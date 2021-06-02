@@ -1,9 +1,32 @@
+import { Navbar, Container } from 'react-bootstrap';
+
+import IncidentTableComponent from "./components/IncidentTable/IncidentTableComponent";
+
+import logo from "./assets/pd_logo.png";
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      PagerDuty Live Incidents
+      <div className="navbar-ctr">
+        <Navbar bg="dark" variant="dark">
+          <Navbar.Brand>
+            <img className="nav-bar-logo" src={logo} alt="logo" />
+          </Navbar.Brand>
+          <Navbar.Brand>
+            PagerDuty Live Incidents Console
+        </Navbar.Brand>
+        </Navbar>
+      </div>
+      <Container fluid>
+        <div className="config-ctr">
+          Configuration Settings
+        </div>
+        <div className="config-ctr">
+          Incidents Table
+          <IncidentTableComponent />
+        </div>
+      </Container>
     </div>
   );
 }
