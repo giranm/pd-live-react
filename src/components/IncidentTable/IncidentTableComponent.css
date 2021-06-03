@@ -1,0 +1,31 @@
+/* Button Overrides */
+
+.buttons-excel {
+  background-image: url("https://visualpharm.com/assets/783/Microsoft%20Excel-595b40b75ba036ed117d8166.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: transparent;
+  border: transparent;
+  height: 30px;
+  width:  30px;
+}
+
+.buttons-csv {
+  background-image: url("https://visualpharm.com/assets/977/CSV-595b40b85ba036ed117dce43.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: transparent;
+  border: transparent;
+  height: 30px;
+  width:  30px;
+}
+
+.buttons-pdf {
+  background-image: url("https://visualpharm.com/assets/795/PDF-595b40b75ba036ed117d6b2b.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: transparent;
+  border: transparent;
+  height: 30px;
+  width:  30px;
+}
