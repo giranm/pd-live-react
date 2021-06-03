@@ -29,3 +29,10 @@
   height: 30px;
   width:  30px;
 }
+
+/* Table Overrides */
+
+.rdt_TableCol {
+  font-size: large !important;
+  font-weight: 600 !important;
+}

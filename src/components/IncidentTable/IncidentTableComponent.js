@@ -3,7 +3,10 @@ import React from 'react';
 import { Container, Row, Col, Button, ButtonGroup, Form } from 'react-bootstrap';
 
 import ReactDatatable from '@ashvin27/react-datatable';
+import DataTable from "react-data-table-component";
+import DataTableExtensions from 'react-data-table-component-extensions';
 
+import 'react-data-table-component-extensions/dist/index.css';
 import "./IncidentTableComponent.css";
 
 class IncidentTableComponent extends React.Component {
@@ -11,46 +14,45 @@ class IncidentTableComponent extends React.Component {
     super(props);
     this.columns = [
       {
-        key: "incident_number",
-        text: "#",
-        className: "incident_number",
-        align: "left",
+        selector: "incident_number",
+        name: "#",
         sortable: true,
+        width: "80px"
       },
       {
-        key: "title",
-        text: "Title",
-        className: "title",
-        align: "left",
-        sortable: true
-      },
-      {
-        key: "status",
-        text: "Status",
+        selector: "status",
+        name: "Status",
         className: "status",
-        sortable: true
-      },
-      {
-        key: "priority.id", // need to flatten this
-        text: "Priority",
-        className: "priority",
-        align: "left",
-        sortable: true
-      },
-      {
-        key: "created_at",
-        text: "Created At",
-        className: "created_at",
         sortable: true,
-        align: "left"
+        width: "100px"
       },
       {
-        key: "service.summary", // need to flatten this
-        text: "Service",
-        className: "service",
+        selector: "priority.id", // need to flatten this
+        name: "Priority",
         sortable: true,
-        align: "left"
+        width: "100px"
       },
+      {
+        selector: "title",
+        name: "Title",
+        sortable: true,
+        minWidth: "700px"
+      },
+      {
+        selector: "created_at",
+        name: "Created At",
+        sortable: true,
+      },
+      {
+        selector: "service.summary", // need to flatten this
+        name: "Service",
+        sortable: true,
+      },
+      // {
+      //   selector: "assignments", // need to flatten this
+      //   name: "Assigned To",
+      //   sortable: true,
+      // },
     ];
     this.config = {
       page_size: 10,
@@ -65,7 +67,7 @@ class IncidentTableComponent extends React.Component {
     }
 
     this.state = {
-      records: this.listIncidents()
+      data: this.listIncidents()
     }
 
   }
@@ -80,6 +82,108 @@ class IncidentTableComponent extends React.Component {
 
   listIncidents() {
     return [
+      {
+        "incident_number": 12728,
+        "title": "Test",
+        "description": "Test",
+        "created_at": "2021-06-03T20:16:54Z",
+        "status": "triggered",
+        "incident_key": "ac8550d99f7046a78aa99de5abdf7eed",
+        "service": {
+          "id": "P689ZFT",
+          "type": "service_reference",
+          "summary": "BD: Analytics",
+          "self": "https://api.pagerduty.com/services/P689ZFT",
+          "html_url": "https://pdt-giran.pagerduty.com/service-directory/P689ZFT"
+        },
+        "assignments": [
+          {
+            "at": "2021-06-03T22:16:55Z",
+            "assignee": {
+              "id": "PZH62CI",
+              "type": "user_reference",
+              "summary": "Michael Mandy",
+              "self": "https://api.pagerduty.com/users/PZH62CI",
+              "html_url": "https://pdt-giran.pagerduty.com/users/PZH62CI"
+            }
+          }
+        ],
+        "assigned_via": "escalation_policy",
+        "last_status_change_at": "2021-06-03T22:16:55Z",
+        "first_trigger_log_entry": {
+          "id": "RO1V3ZV6N8336V01DE7M6WWQY2",
+          "type": "trigger_log_entry_reference",
+          "summary": "Triggered through the website",
+          "self": "https://api.pagerduty.com/log_entries/RO1V3ZV6N8336V01DE7M6WWQY2",
+          "html_url": "https://pdt-giran.pagerduty.com/incidents/PH4UE4E/log_entries/RO1V3ZV6N8336V01DE7M6WWQY2"
+        },
+        "alert_counts": {
+          "all": 0,
+          "triggered": 0,
+          "resolved": 0
+        },
+        "is_mergeable": true,
+        "escalation_policy": {
+          "id": "P6YZB7B",
+          "type": "escalation_policy_reference",
+          "summary": "Risk (EP)",
+          "self": "https://api.pagerduty.com/escalation_policies/P6YZB7B",
+          "html_url": "https://pdt-giran.pagerduty.com/escalation_policies/P6YZB7B"
+        },
+        "teams": [
+          {
+            "id": "P3NVM7M",
+            "type": "team_reference",
+            "summary": "Risk Team",
+            "self": "https://api.pagerduty.com/teams/P3NVM7M",
+            "html_url": "https://pdt-giran.pagerduty.com/teams/P3NVM7M"
+          }
+        ],
+        "pending_actions": [
+          {
+            "type": "escalate",
+            "at": "2021-06-03T22:46:55Z"
+          },
+          {
+            "type": "resolve",
+            "at": "2021-06-04T00:16:54Z"
+          }
+        ],
+        "acknowledgements": [],
+        "basic_alert_grouping": null,
+        "alert_grouping": null,
+        "last_status_change_by": {
+          "id": "P689ZFT",
+          "type": "service_reference",
+          "summary": "BD: Analytics",
+          "self": "https://api.pagerduty.com/services/P689ZFT",
+          "html_url": "https://pdt-giran.pagerduty.com/service-directory/P689ZFT"
+        },
+        "priority": {
+          "id": "PYRMU1A",
+          "type": "priority",
+          "summary": "P4",
+          "self": "https://api.pagerduty.com/priorities/PYRMU1A",
+          "html_url": null,
+          "account_id": "PU5904K",
+          "color": "0074d9",
+          "created_at": "2020-04-28T22:47:49Z",
+          "description": "",
+          "name": "P4",
+          "order": 2048,
+          "schema_version": 0,
+          "updated_at": "2020-05-31T21:11:02Z"
+        },
+        "incidents_responders": [],
+        "responder_requests": [],
+        "subscriber_requests": [],
+        "urgency": "high",
+        "id": "PH4UE4E",
+        "type": "incident",
+        "summary": "[#12728] Test",
+        "self": "https://api.pagerduty.com/incidents/PH4UE4E",
+        "html_url": "https://pdt-giran.pagerduty.com/incidents/PH4UE4E"
+      },
       {
         "incident_number": 11860,
         "title": "Warning: ''Produce - Walk In Mid'' probe temperature has risen above 24°C for more than 30 minutes",
@@ -2833,11 +2937,26 @@ class IncidentTableComponent extends React.Component {
         </div>
         <br />
         <div className="incidents-table">
-          <ReactDatatable
+          {/* <ReactDatatable
             config={this.config}
             records={this.state.records}
             columns={this.columns}
-          />
+          /> */}
+          <DataTableExtensions
+            columns={this.columns}
+            data={this.state.data}>
+            <DataTable
+              noHeader
+              striped
+              highlightOnHover
+              selectableRows
+              selectableRowsHighlight
+              fixedHeader
+              fixedHeaderScrollHeight={"55vh"}
+              pagination={true}
+              paginationRowsPerPageOptions={[10, 15, 20, 25, 30]}
+            />
+          </DataTableExtensions>
         </div>
       </div >
     )
