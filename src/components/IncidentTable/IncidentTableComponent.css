@@ -32,7 +32,24 @@
 
 /* Table Overrides */
 
+.data-table-extensions {
+  /* display: block; */
+  background-color: var(--light);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  border-color: rgba(0,0,0,.125);
+}
+
+.rdt_TableHeadRow {
+  background-color: rgba(0,0,0,.03) !important;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  border-color: rgba(0,0,0,.125);
+}
+
 .rdt_TableCol {
-  font-size: large !important;
+  font-size: 16px !important;
   font-weight: 600 !important;
 }
