@@ -1,9 +1,10 @@
 import { Navbar, Container } from 'react-bootstrap';
 
-import IncidentTableComponent from "./components/IncidentTable/IncidentTableComponent";
+import IncidentTableComponent from "components/IncidentTable/IncidentTableComponent";
+import IncidentViewer from "components/IncidentViewer/IncidentViewer";
 
-import logo from "./assets/images/pd_logo.png";
-import './App.css';
+import logo from "assets/images/pd_logo.png";
+import 'App.css';
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
       </div>
       <Container fluid>
         <div className="incidents-table-ctr">
-          <IncidentTableComponent />
+          {/* Disabling until properly refactored */}
+          {/* <IncidentTableComponent /> */}
+          <IncidentViewer />
         </div>
       </Container>
     </div>

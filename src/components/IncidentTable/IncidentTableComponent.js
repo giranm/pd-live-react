@@ -6,8 +6,8 @@ import Select from 'react-select'
 import DataTable from "react-data-table-component";
 import DataTableExtensions from 'react-data-table-component-extensions';
 
-import PagerDuty from "../../api/pagerduty/pagerduty";
-import mockIncidentData from "../../api/pagerduty/mockData";
+import PagerDuty from "../../util/api/pagerduty/pagerduty";
+import mockIncidentData from "../../util/api/pagerduty/mockData";
 
 import 'react-data-table-component-extensions/dist/index.css';
 import "./IncidentTableComponent.css";
