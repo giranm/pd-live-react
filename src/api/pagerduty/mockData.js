@@ -104,7 +104,7 @@ const mockIncidentData = () => {
     },
     {
       "incident_number": 11860,
-      "title": "Warning: ''Produce - Walk In Mid'' probe temperature has risen above 24°C for more than 30 minutes",
+      "title": "Warning: ''Produce - Walk In Mid'' probe temperature has risen above 24°C for more than 30 minutes - inserting long string to see cutoff here...",
       "description": "Warning: ''Produce - Walk In Mid'' probe temperature has risen above 24°C for more than 30 minutes",
       "created_at": "2021-05-03T19:01:52Z",
       "status": "resolved",

@@ -6,7 +6,8 @@ import Select from 'react-select'
 import DataTable from "react-data-table-component";
 import DataTableExtensions from 'react-data-table-component-extensions';
 
-import mockIncidentData from "../../api/mockData";
+import PagerDuty from "../../api/pagerduty/pagerduty";
+import mockIncidentData from "../../api/pagerduty/mockData";
 
 import 'react-data-table-component-extensions/dist/index.css';
 import "./IncidentTableComponent.css";
@@ -14,6 +15,10 @@ import "./IncidentTableComponent.css";
 class IncidentTableComponent extends React.Component {
   constructor(props) {
     super(props);
+
+    this.pagerduty = new PagerDuty(process.env.REACT_APP_PD_TOKEN);
+
+    // TODO: Move logic for table initialisation
     this.columns = [
       {
         selector: "incident_number",
@@ -69,20 +74,24 @@ class IncidentTableComponent extends React.Component {
     ]
 
     this.state = {
-      data: mockIncidentData()
+      // data: mockIncidentData()
+      data: []
     }
 
   }
 
-  editRecord(record) {
-    console.log("Edit Record", record);
-  }
-
-  deleteRecord(record) {
-    console.log("Delete Record", record);
-  }
-
   render() {
+
+    let until = new Date();
+    until.setHours(23, 59, 59, 999);
+
+    let since = new Date();
+    since.setDate(until.getDate() - 1);
+    since.setHours(0, 0, 0, 0)
+
+    // let incidents = this.pagerduty.fetchIncidents(since, until)
+    // console.log("Fetched incidents", incidents)
+
     return (
       <div>
         <br />
