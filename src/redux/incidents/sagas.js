@@ -29,12 +29,14 @@ export function* getIncidents(action) {
 
     console.log("Fetching incidents")
     // let incidents = yield call(pdfetch, "incidents", params) // Need to fix this
-    let incidents = [1, 2, 3, 4]
-    console.log(incidents)
+
+    // Using direct lib which returns a promise
+    let response = yield call(pd.get, "incidents")
+    console.log(response.resource)
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
-      incidents
+      incidents: response.resource
     });
 
   } catch (e) {
