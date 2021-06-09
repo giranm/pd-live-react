@@ -4,6 +4,8 @@ export const FETCH_INCIDENTS_COMPLETED = "FETCH_INCIDENTS_COMPLETED";
 export const FETCH_INCIDENTS_ERROR = "FETCH_INCIDENTS_ERROR";
 
 // Define Actions
-export const getIncidentsAsync = () => ({
+export const getIncidentsAsync = (since, until) => ({
   type: FETCH_INCIDENTS_REQUESTED,
+  since,
+  until
 });

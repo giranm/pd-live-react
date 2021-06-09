@@ -6,21 +6,27 @@ const incidents = produce(
   (draft, action) => {
     switch (action.type) {
       case FETCH_INCIDENTS_REQUESTED:
-        draft.fetchingIncidents = true;
+        draft.fetchingData = true;
+        draft.status = FETCH_INCIDENTS_REQUESTED;
         break;
       case FETCH_INCIDENTS_COMPLETED:
-        draft.fetchingIncidents = false;
+        draft.fetchingData = false;
+        draft.status = FETCH_INCIDENTS_COMPLETED;
         draft.incidents = action.incidents;
         break;
       case FETCH_INCIDENTS_ERROR:
-        draft.fetchingIncidents = false;
+        draft.fetchingData = false;
+        draft.status = FETCH_INCIDENTS_ERROR;
+        draft.error = action.message
         break;
       default:
         break;
     }
   },
   {
-    incidents: []
+    incidents: [],
+    status: null,
+    fetchingData: false
   }
 );
 
