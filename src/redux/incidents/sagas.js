@@ -6,6 +6,10 @@ import { FETCH_INCIDENTS_REQUESTED, FETCH_INCIDENTS_COMPLETED, FETCH_INCIDENTS_E
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
+export function* getIncidentsAsync() {
+  yield takeLatest(FETCH_INCIDENTS_REQUESTED, getIncidents);
+}
+
 export function* getIncidents(action) {
   try {
     //  Create params and call pd lib
@@ -15,8 +19,8 @@ export function* getIncidents(action) {
       until: until.toISOString(),
       'include[]': 'first_trigger_log_entries',
       'statuses[]': ['triggered', 'acknowledged']
-    }
-    let response = yield call(pd.all, "incidents", { data: { ...params } })
+    };
+    let response = yield call(pd.all, "incidents", { data: { ...params } });
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
@@ -24,10 +28,6 @@ export function* getIncidents(action) {
     });
 
   } catch (e) {
-    yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message })
+    yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
   }
-}
-
-export function* getIncidentsAsync() {
-  yield takeLatest(FETCH_INCIDENTS_REQUESTED, getIncidents);
 }

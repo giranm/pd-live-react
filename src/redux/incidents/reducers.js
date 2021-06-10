@@ -9,16 +9,19 @@ const incidents = produce(
         draft.fetchingData = true;
         draft.status = FETCH_INCIDENTS_REQUESTED;
         break;
+
       case FETCH_INCIDENTS_COMPLETED:
         draft.fetchingData = false;
         draft.status = FETCH_INCIDENTS_COMPLETED;
         draft.incidents = action.incidents;
         break;
+
       case FETCH_INCIDENTS_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_INCIDENTS_ERROR;
         draft.error = action.message
         break;
+
       default:
         break;
     }
@@ -26,7 +29,8 @@ const incidents = produce(
   {
     incidents: [],
     status: null,
-    fetchingData: false
+    fetchingData: false,
+    error: null
   }
 );
 

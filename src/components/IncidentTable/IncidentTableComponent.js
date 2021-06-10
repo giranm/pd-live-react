@@ -34,7 +34,7 @@ class IncidentTableComponent extends React.Component {
         width: "100px"
       },
       {
-        selector: "priority.id", // need to flatten this
+        selector: "priority.summary", // need to flatten this
         name: "Priority",
         sortable: true,
         width: "100px"
