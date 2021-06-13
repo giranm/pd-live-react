@@ -5,9 +5,9 @@ import { Row, Col } from 'react-bootstrap';
 import moment from "moment";
 
 import { getIncidentsAsync } from "redux/incidents/actions";
-import { getLogEntriesAsync } from "redux/log_entries/actions";
+import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
 
-const IncidentViewer = ({ incidents, logEntries, getIncidentsAsync, getLogEntriesAsync }) => {
+const IncidentViewer = ({ incidents, logEntries, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
   let since = new Date("2021-06-10");
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
@@ -16,6 +16,7 @@ const IncidentViewer = ({ incidents, logEntries, getIncidentsAsync, getLogEntrie
       <Row>
         <button onClick={() => getIncidentsAsync(since, until)}>getIncidentsAsync</button>
         <button onClick={() => getLogEntriesAsync(until)}>getLogEntriesAsync</button>
+        <button onClick={() => cleanRecentLogEntriesAsync()}>cleanRecentLogEntriesAsync</button>
       </Row>
       <Row>
         <Col>
@@ -36,7 +37,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getIncidentsAsync: (since, until) => dispatch(getIncidentsAsync(since, until)),
-  getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since))
+  getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
+  cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentViewer);

@@ -7,8 +7,13 @@ import {
   FETCH_LOG_ENTRIES_ERROR,
   UPDATE_RECENT_LOG_ENTRIES,
   UPDATE_RECENT_LOG_ENTRIES_COMPLETED,
-  UPDATE_RECENT_LOG_ENTRIES_ERROR
+  UPDATE_RECENT_LOG_ENTRIES_ERROR,
+  CLEAN_RECENT_LOG_ENTRIES,
+  CLEAN_RECENT_LOG_ENTRIES_COMPLETED,
+  CLEAN_RECENT_LOG_ENTRIES_ERROR
 } from "./actions";
+
+import { UPDATE_INCIDENTS } from "redux/incidents/actions";
 
 import { selectLogEntries } from "./selectors";
 
@@ -17,7 +22,7 @@ const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
 export function* getLogEntriesAsync() {
   yield takeLatest(FETCH_LOG_ENTRIES_REQUESTED, getLogEntries);
-}
+};
 
 export function* getLogEntries(action) {
   try {
@@ -33,55 +38,85 @@ export function* getLogEntries(action) {
     yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
 
     // Call to update recent log entries with this data.
-    yield put({ type: UPDATE_RECENT_LOG_ENTRIES })
+    yield put({ type: UPDATE_RECENT_LOG_ENTRIES });
 
   } catch (e) {
     yield put({ type: FETCH_LOG_ENTRIES_ERROR, message: e.message });
   }
-}
+};
 
 
 export function* updateRecentLogEntriesAsync() {
   yield takeLatest(UPDATE_RECENT_LOG_ENTRIES, updateRecentLogEntries);
-}
+};
 
 export function* updateRecentLogEntries(action) {
   try {
     // Grab log entries from store and determine what is recent based on last polling
-    let { logEntries } = yield select(selectLogEntries)
-    let recentLogEntries = []
-    for (let logEntry in logEntries) {
+    let { logEntries, lastPolled } = yield select(selectLogEntries);
 
+    let recentLogEntries = [];
+    let addSet = new Set();
+    let removeSet = new Set();
+    let updateSet = new Set();
+
+    logEntries.forEach((logEntry) => {
       if (recentLogEntries.filter(x => x.id === logEntry.id).length > 0) {
         // console.log(`duplicate log entry ${logEntry.id}`)
-        continue
+        return;
       }
-      let logEntryDate = new Date(logEntry.created_at)
+      let logEntryDate = new Date(logEntry.created_at);
       recentLogEntries.push({
         date: logEntryDate,
         id: logEntry.id
-      })
-      if (logEntryDate > last_polled) {
-        last_polled = log_entry_date
-      }
-      let incident_id = logEntry.incident.id
-      let entry_type = logEntry.type
+      });
 
-      if (entry_type === 'resolve_log_entry') {
-        remove_set.add(logEntry)
-      } else if (entry_type === 'trigger_log_entry') {
-        add_set.add(logEntry)
+      // TODO: Is this needed anymore with Redux?
+      if (logEntryDate > lastPolled) {
+        lastPolled = logEntryDate;
+      }
+      let entryType = logEntry.type;
+
+      // Find out what incidents need to be updated
+      if (entryType === 'resolve_log_entry') {
+        removeSet.add(logEntry);
+      } else if (entryType === 'trigger_log_entry') {
+        addSet.add(logEntry);
       } else {
-        update_set.add(logEntry)
+        updateSet.add(logEntry);
       }
 
+    });
 
-    }
+    let addList = [...addSet].filter(x => !removeSet.has(x));
+    let updateList = [...updateSet].filter(x => !removeSet.has(x) && !addSet.has(x));
+    let removeList = [...removeSet];
 
+    // Update recent log entries and dispatch update incident list
+    yield put({ type: UPDATE_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries });
+    yield put({ type: UPDATE_INCIDENTS, addList, updateList, removeList });
 
-
-    yield put({ type: UPDATE_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries: [1, 2, 3] })
   } catch (e) {
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES_ERROR, message: e.message });
   }
-}
+};
+
+export function* cleanRecentLogEntriesAsync() {
+  yield takeLatest(CLEAN_RECENT_LOG_ENTRIES, cleanRecentLogEntries);
+};
+
+export function* cleanRecentLogEntries(action) {
+  try {
+    // Grab log entries from store and determine what is recent based on last polling
+    let { recentLogEntries } = yield select(selectLogEntries);
+    let cleanedRecentLogEntries = [...recentLogEntries];
+
+    // Sort by descending date and reduce this down to the last 100 items.
+    cleanedRecentLogEntries.sort((a, b) => b.date - a.date).slice(0, 100);
+
+    yield put({ type: CLEAN_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries: cleanedRecentLogEntries });
+
+  } catch (e) {
+    yield put({ type: CLEAN_RECENT_LOG_ENTRIES_ERROR, message: e.message });
+  }
+};
