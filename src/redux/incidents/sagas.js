@@ -1,13 +1,14 @@
-import { put, takeLatest, call } from "redux-saga/effects";
+/* eslint-disable array-callback-return */
+import { put, call, select, takeLatest } from "redux-saga/effects";
 import { api } from '@pagerduty/pdjs';
 
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
   FETCH_INCIDENTS_ERROR,
-  UPDATE_INCIDENTS,
-  UPDATE_INCIDENTS_COMPLETED,
-  UPDATE_INCIDENTS_ERROR
+  UPDATE_INCIDENTS_LIST,
+  UPDATE_INCIDENTS_LIST_COMPLETED,
+  UPDATE_INCIDENTS_LIST_ERROR
 } from "./actions";
 
 import { selectIncidents } from "./selectors";
@@ -41,21 +42,42 @@ export function* getIncidents(action) {
   }
 };
 
-export function* updateIncidentsAsync() {
-  yield takeLatest(UPDATE_INCIDENTS, updateIncidents);
+export function* updateIncidentsListAsync() {
+  yield takeLatest(UPDATE_INCIDENTS_LIST, updateIncidentsList);
 };
 
-export function* updateIncidents(action) {
+export function* updateIncidentsList(action) {
   try {
-    // TODO:  Update incidents using update lists form log entries
     let { addList, updateList, removeList } = action;
-    console.log("Updating incident set");
-    // yield put({
-    //   type: UPDATE_INCIDENTS_COMPLETED,
-    //   incidents: response.resource
-    // });
+    let { incidents } = yield select(selectIncidents);
+    let updatedIncidentsList = [...incidents];
 
+    // Add new incidents to list
+    addList.map(addItem => {
+      if (addItem.incident)
+        updatedIncidentsList.push(addItem.incident)
+    });
+
+    // Update existing incidents within list
+    updatedIncidentsList = updatedIncidentsList.map(existingIncident => {
+      let updatedItem = updateList.find(updateItem => {
+        if (updateItem.incident)
+          return updateItem.incident.id === existingIncident.id
+      });
+      let updatedIncident = updatedItem ? updatedItem.incident : null;
+      return updatedIncident ? { ...existingIncident, ...updatedIncident } : existingIncident;
+    });
+
+    // Remove incidents within list
+    updatedIncidentsList = updatedIncidentsList.filter(existingIncident => {
+      return !removeList.some(removeItem => {
+        if (removeItem.incident)
+          return removeItem.incident.id === existingIncident.id
+      });
+    });
+
+    yield put({ type: UPDATE_INCIDENTS_LIST_COMPLETED, incidents: updatedIncidentsList });
   } catch (e) {
-    yield put({ type: UPDATE_INCIDENTS_ERROR, message: e.message });
+    yield put({ type: UPDATE_INCIDENTS_LIST_ERROR, message: e.message });
   }
 };

@@ -1,1 +1,1 @@
-export const selectIncidents = (state) => state.selectIncidents;
+export const selectIncidents = (state) => state.incidents;

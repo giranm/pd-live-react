@@ -3,9 +3,9 @@ export const FETCH_INCIDENTS_REQUESTED = "FETCH_INCIDENTS_REQUESTED";
 export const FETCH_INCIDENTS_COMPLETED = "FETCH_INCIDENTS_COMPLETED";
 export const FETCH_INCIDENTS_ERROR = "FETCH_INCIDENTS_ERROR";
 
-export const UPDATE_INCIDENTS = "UPDATE_INCIDENTS";
-export const UPDATE_INCIDENTS_COMPLETED = "UPDATE_INCIDENTS_COMPLETED";
-export const UPDATE_INCIDENTS_ERROR = "UPDATE_INCIDENTS_ERROR";
+export const UPDATE_INCIDENTS_LIST = "UPDATE_INCIDENTS_LIST";
+export const UPDATE_INCIDENTS_LIST_COMPLETED = "UPDATE_INCIDENTS_LIST_COMPLETED";
+export const UPDATE_INCIDENTS_LIST_ERROR = "UPDATE_INCIDENTS_LIST_ERROR";
 
 // Define Actions
 export const getIncidentsAsync = (since, until) => ({
@@ -14,8 +14,8 @@ export const getIncidentsAsync = (since, until) => ({
   until
 });
 
-export const updateIncidentsAsync = (addList, updateList, removeList) => ({
-  type: UPDATE_INCIDENTS,
+export const updateIncidentsListAsync = (addList, updateList, removeList) => ({
+  type: UPDATE_INCIDENTS_LIST,
   addList,
   updateList,
   removeList

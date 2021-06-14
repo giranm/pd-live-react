@@ -8,13 +8,13 @@ import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
 
 const IncidentViewer = ({ incidents, logEntries, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
-  let since = new Date("2021-06-10");
+  let since = new Date("2021-06-14");
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
   return (
     <div>
       <Row>
-        <button onClick={() => getIncidentsAsync(since, until)}>getIncidentsAsync</button>
+        <button onClick={() => getIncidentsAsync(since, now)}>getIncidentsAsync</button>
         <button onClick={() => getLogEntriesAsync(until)}>getLogEntriesAsync</button>
         <button onClick={() => cleanRecentLogEntriesAsync()}>cleanRecentLogEntriesAsync</button>
       </Row>

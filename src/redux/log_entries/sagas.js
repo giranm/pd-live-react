@@ -13,7 +13,7 @@ import {
   CLEAN_RECENT_LOG_ENTRIES_ERROR
 } from "./actions";
 
-import { UPDATE_INCIDENTS } from "redux/incidents/actions";
+import { UPDATE_INCIDENTS_LIST } from "redux/incidents/actions";
 
 import { selectLogEntries } from "./selectors";
 
@@ -53,31 +53,26 @@ export function* updateRecentLogEntriesAsync() {
 export function* updateRecentLogEntries(action) {
   try {
     // Grab log entries from store and determine what is recent based on last polling
-    let { logEntries, lastPolled } = yield select(selectLogEntries);
-
-    let recentLogEntries = [];
+    let { logEntries, recentLogEntries } = yield select(selectLogEntries);
+    let recentLogEntriesLocal = [...recentLogEntries];
     let addSet = new Set();
     let removeSet = new Set();
     let updateSet = new Set();
 
     logEntries.forEach((logEntry) => {
-      if (recentLogEntries.filter(x => x.id === logEntry.id).length > 0) {
-        // console.log(`duplicate log entry ${logEntry.id}`)
+      // Skip duplicate log entry
+      if (recentLogEntriesLocal.filter(x => x.id === logEntry.id).length > 0)
         return;
-      }
+
+      // Push new log entry to array with details
       let logEntryDate = new Date(logEntry.created_at);
-      recentLogEntries.push({
+      recentLogEntriesLocal.push({
         date: logEntryDate,
         id: logEntry.id
       });
 
-      // TODO: Is this needed anymore with Redux?
-      if (logEntryDate > lastPolled) {
-        lastPolled = logEntryDate;
-      }
+      // Find out what incidents need to be updated based on log entry type
       let entryType = logEntry.type;
-
-      // Find out what incidents need to be updated
       if (entryType === 'resolve_log_entry') {
         removeSet.add(logEntry);
       } else if (entryType === 'trigger_log_entry') {
@@ -88,13 +83,14 @@ export function* updateRecentLogEntries(action) {
 
     });
 
+    // Generate update lists from sets
     let addList = [...addSet].filter(x => !removeSet.has(x));
     let updateList = [...updateSet].filter(x => !removeSet.has(x) && !addSet.has(x));
     let removeList = [...removeSet];
 
     // Update recent log entries and dispatch update incident list
-    yield put({ type: UPDATE_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries });
-    yield put({ type: UPDATE_INCIDENTS, addList, updateList, removeList });
+    yield put({ type: UPDATE_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries: recentLogEntriesLocal });
+    yield put({ type: UPDATE_INCIDENTS_LIST, addList, updateList, removeList });
 
   } catch (e) {
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES_ERROR, message: e.message });
@@ -107,11 +103,9 @@ export function* cleanRecentLogEntriesAsync() {
 
 export function* cleanRecentLogEntries(action) {
   try {
-    // Grab log entries from store and determine what is recent based on last polling
+    // Sort recent log entries by descending date and reduce this down to the last 100 items
     let { recentLogEntries } = yield select(selectLogEntries);
     let cleanedRecentLogEntries = [...recentLogEntries];
-
-    // Sort by descending date and reduce this down to the last 100 items.
     cleanedRecentLogEntries.sort((a, b) => b.date - a.date).slice(0, 100);
 
     yield put({ type: CLEAN_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries: cleanedRecentLogEntries });

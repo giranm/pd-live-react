@@ -1,6 +1,6 @@
 import { all } from "redux-saga/effects";
 
-import { getIncidentsAsync, updateIncidentsAsync } from "./incidents/sagas";
+import { getIncidentsAsync, updateIncidentsListAsync } from "./incidents/sagas";
 import { getLogEntriesAsync, updateRecentLogEntriesAsync, cleanRecentLogEntriesAsync } from "./log_entries/sagas";
 
 export default function* rootSaga() {
@@ -8,7 +8,7 @@ export default function* rootSaga() {
     getIncidentsAsync(),
     getLogEntriesAsync(),
     updateRecentLogEntriesAsync(),
-    updateIncidentsAsync(),
+    updateIncidentsListAsync(),
     cleanRecentLogEntriesAsync()
   ]);
 };
