@@ -1,3 +1,8 @@
+/* Table Positioning */
+.incident-table-ctr {
+  margin-top: 10px;
+}
+
 /* Button Overrides */
 
 .buttons-excel {
@@ -34,6 +39,11 @@
 
 .data-table-extensions {
   /* display: block; */
+  position: fixed;
+  top: 0.5%;
+  width: 30%;
+  height: 50px;
+  right: 60px;
   background-color: var(--light);
   border-style: solid;
   border-width: 1px;
@@ -42,7 +52,7 @@
 }
 
 .rdt_TableHeadRow {
-  background-color: rgba(0,0,0,.03) !important;
+  background-color: rgba(0,0,0,.06) !important;
   border-style: solid;
   border-width: 1px;
   border-radius: 4px;
