@@ -1,9 +1,15 @@
-import { Navbar } from "react-bootstrap"
+import { connect } from "react-redux";
 
-import "./NavigationBarComponent.css";
+import { Navbar, Nav } from "react-bootstrap"
+
+import { ReactComponent as SettingsCog } from "assets/images/settings_cog.svg";
 import logo from "assets/images/pd_logo.png";
 
-const NavigationBarComponent = () => {
+import "./NavigationBarComponent.css";
+
+import { toggleDisplayQuerySettings } from "redux/query_settings/actions";
+
+const NavigationBarComponent = ({ toggleDisplayQuerySettings }) => {
   return (
     <div className="navbar-ctr">
       <Navbar bg="dark" variant="dark">
@@ -12,10 +18,17 @@ const NavigationBarComponent = () => {
         </Navbar.Brand>
         <Navbar.Brand className="font-weight-bold">
           PagerDuty Live Incidents Console
-      </Navbar.Brand>
+        </Navbar.Brand>
+        <Nav.Item className="ml-auto">
+          <SettingsCog className="settings-toggle" onClick={() => toggleDisplayQuerySettings()} />
+        </Nav.Item>
       </Navbar>
     </div>
   )
 }
 
-export default NavigationBarComponent;
+const mapDispatchToProps = (dispatch) => ({
+  toggleDisplayQuerySettings: () => dispatch(toggleDisplayQuerySettings())
+});
+
+export default connect(null, mapDispatchToProps)(NavigationBarComponent);

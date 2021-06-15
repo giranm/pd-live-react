@@ -4,17 +4,12 @@ import { Row, Col, Button, ToggleButton, ToggleButtonGroup, Form, Card, Accordio
 import Select from 'react-select'
 
 const QuerySettingsComponent = ({ querySettings, updateQuerySettings }) => {
-  let showQuerySettings = true; // To come from store
-  let eventKey = showQuerySettings ? "0" : "1"
+  let { displayQuerySettings } = querySettings;
+  let eventKey = displayQuerySettings ? "0" : "1"
   return (
     <div className="query-settings-ctr">
       <Accordion defaultActiveKey="0">
         <Card bg="light">
-          <Card.Header>
-            <Accordion.Toggle as={Button} variant="outline-dark" eventKey="0">
-              Incident Query Settings
-            </Accordion.Toggle>
-          </Card.Header>
           <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
               <Row>
@@ -85,7 +80,7 @@ const QuerySettingsComponent = ({ querySettings, updateQuerySettings }) => {
 }
 
 const mapStateToProps = (state) => ({
-  querySettings: null // To be added to store
+  querySettings: state.querySettings
 });
 
 const mapDispatchToProps = (dispatch) => ({

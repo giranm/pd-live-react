@@ -1,3 +1,8 @@
 .nav-bar-logo {
   max-width: 30px;
 }
+
+.settings-toggle {
+  width:  30px;
+  fill: white;
+}

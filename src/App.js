@@ -15,7 +15,7 @@ import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entrie
 import 'App.css';
 
 const App = ({ logEntries, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
-  let since = new Date("2021-06-14");
+  let since = new Date("2021-06-15");
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
 
