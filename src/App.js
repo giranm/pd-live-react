@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
 import { connect } from "react-redux";
-import { Navbar, Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 import moment from "moment";
 
+import NavigationBarComponent from "components/NavigationBar/NavigationBarComponent";
+import QuerySettingsComponent from "components/QuerySettings/QuerySettingsComponent";
 import IncidentTableComponent from "components/IncidentTable/IncidentTableComponent";
-import IncidentViewer from "components/IncidentViewer/IncidentViewer";
+import IncidentActionsComponent from "components/IncidentActions/IncidentActionsComponent";
 
 import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
 
-import logo from "assets/images/pd_logo.png";
 import 'App.css';
 
-const App = ({ incidents, logEntries, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
+const App = ({ logEntries, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
   let since = new Date("2021-06-14");
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
@@ -33,34 +34,22 @@ const App = ({ incidents, logEntries, getIncidentsAsync, getLogEntriesAsync, cle
 
   return (
     <div className="App">
-      <div className="navbar-ctr">
-        <Navbar bg="dark" variant="dark">
-          <Navbar.Brand>
-            <img className="nav-bar-logo" src={logo} alt="logo" />
-          </Navbar.Brand>
-          <Navbar.Brand className="font-weight-bold">
-            PagerDuty Live Incidents Console
-          </Navbar.Brand>
-        </Navbar>
-      </div>
+      <NavigationBarComponent />
       <Container fluid>
-        <Row>
+        {/* <Row>
           <button onClick={() => getIncidentsAsync(since, now)}>getIncidentsAsync</button>
           <button onClick={() => getLogEntriesAsync(until)}>getLogEntriesAsync</button>
           <button onClick={() => cleanRecentLogEntriesAsync()}>cleanRecentLogEntriesAsync</button>
-        </Row>
-        <div className="incidents-table-ctr">
-          {/* Disabling until properly refactored */}
-          <IncidentTableComponent />
-          {/* <IncidentViewer /> */}
-        </div>
+        </Row> */}
+        <QuerySettingsComponent />
+        <IncidentTableComponent />
+        <IncidentActionsComponent />
       </Container>
     </div>
   );
 }
 
 const mapStateToProps = (state) => ({
-  incidents: state.incidents,
   logEntries: state.logEntries
 });
 

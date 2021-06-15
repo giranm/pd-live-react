@@ -46,7 +46,7 @@ const IncidentTableComponent = ({ incidents }) => {
   ];
 
   return (
-    <div className="incidents-table">
+    <div className="incident-table-ctr">
       <DataTableExtensions
         columns={columns}
         data={incidents}>

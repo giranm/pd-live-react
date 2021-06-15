@@ -186,6 +186,7 @@ class IncidentTableComponent extends React.Component {
                 <Button variant="warning">Acknowledge</Button>&nbsp;
                 <Button variant="danger">Escalate</Button>&nbsp;
                 <Button variant="secondary">Reassign</Button>&nbsp;
+                <Button variant="secondary">Add Responders</Button>&nbsp;
                 <Button variant="secondary">Snooze</Button>&nbsp;
                 <Button variant="success">Resolve</Button>&nbsp;
               </Col>

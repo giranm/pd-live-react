@@ -1,0 +1,9 @@
+.incident-actions-ctr {
+  position: absolute;
+  bottom: 20px;
+  width: 99%;
+}
+
+.action-button {
+  margin-right: 10px;
+}
