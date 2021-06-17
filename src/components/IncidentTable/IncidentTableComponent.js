@@ -8,7 +8,6 @@ import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import "./IncidentTableComponent.css";
 
-
 const EmptyIncidentsComponent = () => {
   return (
     <div>
@@ -18,49 +17,13 @@ const EmptyIncidentsComponent = () => {
   )
 }
 
-const IncidentTableComponent = ({ incidents }) => {
-  let columns = [
-    {
-      selector: "incident_number",
-      name: "#",
-      sortable: true,
-      width: "80px"
-    },
-    {
-      selector: "status",
-      name: "Status",
-      className: "status",
-      sortable: true,
-      width: "100px"
-    },
-    {
-      selector: "priority.summary", // need to flatten this
-      name: "Priority",
-      sortable: true,
-      width: "100px"
-    },
-    {
-      selector: "title",
-      name: "Title",
-      sortable: true,
-      minWidth: "700px"
-    },
-    {
-      selector: "created_at",
-      name: "Created At",
-      sortable: true,
-    },
-    {
-      selector: "service.summary", // need to flatten this
-      name: "Service/Node",
-      sortable: true,
-    },
-  ];
+const IncidentTableComponent = ({ incidentTableSettings, incidents }) => {
+  let { incidentTableColumns } = incidentTableSettings;
 
   return (
     <div className="incident-table-ctr">
       <DataTableExtensions
-        columns={columns}
+        columns={incidentTableColumns}
         data={incidents}>
         <DataTable
           noHeader
@@ -80,6 +43,7 @@ const IncidentTableComponent = ({ incidents }) => {
 }
 
 const mapStateToProps = (state) => ({
+  incidentTableSettings: state.incidentTableSettings,
   incidents: state.incidents.incidents,
 });
 
