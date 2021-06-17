@@ -11,16 +11,20 @@ import IncidentActionsComponent from "components/IncidentActions/IncidentActions
 
 import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
+import { getServicesAsync } from "redux/services/actions";
 
 import 'App.css';
 
-const App = ({ logEntries, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
+const App = ({ logEntries, getServicesAsync, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
   let since = new Date("2021-06-15");
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
 
+  // Initia grab of services from API
+  getServicesAsync();
+
   // Initial grab incidents from API
-  getIncidentsAsync(since, now)
+  getIncidentsAsync(since, now);
 
   // Setup log entry polling.
   let { lastPolled } = logEntries;
@@ -54,9 +58,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getIncidentsAsync: (since, until) => dispatch(getIncidentsAsync(since, until)),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
-  cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync())
+  cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -2,10 +2,21 @@ import { connect } from "react-redux";
 
 import { Row, Col, Button, ToggleButton, ToggleButtonGroup, Form, Card, Accordion } from 'react-bootstrap';
 import Select from 'react-select'
+import makeAnimated from 'react-select/animated';
 
-const QuerySettingsComponent = ({ querySettings, updateQuerySettings }) => {
+const animatedComponents = makeAnimated();
+
+const QuerySettingsComponent = ({ querySettings, services, updateQuerySettings }) => {
   let { displayQuerySettings } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
+
+  let selectListServices = services.map(service => {
+    return {
+      label: service.name,
+      value: service.id
+    }
+  })
+
   return (
     <div className="query-settings-ctr">
       <Accordion defaultActiveKey="0">
@@ -47,7 +58,11 @@ const QuerySettingsComponent = ({ querySettings, updateQuerySettings }) => {
                 <Col>
                   Service: {' '}
                   <Form.Group>
-                    <Select options={[]} />
+                    <Select
+                      components={animatedComponents}
+                      isMulti
+                      options={selectListServices}
+                    />
                   </Form.Group>
                 </Col>
               </Row>
@@ -80,7 +95,8 @@ const QuerySettingsComponent = ({ querySettings, updateQuerySettings }) => {
 }
 
 const mapStateToProps = (state) => ({
-  querySettings: state.querySettings
+  querySettings: state.querySettings,
+  services: state.services.services
 });
 
 const mapDispatchToProps = (dispatch) => ({
