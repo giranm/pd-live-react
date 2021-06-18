@@ -6,6 +6,7 @@ import { toggleDisplayQuerySettings } from "./query_settings/sagas";
 import { updateIncidentTableColumns } from "./incident_table/sagas";
 import { getServicesAsync } from "./services/sagas";
 import { getTeamsAsync } from "./teams/sagas";
+import { getPrioritiesAsync } from "./priorities/sagas";
 
 
 export default function* rootSaga() {
@@ -18,6 +19,7 @@ export default function* rootSaga() {
     toggleDisplayQuerySettings(),
     updateIncidentTableColumns(),
     getServicesAsync(),
-    getTeamsAsync()
+    getTeamsAsync(),
+    getPrioritiesAsync(),
   ]);
 };

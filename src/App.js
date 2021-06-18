@@ -13,6 +13,7 @@ import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
 import { getServicesAsync } from "redux/services/actions";
 import { getTeamsAsync } from "redux/teams/actions";
+import { getPrioritiesAsync } from "redux/priorities/actions";
 
 import 'App.css';
 
@@ -20,6 +21,7 @@ const App = ({
   logEntries,
   getServicesAsync,
   getTeamsAsync,
+  getPrioritiesAsync,
   getIncidentsAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync
@@ -28,13 +30,10 @@ const App = ({
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
 
-  // Initial grab of services from API
+  // Initial load of objects from API
   getServicesAsync();
-
-  // Initial grab of teams from API
   getTeamsAsync();
-
-  // Initial grab incidents from API
+  getPrioritiesAsync();
   getIncidentsAsync(since, now);
 
   // Setup log entry polling.
@@ -51,11 +50,6 @@ const App = ({
     <div className="App">
       <NavigationBarComponent />
       <Container fluid>
-        {/* <Row>
-          <button onClick={() => getIncidentsAsync(since, now)}>getIncidentsAsync</button>
-          <button onClick={() => getLogEntriesAsync(until)}>getLogEntriesAsync</button>
-          <button onClick={() => cleanRecentLogEntriesAsync()}>cleanRecentLogEntriesAsync</button>
-        </Row> */}
         <QuerySettingsComponent />
         <IncidentTableComponent />
         <IncidentActionsComponent />
@@ -71,6 +65,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
+  getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),
   getIncidentsAsync: (since, until) => dispatch(getIncidentsAsync(since, until)),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),

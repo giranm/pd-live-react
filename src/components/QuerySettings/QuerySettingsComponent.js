@@ -3,11 +3,16 @@ import { connect } from "react-redux";
 import { Row, Col, Button, ToggleButton, ToggleButtonGroup, Form, Card, Accordion } from 'react-bootstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
-import { selectTeams } from "redux/teams/selectors";
 
 const animatedComponents = makeAnimated();
 
-const QuerySettingsComponent = ({ querySettings, services, teams, updateQuerySettings }) => {
+const QuerySettingsComponent = ({
+  querySettings,
+  services,
+  teams,
+  priorities,
+  updateQuerySettings
+}) => {
   let { displayQuerySettings } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
 
@@ -24,6 +29,14 @@ const QuerySettingsComponent = ({ querySettings, services, teams, updateQuerySet
       value: team.id
     }
   });
+
+  let selectListPriorities = priorities.map(priority => {
+    return {
+      label: priority.name,
+      value: priority.id
+    }
+  });
+
 
   return (
     <div className="query-settings-ctr">
@@ -87,12 +100,13 @@ const QuerySettingsComponent = ({ querySettings, services, teams, updateQuerySet
                   Priorities: {' '}
                   <Form.Group>
                     <ToggleButtonGroup type="checkbox">
-                      {/* To be generated from API */}
-                      <ToggleButton variant="outline-dark" value={"P1"}>P1</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"P2"}>P2</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"P3"} >P3</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"P4"}>P4</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"P5"}>P5</ToggleButton>
+                      {selectListPriorities.map(priority => {
+                        return (
+                          <ToggleButton key={priority.value} variant="outline-dark" value={priority.label}>
+                            {priority.label}
+                          </ToggleButton>
+                        )
+                      })}
                       <Button variant="outline-dark">Clear</Button>
                     </ToggleButtonGroup>
                   </Form.Group>
@@ -109,7 +123,8 @@ const QuerySettingsComponent = ({ querySettings, services, teams, updateQuerySet
 const mapStateToProps = (state) => ({
   querySettings: state.querySettings,
   services: state.services.services,
-  teams: state.teams.teams
+  teams: state.teams.teams,
+  priorities: state.priorities.priorities
 });
 
 const mapDispatchToProps = (dispatch) => ({
