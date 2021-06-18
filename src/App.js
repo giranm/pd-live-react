@@ -12,16 +12,27 @@ import IncidentActionsComponent from "components/IncidentActions/IncidentActions
 import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
 import { getServicesAsync } from "redux/services/actions";
+import { getTeamsAsync } from "redux/teams/actions";
 
 import 'App.css';
 
-const App = ({ logEntries, getServicesAsync, getIncidentsAsync, getLogEntriesAsync, cleanRecentLogEntriesAsync }) => {
+const App = ({
+  logEntries,
+  getServicesAsync,
+  getTeamsAsync,
+  getIncidentsAsync,
+  getLogEntriesAsync,
+  cleanRecentLogEntriesAsync
+}) => {
   let since = new Date("2021-06-15");
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
 
-  // Initia grab of services from API
+  // Initial grab of services from API
   getServicesAsync();
+
+  // Initial grab of teams from API
+  getTeamsAsync();
 
   // Initial grab incidents from API
   getIncidentsAsync(since, now);
@@ -59,6 +70,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
+  getTeamsAsync: () => dispatch(getTeamsAsync()),
   getIncidentsAsync: (since, until) => dispatch(getIncidentsAsync(since, until)),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),

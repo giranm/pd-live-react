@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { Row, Col, Button, ToggleButton, ToggleButtonGroup, Form, Card, Accordion } from 'react-bootstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
+import { selectTeams } from "redux/teams/selectors";
 
 const animatedComponents = makeAnimated();
 
-const QuerySettingsComponent = ({ querySettings, services, updateQuerySettings }) => {
+const QuerySettingsComponent = ({ querySettings, services, teams, updateQuerySettings }) => {
   let { displayQuerySettings } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
 
@@ -15,7 +16,14 @@ const QuerySettingsComponent = ({ querySettings, services, updateQuerySettings }
       label: service.name,
       value: service.id
     }
-  })
+  });
+
+  let selectListTeams = teams.map(team => {
+    return {
+      label: team.name,
+      value: team.id
+    }
+  });
 
   return (
     <div className="query-settings-ctr">
@@ -52,7 +60,11 @@ const QuerySettingsComponent = ({ querySettings, services, updateQuerySettings }
                 <Col>
                   Team: {' '}
                   <Form.Group>
-                    <Select options={[]} />
+                    <Select
+                      components={animatedComponents}
+                      isMulti
+                      options={selectListTeams}
+                    />
                   </Form.Group>
                 </Col>
                 <Col>
@@ -96,7 +108,8 @@ const QuerySettingsComponent = ({ querySettings, services, updateQuerySettings }
 
 const mapStateToProps = (state) => ({
   querySettings: state.querySettings,
-  services: state.services.services
+  services: state.services.services,
+  teams: state.teams.teams
 });
 
 const mapDispatchToProps = (dispatch) => ({
