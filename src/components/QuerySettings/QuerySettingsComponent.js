@@ -65,6 +65,7 @@ const QuerySettingsComponent = ({
                 <DatePicker
                   className="date-picker"
                   dateFormat="dd/MM/yyyy"
+                  todayButton={"Today"}
                   selected={sinceDate}
                   onChange={(date) => updateQuerySettingsSinceDate(date)}
                 />
