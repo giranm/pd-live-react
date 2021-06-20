@@ -18,6 +18,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import "./QuerySettingsComponent.css";
 
+import { updateQuerySettingsSinceDate } from "redux/query_settings/actions";
+
 const animatedComponents = makeAnimated();
 
 const QuerySettingsComponent = ({
@@ -25,9 +27,9 @@ const QuerySettingsComponent = ({
   services,
   teams,
   priorities,
-  updateQuerySettings
+  updateQuerySettingsSinceDate
 }) => {
-  let { displayQuerySettings } = querySettings;
+  let { displayQuerySettings, sinceDate } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
 
   let selectListServices = services.map(service => {
@@ -63,8 +65,8 @@ const QuerySettingsComponent = ({
                 <DatePicker
                   className="date-picker"
                   dateFormat="dd/MM/yyyy"
-                  selected={new Date()}
-                  onChange={(date) => console.log(date)}
+                  selected={sinceDate}
+                  onChange={(date) => updateQuerySettingsSinceDate(date)}
                 />
               </Col>
               <Col xs="auto">
@@ -141,7 +143,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateQuerySettings: (params) => () => { }, // To be implemented as action
+  updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);

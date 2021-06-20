@@ -26,7 +26,6 @@ const App = ({
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync
 }) => {
-  let since = new Date("2021-06-15");
   let now = new Date();
   let until = moment(now).subtract(5, "minutes").toDate();
 
@@ -34,7 +33,7 @@ const App = ({
   getServicesAsync();
   getTeamsAsync();
   getPrioritiesAsync();
-  getIncidentsAsync(since, now);
+  getIncidentsAsync();
 
   // Setup log entry polling.
   let { lastPolled } = logEntries;
