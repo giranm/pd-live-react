@@ -1,8 +1,22 @@
 import { connect } from "react-redux";
 
-import { Row, Col, Button, ToggleButton, ToggleButtonGroup, Form, Card, Accordion } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  Form,
+  Accordion,
+  Container
+} from 'react-bootstrap';
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import "./QuerySettingsComponent.css";
 
 const animatedComponents = makeAnimated();
 
@@ -41,82 +55,81 @@ const QuerySettingsComponent = ({
   return (
     <div className="query-settings-ctr">
       <Accordion defaultActiveKey="0">
-        <Card bg="light">
-          <Accordion.Collapse eventKey={eventKey}>
-            <Card.Body>
-              <Row>
-                <Col xs="auto">
-                  Since:
-                  <Form.Control className="mb-2" type="date" name='since' />
-                </Col>
-                <Col xs="auto">
-                  State: {' '}
-                  <Form.Group>
-                    <ToggleButtonGroup type="checkbox">
-                      <ToggleButton variant="outline-dark" value={"ALL"}>All</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"TRIGGERED"}>Triggered</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"ACKNOWLEDGED"}>Acknowleged</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"RESOLVED"}>Resolved</ToggleButton>
-                    </ToggleButtonGroup>
-                  </Form.Group>
-                </Col>
-                <Col xs="auto">
-                  Urgency: {' '}
-                  <Form.Group>
-                    <ToggleButtonGroup type="checkbox">
-                      <ToggleButton variant="outline-dark" value={"ALL"}>All</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"HIGH"}>High</ToggleButton>
-                      <ToggleButton variant="outline-dark" value={"LOW"}>Low</ToggleButton>
-                    </ToggleButtonGroup>
-                  </Form.Group>
-                </Col>
-                <Col>
-                  Team: {' '}
-                  <Form.Group>
-                    <Select
-                      components={animatedComponents}
-                      isMulti
-                      options={selectListTeams}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  Service: {' '}
-                  <Form.Group>
-                    <Select
-                      components={animatedComponents}
-                      isMulti
-                      options={selectListServices}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs="auto">
-                  Until:
-                  <Form.Control type="date" name='until' />
-                </Col>
-                <Col xs="auto">
-                  Priorities: {' '}
-                  <Form.Group>
-                    <ToggleButtonGroup type="checkbox">
-                      {selectListPriorities.map(priority => {
-                        return (
-                          <ToggleButton key={priority.value} variant="outline-dark" value={priority.label}>
-                            {priority.label}
-                          </ToggleButton>
-                        )
-                      })}
-                      <Button variant="outline-dark">Clear</Button>
-                    </ToggleButtonGroup>
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
+        <Accordion.Collapse eventKey={eventKey}>
+          <Container className="card bg-light query-settings-inner-ctr" fluid>
+            <Row>
+              <Col xs="auto">
+                Since: <br />
+                <DatePicker
+                  className="date-picker"
+                  dateFormat="dd/MM/yyyy"
+                  selected={new Date()}
+                  onChange={(date) => console.log(date)}
+                />
+              </Col>
+              <Col xs="auto">
+                State: {' '}
+                <Form.Group>
+                  <ToggleButtonGroup type="checkbox">
+                    <ToggleButton variant="outline-dark" value={"ALL"}>All</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={"TRIGGERED"}>Triggered</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={"ACKNOWLEDGED"}>Acknowleged</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={"RESOLVED"}>Resolved</ToggleButton>
+                  </ToggleButtonGroup>
+                </Form.Group>
+              </Col>
+              <Col xs="auto">
+                Urgency: {' '}
+                <Form.Group>
+                  <ToggleButtonGroup type="checkbox">
+                    <ToggleButton variant="outline-dark" value={"ALL"}>All</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={"HIGH"}>High</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={"LOW"}>Low</ToggleButton>
+                  </ToggleButtonGroup>
+                </Form.Group>
+              </Col>
+              <Col xs="auto">
+                Priorities: {' '}
+                <Form.Group>
+                  <ToggleButtonGroup type="checkbox">
+                    {selectListPriorities.map(priority => {
+                      return (
+                        <ToggleButton key={priority.value} variant="outline-dark" value={priority.label}>
+                          {priority.label}
+                        </ToggleButton>
+                      )
+                    })}
+                    <Button variant="outline-dark">Clear</Button>
+                  </ToggleButtonGroup>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                Team: {' '}
+                <Form.Group>
+                  <Select
+                    components={animatedComponents}
+                    isMulti
+                    options={selectListTeams}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                Service: {' '}
+                <Form.Group>
+                  <Select
+                    components={animatedComponents}
+                    isMulti
+                    options={selectListServices}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Container>
+        </Accordion.Collapse>
       </Accordion>
-    </div>
+    </div >
   )
 }
 

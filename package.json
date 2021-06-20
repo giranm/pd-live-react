@@ -14,6 +14,7 @@
     "react-bootstrap": "^1.6.0",
     "react-data-table-component": "^6.11.7",
     "react-data-table-component-extensions": "^1.5.2",
+    "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "react-scripts": "4.0.3",
