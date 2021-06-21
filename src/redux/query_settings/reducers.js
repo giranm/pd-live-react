@@ -13,7 +13,9 @@ import {
   UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED,
   UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
   UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
-  UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED
+  UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
+  UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
+  UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED
 } from "./actions";
 
 import {
@@ -73,6 +75,15 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED;
         break;
 
+      case UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED:
+        draft.status = UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED;
+        break;
+
+      case UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED:
+        draft.serviceIds = action.serviceIds;
+        draft.status = UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED;
+        break;
+
       default:
         break;
     }
@@ -84,6 +95,7 @@ const querySettings = produce(
     incidentStatus: [TRIGGERED, ACKNOWLEDGED],
     incidentUrgency: [HIGH, LOW],
     teamIds: [],
+    serviceIds: [],
     status: null,
     fetchingData: false,
     error: null

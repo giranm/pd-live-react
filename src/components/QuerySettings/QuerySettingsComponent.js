@@ -22,7 +22,8 @@ import {
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
   updateQuerySettingsIncidentUrgency,
-  updateQuerySettingsTeams
+  updateQuerySettingsTeams,
+  updateQuerySettingsServices
 } from "redux/query_settings/actions";
 
 import {
@@ -43,7 +44,8 @@ const QuerySettingsComponent = ({
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
   updateQuerySettingsIncidentUrgency,
-  updateQuerySettingsTeams
+  updateQuerySettingsTeams,
+  updateQuerySettingsServices
 }) => {
   let {
     displayQuerySettings,
@@ -130,7 +132,10 @@ const QuerySettingsComponent = ({
                 Team: {' '}
                 <Form.Group>
                   <Select
-                    onChange={(selectedTeams) => updateQuerySettingsTeams(selectedTeams)}
+                    onChange={(selectedTeams) => {
+                      let teamIds = selectedTeams.map(team => team.value);
+                      updateQuerySettingsTeams(teamIds);
+                    }}
                     components={animatedComponents}
                     isMulti
                     options={selectListTeams}
@@ -141,6 +146,10 @@ const QuerySettingsComponent = ({
                 Service: {' '}
                 <Form.Group>
                   <Select
+                    onChange={(selectedServices) => {
+                      let serviceIds = selectedServices.map(service => service.value);
+                      updateQuerySettingsServices(serviceIds);
+                    }}
                     components={animatedComponents}
                     isMulti
                     options={selectListServices}
@@ -166,7 +175,8 @@ const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
   updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(updateQuerySettingsIncidentStatus(incidentStatus)),
   updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(updateQuerySettingsIncidentUrgency(incidentUrgency)),
-  updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeams(teamIds))
+  updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeams(teamIds)),
+  updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServices(serviceIds))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);

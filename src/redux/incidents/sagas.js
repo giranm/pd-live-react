@@ -29,7 +29,8 @@ export function* getIncidents(action) {
       untilDate,
       incidentStatus,
       incidentUrgency,
-      teamIds
+      teamIds,
+      serviceIds,
     } = yield select(selectQuerySettings);
 
     let params = {
@@ -47,6 +48,9 @@ export function* getIncidents(action) {
 
     if (teamIds.length)
       params["team_ids[]"] = teamIds;
+
+    if (serviceIds.length)
+      params["service_ids[]"] = serviceIds;
 
     let response = yield call(pd.all, "incidents", { data: { ...params } });
 

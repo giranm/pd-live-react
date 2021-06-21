@@ -22,7 +22,7 @@ export function* getServices(action) {
     //  Create params and call pd lib
     let { teamIds } = action;
     let params = {};
-    if (teamIds)
+    if (teamIds.length)
       params['team_ids[]'] = teamIds;
 
     let response = yield call(pd.all, "services", { data: { ...params } });

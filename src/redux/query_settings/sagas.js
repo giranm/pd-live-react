@@ -13,12 +13,13 @@ import {
   UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED,
   UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
   UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
-  UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED
+  UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
+  UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
+  UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED
 } from "./actions";
 
-import {
-  FETCH_INCIDENTS_REQUESTED
-} from "redux/incidents/actions"
+import { FETCH_INCIDENTS_REQUESTED } from "redux/incidents/actions"
+import { FETCH_SERVICES_REQUESTED } from "redux/services/actions";
 
 import { selectQuerySettings } from "./selectors";
 
@@ -69,9 +70,20 @@ export function* updateQuerySettingsTeams() {
 };
 
 export function* updateQuerySettingsTeamsImpl(action) {
-  // Update team ids and re-request incidents list
+  // Update team ids, re-request services under those teams, and re-request incidents list
   let { teamIds } = action;
-  teamIds = teamIds.map(team => team.value)
+  yield put({ type: FETCH_SERVICES_REQUESTED, teamIds });
   yield put({ type: UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED, teamIds });
+  yield put({ type: FETCH_INCIDENTS_REQUESTED });
+};
+
+export function* updateQuerySettingsServices() {
+  yield takeLatest(UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED, updateQuerySettingsServicesImpl);
+};
+
+export function* updateQuerySettingsServicesImpl(action) {
+  // Update service ids and re-request incidents list
+  let { serviceIds } = action;
+  yield put({ type: UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED, serviceIds });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
 };

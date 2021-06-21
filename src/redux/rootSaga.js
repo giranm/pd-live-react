@@ -11,7 +11,8 @@ import {
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
   updateQuerySettingsIncidentUrgency,
-  updateQuerySettingsTeams
+  updateQuerySettingsTeams,
+  updateQuerySettingsServices
 } from "./query_settings/sagas";
 
 
@@ -27,6 +28,7 @@ export default function* rootSaga() {
     updateQuerySettingsIncidentStatus(),
     updateQuerySettingsIncidentUrgency(),
     updateQuerySettingsTeams(),
+    updateQuerySettingsServices(),
     updateIncidentTableColumns(),
     getServicesAsync(),
     getTeamsAsync(),

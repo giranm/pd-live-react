@@ -18,6 +18,9 @@ export const UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED = "UPDATE_QUERY_SE
 export const UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED = "UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED";
 export const UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED = "UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED";
 
+export const UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED = "UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED";
+export const UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED = "UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED";
+
 // Define Actions
 export const toggleDisplayQuerySettings = () => ({
   type: TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED
@@ -46,4 +49,9 @@ export const updateQuerySettingsIncidentPriority = (incidentPriority) => ({
 export const updateQuerySettingsTeams = (teamIds) => ({
   type: UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
   teamIds
+});
+
+export const updateQuerySettingsServices = (serviceIds) => ({
+  type: UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
+  serviceIds
 });
