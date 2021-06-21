@@ -20,7 +20,8 @@ import "./QuerySettingsComponent.css";
 
 import {
   updateQuerySettingsSinceDate,
-  updateQuerySettingsIncidentStatus
+  updateQuerySettingsIncidentStatus,
+  updateQuerySettingsIncidentUrgency
 } from "redux/query_settings/actions";
 
 import {
@@ -39,12 +40,14 @@ const QuerySettingsComponent = ({
   teams,
   priorities,
   updateQuerySettingsSinceDate,
-  updateQuerySettingsIncidentStatus
+  updateQuerySettingsIncidentStatus,
+  updateQuerySettingsIncidentUrgency
 }) => {
   let {
     displayQuerySettings,
     sinceDate,
-    incidentStatus
+    incidentStatus,
+    incidentUrgency
   } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
 
@@ -99,7 +102,7 @@ const QuerySettingsComponent = ({
               <Col xs="auto">
                 Urgency: {' '}
                 <Form.Group>
-                  <ToggleButtonGroup type="checkbox" onChange={(val) => console.log(val)}>
+                  <ToggleButtonGroup type="checkbox" value={incidentUrgency} onChange={(val) => updateQuerySettingsIncidentUrgency(val)}>
                     <ToggleButton variant="outline-dark" value={HIGH}>High</ToggleButton>
                     <ToggleButton variant="outline-dark" value={LOW}>Low</ToggleButton>
                   </ToggleButtonGroup>
@@ -159,7 +162,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
-  updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(updateQuerySettingsIncidentStatus(incidentStatus))
+  updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(updateQuerySettingsIncidentStatus(incidentStatus)),
+  updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(updateQuerySettingsIncidentUrgency(incidentUrgency))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);

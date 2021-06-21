@@ -27,7 +27,8 @@ export function* getIncidents(action) {
     let {
       sinceDate,
       untilDate,
-      incidentStatus
+      incidentStatus,
+      incidentUrgency
     } = yield select(selectQuerySettings);
 
     let params = {
@@ -39,6 +40,9 @@ export function* getIncidents(action) {
     // TODO: Insert queries for teams, services, urgency etc
     if (incidentStatus)
       params["statuses[]"] = incidentStatus;
+
+    if (incidentUrgency)
+      params["urgencies[]"] = incidentUrgency;
 
     let response = yield call(pd.all, "incidents", { data: { ...params } });
 

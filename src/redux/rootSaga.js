@@ -9,7 +9,8 @@ import { getPrioritiesAsync } from "./priorities/sagas";
 import {
   toggleDisplayQuerySettings,
   updateQuerySettingsSinceDate,
-  updateQuerySettingsIncidentStatus
+  updateQuerySettingsIncidentStatus,
+  updateQuerySettingsIncidentUrgency
 } from "./query_settings/sagas";
 
 
@@ -23,6 +24,7 @@ export default function* rootSaga() {
     toggleDisplayQuerySettings(),
     updateQuerySettingsSinceDate(),
     updateQuerySettingsIncidentStatus(),
+    updateQuerySettingsIncidentUrgency(),
     updateIncidentTableColumns(),
     getServicesAsync(),
     getTeamsAsync(),

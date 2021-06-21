@@ -7,13 +7,17 @@ import {
   UPDATE_QUERY_SETTING_SINCE_DATE_REQUESTED,
   UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
   UPDATE_QUERY_SETTING_INCIDENT_STATUS_REQUESTED,
-  UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED
+  UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
+  UPDATE_QUERY_SETTING_INCIDENT_URGENCY_REQUESTED,
+  UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED
 } from "./actions";
 
 import {
   TRIGGERED,
   ACKNOWLEDGED,
-  RESOLVED
+  RESOLVED,
+  HIGH,
+  LOW,
 } from "util/incidents";
 
 const querySettings = produce(
@@ -46,6 +50,15 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED;
         break;
 
+      case UPDATE_QUERY_SETTING_INCIDENT_URGENCY_REQUESTED:
+        draft.status = UPDATE_QUERY_SETTING_INCIDENT_URGENCY_REQUESTED;
+        break;
+
+      case UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED:
+        draft.incidentUrgency = action.incidentUrgency;
+        draft.status = UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED;
+        break;
+
       // TODO: Insert further actions for status, urgency, etc
       default:
         break;
@@ -56,6 +69,7 @@ const querySettings = produce(
     sinceDate: moment().subtract(1, "days").toDate(),
     untilDate: new Date(),
     incidentStatus: [TRIGGERED, ACKNOWLEDGED],
+    incidentUrgency: [HIGH, LOW],
     status: null,
     fetchingData: false,
     error: null
