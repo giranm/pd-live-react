@@ -31,5 +31,5 @@ export function* updateQuerySettingsSinceDateImpl(action) {
   // Update since date and re-request incidents list
   let { sinceDate } = action;
   yield put({ type: UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED, sinceDate });
-  // yield put({ type: FETCH_INCIDENTS_REQUESTED, since: sinceDate }); // TODO: Fix this incorrect args and redispatching
+  yield put({ type: FETCH_INCIDENTS_REQUESTED });
 };

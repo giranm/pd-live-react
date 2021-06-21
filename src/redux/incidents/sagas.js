@@ -12,6 +12,7 @@ import {
 } from "./actions";
 
 import { selectIncidents } from "./selectors";
+import { selectQuerySettings } from "redux/query_settings/selectors";
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
@@ -23,12 +24,13 @@ export function* getIncidentsAsync() {
 export function* getIncidents(action) {
   try {
     //  Create params and call pd lib
-    let { since, until } = action;
+    let { sinceDate, untilDate, incidentStatus } = yield select(selectQuerySettings);
     let params = {
-      since: since.toISOString(),
-      until: until.toISOString(),
+      since: sinceDate.toISOString(),
+      until: untilDate.toISOString(),
       'include[]': 'first_trigger_log_entries',
-      'statuses[]': ['triggered', 'acknowledged']
+      'statuses[]': incidentStatus,
+      // TODO: Insert queries for teams, services, urgency etc
     };
     let response = yield call(pd.all, "incidents", { data: { ...params } });
 

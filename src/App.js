@@ -30,10 +30,12 @@ const App = ({
   let until = moment(now).subtract(5, "minutes").toDate();
 
   // Initial load of objects from API
-  getServicesAsync();
-  getTeamsAsync();
-  getPrioritiesAsync();
-  getIncidentsAsync();
+  useEffect(() => {
+    getServicesAsync();
+    getTeamsAsync();
+    getPrioritiesAsync();
+    getIncidentsAsync();
+  }, [])
 
   // Setup log entry polling.
   let { lastPolled } = logEntries;
@@ -65,7 +67,7 @@ const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),
-  getIncidentsAsync: (since, until) => dispatch(getIncidentsAsync(since, until)),
+  getIncidentsAsync: () => dispatch(getIncidentsAsync()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),
 });

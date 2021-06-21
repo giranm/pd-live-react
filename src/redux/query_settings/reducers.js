@@ -29,6 +29,8 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED;
         break;
 
+
+      // TODO: Insert further actions for status, urgency, etc
       default:
         break;
     }
@@ -36,6 +38,8 @@ const querySettings = produce(
   {
     displayQuerySettings: true,
     sinceDate: moment().subtract(1, "days").toDate(),
+    untilDate: new Date(),
+    incidentStatus: ['triggered', 'acknowledged'],
     status: null,
     fetchingData: false,
     error: null

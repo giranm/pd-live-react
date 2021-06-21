@@ -10,13 +10,8 @@ export const UPDATE_INCIDENTS_LIST_COMPLETED = "UPDATE_INCIDENTS_LIST_COMPLETED"
 export const UPDATE_INCIDENTS_LIST_ERROR = "UPDATE_INCIDENTS_LIST_ERROR";
 
 // Define Actions
-export const getIncidentsAsync = (
-  since = moment().subtract(1, "days").startOf('date').toDate(),
-  until = moment().startOf('date').toDate()
-) => ({
+export const getIncidentsAsync = () => ({
   type: FETCH_INCIDENTS_REQUESTED,
-  since,
-  until
 });
 
 export const updateIncidentsListAsync = (addList, updateList, removeList) => ({
