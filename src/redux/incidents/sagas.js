@@ -28,7 +28,8 @@ export function* getIncidents(action) {
       sinceDate,
       untilDate,
       incidentStatus,
-      incidentUrgency
+      incidentUrgency,
+      teamIds
     } = yield select(selectQuerySettings);
 
     let params = {
@@ -37,12 +38,15 @@ export function* getIncidents(action) {
       'include[]': 'first_trigger_log_entries',
     };
 
-    // TODO: Insert queries for teams, services, urgency etc
+    // TODO: Insert queries for services
     if (incidentStatus)
       params["statuses[]"] = incidentStatus;
 
     if (incidentUrgency)
       params["urgencies[]"] = incidentUrgency;
+
+    if (teamIds.length)
+      params["team_ids[]"] = teamIds;
 
     let response = yield call(pd.all, "incidents", { data: { ...params } });
 

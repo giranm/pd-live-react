@@ -10,7 +10,8 @@ import {
   toggleDisplayQuerySettings,
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
-  updateQuerySettingsIncidentUrgency
+  updateQuerySettingsIncidentUrgency,
+  updateQuerySettingsTeams
 } from "./query_settings/sagas";
 
 
@@ -25,6 +26,7 @@ export default function* rootSaga() {
     updateQuerySettingsSinceDate(),
     updateQuerySettingsIncidentStatus(),
     updateQuerySettingsIncidentUrgency(),
+    updateQuerySettingsTeams(),
     updateIncidentTableColumns(),
     getServicesAsync(),
     getTeamsAsync(),

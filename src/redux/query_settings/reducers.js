@@ -9,7 +9,11 @@ import {
   UPDATE_QUERY_SETTING_INCIDENT_STATUS_REQUESTED,
   UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
   UPDATE_QUERY_SETTING_INCIDENT_URGENCY_REQUESTED,
-  UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED
+  UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED,
+  UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED,
+  UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
+  UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
+  UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED
 } from "./actions";
 
 import {
@@ -59,7 +63,16 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED;
         break;
 
-      // TODO: Insert further actions for status, urgency, etc
+      // TODO: Insert logic for priorities
+      case UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED:
+        draft.status = UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED;
+        break;
+
+      case UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED:
+        draft.teamIds = action.teamIds;
+        draft.status = UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED;
+        break;
+
       default:
         break;
     }
@@ -70,6 +83,7 @@ const querySettings = produce(
     untilDate: new Date(),
     incidentStatus: [TRIGGERED, ACKNOWLEDGED],
     incidentUrgency: [HIGH, LOW],
+    teamIds: [],
     status: null,
     fetchingData: false,
     error: null

@@ -21,7 +21,8 @@ import "./QuerySettingsComponent.css";
 import {
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
-  updateQuerySettingsIncidentUrgency
+  updateQuerySettingsIncidentUrgency,
+  updateQuerySettingsTeams
 } from "redux/query_settings/actions";
 
 import {
@@ -41,13 +42,14 @@ const QuerySettingsComponent = ({
   priorities,
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
-  updateQuerySettingsIncidentUrgency
+  updateQuerySettingsIncidentUrgency,
+  updateQuerySettingsTeams
 }) => {
   let {
     displayQuerySettings,
     sinceDate,
     incidentStatus,
-    incidentUrgency
+    incidentUrgency,
   } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
 
@@ -119,7 +121,6 @@ const QuerySettingsComponent = ({
                         </ToggleButton>
                       )
                     })}
-                    <Button variant="outline-dark">Clear</Button>
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
@@ -129,6 +130,7 @@ const QuerySettingsComponent = ({
                 Team: {' '}
                 <Form.Group>
                   <Select
+                    onChange={(selectedTeams) => updateQuerySettingsTeams(selectedTeams)}
                     components={animatedComponents}
                     isMulti
                     options={selectListTeams}
@@ -163,7 +165,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
   updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(updateQuerySettingsIncidentStatus(incidentStatus)),
-  updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(updateQuerySettingsIncidentUrgency(incidentUrgency))
+  updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(updateQuerySettingsIncidentUrgency(incidentUrgency)),
+  updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeams(teamIds))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);
