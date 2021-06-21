@@ -5,8 +5,16 @@ import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
   TOGGLE_DISPLAY_QUERY_SETTINGS_COMPLETED,
   UPDATE_QUERY_SETTING_SINCE_DATE_REQUESTED,
-  UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED
+  UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
+  UPDATE_QUERY_SETTING_INCIDENT_STATUS_REQUESTED,
+  UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED
 } from "./actions";
+
+import {
+  TRIGGERED,
+  ACKNOWLEDGED,
+  RESOLVED
+} from "util/incidents";
 
 const querySettings = produce(
   (draft, action) => {
@@ -29,6 +37,14 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED;
         break;
 
+      case UPDATE_QUERY_SETTING_INCIDENT_STATUS_REQUESTED:
+        draft.status = UPDATE_QUERY_SETTING_INCIDENT_STATUS_REQUESTED;
+        break;
+
+      case UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED:
+        draft.incidentStatus = action.incidentStatus;
+        draft.status = UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED;
+        break;
 
       // TODO: Insert further actions for status, urgency, etc
       default:
@@ -39,7 +55,7 @@ const querySettings = produce(
     displayQuerySettings: true,
     sinceDate: moment().subtract(1, "days").toDate(),
     untilDate: new Date(),
-    incidentStatus: ['triggered', 'acknowledged'],
+    incidentStatus: [TRIGGERED, ACKNOWLEDGED],
     status: null,
     fetchingData: false,
     error: null

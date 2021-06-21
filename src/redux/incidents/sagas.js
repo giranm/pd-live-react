@@ -23,15 +23,23 @@ export function* getIncidentsAsync() {
 
 export function* getIncidents(action) {
   try {
-    //  Create params and call pd lib
-    let { sinceDate, untilDate, incidentStatus } = yield select(selectQuerySettings);
+    //  Build params from query settings and call pd lib
+    let {
+      sinceDate,
+      untilDate,
+      incidentStatus
+    } = yield select(selectQuerySettings);
+
     let params = {
       since: sinceDate.toISOString(),
       until: untilDate.toISOString(),
       'include[]': 'first_trigger_log_entries',
-      'statuses[]': incidentStatus,
-      // TODO: Insert queries for teams, services, urgency etc
     };
+
+    // TODO: Insert queries for teams, services, urgency etc
+    if (incidentStatus)
+      params["statuses[]"] = incidentStatus;
+
     let response = yield call(pd.all, "incidents", { data: { ...params } });
 
     yield put({

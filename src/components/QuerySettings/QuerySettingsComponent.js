@@ -18,7 +18,18 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import "./QuerySettingsComponent.css";
 
-import { updateQuerySettingsSinceDate } from "redux/query_settings/actions";
+import {
+  updateQuerySettingsSinceDate,
+  updateQuerySettingsIncidentStatus
+} from "redux/query_settings/actions";
+
+import {
+  TRIGGERED,
+  ACKNOWLEDGED,
+  RESOLVED,
+  HIGH,
+  LOW
+} from "util/incidents";
 
 const animatedComponents = makeAnimated();
 
@@ -27,11 +38,17 @@ const QuerySettingsComponent = ({
   services,
   teams,
   priorities,
-  updateQuerySettingsSinceDate
+  updateQuerySettingsSinceDate,
+  updateQuerySettingsIncidentStatus
 }) => {
-  let { displayQuerySettings, sinceDate } = querySettings;
+  let {
+    displayQuerySettings,
+    sinceDate,
+    incidentStatus
+  } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
 
+  // Generate lists/data from store
   let selectListServices = services.map(service => {
     return {
       label: service.name,
@@ -53,7 +70,6 @@ const QuerySettingsComponent = ({
     }
   });
 
-
   return (
     <div className="query-settings-ctr">
       <Accordion defaultActiveKey="0">
@@ -73,21 +89,19 @@ const QuerySettingsComponent = ({
               <Col xs="auto">
                 State: {' '}
                 <Form.Group>
-                  <ToggleButtonGroup type="checkbox">
-                    <ToggleButton variant="outline-dark" value={"ALL"}>All</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={"TRIGGERED"}>Triggered</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={"ACKNOWLEDGED"}>Acknowleged</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={"RESOLVED"}>Resolved</ToggleButton>
+                  <ToggleButtonGroup type="checkbox" value={incidentStatus} onChange={(val) => updateQuerySettingsIncidentStatus(val)}>
+                    <ToggleButton variant="outline-dark" value={TRIGGERED} >Triggered</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={ACKNOWLEDGED}>Acknowleged</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={RESOLVED}>Resolved</ToggleButton>
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
               <Col xs="auto">
                 Urgency: {' '}
                 <Form.Group>
-                  <ToggleButtonGroup type="checkbox">
-                    <ToggleButton variant="outline-dark" value={"ALL"}>All</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={"HIGH"}>High</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={"LOW"}>Low</ToggleButton>
+                  <ToggleButtonGroup type="checkbox" onChange={(val) => console.log(val)}>
+                    <ToggleButton variant="outline-dark" value={HIGH}>High</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={LOW}>Low</ToggleButton>
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
@@ -145,6 +159,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
+  updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(updateQuerySettingsIncidentStatus(incidentStatus))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);
