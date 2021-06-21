@@ -38,12 +38,14 @@ const App = ({
   }, [])
 
   // Setup log entry polling.
-  let { lastPolled } = logEntries;
   useEffect(() => {
+    const pollingIntervalSeconds = 5;
     const interval = setInterval(() => {
-      let lastPolledDate = lastPolled ? new Date(lastPolled) : until;
+      // FIXME: Find out why lastPolled does not update in store
+      // let lastPolledDate = moment().subtract(2 * pollingIntervalSeconds, "seconds").toDate()
+      let lastPolledDate = logEntries.lastPolled;
       getLogEntriesAsync(lastPolledDate);
-    }, 5000);
+    }, pollingIntervalSeconds * 1000);
     return () => clearInterval(interval);
   }, []);
 

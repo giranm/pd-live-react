@@ -8,6 +8,8 @@ import {
   FETCH_PRIORITIES_ERROR,
 } from "./actions";
 
+import { UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED } from "redux/query_settings/actions";
+
 import { selectPriorities } from "./selectors";
 
 // TODO: Update with Bearer token OAuth
@@ -21,10 +23,18 @@ export function* getPriorities() {
   try {
     //  Create params and call pd lib
     let response = yield call(pd.all, "priorities");
+    let priorities = response.resource
 
     yield put({
       type: FETCH_PRIORITIES_COMPLETED,
-      priorities: response.resource
+      priorities
+    });
+
+    // Update default query list to include all priorities on app load
+    let incidentPriority = priorities.map((priority) => priority.id)
+    yield put({
+      type: UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED,
+      incidentPriority
     });
 
   } catch (e) {

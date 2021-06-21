@@ -65,7 +65,15 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED;
         break;
 
-      // TODO: Insert logic for priorities
+      case UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED:
+        draft.status = UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED;
+        break;
+
+      case UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED:
+        draft.incidentPriority = action.incidentPriority;
+        draft.status = UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED;
+        break;
+
       case UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED:
         draft.status = UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED;
         break;
@@ -94,6 +102,7 @@ const querySettings = produce(
     untilDate: new Date(),
     incidentStatus: [TRIGGERED, ACKNOWLEDGED],
     incidentUrgency: [HIGH, LOW],
+    incidentPriority: [],
     teamIds: [],
     serviceIds: [],
     status: null,

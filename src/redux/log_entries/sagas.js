@@ -72,13 +72,32 @@ export function* updateRecentLogEntries(action) {
       });
 
       // Find out what incidents need to be updated based on log entry type
+      // TODO: Move entryType definitions to utils/
       let entryType = logEntry.type;
       if (entryType === 'resolve_log_entry') {
         removeSet.add(logEntry);
       } else if (entryType === 'trigger_log_entry') {
         addSet.add(logEntry);
-      } else {
+      } else if (entryType === 'priority_change_log_entry') {
         updateSet.add(logEntry);
+      } else if (entryType === 'acknowledge_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'unacknowledge_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'title_change_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'assign_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'delegate_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'responder_request_for_escalation_policy_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === '"responder_accept_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'annotate_log_entry') {
+        updateSet.add(logEntry);
+      } else {
+        // Other type of log entry which does not warrant an incident update
       }
 
     });

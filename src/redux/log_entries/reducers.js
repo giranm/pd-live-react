@@ -1,4 +1,5 @@
 import produce from "immer";
+import moment from "moment";
 
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
@@ -83,7 +84,7 @@ const logEntries = produce(
     status: null,
     fetchingData: false,
     error: null,
-    lastPolled: null
+    lastPolled: moment().subtract(1, "minutes").toDate()
   }
 );
 

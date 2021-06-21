@@ -6,7 +6,10 @@ import {
   FETCH_INCIDENTS_ERROR,
   UPDATE_INCIDENTS_LIST,
   UPDATE_INCIDENTS_LIST_COMPLETED,
-  UPDATE_INCIDENTS_LIST_ERROR
+  UPDATE_INCIDENTS_LIST_ERROR,
+  FILTER_INCIDENTS_LIST_BY_PRIORITY,
+  FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR
 } from "./actions";
 
 const incidents = produce(
@@ -43,6 +46,23 @@ const incidents = produce(
       case UPDATE_INCIDENTS_LIST_ERROR:
         draft.fetchingData = false;
         draft.status = UPDATE_INCIDENTS_LIST_ERROR;
+        draft.error = action.message
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_PRIORITY:
+        draft.fetchingData = false;
+        draft.status = UPDATE_INCIDENTS_LIST;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED;
+        draft.incidents = action.incidents;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR;
         draft.error = action.message
         break;
 

@@ -65,6 +65,18 @@ export function* updateQuerySettingsIncidentUrgencyImpl(action) {
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
 };
 
+
+export function* updateQuerySettingsIncidentPriority() {
+  yield takeLatest(UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED, updateQuerySettingsIncidentPriorityImpl);
+};
+
+export function* updateQuerySettingsIncidentPriorityImpl(action) {
+  // Update incident priority, re-request incidents list, and then apply priority filtering
+  let { incidentPriority } = action;
+  yield put({ type: UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED, incidentPriority });
+  yield put({ type: FETCH_INCIDENTS_REQUESTED });
+};
+
 export function* updateQuerySettingsTeams() {
   yield takeLatest(UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED, updateQuerySettingsTeamsImpl);
 };

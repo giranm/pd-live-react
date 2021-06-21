@@ -22,6 +22,7 @@ import {
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
   updateQuerySettingsIncidentUrgency,
+  updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
   updateQuerySettingsServices
 } from "redux/query_settings/actions";
@@ -44,6 +45,7 @@ const QuerySettingsComponent = ({
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
   updateQuerySettingsIncidentUrgency,
+  updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
   updateQuerySettingsServices
 }) => {
@@ -52,6 +54,7 @@ const QuerySettingsComponent = ({
     sinceDate,
     incidentStatus,
     incidentUrgency,
+    incidentPriority,
   } = querySettings;
   let eventKey = displayQuerySettings ? "0" : "1"
 
@@ -115,10 +118,10 @@ const QuerySettingsComponent = ({
               <Col xs="auto">
                 Priorities: {' '}
                 <Form.Group>
-                  <ToggleButtonGroup type="checkbox">
+                  <ToggleButtonGroup type="checkbox" value={incidentPriority} onChange={(val) => updateQuerySettingsIncidentPriority(val)}>
                     {selectListPriorities.map(priority => {
                       return (
-                        <ToggleButton key={priority.value} variant="outline-dark" value={priority.label}>
+                        <ToggleButton key={priority.value} variant="outline-dark" value={priority.value}>
                           {priority.label}
                         </ToggleButton>
                       )
@@ -175,6 +178,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
   updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(updateQuerySettingsIncidentStatus(incidentStatus)),
   updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(updateQuerySettingsIncidentUrgency(incidentUrgency)),
+  updateQuerySettingsIncidentPriority: (incidentPriority) => dispatch(updateQuerySettingsIncidentPriority(incidentPriority)),
   updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeams(teamIds)),
   updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServices(serviceIds))
 });
