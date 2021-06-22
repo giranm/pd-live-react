@@ -87,6 +87,12 @@ export function* updateIncidentsList(action) {
     let { incidentPriority } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
+    // Add new incidents to list
+    addList.map(addItem => {
+      if (addItem.incident)
+        updatedIncidentsList.push(addItem.incident)
+    });
+
     // Update existing incidents within list
     if (incidents.length && updateList.length) {
       updatedIncidentsList = updatedIncidentsList.map(existingIncident => {
@@ -111,15 +117,7 @@ export function* updateIncidentsList(action) {
           pushToArray(updatedIncidentsList, updateItem.incident, "id");
         };
       });
-      console.log("updatedIncidentsList now has", updatedIncidentsList)
     };
-
-    // Add new incidents to list
-    addList.map(addItem => {
-      if (addItem.incident)
-        updatedIncidentsList.push(addItem.incident)
-    });
-
 
     // Remove incidents within list
     updatedIncidentsList = updatedIncidentsList.filter(existingIncident => {
