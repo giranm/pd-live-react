@@ -63,3 +63,17 @@
   font-size: 16px !important;
   font-weight: 600 !important;
 }
+
+/* Table Settings */
+.rdt_Pagination {
+  position: relative;
+  right: 80px;
+  border-top: unset;
+}
+
+.incident-table-settings-btn {
+  position: relative;
+  float: right;
+  bottom: 44px;
+  right: 10px;
+}

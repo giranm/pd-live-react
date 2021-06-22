@@ -4,6 +4,8 @@
   src: url("./assets/fonts/ColfaxPD-Regular.woff") format('woff');
 }
 
+@import url('../node_modules/font-awesome/css/font-awesome.min.css');
+
 body {
   font-family: "ColfaxPD", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
