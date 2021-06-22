@@ -23,7 +23,10 @@ export function* getPriorities() {
   try {
     //  Create params and call pd lib
     let response = yield call(pd.all, "priorities");
-    let priorities = response.resource
+    let priorities = response.resource;
+
+    // Push an artificial priority (e.g. empty one)
+    priorities.push({ name: "--", id: "--" });
 
     yield put({
       type: FETCH_PRIORITIES_COMPLETED,

@@ -154,6 +154,9 @@ export function* filterIncidentsByPriorityImpl(action) {
       (incident) => {
         if (incident.priority && incidentPriority.includes(incident.priority.id))
           return incident
+
+        if (!incident.priority && incidentPriority.includes("--"))
+          return incident
       }
     );
     yield put({ type: FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED, incidents: filteredIncidentsByPriorityList });

@@ -45,7 +45,7 @@ const incidentTableSettings = produce(
         width: "100px"
       },
       {
-        selector: "priority.summary",
+        selector: (incident) => incident.priority ? incident.priority.summary : "--",
         name: "Priority",
         sortable: true,
         width: "100px"
