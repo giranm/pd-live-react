@@ -6,11 +6,9 @@ import {
   TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
   UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
-  UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_REQUESTED,
-  UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_COMPLETED,
 } from "./actions";
 
-import { selectIncidentTableSettings, selectTempIncidentTableSettings } from "./selectors";
+import { selectIncidentTableSettings } from "./selectors";
 
 export function* toggleIncidentTableSettings() {
   yield takeLatest(TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED, toggleIncidentTableSettingsImpl);
@@ -28,13 +26,4 @@ export function* updateIncidentTableColumns() {
 export function* updateIncidentTableColumnsImpl(action) {
   let { incidentTableColumns } = action;
   yield put({ type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED, incidentTableColumns });
-};
-
-export function* updateTempIncidentTableColumns() {
-  yield takeLatest(UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_REQUESTED, updateTempIncidentTableColumnsImpl);
-};
-
-export function* updateTempIncidentTableColumnsImpl(action) {
-  let { incidentTableColumns } = action;
-  yield put({ type: UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_COMPLETED, incidentTableColumns });
 };

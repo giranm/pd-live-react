@@ -25,7 +25,6 @@ import {
 import {
   toggleIncidentTableSettings,
   updateIncidentTableColumns,
-  updateTempIncidentTableColumns
 } from "./incident_table/sagas";
 
 import { getServicesAsync } from "./services/sagas";
@@ -56,7 +55,6 @@ export default function* rootSaga() {
     // Incident Table
     toggleIncidentTableSettings(),
     updateIncidentTableColumns(),
-    updateTempIncidentTableColumns(),
 
     // Services
     getServicesAsync(),

@@ -5,8 +5,6 @@ import {
   TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
   UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
-  UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_REQUESTED,
-  UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_COMPLETED,
 } from "./actions";
 
 import { getIncidentTableColumns } from "util/incident-table-columns";
@@ -20,7 +18,7 @@ const defaultColumnNames = [
   "Service",
 ]
 
-export const incidentTableSettings = produce(
+const incidentTableSettings = produce(
   (draft, action) => {
     switch (action.type) {
       case TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED:
@@ -54,23 +52,4 @@ export const incidentTableSettings = produce(
   }
 );
 
-export const tempIncidentTableSettings = produce(
-  (draft, action) => {
-    switch (action.type) {
-      case UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_REQUESTED:
-        draft.status = UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_REQUESTED;
-        break;
-
-      case UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_COMPLETED:
-        draft.incidentTableColumns = action.incidentTableColumns;
-        draft.status = UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_COMPLETED;
-        break;
-
-      default:
-        break;
-    }
-  },
-  {
-    incidentTableColumns: getIncidentTableColumns(defaultColumnNames),
-  }
-);
+export default incidentTableSettings;

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import {
@@ -15,32 +16,30 @@ import "./IncidentTableSettingsComponent.css";
 
 import {
   toggleIncidentTableSettings,
-  updateTempIncidentTableColumns,
 } from "redux/incident_table/actions";
 
+import { availableIncidentTableColumns } from "util/incident-table-columns";
+
+const columnMapper = (column) => {
+  return {
+    label: column.name,
+    value: column.name
+  }
+}
+
 const IncidentTableSettingsComponent = ({
-  toggleIncidentTableSettings,
   incidentTableSettings,
-  tempIncidentTableSettings,
-  updateTempIncidentTableColumns
+  toggleIncidentTableSettings,
 }) => {
   let { incidentTableColumns, displayIncidentTableSettings } = incidentTableSettings;
-  let { incidentTableColumns: tempIncidentTableColumns } = tempIncidentTableSettings;
 
-  // Generate options and selected items
-  let availableColumns = incidentTableColumns.map(column => {
-    return {
-      label: column.name,
-      value: column.name,
-    }
-  });
+  // Create internal state for options
+  const [selectedColumns, setSelectedColumns] = useState(incidentTableColumns.map(columnMapper));
+  let availableColumns = availableIncidentTableColumns.map(columnMapper);
 
-  let selectedColumns = tempIncidentTableColumns.map(column => {
-    return {
-      label: column.name,
-      value: column.name,
-    }
-  });
+  useEffect(() => {
+    console.log("Selected Columns", selectedColumns);
+  }, [selectedColumns]);
 
   return (
     <div className="incident-table-settings-ctr">
@@ -66,7 +65,7 @@ const IncidentTableSettingsComponent = ({
                   simpleValue={false}
                   options={availableColumns}
                   selected={selectedColumns}
-                  onChange={(cols) => updateTempIncidentTableColumns(cols)}
+                  onChange={(cols) => setSelectedColumns(cols)}
                 />
               </Col>
             </Row>
@@ -87,12 +86,10 @@ const IncidentTableSettingsComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
-  tempIncidentTableSettings: state.tempIncidentTableSettings
 });
 
 const mapDispatchToProps = (dispatch) => ({
   toggleIncidentTableSettings: () => dispatch(toggleIncidentTableSettings()),
-  updateTempIncidentTableColumns: (incidentTableColumns) => dispatch(updateTempIncidentTableColumns(incidentTableColumns))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentTableSettingsComponent);
