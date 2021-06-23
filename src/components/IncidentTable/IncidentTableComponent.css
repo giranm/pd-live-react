@@ -77,3 +77,20 @@
   bottom: 44px;
   right: 10px;
 }
+
+/* Priority Pill */
+.priority-label {
+  display: inline;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 26px;
+  font-weight: 700;
+  font-size: 18px;
+  white-space: nowrap;
+  margin-right: 5px;
+  padding: 5px 10px 3px;
+  border-radius: 5px;
+  vertical-align: -4px;
+  border-radius: 4px;
+}

@@ -105,26 +105,25 @@ export const availableIncidentTableColumns = [
     selector: (incident) => {
       if (incident.priority) {
         return (
-          <h5>
-            <Badge
-              style={{
-                backgroundColor: `#${incident.priority.color}`,
-                color: "white",
-                position: "relative",
-                top: "2px",
-              }}
-            >
-              {incident.priority.summary}
-            </Badge>
-          </h5>
+          <p
+            style={{
+              backgroundColor: `#${incident.priority.color}`,
+              color: "white",
+            }}
+            className="priority-label"
+          >
+            {incident.priority.summary}
+          </p>
         );
       } else {
-        return "--";
+        return (<p className="priority-label">--</p>);
       }
     },
     name: "Priority",
     sortable: true,
     minWidth: "100px",
+    allowOverflow: true,
+    sortFunction: (row1, row2) => null // TBD - this needs to be custom implemented
   },
   // TODO: incidents_responders, responder_requests, subscriber_requests
   {
