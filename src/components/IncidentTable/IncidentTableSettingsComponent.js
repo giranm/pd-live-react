@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
 
 import {
@@ -7,6 +7,8 @@ import {
   Container,
   Row,
   Col,
+  Tabs,
+  Tab
 } from 'react-bootstrap';
 
 import DualListBox from 'react-dual-listbox';
@@ -16,6 +18,7 @@ import "./IncidentTableSettingsComponent.css";
 
 import {
   toggleIncidentTableSettings,
+  saveIncidentTableSettings
 } from "redux/incident_table/actions";
 
 import { availableIncidentTableColumns } from "util/incident-table-columns";
@@ -30,16 +33,13 @@ const columnMapper = (column) => {
 const IncidentTableSettingsComponent = ({
   incidentTableSettings,
   toggleIncidentTableSettings,
+  saveIncidentTableSettings
 }) => {
   let { incidentTableColumns, displayIncidentTableSettings } = incidentTableSettings;
 
   // Create internal state for options
   const [selectedColumns, setSelectedColumns] = useState(incidentTableColumns.map(columnMapper));
   let availableColumns = availableIncidentTableColumns.map(columnMapper);
-
-  useEffect(() => {
-    console.log("Selected Columns", selectedColumns);
-  }, [selectedColumns]);
 
   return (
     <div className="incident-table-settings-ctr">
@@ -53,29 +53,28 @@ const IncidentTableSettingsComponent = ({
           <Modal.Title as="h3">Incident Table Settings</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Container>
-            <Row>
-              <Col>
-                <DualListBox
-                  canFilter
-                  preserveSelectOrder
-                  showOrderButtons
-                  showHeaderLabels
-                  showNoOptionsText
-                  simpleValue={false}
-                  options={availableColumns}
-                  selected={selectedColumns}
-                  onChange={(cols) => setSelectedColumns(cols)}
-                />
-              </Col>
-            </Row>
-          </Container>
+          <Tabs defaultActiveKey="columns">
+            <Tab eventKey="columns" title="Columns">
+              <br />
+              <DualListBox
+                canFilter
+                preserveSelectOrder
+                showOrderButtons
+                showHeaderLabels
+                showNoOptionsText
+                simpleValue={false}
+                options={availableColumns}
+                selected={selectedColumns}
+                onChange={(cols) => setSelectedColumns(cols)}
+              />
+            </Tab>
+          </Tabs>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={toggleIncidentTableSettings}>
             Close
           </Button>
-          <Button variant="primary" onClick={toggleIncidentTableSettings}>
+          <Button variant="primary" onClick={() => saveIncidentTableSettings(selectedColumns)}>
             Save Changes
           </Button>
         </Modal.Footer>
@@ -90,6 +89,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   toggleIncidentTableSettings: () => dispatch(toggleIncidentTableSettings()),
+  saveIncidentTableSettings: (updatedIncidentTableColumns) => dispatch(saveIncidentTableSettings(updatedIncidentTableColumns)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentTableSettingsComponent);

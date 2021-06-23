@@ -3,6 +3,9 @@ import produce from "immer";
 import {
   TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED,
   TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
+  SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED,
+  SAVE_INCIDENT_TABLE_SETTINGS_COMPLETED,
+  SAVE_INCIDENT_TABLE_SETTINGS_ERROR,
   UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
 } from "./actions";
@@ -28,6 +31,19 @@ const incidentTableSettings = produce(
       case TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED:
         draft.displayIncidentTableSettings = action.displayIncidentTableSettings;
         draft.status = TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED;
+        break;
+
+      case SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED:
+        draft.status = SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED;
+        break;
+
+      case SAVE_INCIDENT_TABLE_SETTINGS_COMPLETED:
+        draft.status = SAVE_INCIDENT_TABLE_SETTINGS_COMPLETED;
+        break;
+
+      case SAVE_INCIDENT_TABLE_SETTINGS_ERROR:
+        draft.error = action.message;
+        draft.status = SAVE_INCIDENT_TABLE_SETTINGS_ERROR;
         break;
 
       case UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED:

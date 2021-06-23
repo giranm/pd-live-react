@@ -1,5 +1,3 @@
-import { Badge } from "react-bootstrap";
-
 import { getObjectsFromList } from "./helpers"
 
 // Define all possible columns for incidents under PagerDuty's API
@@ -8,7 +6,6 @@ export const availableIncidentTableColumns = [
     selector: "incident_number",
     name: "#",
     sortable: true,
-    minWidth: "80px",
     cell: (incident) => {
       return (
         <a href={incident.html_url} target="_blank"

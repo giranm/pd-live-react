@@ -24,6 +24,7 @@ import {
 
 import {
   toggleIncidentTableSettings,
+  saveIncidentTableSettings,
   updateIncidentTableColumns,
 } from "./incident_table/sagas";
 
@@ -54,6 +55,7 @@ export default function* rootSaga() {
 
     // Incident Table
     toggleIncidentTableSettings(),
+    saveIncidentTableSettings(),
     updateIncidentTableColumns(),
 
     // Services
