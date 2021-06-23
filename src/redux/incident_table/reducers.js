@@ -9,6 +9,17 @@ import {
   UPDATE_TEMP_INCIDENT_TABLE_COLUMNS_COMPLETED,
 } from "./actions";
 
+import { getIncidentTableColumns } from "util/incident-table-columns";
+
+const defaultColumnNames = [
+  "#",
+  "Status",
+  "Priority",
+  "Title",
+  "Created At",
+  "Service",
+]
+
 export const incidentTableSettings = produce(
   (draft, action) => {
     switch (action.type) {
@@ -35,52 +46,8 @@ export const incidentTableSettings = produce(
     }
   },
   {
-    incidentTableColumns: [
-      {
-        selector: "incident_number",
-        name: "#",
-        sortable: true,
-        width: "80px",
-        cell: (row) => {
-          return (
-            <a href={row.html_url} target="_blank"
-              rel="noopener noreferrer">
-              {row.incident_number}
-            </a>
-          )
-        }
-      },
-      {
-        selector: "status",
-        name: "Status",
-        className: "status",
-        sortable: true,
-        width: "100px"
-      },
-      {
-        selector: (incident) => incident.priority ? incident.priority.summary : "--",
-        name: "Priority",
-        sortable: true,
-        width: "100px"
-      },
-      {
-        selector: "title",
-        name: "Title",
-        sortable: true,
-        minWidth: "500px"
-      },
-      {
-        selector: "created_at",
-        name: "Created At",
-        sortable: true,
-      },
-      {
-        selector: "service.summary",
-        name: "Service",
-        sortable: true,
-      },
-    ],
-    displayIncidentTableSettings: true,
+    incidentTableColumns: getIncidentTableColumns(defaultColumnNames),
+    displayIncidentTableSettings: false,
     status: null,
     fetchingData: false,
     error: null
@@ -104,50 +71,6 @@ export const tempIncidentTableSettings = produce(
     }
   },
   {
-    incidentTableColumns: [
-      {
-        selector: "incident_number",
-        name: "#",
-        sortable: true,
-        width: "80px",
-        cell: (row) => {
-          return (
-            <a href={row.html_url} target="_blank"
-              rel="noopener noreferrer">
-              {row.incident_number}
-            </a>
-          )
-        }
-      },
-      {
-        selector: "status",
-        name: "Status",
-        className: "status",
-        sortable: true,
-        width: "100px"
-      },
-      {
-        selector: (incident) => incident.priority ? incident.priority.summary : "--",
-        name: "Priority",
-        sortable: true,
-        width: "100px"
-      },
-      {
-        selector: "title",
-        name: "Title",
-        sortable: true,
-        minWidth: "500px"
-      },
-      {
-        selector: "created_at",
-        name: "Created At",
-        sortable: true,
-      },
-      {
-        selector: "service.summary",
-        name: "Service",
-        sortable: true,
-      },
-    ]
+    incidentTableColumns: getIncidentTableColumns(defaultColumnNames),
   }
 );
