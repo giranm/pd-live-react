@@ -26,6 +26,7 @@ import {
   toggleIncidentTableSettings,
   saveIncidentTableSettings,
   updateIncidentTableColumns,
+  selectIncidentTableRows,
 } from "./incident_table/sagas";
 
 import {
@@ -63,6 +64,7 @@ export default function* rootSaga() {
     toggleIncidentTableSettings(),
     saveIncidentTableSettings(),
     updateIncidentTableColumns(),
+    selectIncidentTableRows(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

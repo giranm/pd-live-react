@@ -9,6 +9,9 @@ export const SAVE_INCIDENT_TABLE_SETTINGS_ERROR = "SAVE_INCIDENT_TABLE_SETTINGS_
 export const UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED = "UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED";
 export const UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED = "UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED";
 
+export const SELECT_INCIDENT_TABLE_ROWS_REQUESTED = "SELECT_INCIDENT_TABLE_ROWS_REQUESTED";
+export const SELECT_INCIDENT_TABLE_ROWS_COMPLETED = "SELECT_INCIDENT_TABLE_ROWS_COMPLETED";
+
 // Define Actions
 export const toggleIncidentTableSettings = () => ({
   type: TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED
@@ -22,4 +25,11 @@ export const saveIncidentTableSettings = (updatedIncidentTableColumns) => ({
 export const updateIncidentTableColumns = (incidentTableColumns) => ({
   type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   incidentTableColumns
+});
+
+export const selectIncidentTableRows = (allSelected, selectedCount, selectedRows) => ({
+  type: SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
+  allSelected,
+  selectedCount,
+  selectedRows
 });

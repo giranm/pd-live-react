@@ -14,7 +14,10 @@ import IncidentTableSettingsComponent from "./IncidentTableSettingsComponent";
 import 'react-data-table-component-extensions/dist/index.css';
 import "./IncidentTableComponent.css";
 
-import { toggleIncidentTableSettings } from "redux/incident_table/actions";
+import {
+  toggleIncidentTableSettings,
+  selectIncidentTableRows,
+} from "redux/incident_table/actions";
 
 const EmptyIncidentsComponent = () => {
   return (
@@ -25,7 +28,12 @@ const EmptyIncidentsComponent = () => {
   )
 }
 
-const IncidentTableComponent = ({ incidentTableSettings, incidents, toggleIncidentTableSettings }) => {
+const IncidentTableComponent = ({
+  toggleIncidentTableSettings,
+  selectIncidentTableRows,
+  incidentTableSettings,
+  incidents
+}) => {
   let { incidentTableColumns } = incidentTableSettings;
 
   return (
@@ -44,6 +52,10 @@ const IncidentTableComponent = ({ incidentTableSettings, incidents, toggleIncide
           pagination={true}
           paginationRowsPerPageOptions={[10, 15, 20, 25, 30]}
           noDataComponent={EmptyIncidentsComponent()}
+          onSelectedRowsChange={
+            ({ allSelected, selectedCount, selectedRows }) =>
+              selectIncidentTableRows(allSelected, selectedCount, selectedRows)
+          }
         />
       </DataTableExtensions>
       {incidents.length ? (
@@ -72,6 +84,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   toggleIncidentTableSettings: () => dispatch(toggleIncidentTableSettings()),
+  selectIncidentTableRows: (allSelected, selectedCount, selectedRows) =>
+    dispatch(selectIncidentTableRows(allSelected, selectedCount, selectedRows))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentTableComponent);

@@ -8,6 +8,8 @@ import {
   SAVE_INCIDENT_TABLE_SETTINGS_ERROR,
   UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
+  SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
+  SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
 } from "./actions";
 
 import { getIncidentTableColumns } from "util/incident-table-columns";
@@ -55,6 +57,17 @@ const incidentTableSettings = produce(
         draft.status = UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED;
         break;
 
+      case SELECT_INCIDENT_TABLE_ROWS_REQUESTED:
+        draft.status = SELECT_INCIDENT_TABLE_ROWS_REQUESTED;
+        break;
+
+      case SELECT_INCIDENT_TABLE_ROWS_COMPLETED:
+        draft.allSelected = action.allSelected;
+        draft.selectedCount = action.selectedCount;
+        draft.selectedRows = action.selectedRows;
+        draft.status = SELECT_INCIDENT_TABLE_ROWS_COMPLETED;
+        break;
+
       default:
         break;
     }
@@ -62,6 +75,9 @@ const incidentTableSettings = produce(
   {
     incidentTableColumns: getIncidentTableColumns(defaultColumnNames),
     displayIncidentTableSettings: false,
+    allSelected: false,
+    selectedCount: 0,
+    selectedRows: [],
     status: null,
     fetchingData: false,
     error: null

@@ -9,6 +9,8 @@ import {
   SAVE_INCIDENT_TABLE_SETTINGS_ERROR,
   UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
+  SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
+  SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
 } from "./actions";
 
 import { selectIncidentTableSettings } from "./selectors";
@@ -58,4 +60,13 @@ export function* updateIncidentTableColumns() {
 export function* updateIncidentTableColumnsImpl(action) {
   let { incidentTableColumns } = action;
   yield put({ type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED, incidentTableColumns });
+};
+
+export function* selectIncidentTableRows() {
+  yield takeLatest(SELECT_INCIDENT_TABLE_ROWS_REQUESTED, selectIncidentTableRowsImpl);
+};
+
+export function* selectIncidentTableRowsImpl(action) {
+  let { allSelected, selectedCount, selectedRows } = action;
+  yield put({ type: SELECT_INCIDENT_TABLE_ROWS_COMPLETED, allSelected, selectedCount, selectedRows });
 };
