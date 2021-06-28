@@ -4,9 +4,14 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import "./IncidentActionsComponent.css";
 
+import {
+  acknowledgeIncidents
+} from "redux/incident_actions/actions";
+
 const IncidentActionsComponent = ({
-  incidentActionSettings,
-  acknowledge,
+  incidentTableSettings,
+  incidentActions,
+  acknowledgeIncidents,
   escalate,
   reassign,
   addResponders,
@@ -16,12 +21,19 @@ const IncidentActionsComponent = ({
   addNote,
   runAction
 }) => {
+
+  let { selectedCount, selectedRows } = incidentTableSettings;
+
+  // TODO: Create helper function to determine what buttons should be enabled/disabled from selectedRows
+
   return (
     <div>
       <Container className="incident-actions-ctr" fluid>
         <Row>
           <Col>
-            <Button className="action-button" variant="outline-dark">Acknowledge</Button>
+            <Button className="action-button" variant="outline-dark" onClick={() => acknowledgeIncidents(selectedRows)}>
+              Acknowledge
+            </Button>
             <Button className="action-button" variant="outline-dark">Escalate</Button>
             <Button className="action-button" variant="outline-dark">Reassign</Button>
             <Button className="action-button" variant="outline-dark">Add Responders</Button>
@@ -40,11 +52,12 @@ const IncidentActionsComponent = ({
 }
 
 const mapStateToProps = (state) => ({
-  incidentActionSettings: null // To be added to store
+  incidentTableSettings: state.incidentTableSettings,
+  incidentActions: state.incidentActions,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  acknowledge: () => () => { }, // To be implemented as action
+  acknowledgeIncidents: (incidents) => dispatch(acknowledgeIncidents(incidents)), // To be implemented as action
   escalate: () => () => { }, // To be implemented as action
   reassign: (params) => () => { }, // To be implemented as action
   addResponders: (params) => () => { }, // To be implemented as action

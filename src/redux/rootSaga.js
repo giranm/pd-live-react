@@ -30,6 +30,10 @@ import {
 } from "./incident_table/sagas";
 
 import {
+  acknowledgeIncidentsAsync,
+} from "./incident_actions/sagas";
+
+import {
   toggleActionAlertsModal,
   updateActionAlertsModalType,
   updateActionAlertsModalMessage,
@@ -65,6 +69,9 @@ export default function* rootSaga() {
     saveIncidentTableSettings(),
     updateIncidentTableColumns(),
     selectIncidentTableRows(),
+
+    // Incident Actions
+    acknowledgeIncidentsAsync(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

@@ -5,6 +5,7 @@ import incidents from "./incidents/reducers";
 import logEntries from "./log_entries/reducers";
 import querySettings from "./query_settings/reducers";
 import incidentTableSettings from "./incident_table/reducers";
+import incidentActions from "./incident_actions/reducers";
 import services from "./services/reducers";
 import teams from "./teams/reducers";
 import priorities from "./priorities/reducers";
@@ -15,6 +16,7 @@ export default combineReducers({
   logEntries,
   querySettings,
   incidentTableSettings,
+  incidentActions,
   services,
   teams,
   priorities
