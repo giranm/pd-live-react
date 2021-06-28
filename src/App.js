@@ -8,6 +8,7 @@ import NavigationBarComponent from "components/NavigationBar/NavigationBarCompon
 import QuerySettingsComponent from "components/QuerySettings/QuerySettingsComponent";
 import IncidentTableComponent from "components/IncidentTable/IncidentTableComponent";
 import IncidentActionsComponent from "components/IncidentActions/IncidentActionsComponent";
+import ActionAlertsModalComponent from "components/ActionAlertsModal/ActionAlertsModalComponent";
 
 import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
@@ -56,6 +57,7 @@ const App = ({
         <QuerySettingsComponent />
         <IncidentTableComponent />
         <IncidentActionsComponent />
+        <ActionAlertsModalComponent />
       </Container>
     </div>
   );

@@ -28,6 +28,12 @@ import {
   updateIncidentTableColumns,
 } from "./incident_table/sagas";
 
+import {
+  toggleActionAlertsModal,
+  updateActionAlertsModalType,
+  updateActionAlertsModalMessage,
+} from "./action_alerts/sagas";
+
 import { getServicesAsync } from "./services/sagas";
 import { getTeamsAsync } from "./teams/sagas";
 import { getPrioritiesAsync } from "./priorities/sagas";
@@ -57,6 +63,11 @@ export default function* rootSaga() {
     toggleIncidentTableSettings(),
     saveIncidentTableSettings(),
     updateIncidentTableColumns(),
+
+    // Action Alerts Modal
+    toggleActionAlertsModal(),
+    updateActionAlertsModalType(),
+    updateActionAlertsModalMessage(),
 
     // Services
     getServicesAsync(),
