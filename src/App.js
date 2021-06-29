@@ -15,6 +15,7 @@ import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entrie
 import { getServicesAsync } from "redux/services/actions";
 import { getTeamsAsync } from "redux/teams/actions";
 import { getPrioritiesAsync } from "redux/priorities/actions";
+import { getCurrentUserAsync } from "redux/users/actions";
 
 import 'App.css';
 
@@ -23,6 +24,7 @@ const App = ({
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
+  getCurrentUserAsync,
   getIncidentsAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync
@@ -36,6 +38,7 @@ const App = ({
     getTeamsAsync();
     getPrioritiesAsync();
     getIncidentsAsync();
+    getCurrentUserAsync();
   }, [])
 
   // Setup log entry polling.
@@ -71,6 +74,7 @@ const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),
+  getCurrentUserAsync: () => dispatch(getCurrentUserAsync()),
   getIncidentsAsync: () => dispatch(getIncidentsAsync()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),

@@ -39,6 +39,10 @@ import {
   updateActionAlertsModalMessage,
 } from "./action_alerts/sagas";
 
+import {
+  getCurrentUserAsync
+} from "./users/sagas";
+
 import { getServicesAsync } from "./services/sagas";
 import { getTeamsAsync } from "./teams/sagas";
 import { getPrioritiesAsync } from "./priorities/sagas";
@@ -77,6 +81,9 @@ export default function* rootSaga() {
     toggleActionAlertsModal(),
     updateActionAlertsModalType(),
     updateActionAlertsModalMessage(),
+
+    // Users
+    getCurrentUserAsync(),
 
     // Services
     getServicesAsync(),

@@ -9,6 +9,7 @@ import incidentActions from "./incident_actions/reducers";
 import services from "./services/reducers";
 import teams from "./teams/reducers";
 import priorities from "./priorities/reducers";
+import users from "./users/reducers";
 
 export default combineReducers({
   actionAlertsModalData,
@@ -19,5 +20,6 @@ export default combineReducers({
   incidentActions,
   services,
   teams,
-  priorities
+  priorities,
+  users
 });

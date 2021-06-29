@@ -1,0 +1,8 @@
+// Define Action Types
+export const GET_CURRENT_USER_REQUESTED = "GET_CURRENT_USER_REQUESTED";
+export const GET_CURRENT_USER_COMPLETED = "GET_CURRENT_USER_COMPLETED";
+export const GET_CURRENT_USER_ERROR = "GET_CURRENT_USER_ERROR";
+
+export const getCurrentUserAsync = () => ({
+  type: GET_CURRENT_USER_REQUESTED,
+});
