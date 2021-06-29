@@ -30,7 +30,7 @@ import {
 } from "./incident_table/sagas";
 
 import {
-  acknowledgeIncidentsAsync,
+  acknowledgeAsync,
 } from "./incident_actions/sagas";
 
 import {
@@ -71,7 +71,7 @@ export default function* rootSaga() {
     selectIncidentTableRows(),
 
     // Incident Actions
-    acknowledgeIncidentsAsync(),
+    acknowledgeAsync(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

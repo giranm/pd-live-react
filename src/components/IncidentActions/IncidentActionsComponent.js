@@ -5,13 +5,13 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import "./IncidentActionsComponent.css";
 
 import {
-  acknowledgeIncidents
+  acknowledge
 } from "redux/incident_actions/actions";
 
 const IncidentActionsComponent = ({
   incidentTableSettings,
   incidentActions,
-  acknowledgeIncidents,
+  acknowledge,
   escalate,
   reassign,
   addResponders,
@@ -31,7 +31,7 @@ const IncidentActionsComponent = ({
       <Container className="incident-actions-ctr" fluid>
         <Row>
           <Col>
-            <Button className="action-button" variant="outline-dark" onClick={() => acknowledgeIncidents(selectedRows)}>
+            <Button className="action-button" variant="outline-dark" onClick={() => acknowledge(selectedRows)}>
               Acknowledge
             </Button>
             <Button className="action-button" variant="outline-dark">Escalate</Button>
@@ -57,7 +57,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  acknowledgeIncidents: (incidents) => dispatch(acknowledgeIncidents(incidents)), // To be implemented as action
+  acknowledge: (incidents) => dispatch(acknowledge(incidents)), // To be implemented as action
   escalate: () => () => { }, // To be implemented as action
   reassign: (params) => () => { }, // To be implemented as action
   addResponders: (params) => () => { }, // To be implemented as action
