@@ -20,7 +20,10 @@ import {
   FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR,
   FILTER_INCIDENTS_LIST_BY_TEAM,
   FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED,
-  FILTER_INCIDENTS_LIST_BY_TEAM_ERROR
+  FILTER_INCIDENTS_LIST_BY_TEAM_ERROR,
+  FILTER_INCIDENTS_LIST_BY_SERVICE,
+  FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR
 } from "./actions";
 
 import { selectIncidents } from "./selectors";
@@ -83,7 +86,7 @@ export function* getIncidents(action) {
 
   } catch (e) {
     yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
-  }
+  };
 };
 
 export function* updateIncidentsListAsync() {
@@ -99,6 +102,7 @@ export function* updateIncidentsList(action) {
       incidentStatus,
       incidentUrgency,
       teamIds,
+      serviceIds
     } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
@@ -173,9 +177,15 @@ export function* updateIncidentsList(action) {
       teamIds
     });
 
+    // Filter updated incident list on team
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_SERVICE,
+      serviceIds
+    });
+
   } catch (e) {
     yield put({ type: UPDATE_INCIDENTS_LIST_ERROR, message: e.message });
-  }
+  };
 };
 
 export function* filterIncidentsByPriority() {
@@ -200,7 +210,7 @@ export function* filterIncidentsByPriorityImpl(action) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED, incidents: filteredIncidentsByPriorityList });
   } catch (e) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR, message: e.message });
-  }
+  };
 
 };
 
@@ -217,7 +227,7 @@ export function* filterIncidentsByStatusImpl(action) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED, incidents: filteredIncidentsByStatusList });
   } catch (e) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_STATUS_ERROR, message: e.message });
-  }
+  };
 
 };
 
@@ -230,11 +240,11 @@ export function* filterIncidentsByUrgencyImpl(action) {
   try {
     let { incidentUrgency } = action;
     let { incidents } = yield select(selectIncidents);
-    let filteredIncidentsByUrgencyList = filterIncidentsByField(incidents, "urgency", incidentUrgency)
+    let filteredIncidentsByUrgencyList = filterIncidentsByField(incidents, "urgency", incidentUrgency);
     yield put({ type: FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED, incidents: filteredIncidentsByUrgencyList });
   } catch (e) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR, message: e.message });
-  }
+  };
 
 };
 
@@ -255,12 +265,41 @@ export function* filterIncidentsByTeamImpl(action) {
       filteredIncidentsByTeamList = filterIncidentsByFieldOfList(incidents, "teams", "id", teamIds);
     } else {
       filteredIncidentsByTeamList = [...incidents];
-    }
+    };
 
     // console.log(filteredIncidentsByTeamList, teamIds)
     yield put({ type: FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED, incidents: filteredIncidentsByTeamList });
   } catch (e) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_TEAM_ERROR, message: e.message });
-  }
+  };
+
+};
+
+export function* filterIncidentsByService() {
+  yield takeLatest(FILTER_INCIDENTS_LIST_BY_SERVICE, filterIncidentsByServiceImpl);
+};
+
+export function* filterIncidentsByServiceImpl(action) {
+  // Filter current incident list by service
+  try {
+    let { serviceIds } = action;
+    let { incidents } = yield select(selectIncidents);
+    let filteredIncidentsByServiceList;
+
+    // Typically there is no filtered view by services, so if empty, show all services.
+    // FIXME: A similar bug happens (e.g. teams filter) when removing services - could be something with log_entries
+    if (serviceIds.length) {
+      console.log("Pre filter incidents", incidents)
+      filteredIncidentsByServiceList = filterIncidentsByField(incidents, "service.id", serviceIds);
+    } else {
+      filteredIncidentsByServiceList = [...incidents];
+    };
+
+    console.log("Filtered", filteredIncidentsByServiceList);
+
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED, incidents: filteredIncidentsByServiceList });
+  } catch (e) {
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR, message: e.message });
+  };
 
 };

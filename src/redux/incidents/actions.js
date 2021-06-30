@@ -23,6 +23,10 @@ export const FILTER_INCIDENTS_LIST_BY_TEAM = "FILTER_INCIDENTS_LIST_BY_TEAM";
 export const FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED = "FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED";
 export const FILTER_INCIDENTS_LIST_BY_TEAM_ERROR = "FILTER_INCIDENTS_LIST_BY_TEAM_ERROR";
 
+export const FILTER_INCIDENTS_LIST_BY_SERVICE = "FILTER_INCIDENTS_LIST_BY_SERVICE";
+export const FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED = "FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED";
+export const FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR = "FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR";
+
 // Define Actions
 export const getIncidentsAsync = () => ({
   type: FETCH_INCIDENTS_REQUESTED,
@@ -53,4 +57,9 @@ export const filterIncidentsByUrgency = (incidentUrgency = []) => ({
 export const filterIncidentsByTeam = (teamIds = []) => ({
   type: FILTER_INCIDENTS_LIST_BY_TEAM,
   teamIds
+});
+
+export const filterIncidentsByService = (serviceIds = []) => ({
+  type: FILTER_INCIDENTS_LIST_BY_SERVICE,
+  serviceIds
 });
