@@ -11,6 +11,13 @@ import {
 import { selectIncidentActions } from "./selectors";
 import { selectUsers } from "redux/users/selectors";
 
+import {
+  TRIGGERED,
+  ACKNOWLEDGED,
+  RESOLVED,
+  filterIncidentsByField
+} from "util/incidents";
+
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
@@ -24,8 +31,11 @@ export function* acknowledge(action) {
     let { incidents } = action;
     let { currentUser } = yield select(selectUsers);
 
-    // TODO: Determine what incidents can be acknowledged (move logic from component)
-    let incidentsToBeAcknowledged = [...incidents];
+    let incidentsToBeAcknowledged = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
+    let incidentsNotToBeAcknowledged = filterIncidentsByField(incidents, "status", [RESOLVED]);
+
+    console.log("TO BE ACK", incidentsToBeAcknowledged);
+    console.log("NOT TO BE ACK", incidentsNotToBeAcknowledged);
 
     // Build request manually given PUT
     let headers = {
@@ -37,7 +47,7 @@ export function* acknowledge(action) {
         return {
           "id": incident.id,
           "type": "incident_reference",
-          "status": "acknowledged"
+          "status": ACKNOWLEDGED
         };
       })
     };
