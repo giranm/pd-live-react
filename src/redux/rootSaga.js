@@ -36,8 +36,7 @@ import {
 
 import {
   toggleActionAlertsModal,
-  updateActionAlertsModalType,
-  updateActionAlertsModalMessage,
+  updateActionAlertsModal,
 } from "./action_alerts/sagas";
 
 import {
@@ -81,8 +80,7 @@ export default function* rootSaga() {
 
     // Action Alerts Modal
     toggleActionAlertsModal(),
-    updateActionAlertsModalType(),
-    updateActionAlertsModalMessage(),
+    updateActionAlertsModal(),
 
     // Users
     getCurrentUserAsync(),

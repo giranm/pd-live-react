@@ -3,10 +3,8 @@ import produce from "immer";
 import {
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_COMPLETED,
-  UPDATE_ACTION_ALERTS_MODAL_TYPE_REQUESTED,
-  UPDATE_ACTION_ALERTS_MODAL_TYPE_COMPLETED,
-  UPDATE_ACTION_ALERTS_MODAL_MESSAGE_REQUESTED,
-  UPDATE_ACTION_ALERTS_MODAL_MESSAGE_COMPLETED
+  UPDATE_ACTION_ALERTS_MODAL_REQUESTED,
+  UPDATE_ACTION_ALERTS_MODAL_COMPLETED,
 } from "./actions";
 
 const actionAlertsModalData = produce(
@@ -21,22 +19,14 @@ const actionAlertsModalData = produce(
         draft.status = TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_COMPLETED;
         break;
 
-      case UPDATE_ACTION_ALERTS_MODAL_TYPE_REQUESTED:
-        draft.status = UPDATE_ACTION_ALERTS_MODAL_TYPE_REQUESTED;
+      case UPDATE_ACTION_ALERTS_MODAL_REQUESTED:
+        draft.status = UPDATE_ACTION_ALERTS_MODAL_REQUESTED;
         break;
 
-      case UPDATE_ACTION_ALERTS_MODAL_TYPE_COMPLETED:
+      case UPDATE_ACTION_ALERTS_MODAL_COMPLETED:
         draft.actionAlertsModalType = action.actionAlertsModalType;
-        draft.status = UPDATE_ACTION_ALERTS_MODAL_TYPE_COMPLETED;
-        break;
-
-      case UPDATE_ACTION_ALERTS_MODAL_MESSAGE_REQUESTED:
-        draft.status = UPDATE_ACTION_ALERTS_MODAL_MESSAGE_REQUESTED;
-        break;
-
-      case UPDATE_ACTION_ALERTS_MODAL_MESSAGE_COMPLETED:
         draft.actionAlertsModalMessage = action.actionAlertsModalMessage;
-        draft.status = UPDATE_ACTION_ALERTS_MODAL_MESSAGE_COMPLETED;
+        draft.status = UPDATE_ACTION_ALERTS_MODAL_COMPLETED;
         break;
 
       default:
