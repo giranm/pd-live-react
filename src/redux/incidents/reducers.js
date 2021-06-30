@@ -13,6 +13,9 @@ import {
   FILTER_INCIDENTS_LIST_BY_STATUS,
   FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_STATUS_ERROR,
+  FILTER_INCIDENTS_LIST_BY_URGENCY,
+  FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR,
 } from "./actions";
 
 const incidents = produce(
@@ -83,6 +86,23 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_STATUS_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_STATUS_ERROR;
+        draft.error = action.message
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_URGENCY:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_URGENCY;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED;
+        draft.incidents = action.incidents;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR;
         draft.error = action.message
         break;
 

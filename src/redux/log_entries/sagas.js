@@ -92,9 +92,13 @@ export function* updateRecentLogEntries(action) {
         updateSet.add(logEntry);
       } else if (entryType === 'responder_request_for_escalation_policy_log_entry') {
         updateSet.add(logEntry);
-      } else if (entryType === '"responder_accept_log_entry') {
+      } else if (entryType === 'responder_accept_log_entry') {
         updateSet.add(logEntry);
       } else if (entryType === 'annotate_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'urgency_change_log_entry') {
+        updateSet.add(logEntry);
+      } else if (entryType === 'change_urgency_log_entry') {
         updateSet.add(logEntry);
       } else {
         // Other type of log entry which does not warrant an incident update

@@ -15,6 +15,9 @@ import {
   FILTER_INCIDENTS_LIST_BY_STATUS,
   FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_STATUS_ERROR,
+  FILTER_INCIDENTS_LIST_BY_URGENCY,
+  FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR,
 } from "./actions";
 
 import { selectIncidents } from "./selectors";
@@ -88,7 +91,11 @@ export function* updateIncidentsList(action) {
   try {
     let { addList, updateList, removeList } = action;
     let { incidents } = yield select(selectIncidents);
-    let { incidentPriority, incidentStatus } = yield select(selectQuerySettings);
+    let {
+      incidentPriority,
+      incidentStatus,
+      incidentUrgency
+    } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
     // Add new incidents to list
@@ -150,6 +157,12 @@ export function* updateIncidentsList(action) {
       incidentStatus
     });
 
+    // Filter updated incident list on urgency
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_URGENCY,
+      incidentUrgency
+    });
+
   } catch (e) {
     yield put({ type: UPDATE_INCIDENTS_LIST_ERROR, message: e.message });
   }
@@ -194,6 +207,23 @@ export function* filterIncidentsByStatusImpl(action) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED, incidents: filteredIncidentsByStatusList });
   } catch (e) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_STATUS_ERROR, message: e.message });
+  }
+
+};
+
+export function* filterIncidentsByUrgency() {
+  yield takeLatest(FILTER_INCIDENTS_LIST_BY_URGENCY, filterIncidentsByUrgencyImpl);
+};
+
+export function* filterIncidentsByUrgencyImpl(action) {
+  // Filter current incident list by urgency
+  try {
+    let { incidentUrgency } = action;
+    let { incidents } = yield select(selectIncidents);
+    let filteredIncidentsByUrgencyList = filterIncidentsByField(incidents, "urgency", incidentUrgency)
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED, incidents: filteredIncidentsByUrgencyList });
+  } catch (e) {
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR, message: e.message });
   }
 
 };
