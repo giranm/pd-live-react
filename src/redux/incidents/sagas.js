@@ -18,13 +18,16 @@ import {
   FILTER_INCIDENTS_LIST_BY_URGENCY,
   FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR,
+  FILTER_INCIDENTS_LIST_BY_TEAM,
+  FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_TEAM_ERROR
 } from "./actions";
 
 import { selectIncidents } from "./selectors";
 import { selectQuerySettings } from "redux/query_settings/selectors";
 
 import { pushToArray } from "util/helpers";
-import { filterIncidentsByField } from "util/incidents";
+import { filterIncidentsByField, filterIncidentsByFieldOfList } from "util/incidents";
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
@@ -94,7 +97,8 @@ export function* updateIncidentsList(action) {
     let {
       incidentPriority,
       incidentStatus,
-      incidentUrgency
+      incidentUrgency,
+      teamIds,
     } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
@@ -163,6 +167,12 @@ export function* updateIncidentsList(action) {
       incidentUrgency
     });
 
+    // Filter updated incident list on team
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_TEAM,
+      teamIds
+    });
+
   } catch (e) {
     yield put({ type: UPDATE_INCIDENTS_LIST_ERROR, message: e.message });
   }
@@ -224,6 +234,33 @@ export function* filterIncidentsByUrgencyImpl(action) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_URGENCY_COMPLETED, incidents: filteredIncidentsByUrgencyList });
   } catch (e) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR, message: e.message });
+  }
+
+};
+
+export function* filterIncidentsByTeam() {
+  yield takeLatest(FILTER_INCIDENTS_LIST_BY_TEAM, filterIncidentsByTeamImpl);
+};
+
+export function* filterIncidentsByTeamImpl(action) {
+  // Filter current incident list by team - assume no team set means show everything
+  try {
+    let { teamIds } = action;
+    let { incidents } = yield select(selectIncidents);
+    let filteredIncidentsByTeamList;
+
+    // Typically there is no filtered view by teams, so if empty, show all teams.
+    // FIXME: If a team filter is enabled, we see the incident coming in, however removing the filter then doesn't display incidents (e.g. re-request API)
+    if (teamIds.length) {
+      filteredIncidentsByTeamList = filterIncidentsByFieldOfList(incidents, "teams", "id", teamIds);
+    } else {
+      filteredIncidentsByTeamList = [...incidents];
+    }
+
+    // console.log(filteredIncidentsByTeamList, teamIds)
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED, incidents: filteredIncidentsByTeamList });
+  } catch (e) {
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_TEAM_ERROR, message: e.message });
   }
 
 };

@@ -16,3 +16,18 @@ export const filterIncidentsByField = (incidents, jsonPath, possibleValues) => {
     }
   );
 };
+
+// Helper function to filter incidents by json path with multiple entries + possible values
+// NB - this is used to flatten teams, assignments, and acknowledgment lists
+export const filterIncidentsByFieldOfList = (incidents, jsonPathOuter, jsonPathInner, possibleValues) => {
+  return incidents.filter(
+    (incident) => {
+      let incidentInnerFieldObjects = Object.byString(incident, jsonPathOuter);
+      let incidentInnerFieldsFlattened = incidentInnerFieldObjects.map(
+        (outerObject) => Object.byString(outerObject, jsonPathInner)
+      );
+      if (possibleValues.some(value => incidentInnerFieldsFlattened.includes(value)))
+        return incident;
+    }
+  );
+};
