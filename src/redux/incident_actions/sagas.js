@@ -8,6 +8,11 @@ import {
   ACKNOWLEDGE_ERROR,
 } from "./actions";
 
+import {
+  TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,
+  UPDATE_ACTION_ALERTS_MODAL_REQUESTED,
+} from "redux/action_alerts/actions";
+
 import { selectIncidentActions } from "./selectors";
 import { selectUsers } from "redux/users/selectors";
 
@@ -33,9 +38,6 @@ export function* acknowledge(action) {
 
     let incidentsToBeAcknowledged = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
     let incidentsNotToBeAcknowledged = filterIncidentsByField(incidents, "status", [RESOLVED]);
-
-    console.log("TO BE ACK", incidentsToBeAcknowledged);
-    console.log("NOT TO BE ACK", incidentsNotToBeAcknowledged);
 
     // Build request manually given PUT
     let headers = {
@@ -65,7 +67,24 @@ export function* acknowledge(action) {
         type: ACKNOWLEDGE_COMPLETED,
         acknowledgedIncidents: response.resource
       });
-      // TODO: Dispatch Action Alert Modal message upon success
+
+      // Dispatch alert modal message upon success
+      let actionAlertsModalType = "success";
+      let actionAlertsModalMessage;
+      let acknowledgedMessage = `Incident(s) ${incidentsToBeAcknowledged
+        .map(i => i.incident_number)
+        .join(", ")} have been acknowledged.`;
+
+      if (incidentsNotToBeAcknowledged.length === 0) {
+        actionAlertsModalMessage = acknowledgedMessage;
+      } else {
+        let unAcknowledgedMessage = `(${incidentsNotToBeAcknowledged.length} Incidents were not acknowledged because they have already been suppressed or resolved)`;
+        actionAlertsModalMessage = `${acknowledgedMessage} ${unAcknowledgedMessage}`;
+      }
+
+      yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
+      yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+
     } else {
       if (response.data.error) {
         throw Error(response.data.error.message);
@@ -75,6 +94,11 @@ export function* acknowledge(action) {
     };
 
   } catch (e) {
+    // Render alert modal on failure
+    let actionAlertsModalType = "danger";
+    let actionAlertsModalMessage = e.message;
+    yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
+    yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
     yield put({ type: ACKNOWLEDGE_ERROR, message: e.message });
   }
 };

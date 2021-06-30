@@ -8,6 +8,13 @@ import {
   acknowledge
 } from "redux/incident_actions/actions";
 
+import {
+  TRIGGERED,
+  ACKNOWLEDGED,
+  RESOLVED,
+  filterIncidentsByField
+} from "util/incidents";
+
 const IncidentActionsComponent = ({
   incidentTableSettings,
   incidentActions,
@@ -23,27 +30,85 @@ const IncidentActionsComponent = ({
 }) => {
 
   let { selectedCount, selectedRows } = incidentTableSettings;
+  let triggeredIncidents = filterIncidentsByField(selectedRows, "status", [TRIGGERED]);
+  let acknowledgedIncidents = filterIncidentsByField(selectedRows, "status", [ACKNOWLEDGED]);
+  let resolvedIncidents = filterIncidentsByField(selectedRows, "status", [RESOLVED]);
 
-  // TODO: Create helper function to determine what buttons should be enabled/disabled from selectedRows
+  // Determine ability of each button based on selected items
+  let enableActions = triggeredIncidents.length > 0 || acknowledgedIncidents.length > 0 ? false : true;
+  let enablePostActions = selectedCount > 0 ? false : true;
 
   return (
     <div>
       <Container className="incident-actions-ctr" fluid>
         <Row>
           <Col>
-            <Button className="action-button" variant="outline-dark" onClick={() => acknowledge(selectedRows)}>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              onClick={() => acknowledge(selectedRows)}
+              disabled={enableActions}
+            >
               Acknowledge
             </Button>
-            <Button className="action-button" variant="outline-dark">Escalate</Button>
-            <Button className="action-button" variant="outline-dark">Reassign</Button>
-            <Button className="action-button" variant="outline-dark">Add Responders</Button>
-            <Button className="action-button" variant="outline-dark">Snooze</Button>
-            <Button className="action-button" variant="outline-dark">Resolve</Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enableActions}
+            >
+              Escalate
+            </Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enableActions}
+            >
+              Reassign
+            </Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enableActions}
+            >
+              Add Responders
+            </Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enableActions}
+            >
+              Snooze
+            </Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enableActions}
+            >
+              Resolve
+            </Button>
           </Col>
           <Col sm={{ span: 3 }}>
-            <Button className="action-button" variant="outline-dark">Update Priority</Button>
-            <Button className="action-button" variant="outline-dark">Add Note</Button>
-            <Button className="action-button" variant="outline-dark">Run Action</Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enablePostActions}
+            >
+              Update Priority
+            </Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enablePostActions}
+            >
+              Add Note
+            </Button>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              disabled={enablePostActions}
+            >
+              Run Action
+            </Button>
           </Col>
         </Row>
       </Container>
@@ -57,7 +122,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  acknowledge: (incidents) => dispatch(acknowledge(incidents)), // To be implemented as action
+  acknowledge: (incidents) => dispatch(acknowledge(incidents)),
   escalate: () => () => { }, // To be implemented as action
   reassign: (params) => () => { }, // To be implemented as action
   addResponders: (params) => () => { }, // To be implemented as action
