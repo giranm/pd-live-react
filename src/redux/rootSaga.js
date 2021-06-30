@@ -13,7 +13,8 @@ import {
 import {
   getIncidentsAsync,
   updateIncidentsListAsync,
-  filterIncidentsByPriority
+  filterIncidentsByPriority,
+  filterIncidentsByStatus
 } from "./incidents/sagas";
 
 import {
@@ -62,6 +63,7 @@ export default function* rootSaga() {
     getIncidentsAsync(),
     updateIncidentsListAsync(),
     filterIncidentsByPriority(),
+    filterIncidentsByStatus(),
 
     // Log Entries
     getLogEntriesAsync(),

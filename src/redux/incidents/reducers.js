@@ -9,7 +9,10 @@ import {
   UPDATE_INCIDENTS_LIST_ERROR,
   FILTER_INCIDENTS_LIST_BY_PRIORITY,
   FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
-  FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR
+  FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
+  FILTER_INCIDENTS_LIST_BY_STATUS,
+  FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_STATUS_ERROR,
 } from "./actions";
 
 const incidents = produce(
@@ -51,7 +54,7 @@ const incidents = produce(
 
       case FILTER_INCIDENTS_LIST_BY_PRIORITY:
         draft.fetchingData = false;
-        draft.status = UPDATE_INCIDENTS_LIST;
+        draft.status = FILTER_INCIDENTS_LIST_BY_PRIORITY;
         break;
 
       case FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED:
@@ -63,6 +66,23 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR;
+        draft.error = action.message
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_STATUS:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_STATUS;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED;
+        draft.incidents = action.incidents;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_STATUS_ERROR:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_STATUS_ERROR;
         draft.error = action.message
         break;
 

@@ -11,13 +11,17 @@ import {
   UPDATE_INCIDENTS_LIST_ERROR,
   FILTER_INCIDENTS_LIST_BY_PRIORITY,
   FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
-  FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR
+  FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
+  FILTER_INCIDENTS_LIST_BY_STATUS,
+  FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_STATUS_ERROR,
 } from "./actions";
 
 import { selectIncidents } from "./selectors";
 import { selectQuerySettings } from "redux/query_settings/selectors";
 
 import { pushToArray } from "util/helpers";
+import { filterIncidentsByField } from "util/incidents";
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
@@ -84,7 +88,7 @@ export function* updateIncidentsList(action) {
   try {
     let { addList, updateList, removeList } = action;
     let { incidents } = yield select(selectIncidents);
-    let { incidentPriority } = yield select(selectQuerySettings);
+    let { incidentPriority, incidentStatus } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
     // Add new incidents to list
@@ -130,10 +134,20 @@ export function* updateIncidentsList(action) {
     // Update store with updated list of incidents
     yield put({ type: UPDATE_INCIDENTS_LIST_COMPLETED, incidents: updatedIncidentsList });
 
+    /* 
+      Apply filters that already are configured down below
+    */
+
     // Filter updated incident list on priority (can't do this from API)
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_PRIORITY,
       incidentPriority
+    });
+
+    // Filter updated incident list on status
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_STATUS,
+      incidentStatus
     });
 
   } catch (e) {
@@ -152,6 +166,7 @@ export function* filterIncidentsByPriorityImpl(action) {
     let { incidents } = yield select(selectIncidents);
     let filteredIncidentsByPriorityList = incidents.filter(
       (incident) => {
+        // Incident priority is not always defined - need to check this
         if (incident.priority && incidentPriority.includes(incident.priority.id))
           return incident
 
@@ -160,10 +175,25 @@ export function* filterIncidentsByPriorityImpl(action) {
       }
     );
     yield put({ type: FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED, incidents: filteredIncidentsByPriorityList });
-
-
   } catch (e) {
     yield put({ type: FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR, message: e.message });
+  }
+
+};
+
+export function* filterIncidentsByStatus() {
+  yield takeLatest(FILTER_INCIDENTS_LIST_BY_STATUS, filterIncidentsByStatusImpl);
+};
+
+export function* filterIncidentsByStatusImpl(action) {
+  // Filter current incident list by status
+  try {
+    let { incidentStatus } = action;
+    let { incidents } = yield select(selectIncidents);
+    let filteredIncidentsByStatusList = filterIncidentsByField(incidents, "status", incidentStatus)
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED, incidents: filteredIncidentsByStatusList });
+  } catch (e) {
+    yield put({ type: FILTER_INCIDENTS_LIST_BY_STATUS_ERROR, message: e.message });
   }
 
 };

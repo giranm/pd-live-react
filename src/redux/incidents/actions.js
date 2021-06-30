@@ -13,6 +13,10 @@ export const FILTER_INCIDENTS_LIST_BY_PRIORITY = "FILTER_INCIDENTS_LIST_BY_PRIOR
 export const FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED = "FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED";
 export const FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR = "FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR";
 
+export const FILTER_INCIDENTS_LIST_BY_STATUS = "FILTER_INCIDENTS_LIST_BY_STATUS";
+export const FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED = "FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED";
+export const FILTER_INCIDENTS_LIST_BY_STATUS_ERROR = "FILTER_INCIDENTS_LIST_BY_STATUS_ERROR";
+
 // Define Actions
 export const getIncidentsAsync = () => ({
   type: FETCH_INCIDENTS_REQUESTED,
@@ -28,4 +32,9 @@ export const updateIncidentsListAsync = (addList, updateList, removeList) => ({
 export const filterIncidentsByPriority = (incidentPriority = []) => ({
   type: FILTER_INCIDENTS_LIST_BY_PRIORITY,
   incidentPriority
+});
+
+export const filterIncidentsByStatus = (incidentStatus = []) => ({
+  type: FILTER_INCIDENTS_LIST_BY_PRIORITY,
+  incidentStatus
 });
