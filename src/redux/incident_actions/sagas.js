@@ -26,12 +26,20 @@ import {
   TRIGGERED,
   ACKNOWLEDGED,
   RESOLVED,
+  SNOOZED,
   SNOOZE_TIMES,
-  filterIncidentsByField
+  filterIncidentsByField,
+  generateIncidentActionModal
 } from "util/incidents";
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
+
+// Helper function to display modal with API result
+export function* displayActionModal(actionAlertsModalType, actionAlertsModalMessage) {
+  yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
+  yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+};
 
 export function* acknowledgeAsync() {
   yield takeLatest(ACKNOWLEDGE_REQUESTED, acknowledge);
@@ -39,18 +47,11 @@ export function* acknowledgeAsync() {
 
 export function* acknowledge(action) {
   try {
-    //  Create params and call pd lib
     let { incidents, displayModal } = action;
     let { currentUser } = yield select(selectUsers);
-
     let incidentsToBeAcknowledged = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
-    let incidentsNotToBeAcknowledged = filterIncidentsByField(incidents, "status", [RESOLVED]);
 
     // Build request manually given PUT
-    let headers = {
-      "From": currentUser["email"]
-    };
-
     let data = {
       "incidents": incidentsToBeAcknowledged.map(incident => {
         return {
@@ -64,36 +65,22 @@ export function* acknowledge(action) {
     let response = yield call(pd, {
       method: "put",
       endpoint: "incidents",
-      headers,
+      headers: { "From": currentUser["email"] },
       data
     });
 
-    // Determine how store is updated based on response
     if (response.ok) {
       yield put({
         type: ACKNOWLEDGE_COMPLETED,
         acknowledgedIncidents: response.resource
       });
-
-      // Dispatch alert modal message upon success
       if (displayModal) {
-        let actionAlertsModalType = "success";
-        let actionAlertsModalMessage;
-        let acknowledgedMessage = `Incident(s) ${incidentsToBeAcknowledged
-          .map(i => i.incident_number)
-          .join(", ")} have been acknowledged.`;
-
-        if (incidentsNotToBeAcknowledged.length === 0) {
-          actionAlertsModalMessage = acknowledgedMessage;
-        } else {
-          let unAcknowledgedMessage = `(${incidentsNotToBeAcknowledged.length} Incidents were not acknowledged because they have already been suppressed or resolved)`;
-          actionAlertsModalMessage = `${acknowledgedMessage} ${unAcknowledgedMessage}`;
-        }
-
-        yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
-        yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+        let {
+          actionAlertsModalType,
+          actionAlertsModalMessage
+        } = generateIncidentActionModal(incidents, ACKNOWLEDGED);
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       };
-
     } else {
       if (response.data.error) {
         throw Error(response.data.error.message);
@@ -103,11 +90,7 @@ export function* acknowledge(action) {
     };
 
   } catch (e) {
-    // Render alert modal on failure
-    let actionAlertsModalType = "danger";
-    let actionAlertsModalMessage = e.message;
-    yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
-    yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+    yield displayActionModal("danger", e.message)
     yield put({ type: ACKNOWLEDGE_ERROR, message: e.message });
   }
 };
@@ -118,63 +101,38 @@ export function* snoozeAsync() {
 
 export function* snooze(action) {
   try {
-    //  Create params and call pd lib
     let { incidents, duration, displayModal } = action;
     let { currentUser } = yield select(selectUsers);
+    let incidentsToBeSnoozed = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
 
     // In order to snooze, triggered incidents must be acknowledged first; modal will be hidden.
     yield put({ type: ACKNOWLEDGE_REQUESTED, incidents, displayModal: false });
 
-    let incidentsToBeSnoozed = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
-    let incidentsNotToBeSnoozed = filterIncidentsByField(incidents, "status", [RESOLVED]);
-
     // Build individual requests as the endpoint supports singular POST
-    let headers = {
-      "From": currentUser["email"]
-    };
-
-    let data = {
-      duration: SNOOZE_TIMES[duration]
-    };
-
     let snoozeRequests = incidentsToBeSnoozed.map(incident => {
       return call(pd, {
         method: "post",
         endpoint: `incidents/${incident.id}/snooze`,
-        headers,
-        data
-      })
+        headers: { "From": currentUser["email"] },
+        data: { duration: SNOOZE_TIMES[duration] }
+      });
     });
 
     // Invoke parallel calls for optimal performance
     let responses = yield all(snoozeRequests);
 
-    // Determine how store is updated based on response
     if (responses.every((response) => response.ok)) {
       yield put({
         type: SNOOZE_COMPLETED,
         snoozedIncidents: responses
       });
-
-      // Dispatch alert modal message upon success
       if (displayModal) {
-        let actionAlertsModalType = "success";
-        let actionAlertsModalMessage;
-        let snoozedMessage = `Incident(s) ${incidentsToBeSnoozed
-          .map(i => i.incident_number)
-          .join(", ")} have been snoozed for ${duration}.`;
-
-        if (incidentsNotToBeSnoozed.length === 0) {
-          actionAlertsModalMessage = snoozedMessage;
-        } else {
-          let unsnoozedMessage = `(${incidentsNotToBeSnoozed.length} Incidents were not snoozed because they have already been suppressed or resolved)`;
-          actionAlertsModalMessage = `${snoozedMessage} ${unsnoozedMessage}`;
-        }
-
-        yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
-        yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+        let {
+          actionAlertsModalType,
+          actionAlertsModalMessage
+        } = generateIncidentActionModal(incidents, SNOOZED);
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       };
-
     } else {
       let errors = responses
         .filter((response) => response.data.error)
@@ -184,14 +142,10 @@ export function* snooze(action) {
       } else {
         throw Error("Unknown error while using PD API");
       };
-    }
+    };
 
   } catch (e) {
-    // Render alert modal on failure
-    let actionAlertsModalType = "danger";
-    let actionAlertsModalMessage = e.message;
-    yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
-    yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+    yield displayActionModal("danger", e.message)
     yield put({ type: SNOOZE_ERROR, message: e.message });
   }
 };
@@ -202,18 +156,11 @@ export function* resolveAsync() {
 
 export function* resolve(action) {
   try {
-    //  Create params and call pd lib
     let { incidents, displayModal } = action;
     let { currentUser } = yield select(selectUsers);
-
     let incidentsToBeResolved = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
-    let incidentsNotToBeResolved = filterIncidentsByField(incidents, "status", [RESOLVED]);
 
     // Build request manually given PUT
-    let headers = {
-      "From": currentUser["email"]
-    };
-
     let data = {
       "incidents": incidentsToBeResolved.map(incident => {
         return {
@@ -227,38 +174,22 @@ export function* resolve(action) {
     let response = yield call(pd, {
       method: "put",
       endpoint: "incidents",
-      headers,
+      headers: { "From": currentUser["email"] },
       data
     });
 
-    // Determine how store is updated based on response
     if (response.ok) {
       yield put({
         type: RESOLVE_COMPLETED,
         resolvedIncidents: response.resource
       });
-
-      // Dispatch alert modal message upon success
       if (displayModal) {
-        let actionAlertsModalType = "success";
-        let actionAlertsModalMessage;
-        let resolvedMessage = `Incident(s) ${incidentsToBeResolved
-          .map(i => i.incident_number)
-          .join(", ")} have been resolved.`;
-        let unresolvedMessage = `(${incidentsNotToBeResolved.length} Incidents were not resolved because they have already been suppressed or resolved)`;
-
-        if (incidentsToBeResolved.length > 0 && incidentsNotToBeResolved.length === 0) {
-          actionAlertsModalMessage = resolvedMessage;
-        } else if (incidentsToBeResolved.length > 0 && incidentsNotToBeResolved.length > 0) {
-          actionAlertsModalMessage = `${resolvedMessage} ${unresolvedMessage}`;
-        } else if (incidentsToBeResolved.length === 0 && incidentsNotToBeResolved.length > 0) {
-          actionAlertsModalMessage = `${unresolvedMessage}`;
-        }
-
-        yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
-        yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+        let {
+          actionAlertsModalType,
+          actionAlertsModalMessage
+        } = generateIncidentActionModal(incidents, RESOLVED);
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       };
-
     } else {
       if (response.data.error) {
         throw Error(response.data.error.message);
@@ -268,11 +199,7 @@ export function* resolve(action) {
     };
 
   } catch (e) {
-    // Render alert modal on failure
-    let actionAlertsModalType = "danger";
-    let actionAlertsModalMessage = e.message;
-    yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
-    yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+    yield displayActionModal("danger", e.message)
     yield put({ type: RESOLVE_ERROR, message: e.message });
   }
 };

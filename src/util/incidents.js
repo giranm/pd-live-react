@@ -2,6 +2,7 @@
 export const TRIGGERED = 'triggered';
 export const ACKNOWLEDGED = 'acknowledged';
 export const RESOLVED = 'resolved';
+export const SNOOZED = 'snoozed';
 
 export const HIGH = 'high';
 export const LOW = 'low';
@@ -38,4 +39,31 @@ export const filterIncidentsByFieldOfList = (incidents, jsonPathOuter, jsonPathI
         return incident;
     }
   );
+};
+
+// Helper function to generate modal message based on action
+export const generateIncidentActionModal = (incidents, action) => {
+  // Split incidents based on status
+  let unresolvedIncidents = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
+  let resolvedIncidents = filterIncidentsByField(incidents, "status", [RESOLVED]);
+
+  // Create message based on action and incident status
+  let message;
+  let primaryMessage = `Incident(s) ${unresolvedIncidents
+    .map(i => i.incident_number)
+    .join(", ")} have been ${action}.`;
+  let secondaryMessage = `(${resolvedIncidents.length} Incidents were not ${action} 
+    because they have already been suppressed or resolved)`;
+
+
+  if (unresolvedIncidents.length > 0 && resolvedIncidents.length === 0) {
+    message = primaryMessage;
+  } else if (unresolvedIncidents.length > 0 && resolvedIncidents.length > 0) {
+    message = `${primaryMessage} ${secondaryMessage}`;
+  }
+
+  return {
+    actionAlertsModalType: "success",
+    actionAlertsModalMessage: message
+  };
 };
