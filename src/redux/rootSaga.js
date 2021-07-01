@@ -35,6 +35,7 @@ import {
 
 import {
   acknowledgeAsync,
+  resolveAsync,
 } from "./incident_actions/sagas";
 
 import {
@@ -83,6 +84,7 @@ export default function* rootSaga() {
 
     // Incident Actions
     acknowledgeAsync(),
+    resolveAsync(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

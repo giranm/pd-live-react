@@ -6,6 +6,9 @@ import {
   ACKNOWLEDGE_REQUESTED,
   ACKNOWLEDGE_COMPLETED,
   ACKNOWLEDGE_ERROR,
+  RESOLVE_REQUESTED,
+  RESOLVE_COMPLETED,
+  RESOLVE_ERROR,
 } from "./actions";
 
 import {
@@ -100,5 +103,84 @@ export function* acknowledge(action) {
     yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
     yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
     yield put({ type: ACKNOWLEDGE_ERROR, message: e.message });
+  }
+};
+
+export function* resolveAsync() {
+  yield takeLatest(RESOLVE_REQUESTED, resolve);
+};
+
+export function* resolve(action) {
+  try {
+    //  Create params and call pd lib
+    let { incidents } = action;
+    let { currentUser } = yield select(selectUsers);
+
+    let incidentsToBeResolved = filterIncidentsByField(incidents, "status", [TRIGGERED, ACKNOWLEDGED]);
+    let incidentsNotToBeResolved = filterIncidentsByField(incidents, "status", [RESOLVED]);
+
+    // Build request manually given PUT
+    let headers = {
+      "From": currentUser["email"]
+    };
+
+    let data = {
+      "incidents": incidentsToBeResolved.map(incident => {
+        return {
+          "id": incident.id,
+          "type": "incident_reference",
+          "status": RESOLVED
+        };
+      })
+    };
+
+    let response = yield call(pd, {
+      method: "put",
+      endpoint: "incidents",
+      headers,
+      data
+    });
+
+    // Determine how store is updated based on response
+    if (response.ok) {
+      yield put({
+        type: RESOLVE_COMPLETED,
+        resolvedIncidents: response.resource
+      });
+
+      // Dispatch alert modal message upon success
+      let actionAlertsModalType = "success";
+      let actionAlertsModalMessage;
+      let resolvedMessage = `Incident(s) ${incidentsToBeResolved
+        .map(i => i.incident_number)
+        .join(", ")} have been resolved.`;
+      let unAcknowledgedMessage = `(${incidentsNotToBeResolved.length} Incidents were not resolved because they have already been suppressed or resolved)`;
+
+      if (incidentsToBeResolved.length > 0 && incidentsNotToBeResolved.length === 0) {
+        actionAlertsModalMessage = resolvedMessage;
+      } else if (incidentsToBeResolved.length > 0 && incidentsNotToBeResolved.length > 0) {
+        actionAlertsModalMessage = `${resolvedMessage} ${unAcknowledgedMessage}`;
+      } else if (incidentsToBeResolved.length === 0 && incidentsNotToBeResolved.length > 0) {
+        actionAlertsModalMessage = `${unAcknowledgedMessage}`;
+      }
+
+      yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
+      yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+
+    } else {
+      if (response.data.error) {
+        throw Error(response.data.error.message);
+      } else {
+        throw Error("Unknown error while using PD API");
+      };
+    };
+
+  } catch (e) {
+    // Render alert modal on failure
+    let actionAlertsModalType = "danger";
+    let actionAlertsModalMessage = e.message;
+    yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
+    yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+    yield put({ type: RESOLVE_ERROR, message: e.message });
   }
 };

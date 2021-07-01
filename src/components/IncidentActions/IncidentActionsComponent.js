@@ -5,7 +5,8 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import "./IncidentActionsComponent.css";
 
 import {
-  acknowledge
+  acknowledge,
+  resolve
 } from "redux/incident_actions/actions";
 
 import {
@@ -83,6 +84,7 @@ const IncidentActionsComponent = ({
               className="action-button"
               variant="outline-dark"
               disabled={enableActions}
+              onClick={() => resolve(selectedRows)}
             >
               Resolve
             </Button>
@@ -127,7 +129,7 @@ const mapDispatchToProps = (dispatch) => ({
   reassign: (params) => () => { }, // To be implemented as action
   addResponders: (params) => () => { }, // To be implemented as action
   snooze: (params) => () => { }, // To be implemented as action
-  resolve: (params) => () => { }, // To be implemented as action
+  resolve: (incidents) => dispatch(resolve(incidents)),
   updatePriority: (params) => () => { }, // To be implemented as action
   addNote: (params) => () => { }, // To be implemented as action
   runAction: (params) => () => { }, // To be implemented as action
