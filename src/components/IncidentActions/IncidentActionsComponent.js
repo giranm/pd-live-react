@@ -1,11 +1,20 @@
 import { connect } from "react-redux";
 
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Dropdown,
+  DropdownButton,
+  ButtonGroup
+} from 'react-bootstrap';
 
 import "./IncidentActionsComponent.css";
 
 import {
   acknowledge,
+  snooze,
   resolve
 } from "redux/incident_actions/actions";
 
@@ -13,6 +22,7 @@ import {
   TRIGGERED,
   ACKNOWLEDGED,
   RESOLVED,
+  SNOOZE_TIMES,
   filterIncidentsByField
 } from "util/incidents";
 
@@ -73,13 +83,27 @@ const IncidentActionsComponent = ({
             >
               Add Responders
             </Button>
-            <Button
+            <DropdownButton
+              as={ButtonGroup}
               className="action-button"
               variant="outline-dark"
+              drop="up"
+              title="Snooze"
               disabled={enableActions}
             >
-              Snooze
-            </Button>
+              {Object.keys(SNOOZE_TIMES).map(duration =>
+                <Dropdown.Item
+                  key={duration}
+                  variant="outline-dark"
+                  onClick={() => snooze(selectedRows, duration)}
+                >
+                  {duration}
+                </Dropdown.Item>
+              )}
+              <Dropdown.Divider />
+              {/* TODO: Render custom duration modal here */}
+              <Dropdown.Item>Custom</Dropdown.Item>
+            </DropdownButton>
             <Button
               className="action-button"
               variant="outline-dark"
@@ -125,14 +149,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   acknowledge: (incidents) => dispatch(acknowledge(incidents)),
-  escalate: () => () => { }, // To be implemented as action
-  reassign: (params) => () => { }, // To be implemented as action
-  addResponders: (params) => () => { }, // To be implemented as action
-  snooze: (params) => () => { }, // To be implemented as action
+  escalate: (incidents) => () => { }, // To be implemented as action
+  reassign: (incidents) => () => { }, // To be implemented as action
+  addResponders: (incidents) => () => { }, // To be implemented as action
+  snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
   resolve: (incidents) => dispatch(resolve(incidents)),
-  updatePriority: (params) => () => { }, // To be implemented as action
-  addNote: (params) => () => { }, // To be implemented as action
-  runAction: (params) => () => { }, // To be implemented as action
+  updatePriority: (incidents) => () => { }, // To be implemented as action
+  addNote: (incidents) => () => { }, // To be implemented as action
+  runAction: (incidents) => () => { }, // To be implemented as action
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentActionsComponent);

@@ -6,6 +6,14 @@ export const RESOLVED = 'resolved';
 export const HIGH = 'high';
 export const LOW = 'low';
 
+export const SNOOZE_TIMES = {
+  "5 mins": 60 * 5,
+  "30 mins": 60 * 30,
+  "1 hr": 60 * 60,
+  "4 hrs": 60 * 60 * 4,
+  "24 hrs": 60 * 60 * 24,
+};
+
 // Helper function to filter incidents by json path + possible values
 export const filterIncidentsByField = (incidents, jsonPath, possibleValues) => {
   return incidents.filter(
