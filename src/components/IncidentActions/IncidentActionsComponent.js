@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import {
@@ -49,6 +50,12 @@ const IncidentActionsComponent = ({
   let enableActions = triggeredIncidents.length > 0 || acknowledgedIncidents.length > 0 ? false : true;
   let enablePostActions = selectedCount > 0 ? false : true;
 
+  // Create internal state for snooze - disable toggle irrespective of actions
+  const [displaySnooze, toggleSnooze] = useState(false);
+  useEffect(() => {
+    toggleSnooze(false);
+  }, [enableActions]);
+
   return (
     <div>
       <Container className="incident-actions-ctr" fluid>
@@ -90,6 +97,8 @@ const IncidentActionsComponent = ({
               drop="up"
               title="Snooze"
               disabled={enableActions}
+              show={displaySnooze}
+              onClick={() => toggleSnooze(!displaySnooze)}
             >
               {Object.keys(SNOOZE_TIMES).map(duration =>
                 <Dropdown.Item
