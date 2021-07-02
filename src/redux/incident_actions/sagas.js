@@ -9,6 +9,8 @@ import {
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
+  TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED,
   RESOLVE_REQUESTED,
   RESOLVE_COMPLETED,
   RESOLVE_ERROR,
@@ -148,6 +150,15 @@ export function* snooze(action) {
     yield displayActionModal("danger", e.message)
     yield put({ type: SNOOZE_ERROR, message: e.message });
   }
+};
+
+export function* toggleDisplayCustomSnoozeModal() {
+  yield takeLatest(TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED, toggleDisplayCustomSnoozeModalImpl);
+};
+
+export function* toggleDisplayCustomSnoozeModalImpl() {
+  let { displayCustomSnoozeModal } = yield select(selectIncidentActions);
+  yield put({ type: TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED, displayCustomSnoozeModal: !displayCustomSnoozeModal });
 };
 
 export function* resolveAsync() {

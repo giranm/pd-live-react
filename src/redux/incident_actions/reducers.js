@@ -7,6 +7,8 @@ import {
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
+  TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED,
   RESOLVE_REQUESTED,
   RESOLVE_COMPLETED,
   RESOLVE_ERROR,
@@ -43,6 +45,15 @@ const incidentActions = produce(
         draft.error = action.message
         break;
 
+      case TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED:
+        draft.status = TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED;
+        break;
+
+      case TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED:
+        draft.displayCustomSnoozeModal = action.displayCustomSnoozeModal;
+        draft.status = TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED;
+        break;
+
       case RESOLVE_REQUESTED:
         draft.status = RESOLVE_REQUESTED;
         break;
@@ -65,6 +76,7 @@ const incidentActions = produce(
     acknowledgedIncidents: [],
     snoozedIncidents: [],
     resolvedIncidents: [],
+    displayCustomSnoozeModal: false,
     status: null,
     fetchingData: false,
     error: null

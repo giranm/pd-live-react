@@ -14,7 +14,6 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 import "./QuerySettingsComponent.css";
 

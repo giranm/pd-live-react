@@ -7,6 +7,9 @@ export const SNOOZE_REQUESTED = "SNOOZE_REQUESTED";
 export const SNOOZE_COMPLETED = "SNOOZE_COMPLETED";
 export const SNOOZE_ERROR = "SNOOZE_ERROR";
 
+export const TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED = "TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED";
+export const TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED = "TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED";
+
 export const RESOLVE_REQUESTED = "RESOLVE_REQUESTED";
 export const RESOLVE_COMPLETED = "RESOLVE_COMPLETED";
 export const RESOLVE_ERROR = "RESOLVE_ERROR";
@@ -22,6 +25,10 @@ export const snooze = (incidents, duration, displayModal = true) => ({
   incidents,
   duration,
   displayModal
+});
+
+export const toggleDisplayCustomSnoozeModal = () => ({
+  type: TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED
 });
 
 export const resolve = (incidents, displayModal = true) => ({

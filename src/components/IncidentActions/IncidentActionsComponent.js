@@ -16,13 +16,13 @@ import "./IncidentActionsComponent.css";
 import {
   acknowledge,
   snooze,
+  toggleDisplayCustomSnoozeModal,
   resolve
 } from "redux/incident_actions/actions";
 
 import {
   TRIGGERED,
   ACKNOWLEDGED,
-  RESOLVED,
   SNOOZE_TIMES,
   filterIncidentsByField
 } from "util/incidents";
@@ -35,6 +35,7 @@ const IncidentActionsComponent = ({
   reassign,
   addResponders,
   snooze,
+  toggleDisplayCustomSnoozeModal,
   resolve,
   updatePriority,
   addNote,
@@ -42,12 +43,10 @@ const IncidentActionsComponent = ({
 }) => {
 
   let { selectedCount, selectedRows } = incidentTableSettings;
-  let triggeredIncidents = filterIncidentsByField(selectedRows, "status", [TRIGGERED]);
-  let acknowledgedIncidents = filterIncidentsByField(selectedRows, "status", [ACKNOWLEDGED]);
-  let resolvedIncidents = filterIncidentsByField(selectedRows, "status", [RESOLVED]);
+  let unresolvedIncidents = filterIncidentsByField(selectedRows, "status", [TRIGGERED, ACKNOWLEDGED]);
 
   // Determine ability of each button based on selected items
-  let enableActions = triggeredIncidents.length > 0 || acknowledgedIncidents.length > 0 ? false : true;
+  let enableActions = unresolvedIncidents.length > 0 ? false : true;
   let enablePostActions = selectedCount > 0 ? false : true;
 
   // Create internal state for snooze - disable toggle irrespective of actions
@@ -110,8 +109,9 @@ const IncidentActionsComponent = ({
                 </Dropdown.Item>
               )}
               <Dropdown.Divider />
-              {/* TODO: Render custom duration modal here */}
-              <Dropdown.Item>Custom</Dropdown.Item>
+              <Dropdown.Item onClick={() => toggleDisplayCustomSnoozeModal()}>
+                Custom
+              </Dropdown.Item>
             </DropdownButton>
             <Button
               className="action-button"
@@ -162,6 +162,7 @@ const mapDispatchToProps = (dispatch) => ({
   reassign: (incidents) => () => { }, // To be implemented as action
   addResponders: (incidents) => () => { }, // To be implemented as action
   snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
+  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
   resolve: (incidents) => dispatch(resolve(incidents)),
   updatePriority: (incidents) => () => { }, // To be implemented as action
   addNote: (incidents) => () => { }, // To be implemented as action
