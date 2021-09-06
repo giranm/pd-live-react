@@ -15,7 +15,7 @@ import {
 
 import { UPDATE_INCIDENTS_LIST } from "redux/incidents/actions";
 
-import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY } from "util/log_entries";
+import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from "util/log_entries";
 
 import { selectLogEntries } from "./selectors";
 
@@ -78,6 +78,21 @@ export function* updateRecentLogEntries(action) {
         removeSet.add(logEntry);
       } else if (logEntry.type === TRIGGER_LOG_ENTRY) {
         addSet.add(logEntry);
+      } else if (logEntry.type === ANNOTATE_LOG_ENTRY) {
+        // Handle special case for notes: create synthetic notes object
+        let modifiedLogEntry = { ...logEntry };
+        let tempIncident = { ...modifiedLogEntry.incident }
+        tempIncident.notes = [{
+          "id": null, // This is missing in log_entries
+          "user": logEntry.agent,
+          "channel": {
+            "summary": "The PagerDuty website or APIs"
+          },
+          "content": logEntry.channel.summary,
+          "created_at": logEntry.created_at
+        }]
+        modifiedLogEntry.incident = tempIncident;
+        updateSet.add(modifiedLogEntry)
       } else {
         // Assume everything else is an update
         updateSet.add(logEntry);
@@ -95,6 +110,7 @@ export function* updateRecentLogEntries(action) {
     yield put({ type: UPDATE_INCIDENTS_LIST, addList, updateList, removeList });
 
   } catch (e) {
+    console.log(e)
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES_ERROR, message: e.message });
   }
 };
