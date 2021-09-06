@@ -61,7 +61,6 @@ export function* getIncidents(action) {
       'include[]': 'first_trigger_log_entries',
     };
 
-    // TODO: Insert queries for services
     if (incidentStatus)
       params["statuses[]"] = incidentStatus;
 
@@ -218,7 +217,7 @@ export function* updateIncidentsList(action) {
       teamIds
     });
 
-    // Filter updated incident list on team
+    // Filter updated incident list on service
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_SERVICE,
       serviceIds
@@ -330,13 +329,13 @@ export function* filterIncidentsByServiceImpl(action) {
     // Typically there is no filtered view by services, so if empty, show all services.
     // FIXME: A similar bug happens (e.g. teams filter) when removing services - could be something with log_entries
     if (serviceIds.length) {
-      console.log("Pre filter incidents", incidents)
+      // console.log("Pre filter incidents", incidents)
       filteredIncidentsByServiceList = filterIncidentsByField(incidents, "service.id", serviceIds);
     } else {
       filteredIncidentsByServiceList = [...incidents];
     };
 
-    console.log("Filtered", filteredIncidentsByServiceList);
+    // console.log("Filtered", filteredIncidentsByServiceList);
 
     yield put({ type: FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED, incidents: filteredIncidentsByServiceList });
   } catch (e) {
