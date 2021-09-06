@@ -1,11 +1,14 @@
 /* eslint-disable array-callback-return */
-import { put, call, select, takeLatest } from "redux-saga/effects";
+import { put, call, select, takeLatest, takeEvery, all } from "redux-saga/effects";
 import { api } from '@pagerduty/pdjs';
 
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
   FETCH_INCIDENTS_ERROR,
+  FETCH_INCIDENT_NOTES_REQUESTED,
+  FETCH_INCIDENT_NOTES_COMPLETED,
+  FETCH_INCIDENT_NOTES_ERROR,
   UPDATE_INCIDENTS_LIST,
   UPDATE_INCIDENTS_LIST_COMPLETED,
   UPDATE_INCIDENTS_LIST_ERROR,
@@ -72,11 +75,18 @@ export function* getIncidents(action) {
       params["service_ids[]"] = serviceIds;
 
     let response = yield call(pd.all, "incidents", { data: { ...params } });
+    let incidents = response.resource;
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
-      incidents: response.resource
+      incidents
     });
+
+    // Get notes for each incident (implictly updates store)
+    yield all(incidents
+      .map(incident => incident.id)
+      .map(incidentId => put({ type: FETCH_INCIDENT_NOTES_REQUESTED, incidentId }))
+    );
 
     // Filter incident list on priority (can't do this from API)
     yield put({
@@ -86,6 +96,37 @@ export function* getIncidents(action) {
 
   } catch (e) {
     yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
+  };
+};
+
+export function* getIncidentNotesAsync() {
+  yield takeEvery(FETCH_INCIDENT_NOTES_REQUESTED, getIncidentNotes);
+};
+
+export function* getIncidentNotes(action) {
+  try {
+    // Call PD API to grab note for given Incident ID
+    let { incidentId } = action;
+    let response = yield call(pd.get, `incidents/${incidentId}/notes`);
+    let { notes } = response.data;
+
+    // Grab matching incident and apply note update
+    let { incidents } = yield select(selectIncidents);
+    let updatedIncidentsList = incidents.map((incident) => {
+      if (incident.id === incidentId) {
+        let tempIncident = { ...incident };
+        tempIncident.notes = notes;
+        return tempIncident;
+      } else {
+        return incident;
+      }
+    });
+
+    // Update store with incident having notes data
+    yield put({ type: FETCH_INCIDENT_NOTES_COMPLETED, incidents: updatedIncidentsList });
+
+  } catch (e) {
+    yield put({ type: FETCH_INCIDENT_NOTES_ERROR, message: e.message });
   };
 };
 

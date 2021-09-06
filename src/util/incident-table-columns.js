@@ -70,7 +70,7 @@ export const availableIncidentTableColumns = [
   },
   {
     selector: "escalation_policy.summary",
-    name: "Escalaion Policy",
+    name: "Escalation Policy",
     sortable: true,
   },
   {
@@ -138,6 +138,18 @@ export const availableIncidentTableColumns = [
     name: "Summary",
     sortable: true,
     minWidth: "500px"
+  },
+  {
+    selector: (incident) => {
+      if (incident.notes && incident.notes.length > 0) {
+        return incident.notes[0].content
+      } else {
+        return "--"
+      }
+    },
+    name: "Latest Note",
+    sortable: true,
+    minWidth: "400px"
   },
 ]
 

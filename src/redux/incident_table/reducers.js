@@ -21,6 +21,7 @@ const defaultColumnNames = [
   "Title",
   "Created At",
   "Service",
+  "Latest Note"
 ]
 
 const incidentTableSettings = produce(

@@ -50,7 +50,7 @@ const CustomSnoozeModalComponent = ({
     <div className="custom-snooze-modal-ctr">
       <Modal
         // show={displayCustomSnoozeModal}
-        show
+        // show
         onHide={toggleDisplayCustomSnoozeModal}
       >
         <Modal.Header closeButton>
