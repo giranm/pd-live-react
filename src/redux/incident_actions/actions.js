@@ -39,7 +39,7 @@ export const toggleDisplayCustomSnoozeModal = () => ({
 });
 
 export const resolve = (incidents, displayModal = true) => ({
-  type: ADD_NOTE_REQUESTED,
+  type: RESOLVE_REQUESTED,
   incidents,
   displayModal
 });
