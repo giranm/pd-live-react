@@ -17,7 +17,8 @@ import {
   acknowledge,
   snooze,
   toggleDisplayCustomSnoozeModal,
-  resolve
+  resolve,
+  toggleDisplayAddNoteModal,
 } from "redux/incident_actions/actions";
 
 import {
@@ -38,7 +39,7 @@ const IncidentActionsComponent = ({
   toggleDisplayCustomSnoozeModal,
   resolve,
   updatePriority,
-  addNote,
+  toggleDisplayAddNoteModal,
   runAction
 }) => {
 
@@ -133,6 +134,7 @@ const IncidentActionsComponent = ({
             <Button
               className="action-button"
               variant="outline-dark"
+              onClick={() => toggleDisplayAddNoteModal()}
               disabled={enablePostActions}
             >
               Add Note
@@ -165,7 +167,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
   resolve: (incidents) => dispatch(resolve(incidents)),
   updatePriority: (incidents) => () => { }, // To be implemented as action
-  addNote: (incidents) => () => { }, // To be implemented as action
+  toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
   runAction: (incidents) => () => { }, // To be implemented as action
 });
 

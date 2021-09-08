@@ -39,6 +39,8 @@ import {
   snoozeAsync,
   toggleDisplayCustomSnoozeModal,
   resolveAsync,
+  addNoteAsync,
+  toggleDisplayAddNoteModal,
 } from "./incident_actions/sagas";
 
 import {
@@ -91,6 +93,8 @@ export default function* rootSaga() {
     snoozeAsync(),
     toggleDisplayCustomSnoozeModal(),
     resolveAsync(),
+    addNoteAsync(),
+    toggleDisplayAddNoteModal(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

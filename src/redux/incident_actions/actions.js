@@ -14,6 +14,13 @@ export const RESOLVE_REQUESTED = "RESOLVE_REQUESTED";
 export const RESOLVE_COMPLETED = "RESOLVE_COMPLETED";
 export const RESOLVE_ERROR = "RESOLVE_ERROR";
 
+export const ADD_NOTE_REQUESTED = "ADD_NOTE_REQUESTED";
+export const ADD_NOTE_COMPLETED = "ADD_NOTE_COMPLETED";
+export const ADD_NOTE_ERROR = "ADD_NOTE_ERROR";
+
+export const TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED = "TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED";
+export const TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED = "TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED";
+
 export const acknowledge = (incidents, displayModal = true) => ({
   type: ACKNOWLEDGE_REQUESTED,
   incidents,
@@ -32,7 +39,18 @@ export const toggleDisplayCustomSnoozeModal = () => ({
 });
 
 export const resolve = (incidents, displayModal = true) => ({
-  type: RESOLVE_REQUESTED,
+  type: ADD_NOTE_REQUESTED,
   incidents,
   displayModal
+});
+
+export const addNote = (incidents, note, displayModal = true) => ({
+  type: ADD_NOTE_REQUESTED,
+  incidents,
+  note,
+  displayModal
+});
+
+export const toggleDisplayAddNoteModal = () => ({
+  type: TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED
 });

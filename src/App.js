@@ -10,6 +10,7 @@ import IncidentTableComponent from "components/IncidentTable/IncidentTableCompon
 import IncidentActionsComponent from "components/IncidentActions/IncidentActionsComponent";
 import ActionAlertsModalComponent from "components/ActionAlertsModal/ActionAlertsModalComponent";
 import CustomSnoozeModalComponent from "components/CustomSnoozeModal/CustomSnoozeModalComponent";
+import AddNoteModalComponent from "components/AddNoteModal/AddNoteModalComponent";
 
 import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
@@ -63,6 +64,7 @@ const App = ({
         <IncidentActionsComponent />
         <ActionAlertsModalComponent />
         <CustomSnoozeModalComponent />
+        <AddNoteModalComponent />
       </Container>
     </div>
   );

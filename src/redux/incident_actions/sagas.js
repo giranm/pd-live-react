@@ -14,6 +14,11 @@ import {
   RESOLVE_REQUESTED,
   RESOLVE_COMPLETED,
   RESOLVE_ERROR,
+  ADD_NOTE_REQUESTED,
+  ADD_NOTE_COMPLETED,
+  ADD_NOTE_ERROR,
+  TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
 } from "./actions";
 
 import {
@@ -213,4 +218,64 @@ export function* resolve(action) {
     yield displayActionModal("danger", e.message)
     yield put({ type: RESOLVE_ERROR, message: e.message });
   }
+};
+
+export function* addNoteAsync() {
+  yield takeLatest(ADD_NOTE_REQUESTED, addNote);
+};
+
+export function* addNote(action) {
+  try {
+    let { incidents: selectedIncidents, note, displayModal } = action;
+    let { currentUser } = yield select(selectUsers);
+
+    // Build individual requests as the endpoint supports singular POST
+    let addNoteRequests = selectedIncidents.map(incident => {
+      return call(pd, {
+        method: "post",
+        endpoint: `incidents/${incident.id}/notes`,
+        headers: { "From": currentUser["email"] },
+        data: { note: { content: note } }
+      });
+    });
+
+    // Invoke parallel calls for optimal performance
+    let responses = yield all(addNoteRequests);
+
+    if (responses.every((response) => response.ok)) {
+      yield put({
+        type: ADD_NOTE_COMPLETED,
+        updatedIncidentNotes: responses
+      });
+      if (displayModal) {
+        let actionAlertsModalType = "success"
+        let actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+          .map(i => i.incident_number)
+          .join(", ")} have been updated with a note.`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      };
+    } else {
+      let errors = responses
+        .filter((response) => response.data.error)
+        .map((response) => response.data.error.message);
+      if (errors.length) {
+        throw Error(errors);
+      } else {
+        throw Error("Unknown error while using PD API");
+      };
+    };
+
+  } catch (e) {
+    yield displayActionModal("danger", e.message)
+    yield put({ type: ADD_NOTE_ERROR, message: e.message });
+  }
+};
+
+export function* toggleDisplayAddNoteModal() {
+  yield takeLatest(TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED, toggleDisplayAddNoteModalImpl);
+};
+
+export function* toggleDisplayAddNoteModalImpl() {
+  let { displayAddNoteModal } = yield select(selectIncidentActions);
+  yield put({ type: TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED, displayAddNoteModal: !displayAddNoteModal });
 };
