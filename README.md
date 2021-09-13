@@ -9,7 +9,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [ ] Escalate Incident
 - [ ] Reassign Incident
 - [ ] Add Responders to Incident
-- [ ] Update Priority of Incident
+- [x] Update Priority of Incident
 - [ ] Run Action (including Custom Incident Actions, Webhooks, and Response Plays)
 - [ ] Review appropriate React table (with resizeable columns)
 - [ ] Store query/settings using session data

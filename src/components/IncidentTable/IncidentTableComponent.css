@@ -12,7 +12,7 @@
   background-color: transparent;
   border: transparent;
   height: 30px;
-  width:  30px;
+  width: 30px;
 }
 
 .buttons-csv {
@@ -22,7 +22,7 @@
   background-color: transparent;
   border: transparent;
   height: 30px;
-  width:  30px;
+  width: 30px;
 }
 
 .buttons-pdf {
@@ -32,7 +32,7 @@
   background-color: transparent;
   border: transparent;
   height: 30px;
-  width:  30px;
+  width: 30px;
 }
 
 /* Table Overrides */
@@ -48,15 +48,15 @@
   border-style: solid;
   border-width: 1px;
   border-radius: 4px;
-  border-color: rgba(0,0,0,.125);
+  border-color: rgba(0, 0, 0, 0.125);
 }
 
 .rdt_TableHeadRow {
-  background-color: rgba(0,0,0,.06) !important;
+  background-color: rgba(0, 0, 0, 0.06) !important;
   border-style: solid;
   border-width: 1px;
   border-radius: 4px;
-  border-color: rgba(0,0,0,.125);
+  border-color: rgba(0, 0, 0, 0.125);
 }
 
 .rdt_TableCol {
@@ -84,7 +84,7 @@
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
-  min-width: 26px;
+  min-width: 40px;
   font-weight: 700;
   font-size: 18px;
   white-space: nowrap;
@@ -93,4 +93,18 @@
   border-radius: 5px;
   vertical-align: -4px;
   border-radius: 4px;
+}
+
+.priority-label-dropdown {
+  display: block;
+  position: relative;
+  top: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 18px;
+  white-space: nowrap;
+  padding: 5px 10px 3px;
+  border-radius: 5px;
 }

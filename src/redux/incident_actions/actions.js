@@ -14,6 +14,10 @@ export const RESOLVE_REQUESTED = "RESOLVE_REQUESTED";
 export const RESOLVE_COMPLETED = "RESOLVE_COMPLETED";
 export const RESOLVE_ERROR = "RESOLVE_ERROR";
 
+export const UPDATE_PRIORITY_REQUESTED = "UPDATE_PRIORITY_REQUESTED";
+export const UPDATE_PRIORITY_COMPLETED = "UPDATE_PRIORITY_COMPLETED";
+export const UPDATE_PRIORITY_ERROR = "UPDATE_PRIORITY_ERROR";
+
 export const ADD_NOTE_REQUESTED = "ADD_NOTE_REQUESTED";
 export const ADD_NOTE_COMPLETED = "ADD_NOTE_COMPLETED";
 export const ADD_NOTE_ERROR = "ADD_NOTE_ERROR";
@@ -41,6 +45,13 @@ export const toggleDisplayCustomSnoozeModal = () => ({
 export const resolve = (incidents, displayModal = true) => ({
   type: RESOLVE_REQUESTED,
   incidents,
+  displayModal
+});
+
+export const updatePriority = (incidents, priorityId, displayModal = true) => ({
+  type: UPDATE_PRIORITY_REQUESTED,
+  incidents,
+  priorityId,
   displayModal
 });
 

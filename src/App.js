@@ -36,11 +36,11 @@ const App = ({
 
   // Initial load of objects from API
   useEffect(() => {
+    getCurrentUserAsync();
     getServicesAsync();
     getTeamsAsync();
     getPrioritiesAsync();
     getIncidentsAsync();
-    getCurrentUserAsync();
   }, [])
 
   // Setup log entry polling.

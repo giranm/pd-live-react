@@ -18,6 +18,7 @@ import {
   snooze,
   toggleDisplayCustomSnoozeModal,
   resolve,
+  updatePriority,
   toggleDisplayAddNoteModal,
 } from "redux/incident_actions/actions";
 
@@ -31,6 +32,7 @@ import {
 const IncidentActionsComponent = ({
   incidentTableSettings,
   incidentActions,
+  priorities,
   acknowledge,
   escalate,
   reassign,
@@ -54,6 +56,12 @@ const IncidentActionsComponent = ({
   const [displaySnooze, toggleSnooze] = useState(false);
   useEffect(() => {
     toggleSnooze(false);
+  }, [enableActions]);
+
+  // Create internal state for priorities
+  const [displayPriority, togglePriority] = useState(false);
+  useEffect(() => {
+    togglePriority(false);
   }, [enableActions]);
 
   return (
@@ -123,14 +131,35 @@ const IncidentActionsComponent = ({
               Resolve
             </Button>
           </Col>
-          <Col sm={{ span: 3 }}>
-            <Button
+          <Col sm={{ span: 3.5 }}>
+            <DropdownButton
+              as={ButtonGroup}
               className="action-button"
               variant="outline-dark"
-              disabled={enablePostActions}
+              drop="up"
+              title="Update Priority"
+              disabled={enableActions}
+              show={displayPriority}
+              onClick={() => togglePriority(!displayPriority)}
             >
-              Update Priority
-            </Button>
+              {priorities.priorities.map(priority =>
+                <Dropdown.Item
+                  key={priority.id}
+                  variant="outline-dark"
+                  onClick={() => updatePriority(selectedRows, priority.id)}
+                >
+                  <p
+                    style={{
+                      backgroundColor: `#${priority.color}`,
+                      color: "white",
+                    }}
+                    className="priority-label-dropdown"
+                  >
+                    {priority.name}
+                  </p>
+                </Dropdown.Item>
+              )}
+            </DropdownButton>
             <Button
               className="action-button"
               variant="outline-dark"
@@ -156,6 +185,7 @@ const IncidentActionsComponent = ({
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
   incidentActions: state.incidentActions,
+  priorities: state.priorities,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -166,7 +196,7 @@ const mapDispatchToProps = (dispatch) => ({
   snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
   toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
   resolve: (incidents) => dispatch(resolve(incidents)),
-  updatePriority: (incidents) => () => { }, // To be implemented as action
+  updatePriority: (incidents, priorityId) => dispatch(updatePriority(incidents, priorityId)),
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
   runAction: (incidents) => () => { }, // To be implemented as action
 });

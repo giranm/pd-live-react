@@ -12,6 +12,9 @@ import {
   RESOLVE_REQUESTED,
   RESOLVE_COMPLETED,
   RESOLVE_ERROR,
+  UPDATE_PRIORITY_REQUESTED,
+  UPDATE_PRIORITY_COMPLETED,
+  UPDATE_PRIORITY_ERROR,
   ADD_NOTE_REQUESTED,
   ADD_NOTE_COMPLETED,
   ADD_NOTE_ERROR,
@@ -73,6 +76,20 @@ const incidentActions = produce(
         draft.error = action.message
         break;
 
+      case UPDATE_PRIORITY_REQUESTED:
+        draft.status = UPDATE_PRIORITY_REQUESTED;
+        break;
+
+      case UPDATE_PRIORITY_COMPLETED:
+        draft.updatedIncidentPriorities = action.updatedIncidentPriorities;
+        draft.status = UPDATE_PRIORITY_COMPLETED;
+        break;
+
+      case UPDATE_PRIORITY_ERROR:
+        draft.status = UPDATE_PRIORITY_ERROR;
+        draft.error = action.message
+        break;
+
       case ADD_NOTE_REQUESTED:
         draft.status = ADD_NOTE_REQUESTED;
         break;
@@ -105,6 +122,7 @@ const incidentActions = produce(
     snoozedIncidents: [],
     resolvedIncidents: [],
     updatedIncidentNotes: [],
+    updatedIncidentPriorities: [],
     displayCustomSnoozeModal: false,
     displayAddNoteModal: false,
     status: null,

@@ -26,7 +26,7 @@ export function* getPriorities() {
     let priorities = response.resource;
 
     // Push an artificial priority (e.g. empty one)
-    priorities.push({ name: "--", id: "--" });
+    priorities.push({ name: "--", id: "--", color: "000000" });
 
     yield put({
       type: FETCH_PRIORITIES_COMPLETED,
