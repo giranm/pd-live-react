@@ -56,6 +56,7 @@ import {
 import { getServicesAsync } from "./services/sagas";
 import { getTeamsAsync } from "./teams/sagas";
 import { getPrioritiesAsync } from "./priorities/sagas";
+import { getEscalationPoliciesAsync } from "./escalation_policies/sagas";
 
 export default function* rootSaga() {
   yield all([
@@ -113,5 +114,8 @@ export default function* rootSaga() {
 
     // Priorities
     getPrioritiesAsync(),
+
+    // Escalation Policies
+    getEscalationPoliciesAsync(),
   ]);
 };
