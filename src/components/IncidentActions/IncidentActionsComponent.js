@@ -51,6 +51,7 @@ const IncidentActionsComponent = ({
   // Determine ability of each button based on selected items
   let enableActions = unresolvedIncidents.length > 0 ? false : true;
   let enablePostActions = selectedCount > 0 ? false : true;
+  let enablePostSingularAction = selectedCount === 1 ? false : true;
 
   // Create internal state for snooze - disable toggle irrespective of actions
   const [displaySnooze, toggleSnooze] = useState(false);
@@ -80,7 +81,7 @@ const IncidentActionsComponent = ({
             <Button
               className="action-button"
               variant="outline-dark"
-              disabled={enableActions}
+              disabled={enablePostSingularAction}
             >
               Escalate
             </Button>
@@ -171,7 +172,7 @@ const IncidentActionsComponent = ({
             <Button
               className="action-button"
               variant="outline-dark"
-              disabled={enablePostActions}
+              disabled={enablePostSingularAction}
             >
               Run Action
             </Button>

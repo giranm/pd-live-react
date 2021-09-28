@@ -10,10 +10,11 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [ ] Reassign Incident
 - [ ] Add Responders to Incident
 - [x] Update Priority of Incident
+- [ ] Custom snooze duration for Incident
 - [ ] Run Action (including Custom Incident Actions, Webhooks, and Response Plays)
 - [ ] Review appropriate React table (with resizeable columns)
 - [ ] Store query/settings using session data
-- [ ] Minor display bugs (incident resolution and creation duplication)
+- [x] Minor display bugs (incident resolution and creation duplication)
 - [ ] Tests (including suitable framework)
 - [ ] Deployment/Bundling Steps
 
