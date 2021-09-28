@@ -26,7 +26,8 @@ import {
   TRIGGERED,
   ACKNOWLEDGED,
   SNOOZE_TIMES,
-  filterIncidentsByField
+  filterIncidentsByField,
+  HIGH
 } from "util/incidents";
 
 const IncidentActionsComponent = ({
@@ -47,11 +48,13 @@ const IncidentActionsComponent = ({
 
   let { selectedCount, selectedRows } = incidentTableSettings;
   let unresolvedIncidents = filterIncidentsByField(selectedRows, "status", [TRIGGERED, ACKNOWLEDGED]);
+  let highUrgencyIncidents = filterIncidentsByField(selectedRows, "urgency", [HIGH]);
 
   // Determine ability of each button based on selected items
   let enableActions = unresolvedIncidents.length > 0 ? false : true;
   let enablePostActions = selectedCount > 0 ? false : true;
   let enablePostSingularAction = selectedCount === 1 ? false : true;
+  let enableEscalationAction = (selectedCount === 1 && highUrgencyIncidents.length) ? false : true;
 
   // Create internal state for snooze - disable toggle irrespective of actions
   const [displaySnooze, toggleSnooze] = useState(false);
@@ -81,7 +84,7 @@ const IncidentActionsComponent = ({
             <Button
               className="action-button"
               variant="outline-dark"
-              disabled={enablePostSingularAction}
+              disabled={enableEscalationAction}
             >
               Escalate
             </Button>
