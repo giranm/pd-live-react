@@ -13,6 +13,12 @@ export const getObjectsFromList = (searchableList, matchList, matchKey) => {
   return results.sort((a, b) => matchList.indexOf(a[matchKey]) - matchList.indexOf(b[matchKey]));
 }
 
+// Get objects from array given matching key/value while preserving order
+export const getObjectsFromListbyKey = (searchableList, searchKey, searchValue) => {
+  let results = searchableList.filter((obj) => obj[searchKey] === searchValue);
+  return results;
+}
+
 // Prototype function to get object value from JSON path
 Object.byString = function (o, s) {
   s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties

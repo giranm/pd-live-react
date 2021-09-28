@@ -30,10 +30,13 @@ import {
   HIGH
 } from "util/incidents";
 
+import { getObjectsFromListbyKey } from "util/helpers";
+
 const IncidentActionsComponent = ({
   incidentTableSettings,
   incidentActions,
   priorities,
+  escalationPolicies,
   acknowledge,
   escalate,
   reassign,
@@ -55,6 +58,17 @@ const IncidentActionsComponent = ({
   let enablePostActions = selectedCount > 0 ? false : true;
   let enablePostSingularAction = selectedCount === 1 ? false : true;
   let enableEscalationAction = (selectedCount === 1 && highUrgencyIncidents.length) ? false : true;
+
+  // Create internal variables and state for escalate
+  const selectedEscalationPolicyId = selectedCount > 0 ? selectedRows[0]["escalation_policy"]["id"] : null;
+  const selectedEscalationPolicy = getObjectsFromListbyKey(escalationPolicies, "id", selectedEscalationPolicyId)[0];
+  const selectedEscalationRules = selectedEscalationPolicy ? selectedEscalationPolicy.escalation_rules.slice(0).reverse() : [];
+
+  const [displayEscalate, toggleEscalate] = useState(false);
+  useEffect(() => {
+    toggleEscalate(false);
+  }, [enableEscalationAction]);
+
 
   // Create internal state for snooze - disable toggle irrespective of actions
   const [displaySnooze, toggleSnooze] = useState(false);
@@ -81,13 +95,26 @@ const IncidentActionsComponent = ({
             >
               Acknowledge
             </Button>
-            <Button
+            <DropdownButton
+              as={ButtonGroup}
               className="action-button"
               variant="outline-dark"
+              drop="up"
+              title="Escalate"
               disabled={enableEscalationAction}
+              show={displayEscalate}
+              onClick={() => toggleEscalate(!displayEscalate)}
             >
-              Escalate
-            </Button>
+              {selectedEscalationRules.map((escalation_rule, idx) =>
+                <Dropdown.Item
+                  key={escalation_rule.id}
+                  variant="outline-dark"
+                // onClick={() => escalate(selectedRows, escalationLevel)}
+                >
+                  {`Level ${selectedEscalationRules.length - idx}: ${escalation_rule.targets.map(t => t.summary).join(", ")}`}
+                </Dropdown.Item>
+              )}
+            </DropdownButton>
             <Button
               className="action-button"
               variant="outline-dark"
@@ -146,7 +173,7 @@ const IncidentActionsComponent = ({
               show={displayPriority}
               onClick={() => togglePriority(!displayPriority)}
             >
-              {priorities.priorities.map(priority =>
+              {priorities.map(priority =>
                 <Dropdown.Item
                   key={priority.id}
                   variant="outline-dark"
@@ -189,12 +216,13 @@ const IncidentActionsComponent = ({
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
   incidentActions: state.incidentActions,
-  priorities: state.priorities,
+  priorities: state.priorities.priorities,
+  escalationPolicies: state.escalationPolicies.escalationPolicies,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   acknowledge: (incidents) => dispatch(acknowledge(incidents)),
-  escalate: (incidents) => () => { }, // To be implemented as action
+  escalate: (incidents, escalationLevel) => () => { }, // To be implemented as action
   reassign: (incidents) => () => { }, // To be implemented as action
   addResponders: (incidents) => () => { }, // To be implemented as action
   snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
