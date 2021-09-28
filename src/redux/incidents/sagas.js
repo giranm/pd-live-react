@@ -186,8 +186,12 @@ export function* updateIncidentsList(action) {
       });
     });
 
+    // Remove any unintentional duplicate incidents (i.e. new incident triggered)
+    let updatedIncidentsIds = updatedIncidentsList.map(o => o.id)
+    let uniqueUpdatedIncidentsList = updatedIncidentsList.filter(({ id }, index) => !updatedIncidentsIds.includes(id, index + 1))
+
     // Update store with updated list of incidents
-    yield put({ type: UPDATE_INCIDENTS_LIST_COMPLETED, incidents: updatedIncidentsList });
+    yield put({ type: UPDATE_INCIDENTS_LIST_COMPLETED, incidents: uniqueUpdatedIncidentsList });
 
     /* 
       Apply filters that already are configured down below
