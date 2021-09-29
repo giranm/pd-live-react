@@ -14,6 +14,11 @@ import {
   REASSIGN_ERROR,
   TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED,
   TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED,
+  ADD_RESPONDER_REQUESTED,
+  ADD_RESPONDER_COMPLETED,
+  ADD_RESPONDER_ERROR,
+  TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED,
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
@@ -248,6 +253,67 @@ export function* toggleDisplayReassignModal() {
 export function* toggleDisplayReassignModalImpl() {
   let { displayReassignModal } = yield select(selectIncidentActions);
   yield put({ type: TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED, displayReassignModal: !displayReassignModal });
+};
+
+export function* addResponderAsync() {
+  yield takeLatest(ADD_RESPONDER_REQUESTED, addResponder);
+};
+
+export function* addResponder(action) {
+  try {
+    let { incidents: selectedIncidents, responderRequestTargets, message, displayModal } = action;
+
+    // Build individual requests as the endpoint supports singular POST
+    let addResponderRequests = selectedIncidents.map(incident => {
+      return call(pd, {
+        method: "post",
+        endpoint: `incidents/${incident.id}/responder_requests`,
+        data: {
+          message,
+          responder_request_targets: responderRequestTargets.map(target => {
+            return {
+              "responder_request_target": {
+                "id": target.value,
+                "summary": target.name,
+                "type": target.type
+              }
+            }
+          })
+        }
+      });
+    });
+
+    // Invoke parallel calls for optimal performance
+    let responses = yield all(addResponderRequests);
+    if (responses.every((response) => response.ok)) {
+      yield put({
+        type: ADD_RESPONDER_COMPLETED,
+        updatedIncidentResponderRequests: responses
+      });
+      yield toggleDisplayAddResponderModalImpl();
+      if (displayModal) {
+        let actionAlertsModalType = "success"
+        let actionAlertsModalMessage = `Requested additional response for incident(s) ${selectedIncidents
+          .map(i => i.incident_number)
+          .join(", ")}.`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      };
+    } else {
+      handleMultipleAPIErrorResponses(responses);
+    };
+
+  } catch (e) {
+    handleSagaError(ADD_RESPONDER_ERROR, e);
+  }
+};
+
+export function* toggleDisplayAddResponderModal() {
+  yield takeLatest(TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED, toggleDisplayAddResponderModalImpl);
+};
+
+export function* toggleDisplayAddResponderModalImpl() {
+  let { displayAddResponderModal } = yield select(selectIncidentActions);
+  yield put({ type: TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED, displayAddResponderModal: !displayAddResponderModal });
 };
 
 export function* snoozeAsync() {

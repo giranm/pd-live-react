@@ -14,6 +14,13 @@ export const REASSIGN_ERROR = "REASSIGN_ERROR";
 export const TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED = "TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED";
 export const TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED = "TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED";
 
+export const ADD_RESPONDER_REQUESTED = "ADD_RESPONDER_REQUESTED";
+export const ADD_RESPONDER_COMPLETED = "ADD_RESPONDER_COMPLETED";
+export const ADD_RESPONDER_ERROR = "ADD_RESPONDER_ERROR";
+
+export const TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED = "TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED";
+export const TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED = "TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED";
+
 export const SNOOZE_REQUESTED = "SNOOZE_REQUESTED";
 export const SNOOZE_COMPLETED = "SNOOZE_COMPLETED";
 export const SNOOZE_ERROR = "SNOOZE_ERROR";
@@ -58,6 +65,18 @@ export const reassign = (incidents, assignment, displayModal = true) => ({
 
 export const toggleDisplayReassignModal = () => ({
   type: TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED
+});
+
+export const addResponder = (incidents, responderRequestTargets, message, displayModal = true) => ({
+  type: ADD_RESPONDER_REQUESTED,
+  incidents,
+  responderRequestTargets,
+  message,
+  displayModal
+});
+
+export const toggleDisplayAddResponderModal = () => ({
+  type: TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED
 });
 
 export const snooze = (incidents, duration, displayModal = true) => ({

@@ -71,6 +71,7 @@ const ReassignModalComponent = ({
               }}
               components={animatedComponents}
               options={selectListAssignments}
+              placeholder="Search for Escalation Policy or User"
             />
           </Form>
         </Modal.Body>

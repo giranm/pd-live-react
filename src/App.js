@@ -12,6 +12,7 @@ import ActionAlertsModalComponent from "components/ActionAlertsModal/ActionAlert
 import CustomSnoozeModalComponent from "components/CustomSnoozeModal/CustomSnoozeModalComponent";
 import AddNoteModalComponent from "components/AddNoteModal/AddNoteModalComponent";
 import ReassignModalComponent from "components/ReassignModal/ReassignModalComponent";
+import AddResponderModalComponent from "components/AddResponderModal/AddResponderModalComponent";
 
 import { getIncidentsAsync } from "redux/incidents/actions";
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entries/actions";
@@ -72,6 +73,7 @@ const App = ({
         <CustomSnoozeModalComponent />
         <AddNoteModalComponent />
         <ReassignModalComponent />
+        <AddResponderModalComponent />
       </Container>
     </div>
   );

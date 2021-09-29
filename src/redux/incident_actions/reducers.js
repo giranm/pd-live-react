@@ -12,6 +12,11 @@ import {
   REASSIGN_ERROR,
   TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED,
   TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED,
+  ADD_RESPONDER_REQUESTED,
+  ADD_RESPONDER_COMPLETED,
+  ADD_RESPONDER_ERROR,
+  TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED,
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
@@ -82,6 +87,29 @@ const incidentActions = produce(
       case TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED:
         draft.displayReassignModal = action.displayReassignModal;
         draft.status = TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED;
+        break;
+
+      case ADD_RESPONDER_REQUESTED:
+        draft.status = ADD_RESPONDER_REQUESTED;
+        break;
+
+      case ADD_RESPONDER_COMPLETED:
+        draft.updatedIncidentResponderRequests = action.updatedIncidentResponderRequests;
+        draft.status = ADD_RESPONDER_COMPLETED;
+        break;
+
+      case ADD_RESPONDER_ERROR:
+        draft.status = ADD_RESPONDER_ERROR;
+        draft.error = action.message
+        break;
+
+      case TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED:
+        draft.status = TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED;
+        break;
+
+      case TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED:
+        draft.displayAddResponderModal = action.displayAddResponderModal;
+        draft.status = TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED;
         break;
 
       case SNOOZE_REQUESTED:
@@ -168,9 +196,11 @@ const incidentActions = produce(
     reassignedIncidents: [],
     snoozedIncidents: [],
     resolvedIncidents: [],
+    updatedIncidentResponderRequests: [],
     updatedIncidentNotes: [],
     updatedIncidentPriorities: [],
     displayReassignModal: false,
+    displayAddResponderModal: false,
     displayCustomSnoozeModal: false,
     displayAddNoteModal: false,
     status: null,

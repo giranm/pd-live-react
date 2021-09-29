@@ -17,6 +17,7 @@ import {
   acknowledge,
   escalate,
   toggleDisplayReassignModal,
+  toggleDisplayAddResponderModal,
   snooze,
   toggleDisplayCustomSnoozeModal,
   resolve,
@@ -42,7 +43,7 @@ const IncidentActionsComponent = ({
   acknowledge,
   escalate,
   toggleDisplayReassignModal,
-  addResponders,
+  toggleDisplayAddResponderModal,
   snooze,
   toggleDisplayCustomSnoozeModal,
   resolve,
@@ -131,6 +132,7 @@ const IncidentActionsComponent = ({
             <Button
               className="action-button"
               variant="outline-dark"
+              onClick={() => toggleDisplayAddResponderModal()}
               disabled={enableActions}
             >
               Add Responders
@@ -230,7 +232,7 @@ const mapDispatchToProps = (dispatch) => ({
   acknowledge: (incidents) => dispatch(acknowledge(incidents)),
   escalate: (incidents, escalationLevel) => dispatch(escalate(incidents, escalationLevel)),
   toggleDisplayReassignModal: () => dispatch(toggleDisplayReassignModal()),
-  addResponders: (incidents) => () => { }, // To be implemented as action
+  toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModal()),
   snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
   toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
   resolve: (incidents) => dispatch(resolve(incidents)),
