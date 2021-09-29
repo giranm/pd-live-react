@@ -7,6 +7,13 @@ export const ESCALATE_REQUESTED = "ESCALATE_REQUESTED";
 export const ESCALATE_COMPLETED = "ESCALATE_COMPLETED";
 export const ESCALATE_ERROR = "ESCALATE_ERROR";
 
+export const REASSIGN_REQUESTED = "REASSIGN_REQUESTED";
+export const REASSIGN_COMPLETED = "REASSIGN_COMPLETED";
+export const REASSIGN_ERROR = "REASSIGN_ERROR";
+
+export const TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED = "TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED";
+export const TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED = "TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED";
+
 export const SNOOZE_REQUESTED = "SNOOZE_REQUESTED";
 export const SNOOZE_COMPLETED = "SNOOZE_COMPLETED";
 export const SNOOZE_ERROR = "SNOOZE_ERROR";
@@ -40,6 +47,17 @@ export const escalate = (incidents, escalationLevel, displayModal = true) => ({
   incidents,
   escalationLevel,
   displayModal
+});
+
+export const reassign = (incidents, assignment, displayModal = true) => ({
+  type: REASSIGN_REQUESTED,
+  incidents,
+  assignment,
+  displayModal
+});
+
+export const toggleDisplayReassignModal = () => ({
+  type: TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED
 });
 
 export const snooze = (incidents, duration, displayModal = true) => ({

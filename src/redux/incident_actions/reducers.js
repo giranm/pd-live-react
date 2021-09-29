@@ -7,6 +7,11 @@ import {
   ESCALATE_REQUESTED,
   ESCALATE_COMPLETED,
   ESCALATE_ERROR,
+  REASSIGN_REQUESTED,
+  REASSIGN_COMPLETED,
+  REASSIGN_ERROR,
+  TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED,
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
@@ -54,6 +59,29 @@ const incidentActions = produce(
       case ESCALATE_ERROR:
         draft.status = ESCALATE_ERROR;
         draft.error = action.message
+        break;
+
+      case REASSIGN_REQUESTED:
+        draft.status = REASSIGN_REQUESTED;
+        break;
+
+      case REASSIGN_COMPLETED:
+        draft.reassignedIncidents = action.reassignedIncidents;
+        draft.status = REASSIGN_COMPLETED;
+        break;
+
+      case REASSIGN_ERROR:
+        draft.status = REASSIGN_ERROR;
+        draft.error = action.message
+        break;
+
+      case TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED:
+        draft.status = TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED;
+        break;
+
+      case TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED:
+        draft.displayReassignModal = action.displayReassignModal;
+        draft.status = TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED;
         break;
 
       case SNOOZE_REQUESTED:
@@ -137,10 +165,12 @@ const incidentActions = produce(
   {
     acknowledgedIncidents: [],
     escalatedIncidents: [],
+    reassignedIncidents: [],
     snoozedIncidents: [],
     resolvedIncidents: [],
     updatedIncidentNotes: [],
     updatedIncidentPriorities: [],
+    displayReassignModal: false,
     displayCustomSnoozeModal: false,
     displayAddNoteModal: false,
     status: null,

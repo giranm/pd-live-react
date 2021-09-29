@@ -37,6 +37,8 @@ import {
 import {
   acknowledgeAsync,
   escalateAsync,
+  reassignAsync,
+  toggleDisplayReassignModal,
   snoozeAsync,
   toggleDisplayCustomSnoozeModal,
   resolveAsync,
@@ -95,6 +97,8 @@ export default function* rootSaga() {
     // Incident Actions
     acknowledgeAsync(),
     escalateAsync(),
+    reassignAsync(),
+    toggleDisplayReassignModal(),
     snoozeAsync(),
     toggleDisplayCustomSnoozeModal(),
     resolveAsync(),

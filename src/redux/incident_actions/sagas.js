@@ -9,6 +9,11 @@ import {
   ESCALATE_REQUESTED,
   ESCALATE_COMPLETED,
   ESCALATE_ERROR,
+  REASSIGN_REQUESTED,
+  REASSIGN_COMPLETED,
+  REASSIGN_ERROR,
+  TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED,
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
@@ -171,6 +176,78 @@ export function* escalate(action) {
   } catch (e) {
     handleSagaError(ESCALATE_ERROR, e);
   }
+};
+
+export function* reassignAsync() {
+  yield takeLatest(REASSIGN_REQUESTED, reassign);
+};
+
+export function* reassign(action) {
+  try {
+    let { incidents: selectedIncidents, assignment, displayModal } = action;
+
+    // Build request manually given PUT
+    let data = {
+      "incidents": selectedIncidents.map(incident => {
+        let updatedIncident = {
+          "id": incident.id,
+          "type": "incident_reference",
+        };
+        // Determine if EP or User Assignment
+        if (assignment.type === "escalation_policy") {
+          updatedIncident["escalation_policy"] = {
+            "id": assignment.value,
+            "type": "escalation_policy"
+          }
+        } else if (assignment.type === "user") {
+          updatedIncident["assignments"] = [
+            {
+              "assignee": {
+                "id": assignment.value,
+                "type": "user"
+              }
+            }
+          ]
+        }
+        return updatedIncident;
+      })
+    };
+
+    let response = yield call(pd, {
+      method: "put",
+      endpoint: "incidents",
+      data
+    });
+
+    if (response.ok) {
+      yield put({
+        type: REASSIGN_COMPLETED,
+        escalatedIncidents: response.resource
+      });
+      yield toggleDisplayReassignModalImpl();
+      if (displayModal) {
+        let actionAlertsModalType = "success"
+        let actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+          .map(i => i.incident_number)
+          .join(", ")} have been reassigned to ${assignment.name}`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      };
+    } else {
+      handleSingleAPIErrorResponse(response);
+    }
+
+  } catch (e) {
+    handleSagaError(REASSIGN_ERROR, e);
+  }
+};
+
+export function* toggleDisplayReassignModal() {
+  yield takeLatest(TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED, toggleDisplayReassignModalImpl);
+};
+
+export function* toggleDisplayReassignModalImpl() {
+  let { displayReassignModal } = yield select(selectIncidentActions);
+  yield put({ type: TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED, displayReassignModal: !displayReassignModal });
 };
 
 export function* snoozeAsync() {
@@ -355,6 +432,7 @@ export function* addNote(action) {
         type: ADD_NOTE_COMPLETED,
         updatedIncidentNotes: responses
       });
+      yield toggleDisplayAddNoteModalImpl();
       if (displayModal) {
         let actionAlertsModalType = "success"
         let actionAlertsModalMessage = `Incident(s) ${selectedIncidents

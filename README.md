@@ -7,7 +7,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 
 - [ ] OAuth2 Login (will replace steps 2 + 3 from development use)
 - [x] Escalate Incident
-- [ ] Reassign Incident
+- [x] Reassign Incident
 - [ ] Add Responders to Incident
 - [x] Update Priority of Incident
 - [ ] Custom snooze duration for Incident
