@@ -28,6 +28,7 @@ import {
 import {
   TRIGGERED,
   ACKNOWLEDGED,
+  RESOLVED,
   SNOOZE_TIMES,
   filterIncidentsByField,
   HIGH
@@ -57,10 +58,11 @@ const IncidentActionsComponent = ({
   let highUrgencyIncidents = filterIncidentsByField(selectedRows, "urgency", [HIGH]);
 
   // Determine ability of each button based on selected items
+  let selectedIncident = selectedCount === 1 ? selectedRows[0] : null;
   let enableActions = unresolvedIncidents.length > 0 ? false : true;
   let enablePostActions = selectedCount > 0 ? false : true;
   let enablePostSingularAction = selectedCount === 1 ? false : true;
-  let enableEscalationAction = (selectedCount === 1 && highUrgencyIncidents.length) ? false : true;
+  let enableEscalationAction = (selectedCount === 1 && highUrgencyIncidents.length && selectedIncident["status"] !== RESOLVED) ? false : true;
 
   // Create internal variables and state for escalate
   let selectedEscalationPolicyId = selectedCount > 0 ? selectedRows[0]["escalation_policy"]["id"] : null;
