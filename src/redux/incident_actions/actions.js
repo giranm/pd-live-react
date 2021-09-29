@@ -3,6 +3,10 @@ export const ACKNOWLEDGE_REQUESTED = "ACKNOWLEDGE_REQUESTED";
 export const ACKNOWLEDGE_COMPLETED = "ACKNOWLEDGE_COMPLETED";
 export const ACKNOWLEDGE_ERROR = "ACKNOWLEDGE_ERROR";
 
+export const ESCALATE_REQUESTED = "ESCALATE_REQUESTED";
+export const ESCALATE_COMPLETED = "ESCALATE_COMPLETED";
+export const ESCALATE_ERROR = "ESCALATE_ERROR";
+
 export const SNOOZE_REQUESTED = "SNOOZE_REQUESTED";
 export const SNOOZE_COMPLETED = "SNOOZE_COMPLETED";
 export const SNOOZE_ERROR = "SNOOZE_ERROR";
@@ -28,6 +32,13 @@ export const TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED = "TOGGLE_DISPLAY_ADD_NOTE_
 export const acknowledge = (incidents, displayModal = true) => ({
   type: ACKNOWLEDGE_REQUESTED,
   incidents,
+  displayModal
+});
+
+export const escalate = (incidents, escalationLevel, displayModal = true) => ({
+  type: ESCALATE_REQUESTED,
+  incidents,
+  escalationLevel,
   displayModal
 });
 

@@ -4,6 +4,9 @@ import {
   ACKNOWLEDGE_REQUESTED,
   ACKNOWLEDGE_COMPLETED,
   ACKNOWLEDGE_ERROR,
+  ESCALATE_REQUESTED,
+  ESCALATE_COMPLETED,
+  ESCALATE_ERROR,
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
@@ -36,6 +39,20 @@ const incidentActions = produce(
 
       case ACKNOWLEDGE_ERROR:
         draft.status = ACKNOWLEDGE_ERROR;
+        draft.error = action.message
+        break;
+
+      case ESCALATE_REQUESTED:
+        draft.status = ESCALATE_REQUESTED;
+        break;
+
+      case ESCALATE_COMPLETED:
+        draft.escalatedIncidents = action.escalatedIncidents;
+        draft.status = ESCALATE_COMPLETED;
+        break;
+
+      case ESCALATE_ERROR:
+        draft.status = ESCALATE_ERROR;
         draft.error = action.message
         break;
 
@@ -119,6 +136,7 @@ const incidentActions = produce(
   },
   {
     acknowledgedIncidents: [],
+    escalatedIncidents: [],
     snoozedIncidents: [],
     resolvedIncidents: [],
     updatedIncidentNotes: [],

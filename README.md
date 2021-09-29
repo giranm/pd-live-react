@@ -6,7 +6,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 #### TODO
 
 - [ ] OAuth2 Login (will replace steps 2 + 3 from development use)
-- [ ] Escalate Incident
+- [x] Escalate Incident
 - [ ] Reassign Incident
 - [ ] Add Responders to Incident
 - [x] Update Priority of Incident

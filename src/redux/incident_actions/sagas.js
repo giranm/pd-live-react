@@ -6,6 +6,9 @@ import {
   ACKNOWLEDGE_REQUESTED,
   ACKNOWLEDGE_COMPLETED,
   ACKNOWLEDGE_ERROR,
+  ESCALATE_REQUESTED,
+  ESCALATE_COMPLETED,
+  ESCALATE_ERROR,
   SNOOZE_REQUESTED,
   SNOOZE_COMPLETED,
   SNOOZE_ERROR,
@@ -124,6 +127,52 @@ export function* acknowledge(action) {
   }
 };
 
+export function* escalateAsync() {
+  yield takeLatest(ESCALATE_REQUESTED, escalate);
+};
+
+export function* escalate(action) {
+  try {
+    let { incidents: selectedIncidents, escalationLevel, displayModal } = action;
+
+    // Build request manually given PUT
+    let data = {
+      "incidents": selectedIncidents.map(incident => {
+        return {
+          "id": incident.id,
+          "type": "incident_reference",
+          "escalation_level": escalationLevel
+        };
+      })
+    };
+
+    let response = yield call(pd, {
+      method: "put",
+      endpoint: "incidents",
+      data
+    });
+
+    if (response.ok) {
+      yield put({
+        type: ESCALATE_COMPLETED,
+        escalatedIncidents: response.resource
+      });
+      if (displayModal) {
+        let actionAlertsModalType = "success"
+        let actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+          .map(i => i.incident_number)
+          .join(", ")} have been manually escalated to level ${escalationLevel}`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      };
+    } else {
+      handleSingleAPIErrorResponse(response);
+    }
+
+  } catch (e) {
+    handleSagaError(ESCALATE_ERROR, e);
+  }
+};
+
 export function* snoozeAsync() {
   yield takeLatest(SNOOZE_REQUESTED, snooze);
 };
@@ -200,7 +249,6 @@ export function* resolve(action) {
     let response = yield call(pd, {
       method: "put",
       endpoint: "incidents",
-
       data
     });
 

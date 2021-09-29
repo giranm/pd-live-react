@@ -1,11 +1,12 @@
 /* eslint-disable array-callback-return */
-export const TRIGGERED = 'triggered';
-export const ACKNOWLEDGED = 'acknowledged';
-export const RESOLVED = 'resolved';
-export const SNOOZED = 'snoozed';
+export const TRIGGERED = "triggered";
+export const ESCALATED = "escalated";
+export const ACKNOWLEDGED = "acknowledged";
+export const RESOLVED = "resolved";
+export const SNOOZED = "snoozed";
 
-export const HIGH = 'high';
-export const LOW = 'low';
+export const HIGH = "high";
+export const LOW = "low";
 
 export const SNOOZE_TIMES = {
   "5 mins": 60 * 5,
