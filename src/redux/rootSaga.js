@@ -51,6 +51,7 @@ import {
 } from "./action_alerts/sagas";
 
 import {
+  getUsersAsync,
   getCurrentUserAsync
 } from "./users/sagas";
 
@@ -106,6 +107,7 @@ export default function* rootSaga() {
     updateActionAlertsModal(),
 
     // Users
+    getUsersAsync(),
     getCurrentUserAsync(),
 
     // Services

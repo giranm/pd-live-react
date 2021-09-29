@@ -17,7 +17,7 @@ import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from "redux/log_entrie
 import { getServicesAsync } from "redux/services/actions";
 import { getTeamsAsync } from "redux/teams/actions";
 import { getPrioritiesAsync } from "redux/priorities/actions";
-import { getCurrentUserAsync } from "redux/users/actions";
+import { getUsersAsync, getCurrentUserAsync } from "redux/users/actions";
 import { getEscalationPoliciesAsync } from "redux/escalation_policies/actions";
 
 import 'App.css';
@@ -27,6 +27,7 @@ const App = ({
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
+  getUsersAsync,
   getCurrentUserAsync,
   getEscalationPoliciesAsync,
   getIncidentsAsync,
@@ -38,6 +39,7 @@ const App = ({
 
   // Initial load of objects from API
   useEffect(() => {
+    getUsersAsync();
     getCurrentUserAsync();
     getServicesAsync();
     getTeamsAsync();
@@ -81,6 +83,7 @@ const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),
+  getUsersAsync: () => dispatch(getUsersAsync()),
   getCurrentUserAsync: () => dispatch(getCurrentUserAsync()),
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsync()),
   getIncidentsAsync: () => dispatch(getIncidentsAsync()),
