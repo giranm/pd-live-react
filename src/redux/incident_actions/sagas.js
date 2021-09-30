@@ -333,7 +333,10 @@ export function* snooze(action) {
       return call(pd, {
         method: "post",
         endpoint: `incidents/${incident.id}/snooze`,
-        data: { duration: SNOOZE_TIMES[duration] }
+        data: {
+          // Handle pre-built snoozes as well as custom durations
+          duration: SNOOZE_TIMES[duration] ? SNOOZE_TIMES[duration] : duration
+        }
       });
     });
 
