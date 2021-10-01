@@ -8,8 +8,10 @@ import {
   Button,
   Dropdown,
   DropdownButton,
-  ButtonGroup
+  ButtonGroup,
 } from 'react-bootstrap';
+import Select from 'react-select'
+import makeAnimated from 'react-select/animated';
 
 import "./IncidentActionsComponent.css";
 
@@ -26,6 +28,10 @@ import {
 } from "redux/incident_actions/actions";
 
 import {
+  runResponsePlayAsync,
+} from "redux/response_plays/actions";
+
+import {
   TRIGGERED,
   ACKNOWLEDGED,
   RESOLVED,
@@ -36,11 +42,15 @@ import {
 
 import { getObjectsFromListbyKey } from "util/helpers";
 
+const animatedComponents = makeAnimated();
+
 const IncidentActionsComponent = ({
   incidentTableSettings,
   incidentActions,
   priorities,
   escalationPolicies,
+  extensions,
+  responsePlays,
   acknowledge,
   escalate,
   toggleDisplayReassignModal,
@@ -50,7 +60,8 @@ const IncidentActionsComponent = ({
   resolve,
   updatePriority,
   toggleDisplayAddNoteModal,
-  runAction
+  runAction,
+  runResponsePlayAsync,
 }) => {
 
   let { selectedCount, selectedRows } = incidentTableSettings;
@@ -74,7 +85,6 @@ const IncidentActionsComponent = ({
     toggleEscalate(false);
   }, [enableEscalationAction]);
 
-
   // Create internal state for snooze - disable toggle irrespective of actions
   const [displaySnooze, toggleSnooze] = useState(false);
   useEffect(() => {
@@ -86,6 +96,27 @@ const IncidentActionsComponent = ({
   useEffect(() => {
     togglePriority(false);
   }, [enableActions]);
+
+  // Create internal state for run actions
+  const [displayRunActions, toggleRunActions] = useState(false);
+  useEffect(() => {
+    toggleRunActions(false);
+  }, [enablePostSingularAction]);
+
+  // Generate selection list for response plays per selected incident
+  let selectListResponsePlays = responsePlays.length > 0 ? responsePlays.map(responsePlay => {
+    return {
+      label: responsePlay.summary,
+      value: responsePlay.id
+    }
+  }) : [];
+
+  // Generate extension types per selected incident's service
+  let { serviceExtensionMap } = extensions;
+  let serviceExtensions = selectedIncident ? serviceExtensionMap[selectedIncident.service.id] : [];
+  let customIncidentActions = serviceExtensions.length > 0 ? serviceExtensions.filter(
+    serviceExtension => serviceExtension.extension_schema.summary === "Custom Incident Action"
+  ) : [];
 
   return (
     <div>
@@ -209,17 +240,62 @@ const IncidentActionsComponent = ({
             >
               Add Note
             </Button>
-            <Button
+            <DropdownButton
+              as={ButtonGroup}
               className="action-button"
               variant="outline-dark"
+              drop="up"
+              title="Run Action"
+              align="end"
+              id="run-action"
               disabled={enablePostSingularAction}
+              show={displayRunActions}
+              onClick={(e) => {
+                if (e.target.id === "run-action")
+                  toggleRunActions(!displayRunActions)
+              }}
             >
-              Run Action
-            </Button>
+              {selectListResponsePlays.length > 0 ? (
+                <>
+                  <Dropdown.Header>Response Plays</Dropdown.Header>
+                  <Dropdown.Item>
+                    <Select
+                      className="response-play-dropdown"
+                      components={animatedComponents}
+                      options={selectListResponsePlays}
+                      onChange={(selectedResponsePlay) => {
+                        runResponsePlayAsync(selectedRows, selectedResponsePlay.value);
+                        toggleRunActions(!displayRunActions);
+                      }}
+                    />
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                </>
+              ) : <></>}
+              {customIncidentActions.length > 0 ? (
+                <>
+                  <Dropdown.Header>Actions</Dropdown.Header>
+                  {customIncidentActions.map((customIncidentAction) => {
+                    return (
+                      <Dropdown.Item
+                        key={customIncidentAction.id}
+                        onClick={() => {
+                          console.log("TBD");
+                          toggleRunActions(!displayRunActions);
+                        }}
+                      >
+                        {customIncidentAction.name}
+                      </Dropdown.Item>
+                    )
+                  })}
+                  <Dropdown.Divider />
+                </>
+              ) : <></>}
+            </DropdownButton>
           </Col>
         </Row>
       </Container>
-    </div>
+    </div >
   )
 }
 
@@ -228,6 +304,8 @@ const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
+  extensions: state.extensions,
+  responsePlays: state.responsePlays.responsePlays
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -241,6 +319,7 @@ const mapDispatchToProps = (dispatch) => ({
   updatePriority: (incidents, priorityId) => dispatch(updatePriority(incidents, priorityId)),
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
   runAction: (incidents) => () => { }, // To be implemented as action
+  runResponsePlayAsync: (incidents, responsePlayId) => dispatch(runResponsePlayAsync(incidents, responsePlayId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentActionsComponent);

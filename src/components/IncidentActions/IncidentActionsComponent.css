@@ -7,3 +7,7 @@
 .action-button {
   margin-right: 10px;
 }
+
+.response-play-dropdown {
+  min-width: 200px;
+}

@@ -58,6 +58,10 @@ export function* mapServicesToExtensionsImpl() {
             serviceExtensions.push(extension);
         })
       });
+      // Sort name of extensions alphabetically
+      serviceExtensions.sort(
+        (a, b) => a["name"].localeCompare(b["name"])
+      );
       serviceExtensionMap[service.id] = serviceExtensions;
     });
 
