@@ -11,6 +11,7 @@ import teams from "./teams/reducers";
 import priorities from "./priorities/reducers";
 import users from "./users/reducers";
 import escalationPolicies from "./escalation_policies/reducers";
+import extensions from "./extensions/reducers";
 
 export default combineReducers({
   actionAlertsModalData,
@@ -23,5 +24,6 @@ export default combineReducers({
   teams,
   priorities,
   users,
-  escalationPolicies
+  escalationPolicies,
+  extensions
 });

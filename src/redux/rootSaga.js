@@ -64,6 +64,11 @@ import { getTeamsAsync } from "./teams/sagas";
 import { getPrioritiesAsync } from "./priorities/sagas";
 import { getEscalationPoliciesAsync } from "./escalation_policies/sagas";
 
+import {
+  getExtensionsAsync,
+  mapServicesToExtensions
+} from "./extensions/sagas";
+
 export default function* rootSaga() {
   yield all([
     // Query Settings
@@ -129,5 +134,9 @@ export default function* rootSaga() {
 
     // Escalation Policies
     getEscalationPoliciesAsync(),
+
+    // Extensions
+    getExtensionsAsync(),
+    mapServicesToExtensions(),
   ]);
 };
