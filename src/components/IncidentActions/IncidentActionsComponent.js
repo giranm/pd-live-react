@@ -118,7 +118,10 @@ const IncidentActionsComponent = ({
   let { serviceExtensionMap } = extensions;
   let serviceExtensions = selectedIncident ? serviceExtensionMap[selectedIncident.service.id] : [];
   let customIncidentActions = serviceExtensions.length > 0 ? serviceExtensions.filter(
-    serviceExtension => serviceExtension.extension_schema.summary === "Custom Incident Action"
+    serviceExtension => serviceExtension.extension_type === "Custom Incident Action"
+  ) : [];
+  let ticketingActions = serviceExtensions.length > 0 ? serviceExtensions.filter(
+    serviceExtension => serviceExtension.extension_type === "Ticketing"
   ) : [];
 
   return (
@@ -288,6 +291,25 @@ const IncidentActionsComponent = ({
                         }}
                       >
                         {customIncidentAction.name}
+                      </Dropdown.Item>
+                    )
+                  })}
+                  <Dropdown.Divider />
+                </>
+              ) : <></>}
+              {ticketingActions.length > 0 ? (
+                <>
+                  <Dropdown.Header>Sync</Dropdown.Header>
+                  {ticketingActions.map((ticketingAction) => {
+                    return (
+                      <Dropdown.Item
+                        key={ticketingAction.id}
+                        onClick={() => {
+                          // runTicketingSync(selectedRows, ticketingAction);
+                          toggleRunActions(!displayRunActions);
+                        }}
+                      >
+                        {ticketingAction.extension_label}
                       </Dropdown.Item>
                     )
                   })}

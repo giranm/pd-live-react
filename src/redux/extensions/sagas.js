@@ -54,8 +54,33 @@ export function* mapServicesToExtensionsImpl() {
       let serviceExtensions = [];
       extensions.map(extension => {
         extension.extension_objects.map(extensionObject => {
-          if (extensionObject.type === "service_reference" && extensionObject.id === service.id)
-            serviceExtensions.push(extension);
+          if (extensionObject.type === "service_reference" && extensionObject.id === service.id) {
+            // Add modified version of extension object for rendering, containing "types" + "labels"
+            let modifiedExtension = { ...extension };
+            let extensionSummary = modifiedExtension.extension_schema.summary;
+
+            // Custom Incident Action
+            if (extensionSummary === "Custom Incident Action") {
+              modifiedExtension["extension_type"] = "Custom Incident Action";
+
+              // ServiceNow
+            } else if (extensionSummary.includes("ServiceNow") && modifiedExtension.config.sync_options === "manual_sync") {
+              modifiedExtension["extension_type"] = "Ticketing";
+              modifiedExtension["extension_label"] = "Sync with ServiceNow";
+
+              // Jira
+            } else if (extensionSummary.includes("Jira") && !modifiedExtension.config.jira.createIssueOnIncidentTrigger) {
+              modifiedExtension["extension_type"] = "Ticketing"
+              modifiedExtension["extension_label"] = `Sync with ${extensionSummary}`;
+
+              // Zendesk
+            } else if (extensionSummary === "Zendesk") {
+              modifiedExtension["extension_type"] = "Ticketing";
+              modifiedExtension["extension_label"] = "Sync with Zendesk";
+            }
+
+            serviceExtensions.push(modifiedExtension);
+          }
         })
       });
       // Sort name of extensions alphabetically
