@@ -12,9 +12,9 @@ export const getResponsePlaysAsync = () => ({
   type: FETCH_RESPONSE_PLAYS_REQUESTED
 });
 
-export const runResponsePlayAsync = (incidents, responsePlayId, displayModal = true) => ({
+export const runResponsePlayAsync = (incidents, responsePlay, displayModal = true) => ({
   type: RUN_RESPONSE_PLAY_REQUESTED,
   incidents,
-  responsePlayId,
+  responsePlay,
   displayModal
 });

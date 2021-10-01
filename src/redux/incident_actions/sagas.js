@@ -42,6 +42,9 @@ import {
   ADD_NOTE_ERROR,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
+  RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
+  RUN_CUSTOM_INCIDENT_ACTION_COMPLETED,
+  RUN_CUSTOM_INCIDENT_ACTION_ERROR
 } from "./actions";
 
 import { selectIncidentActions } from "./selectors";
@@ -495,4 +498,52 @@ export function* toggleDisplayAddNoteModal() {
 export function* toggleDisplayAddNoteModalImpl() {
   let { displayAddNoteModal } = yield select(selectIncidentActions);
   yield put({ type: TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED, displayAddNoteModal: !displayAddNoteModal });
+};
+
+export function* runCustomIncidentActionAsync() {
+  yield takeLatest(RUN_CUSTOM_INCIDENT_ACTION_REQUESTED, runCustomIncidentAction);
+};
+
+export function* runCustomIncidentAction(action) {
+  try {
+    let { incidents: selectedIncidents, webhook, displayModal } = action;
+
+    // Build individual requests as the endpoint supports singular POST
+    let customIncidentActionRequests = selectedIncidents.map(incident => {
+      return call(pd, {
+        method: "post",
+        endpoint: `incidents/${incident.id}/custom_action`,
+        data: {
+          "custom_action": {
+            "webhook": {
+              "id": webhook.id,
+              "type": "webhook_reference"
+            }
+          }
+        }
+      });
+    });
+
+    // Invoke parallel calls for optimal performance
+    let responses = yield all(customIncidentActionRequests);
+    if (responses.every((response) => response.ok)) {
+      yield put({
+        type: RUN_CUSTOM_INCIDENT_ACTION_COMPLETED,
+        customIncidentActionRequests: responses
+      });
+      if (displayModal) {
+        let actionAlertsModalType = "success"
+        let actionAlertsModalMessage = `Custom Incident Action "${webhook.name}" triggered for incident(s) ${selectedIncidents
+          .map(i => i.incident_number)
+          .join(", ")}.`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      };
+    } else {
+      handleMultipleAPIErrorResponses(responses);
+    };
+
+  } catch (e) {
+    console.log(e)
+    handleSagaError(RUN_CUSTOM_INCIDENT_ACTION_ERROR, e);
+  }
 };

@@ -52,6 +52,7 @@ import {
   updatePriorityAsync,
   addNoteAsync,
   toggleDisplayAddNoteModal,
+  runCustomIncidentActionAsync,
 } from "./incident_actions/sagas";
 
 import {
@@ -124,6 +125,7 @@ export default function* rootSaga() {
     updatePriorityAsync(),
     addNoteAsync(),
     toggleDisplayAddNoteModal(),
+    runCustomIncidentActionAsync(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

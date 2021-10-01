@@ -52,13 +52,13 @@ export function* runResponsePlayAsync() {
 
 export function* runResponsePlay(action) {
   try {
-    let { incidents: selectedIncidents, responsePlayId, displayModal } = action;
+    let { incidents: selectedIncidents, responsePlay, displayModal } = action;
 
     // Build individual requests as the endpoint supports singular POST
     let responsePlayRequests = selectedIncidents.map(incident => {
       return call(pd, {
         method: "post",
-        endpoint: `response_plays/${responsePlayId}/run`,
+        endpoint: `response_plays/${responsePlay.id}/run`,
         data: {
           "incident": {
             "id": incident.id,
@@ -77,7 +77,7 @@ export function* runResponsePlay(action) {
       });
       if (displayModal) {
         let actionAlertsModalType = "success"
-        let actionAlertsModalMessage = `Ran response play for incident(s) ${selectedIncidents
+        let actionAlertsModalMessage = `Ran "${responsePlay.summary}" response play for incident(s) ${selectedIncidents
           .map(i => i.incident_number)
           .join(", ")}.`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);

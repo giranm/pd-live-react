@@ -25,6 +25,7 @@ import {
   resolve,
   updatePriority,
   toggleDisplayAddNoteModal,
+  runCustomIncidentAction
 } from "redux/incident_actions/actions";
 
 import {
@@ -60,7 +61,7 @@ const IncidentActionsComponent = ({
   resolve,
   updatePriority,
   toggleDisplayAddNoteModal,
-  runAction,
+  runCustomIncidentAction,
   runResponsePlayAsync,
 }) => {
 
@@ -107,7 +108,9 @@ const IncidentActionsComponent = ({
   let selectListResponsePlays = responsePlays.length > 0 ? responsePlays.map(responsePlay => {
     return {
       label: responsePlay.summary,
-      value: responsePlay.id
+      value: responsePlay.id,
+      summary: responsePlay.summary,
+      id: responsePlay.id
     }
   }) : [];
 
@@ -264,7 +267,7 @@ const IncidentActionsComponent = ({
                       components={animatedComponents}
                       options={selectListResponsePlays}
                       onChange={(selectedResponsePlay) => {
-                        runResponsePlayAsync(selectedRows, selectedResponsePlay.value);
+                        runResponsePlayAsync(selectedRows, selectedResponsePlay);
                         toggleRunActions(!displayRunActions);
                       }}
                     />
@@ -280,7 +283,7 @@ const IncidentActionsComponent = ({
                       <Dropdown.Item
                         key={customIncidentAction.id}
                         onClick={() => {
-                          console.log("TBD");
+                          runCustomIncidentAction(selectedRows, customIncidentAction);
                           toggleRunActions(!displayRunActions);
                         }}
                       >
@@ -318,8 +321,8 @@ const mapDispatchToProps = (dispatch) => ({
   resolve: (incidents) => dispatch(resolve(incidents)),
   updatePriority: (incidents, priorityId) => dispatch(updatePriority(incidents, priorityId)),
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
-  runAction: (incidents) => () => { }, // To be implemented as action
-  runResponsePlayAsync: (incidents, responsePlayId) => dispatch(runResponsePlayAsync(incidents, responsePlayId)),
+  runCustomIncidentAction: (incidents, webhook) => dispatch(runCustomIncidentAction(incidents, webhook)),
+  runResponsePlayAsync: (incidents, responsePlay) => dispatch(runResponsePlayAsync(incidents, responsePlay)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentActionsComponent);

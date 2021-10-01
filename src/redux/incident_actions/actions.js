@@ -43,6 +43,10 @@ export const ADD_NOTE_ERROR = "ADD_NOTE_ERROR";
 export const TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED = "TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED";
 export const TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED = "TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED";
 
+export const RUN_CUSTOM_INCIDENT_ACTION_REQUESTED = "RUN_CUSTOM_INCIDENT_ACTION_REQUESTED";
+export const RUN_CUSTOM_INCIDENT_ACTION_COMPLETED = "RUN_CUSTOM_INCIDENT_ACTION_COMPLETED";
+export const RUN_CUSTOM_INCIDENT_ACTION_ERROR = "RUN_CUSTOM_INCIDENT_ACTION_ERROR";
+
 export const acknowledge = (incidents, displayModal = true) => ({
   type: ACKNOWLEDGE_REQUESTED,
   incidents,
@@ -112,4 +116,11 @@ export const addNote = (incidents, note, displayModal = true) => ({
 
 export const toggleDisplayAddNoteModal = () => ({
   type: TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED
+});
+
+export const runCustomIncidentAction = (incidents, webhook, displayModal = true) => ({
+  type: RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
+  incidents,
+  webhook,
+  displayModal
 });

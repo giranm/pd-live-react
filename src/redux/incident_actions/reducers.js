@@ -33,6 +33,9 @@ import {
   ADD_NOTE_ERROR,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
+  RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
+  RUN_CUSTOM_INCIDENT_ACTION_COMPLETED,
+  RUN_CUSTOM_INCIDENT_ACTION_ERROR
 } from "./actions";
 
 const incidentActions = produce(
@@ -186,6 +189,20 @@ const incidentActions = produce(
         draft.status = TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED;
         break;
 
+      case RUN_CUSTOM_INCIDENT_ACTION_REQUESTED:
+        draft.status = RUN_CUSTOM_INCIDENT_ACTION_REQUESTED;
+        break;
+
+      case RUN_CUSTOM_INCIDENT_ACTION_COMPLETED:
+        draft.customIncidentActionRequests = action.customIncidentActionRequests;
+        draft.status = RUN_CUSTOM_INCIDENT_ACTION_COMPLETED;
+        break;
+
+      case RUN_CUSTOM_INCIDENT_ACTION_ERROR:
+        draft.status = RUN_CUSTOM_INCIDENT_ACTION_ERROR;
+        draft.error = action.message
+        break;
+
       default:
         break;
     }
@@ -199,6 +216,7 @@ const incidentActions = produce(
     updatedIncidentResponderRequests: [],
     updatedIncidentNotes: [],
     updatedIncidentPriorities: [],
+    customIncidentActionRequests: [],
     displayReassignModal: false,
     displayAddResponderModal: false,
     displayCustomSnoozeModal: false,
