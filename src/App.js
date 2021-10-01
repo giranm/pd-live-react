@@ -22,6 +22,7 @@ import { getPrioritiesAsync } from "redux/priorities/actions";
 import { getUsersAsync, getCurrentUserAsync } from "redux/users/actions";
 import { getEscalationPoliciesAsync } from "redux/escalation_policies/actions";
 import { getExtensionsAsync } from "redux/extensions/actions";
+import { getResponsePlaysAsync } from "redux/response_plays/actions";
 
 import 'App.css';
 
@@ -34,6 +35,7 @@ const App = ({
   getCurrentUserAsync,
   getEscalationPoliciesAsync,
   getExtensionsAsync,
+  getResponsePlaysAsync,
   getIncidentsAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync
@@ -50,6 +52,7 @@ const App = ({
     getPrioritiesAsync();
     getEscalationPoliciesAsync();
     getExtensionsAsync();
+    getResponsePlaysAsync();
     getIncidentsAsync();
   }, [])
 
@@ -94,6 +97,7 @@ const mapDispatchToProps = (dispatch) => ({
   getCurrentUserAsync: () => dispatch(getCurrentUserAsync()),
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsync()),
   getExtensionsAsync: () => dispatch(getExtensionsAsync()),
+  getResponsePlaysAsync: () => dispatch(getResponsePlaysAsync()),
   getIncidentsAsync: () => dispatch(getIncidentsAsync()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),

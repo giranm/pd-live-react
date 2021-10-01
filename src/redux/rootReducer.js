@@ -12,6 +12,7 @@ import priorities from "./priorities/reducers";
 import users from "./users/reducers";
 import escalationPolicies from "./escalation_policies/reducers";
 import extensions from "./extensions/reducers";
+import responsePlays from "./response_plays/reducers";
 
 export default combineReducers({
   actionAlertsModalData,
@@ -25,5 +26,6 @@ export default combineReducers({
   priorities,
   users,
   escalationPolicies,
-  extensions
+  extensions,
+  responsePlays
 });

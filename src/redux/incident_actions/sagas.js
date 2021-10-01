@@ -3,6 +3,13 @@ import { put, call, select, takeLatest, all } from "redux-saga/effects";
 import { api } from '@pagerduty/pdjs';
 
 import {
+  handleSagaError,
+  handleSingleAPIErrorResponse,
+  handleMultipleAPIErrorResponses,
+  displayActionModal,
+} from "redux/rootSaga";
+
+import {
   ACKNOWLEDGE_REQUESTED,
   ACKNOWLEDGE_COMPLETED,
   ACKNOWLEDGE_ERROR,
@@ -37,11 +44,6 @@ import {
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
 } from "./actions";
 
-import {
-  TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,
-  UPDATE_ACTION_ALERTS_MODAL_REQUESTED,
-} from "redux/action_alerts/actions";
-
 import { selectIncidentActions } from "./selectors";
 import { selectPriorities } from "redux/priorities/selectors";
 
@@ -57,38 +59,6 @@ import {
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
-
-// Helper function to display modal with API result
-export function* displayActionModal(actionAlertsModalType, actionAlertsModalMessage) {
-  yield put({ type: UPDATE_ACTION_ALERTS_MODAL_REQUESTED, actionAlertsModalType, actionAlertsModalMessage });
-  yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
-};
-
-// Helper function to handle API errors in response
-const handleSingleAPIErrorResponse = (response) => {
-  if (response.data.error) {
-    throw Error(response.data.error.message);
-  } else {
-    throw Error("Unknown error while using PD API");
-  };
-};
-
-const handleMultipleAPIErrorResponses = (responses) => {
-  let errors = responses
-    .filter((response) => response.data.error)
-    .map((response) => response.data.error.message);
-  if (errors.length) {
-    throw Error(errors);
-  } else {
-    throw Error("Unknown error while using PD API");
-  };
-}
-
-// Helper function to handle errors while processing saga
-export function* handleSagaError(action, exception) {
-  yield displayActionModal("danger", exception.message)
-  yield put({ type: action, message: exception.message });
-}
 
 export function* acknowledgeAsync() {
   yield takeLatest(ACKNOWLEDGE_REQUESTED, acknowledge);
