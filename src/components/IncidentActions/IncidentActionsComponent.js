@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 
 import {
   Container,
@@ -10,10 +10,10 @@ import {
   DropdownButton,
   ButtonGroup,
 } from 'react-bootstrap';
-import Select from 'react-select'
+import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import "./IncidentActionsComponent.css";
+import './IncidentActionsComponent.css';
 
 import {
   acknowledge,
@@ -26,12 +26,10 @@ import {
   updatePriority,
   toggleDisplayAddNoteModal,
   runCustomIncidentAction,
-  syncWithExternalSystem
-} from "redux/incident_actions/actions";
+  syncWithExternalSystem,
+} from 'redux/incident_actions/actions';
 
-import {
-  runResponsePlayAsync,
-} from "redux/response_plays/actions";
+import { runResponsePlayAsync } from 'redux/response_plays/actions';
 
 import {
   TRIGGERED,
@@ -39,15 +37,12 @@ import {
   RESOLVED,
   SNOOZE_TIMES,
   filterIncidentsByField,
-  HIGH
-} from "util/incidents";
+  HIGH,
+} from 'util/incidents';
 
-import {
-  CUSTOM_INCIDENT_ACTION,
-  EXTERNAL_SYSTEM
-} from "util/extensions";
+import { CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM } from 'util/extensions';
 
-import { getObjectsFromListbyKey } from "util/helpers";
+import { getObjectsFromListbyKey } from 'util/helpers';
 
 const animatedComponents = makeAnimated();
 
@@ -71,22 +66,32 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
-
-  let { selectedCount, selectedRows } = incidentTableSettings;
-  let unresolvedIncidents = filterIncidentsByField(selectedRows, "status", [TRIGGERED, ACKNOWLEDGED]);
-  let highUrgencyIncidents = filterIncidentsByField(selectedRows, "urgency", [HIGH]);
+  const { selectedCount, selectedRows } = incidentTableSettings;
+  const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
+    TRIGGERED,
+    ACKNOWLEDGED,
+  ]);
+  const highUrgencyIncidents = filterIncidentsByField(selectedRows, 'urgency', [HIGH]);
 
   // Determine ability of each button based on selected items
-  let selectedIncident = selectedCount === 1 ? selectedRows[0] : null;
-  let enableActions = unresolvedIncidents.length > 0 ? false : true;
-  let enablePostActions = selectedCount > 0 ? false : true;
-  let enablePostSingularAction = selectedCount === 1 ? false : true;
-  let enableEscalationAction = (selectedCount === 1 && highUrgencyIncidents.length && selectedIncident["status"] !== RESOLVED) ? false : true;
+  const selectedIncident = selectedCount === 1 ? selectedRows[0] : null;
+  const enableActions = !(unresolvedIncidents.length > 0);
+  const enablePostActions = !(selectedCount > 0);
+  const enablePostSingularAction = selectedCount !== 1;
+  const enableEscalationAction = !(selectedCount === 1 && highUrgencyIncidents.length && selectedIncident.status !== RESOLVED);
 
   // Create internal variables and state for escalate
-  let selectedEscalationPolicyId = selectedIncident ? selectedRows[0]["escalation_policy"]["id"] : null;
-  let selectedEscalationPolicy = getObjectsFromListbyKey(escalationPolicies, "id", selectedEscalationPolicyId)[0];
-  let selectedEscalationRules = selectedEscalationPolicy ? selectedEscalationPolicy.escalation_rules.slice(0).reverse() : [];
+  const selectedEscalationPolicyId = selectedIncident
+    ? selectedRows[0].escalation_policy.id
+    : null;
+  const selectedEscalationPolicy = getObjectsFromListbyKey(
+    escalationPolicies,
+    'id',
+    selectedEscalationPolicyId,
+  )[0];
+  const selectedEscalationRules = selectedEscalationPolicy
+    ? selectedEscalationPolicy.escalation_rules.slice(0).reverse()
+    : [];
 
   const [displayEscalate, toggleEscalate] = useState(false);
   useEffect(() => {
@@ -112,41 +117,49 @@ const IncidentActionsComponent = ({
   }, [enablePostSingularAction]);
 
   // Generate selection list for response plays per selected incident
-  let selectListResponsePlays = responsePlays.length > 0 ? responsePlays.map(responsePlay => {
-    return {
+  const selectListResponsePlays = responsePlays.length > 0
+    ? responsePlays.map((responsePlay) => ({
       label: responsePlay.summary,
       value: responsePlay.id,
       summary: responsePlay.summary,
-      id: responsePlay.id
-    }
-  }) : [];
+      id: responsePlay.id,
+    }))
+    : [];
 
   // Generate extension types per selected incident's service
-  let { serviceExtensionMap } = extensions;
-  let serviceExtensions = selectedIncident ? serviceExtensionMap[selectedIncident.service.id] : [];
-  let customIncidentActions = serviceExtensions.length > 0 ? serviceExtensions.filter(
-    serviceExtension => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION
-  ) : [];
-  let externalSystemsTemp = serviceExtensions.length > 0 ? serviceExtensions.filter(
-    serviceExtension => serviceExtension.extension_type === EXTERNAL_SYSTEM
-  ) : [];
+  const { serviceExtensionMap } = extensions;
+  const serviceExtensions = selectedIncident ? serviceExtensionMap[selectedIncident.service.id] : [];
+  const customIncidentActions = serviceExtensions.length > 0
+    ? serviceExtensions.filter(
+      (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
+    )
+    : [];
+  const externalSystemsTemp = serviceExtensions.length > 0
+    ? serviceExtensions.filter(
+      (serviceExtension) => serviceExtension.extension_type === EXTERNAL_SYSTEM,
+    )
+    : [];
 
   // Identify extensions (ext systems) that have already been sync'd with on the selected incident
   // NB - need intermediate variables to stop race condition of empty array
-  let externalSystems = selectedIncident ? externalSystemsTemp.map(serviceExtension => {
-    let tempServiceExtension = { ...serviceExtension };
-    let result;
-    result = selectedIncident.external_references ? selectedIncident.external_references.find(
-      ({ webhook }) => webhook.id === serviceExtension.id
-    ) : null;
-    if (result) {
-      tempServiceExtension.synced = true;
-      tempServiceExtension.extension_label = `Synced with ${result.webhook.summary} (${result.external_id})`;
-    } else {
-      tempServiceExtension.synced = false;
-    }
-    return tempServiceExtension;
-  }) : [];
+  const externalSystems = selectedIncident
+    ? externalSystemsTemp.map((serviceExtension) => {
+      const tempServiceExtension = { ...serviceExtension };
+      let result;
+      result = selectedIncident.external_references
+        ? selectedIncident.external_references.find(
+          ({ webhook }) => webhook.id === serviceExtension.id,
+        )
+        : null;
+      if (result) {
+        tempServiceExtension.synced = true;
+        tempServiceExtension.extension_label = `Synced with ${result.webhook.summary} (${result.external_id})`;
+      } else {
+        tempServiceExtension.synced = false;
+      }
+      return tempServiceExtension;
+    })
+    : [];
 
   return (
     <div>
@@ -172,16 +185,18 @@ const IncidentActionsComponent = ({
               onClick={() => toggleEscalate(!displayEscalate)}
             >
               {selectedEscalationRules.map((escalation_rule, idx) => {
-                let escalationLevel = selectedEscalationRules.length - idx;
+                const escalationLevel = selectedEscalationRules.length - idx;
                 return (
                   <Dropdown.Item
                     key={escalation_rule.id}
                     variant="outline-dark"
                     onClick={() => escalate(selectedRows, escalationLevel)}
                   >
-                    {`Level ${escalationLevel}: ${escalation_rule.targets.map(t => t.summary).join(", ")}`}
+                    {`Level ${escalationLevel}: ${escalation_rule.targets
+                      .map((t) => t.summary)
+                      .join(', ')}`}
                   </Dropdown.Item>
-                )
+                );
               })}
             </DropdownButton>
             <Button
@@ -210,7 +225,7 @@ const IncidentActionsComponent = ({
               show={displaySnooze}
               onClick={() => toggleSnooze(!displaySnooze)}
             >
-              {Object.keys(SNOOZE_TIMES).map(duration =>
+              {Object.keys(SNOOZE_TIMES).map((duration) => (
                 <Dropdown.Item
                   key={duration}
                   variant="outline-dark"
@@ -218,11 +233,9 @@ const IncidentActionsComponent = ({
                 >
                   {duration}
                 </Dropdown.Item>
-              )}
+              ))}
               <Dropdown.Divider />
-              <Dropdown.Item onClick={() => toggleDisplayCustomSnoozeModal()}>
-                Custom
-              </Dropdown.Item>
+              <Dropdown.Item onClick={() => toggleDisplayCustomSnoozeModal()}>Custom</Dropdown.Item>
             </DropdownButton>
             <Button
               className="action-button"
@@ -244,7 +257,7 @@ const IncidentActionsComponent = ({
               show={displayPriority}
               onClick={() => togglePriority(!displayPriority)}
             >
-              {priorities.map(priority =>
+              {priorities.map((priority) => (
                 <Dropdown.Item
                   key={priority.id}
                   variant="outline-dark"
@@ -253,14 +266,14 @@ const IncidentActionsComponent = ({
                   <p
                     style={{
                       backgroundColor: `#${priority.color}`,
-                      color: "white",
+                      color: 'white',
                     }}
                     className="priority-label-dropdown"
                   >
                     {priority.name}
                   </p>
                 </Dropdown.Item>
-              )}
+              ))}
             </DropdownButton>
             <Button
               className="action-button"
@@ -281,8 +294,7 @@ const IncidentActionsComponent = ({
               disabled={enablePostSingularAction}
               show={displayRunActions}
               onClick={(e) => {
-                if (e.target.id === "run-action")
-                  toggleRunActions(!displayRunActions)
+                if (e.target.id === 'run-action') toggleRunActions(!displayRunActions);
               }}
             >
               {selectListResponsePlays.length > 0 ? (
@@ -301,53 +313,55 @@ const IncidentActionsComponent = ({
                   </Dropdown.Item>
                   <Dropdown.Divider />
                 </>
-              ) : <></>}
+              ) : (
+                <></>
+              )}
               {customIncidentActions.length > 0 ? (
                 <>
                   <Dropdown.Header>Actions</Dropdown.Header>
-                  {customIncidentActions.map((customIncidentAction) => {
-                    return (
-                      <Dropdown.Item
-                        key={customIncidentAction.id}
-                        onClick={() => {
-                          runCustomIncidentAction(selectedRows, customIncidentAction);
-                          toggleRunActions(!displayRunActions);
-                        }}
-                      >
-                        {customIncidentAction.name}
-                      </Dropdown.Item>
-                    )
-                  })}
+                  {customIncidentActions.map((customIncidentAction) => (
+                    <Dropdown.Item
+                      key={customIncidentAction.id}
+                      onClick={() => {
+                        runCustomIncidentAction(selectedRows, customIncidentAction);
+                        toggleRunActions(!displayRunActions);
+                      }}
+                    >
+                      {customIncidentAction.name}
+                    </Dropdown.Item>
+                  ))}
                   <Dropdown.Divider />
                 </>
-              ) : <></>}
+              ) : (
+                <></>
+              )}
               {externalSystems.length > 0 ? (
                 <>
                   <Dropdown.Header>External Systems</Dropdown.Header>
-                  {externalSystems.map((externalSystem) => {
-                    return (
-                      <Dropdown.Item
-                        key={externalSystem.id}
-                        disabled={externalSystem.synced}
-                        onClick={() => {
-                          syncWithExternalSystem(selectedRows, externalSystem);
-                          toggleRunActions(!displayRunActions);
-                        }}
-                      >
-                        {externalSystem.extension_label}
-                      </Dropdown.Item>
-                    )
-                  })}
+                  {externalSystems.map((externalSystem) => (
+                    <Dropdown.Item
+                      key={externalSystem.id}
+                      disabled={externalSystem.synced}
+                      onClick={() => {
+                        syncWithExternalSystem(selectedRows, externalSystem);
+                        toggleRunActions(!displayRunActions);
+                      }}
+                    >
+                      {externalSystem.extension_label}
+                    </Dropdown.Item>
+                  ))}
                   <Dropdown.Divider />
                 </>
-              ) : <></>}
+              ) : (
+                <></>
+              )}
             </DropdownButton>
           </Col>
         </Row>
       </Container>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
@@ -355,7 +369,7 @@ const mapStateToProps = (state) => ({
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   extensions: state.extensions,
-  responsePlays: state.responsePlays.responsePlays
+  responsePlays: state.responsePlays.responsePlays,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -370,7 +384,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
   runCustomIncidentAction: (incidents, webhook) => dispatch(runCustomIncidentAction(incidents, webhook)),
   runResponsePlayAsync: (incidents, responsePlay) => dispatch(runResponsePlayAsync(incidents, responsePlay)),
-  syncWithExternalSystem: (incidents, webhook) => dispatch(syncWithExternalSystem(incidents, webhook))
+  syncWithExternalSystem: (incidents, webhook) => dispatch(syncWithExternalSystem(incidents, webhook)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentActionsComponent);

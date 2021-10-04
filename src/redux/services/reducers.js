@@ -1,10 +1,10 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   FETCH_SERVICES_REQUESTED,
   FETCH_SERVICES_COMPLETED,
   FETCH_SERVICES_ERROR,
-} from "./actions";
+} from './actions';
 
 const services = produce(
   (draft, action) => {
@@ -23,7 +23,7 @@ const services = produce(
       case FETCH_SERVICES_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_SERVICES_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -34,8 +34,8 @@ const services = produce(
     services: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default services;

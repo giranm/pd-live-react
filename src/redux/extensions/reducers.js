@@ -1,4 +1,4 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   FETCH_EXTENSIONS_REQUESTED,
@@ -7,7 +7,7 @@ import {
   MAP_SERVICES_TO_EXTENSIONS_REQUESTED,
   MAP_SERVICES_TO_EXTENSIONS_COMPLETED,
   MAP_SERVICES_TO_EXTENSIONS_ERROR,
-} from "./actions";
+} from './actions';
 
 const extensions = produce(
   (draft, action) => {
@@ -26,7 +26,7 @@ const extensions = produce(
       case FETCH_EXTENSIONS_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_EXTENSIONS_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case MAP_SERVICES_TO_EXTENSIONS_REQUESTED:
@@ -40,7 +40,7 @@ const extensions = produce(
 
       case MAP_SERVICES_TO_EXTENSIONS_ERROR:
         draft.status = MAP_SERVICES_TO_EXTENSIONS_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -52,8 +52,8 @@ const extensions = produce(
     serviceExtensionMap: {},
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default extensions;

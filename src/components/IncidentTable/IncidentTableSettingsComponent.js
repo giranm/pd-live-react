@@ -1,45 +1,37 @@
-import { useState } from "react";
-import { connect } from "react-redux";
+import { useState } from 'react';
+import { connect } from 'react-redux';
 
 import {
-  Modal,
-  Button,
-  Container,
-  Row,
-  Col,
-  Tabs,
-  Tab
+  Modal, Button, Container, Row, Col, Tabs, Tab,
 } from 'react-bootstrap';
 
 import DualListBox from 'react-dual-listbox';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
-import "./IncidentTableSettingsComponent.css";
+import './IncidentTableSettingsComponent.css';
 
 import {
   toggleIncidentTableSettings,
-  saveIncidentTableSettings
-} from "redux/incident_table/actions";
+  saveIncidentTableSettings,
+} from 'redux/incident_table/actions';
 
-import { availableIncidentTableColumns } from "util/incident-table-columns";
+import { availableIncidentTableColumns } from 'util/incident-table-columns';
 
-const columnMapper = (column) => {
-  return {
-    label: column.name,
-    value: column.name
-  }
-}
+const columnMapper = (column) => ({
+  label: column.name,
+  value: column.name,
+});
 
 const IncidentTableSettingsComponent = ({
   incidentTableSettings,
   toggleIncidentTableSettings,
-  saveIncidentTableSettings
+  saveIncidentTableSettings,
 }) => {
-  let { incidentTableColumns, displayIncidentTableSettings } = incidentTableSettings;
+  const { incidentTableColumns, displayIncidentTableSettings } = incidentTableSettings;
 
   // Create internal state for options
   const [selectedColumns, setSelectedColumns] = useState(incidentTableColumns.map(columnMapper));
-  let availableColumns = availableIncidentTableColumns.map(columnMapper);
+  const availableColumns = availableIncidentTableColumns.map(columnMapper);
 
   return (
     <div className="incident-table-settings-ctr">
@@ -80,8 +72,8 @@ const IncidentTableSettingsComponent = ({
         </Modal.Footer>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,

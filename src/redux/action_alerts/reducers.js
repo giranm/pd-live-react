@@ -1,11 +1,11 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_COMPLETED,
   UPDATE_ACTION_ALERTS_MODAL_REQUESTED,
   UPDATE_ACTION_ALERTS_MODAL_COMPLETED,
-} from "./actions";
+} from './actions';
 
 const actionAlertsModalData = produce(
   (draft, action) => {
@@ -35,12 +35,12 @@ const actionAlertsModalData = produce(
   },
   {
     displayActionAlertsModal: false,
-    actionAlertsModalType: "success",
-    actionAlertsModalMessage: "N/A",
+    actionAlertsModalType: 'success',
+    actionAlertsModalMessage: 'N/A',
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default actionAlertsModalData;

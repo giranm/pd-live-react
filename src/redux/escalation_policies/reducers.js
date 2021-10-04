@@ -1,10 +1,10 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   FETCH_ESCALATION_POLICIES_REQUESTED,
   FETCH_ESCALATION_POLICIES_COMPLETED,
   FETCH_ESCALATION_POLICIES_ERROR,
-} from "./actions";
+} from './actions';
 
 const escalationPolicies = produce(
   (draft, action) => {
@@ -23,7 +23,7 @@ const escalationPolicies = produce(
       case FETCH_ESCALATION_POLICIES_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_ESCALATION_POLICIES_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -34,8 +34,8 @@ const escalationPolicies = produce(
     escalationPolicies: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default escalationPolicies;

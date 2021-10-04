@@ -1,4 +1,4 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   FETCH_RESPONSE_PLAYS_REQUESTED,
@@ -7,7 +7,7 @@ import {
   RUN_RESPONSE_PLAY_REQUESTED,
   RUN_RESPONSE_PLAY_COMPLETED,
   RUN_RESPONSE_PLAY_ERROR,
-} from "./actions";
+} from './actions';
 
 const responsePlays = produce(
   (draft, action) => {
@@ -26,7 +26,7 @@ const responsePlays = produce(
       case FETCH_RESPONSE_PLAYS_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_RESPONSE_PLAYS_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case RUN_RESPONSE_PLAY_REQUESTED:
@@ -40,7 +40,7 @@ const responsePlays = produce(
 
       case RUN_RESPONSE_PLAY_ERROR:
         draft.status = RUN_RESPONSE_PLAY_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -52,8 +52,8 @@ const responsePlays = produce(
     responsePlayRequests: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default responsePlays;

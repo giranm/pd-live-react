@@ -1,6 +1,11 @@
-import { put, call, select, takeLatest } from "redux-saga/effects";
+import {
+  put, call, select, takeLatest,
+} from 'redux-saga/effects';
 import { api } from '@pagerduty/pdjs';
 
+import { UPDATE_INCIDENTS_LIST } from 'redux/incidents/actions';
+
+import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from 'util/log_entries';
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
   FETCH_LOG_ENTRIES_COMPLETED,
@@ -10,67 +15,60 @@ import {
   UPDATE_RECENT_LOG_ENTRIES_ERROR,
   CLEAN_RECENT_LOG_ENTRIES,
   CLEAN_RECENT_LOG_ENTRIES_COMPLETED,
-  CLEAN_RECENT_LOG_ENTRIES_ERROR
-} from "./actions";
+  CLEAN_RECENT_LOG_ENTRIES_ERROR,
+} from './actions';
 
-import { UPDATE_INCIDENTS_LIST } from "redux/incidents/actions";
-
-import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from "util/log_entries";
-
-import { selectLogEntries } from "./selectors";
+import { selectLogEntries } from './selectors';
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
 export function* getLogEntriesAsync() {
   yield takeLatest(FETCH_LOG_ENTRIES_REQUESTED, getLogEntries);
-};
+}
 
 export function* getLogEntries(action) {
   try {
     //  Create params and call pd lib
-    let { since } = action;
-    let params = {
+    const { since } = action;
+    const params = {
       since: since.toISOString().replace(/\.[\d]{3}/, ''),
       'include[]': ['incidents'],
     };
-    let response = yield call(pd.all, "log_entries", { data: { ...params } });
-    let logEntries = response.resource;
+    const response = yield call(pd.all, 'log_entries', { data: { ...params } });
+    const logEntries = response.resource;
 
     yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
 
     // Call to update recent log entries with this data.
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES });
-
   } catch (e) {
     yield put({ type: FETCH_LOG_ENTRIES_ERROR, message: e.message });
   }
-};
-
+}
 
 export function* updateRecentLogEntriesAsync() {
   yield takeLatest(UPDATE_RECENT_LOG_ENTRIES, updateRecentLogEntries);
-};
+}
 
 export function* updateRecentLogEntries(action) {
   try {
     // Grab log entries from store and determine what is recent based on last polling
-    let { logEntries, recentLogEntries } = yield select(selectLogEntries);
-    let recentLogEntriesLocal = [...recentLogEntries];
-    let addSet = new Set();
-    let removeSet = new Set();
-    let updateSet = new Set();
+    const { logEntries, recentLogEntries } = yield select(selectLogEntries);
+    const recentLogEntriesLocal = [...recentLogEntries];
+    const addSet = new Set();
+    const removeSet = new Set();
+    const updateSet = new Set();
 
     logEntries.forEach((logEntry) => {
       // Skip duplicate log entry
-      if (recentLogEntriesLocal.filter(x => x.id === logEntry.id).length > 0)
-        return;
+      if (recentLogEntriesLocal.filter((x) => x.id === logEntry.id).length > 0) return;
 
       // Push new log entry to array with details
-      let logEntryDate = new Date(logEntry.created_at);
+      const logEntryDate = new Date(logEntry.created_at);
       recentLogEntriesLocal.push({
         date: logEntryDate,
-        id: logEntry.id
+        id: logEntry.id,
       });
 
       // Find out what incidents need to be updated based on log entry type
@@ -80,55 +78,62 @@ export function* updateRecentLogEntries(action) {
         addSet.add(logEntry);
       } else if (logEntry.type === ANNOTATE_LOG_ENTRY) {
         // Handle special case for notes: create synthetic notes object
-        let modifiedLogEntry = { ...logEntry };
-        let tempIncident = { ...modifiedLogEntry.incident }
-        tempIncident.notes = [{
-          "id": null, // This is missing in log_entries
-          "user": logEntry.agent,
-          "channel": {
-            "summary": "The PagerDuty website or APIs"
+        const modifiedLogEntry = { ...logEntry };
+        const tempIncident = { ...modifiedLogEntry.incident };
+        tempIncident.notes = [
+          {
+            id: null, // This is missing in log_entries
+            user: logEntry.agent,
+            channel: {
+              summary: 'The PagerDuty website or APIs',
+            },
+            content: logEntry.channel.summary,
+            created_at: logEntry.created_at,
           },
-          "content": logEntry.channel.summary,
-          "created_at": logEntry.created_at
-        }]
+        ];
         modifiedLogEntry.incident = tempIncident;
-        updateSet.add(modifiedLogEntry)
+        updateSet.add(modifiedLogEntry);
       } else {
         // Assume everything else is an update
         updateSet.add(logEntry);
       }
-
     });
 
     // Generate update lists from sets
-    let addList = [...addSet].filter(x => !removeSet.has(x));
-    let updateList = [...updateSet].filter(x => !removeSet.has(x) && !addSet.has(x));
-    let removeList = [...removeSet];
+    const addList = [...addSet].filter((x) => !removeSet.has(x));
+    const updateList = [...updateSet].filter((x) => !removeSet.has(x) && !addSet.has(x));
+    const removeList = [...removeSet];
 
     // Update recent log entries and dispatch update incident list
-    yield put({ type: UPDATE_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries: recentLogEntriesLocal });
-    yield put({ type: UPDATE_INCIDENTS_LIST, addList, updateList, removeList });
-
+    yield put({
+      type: UPDATE_RECENT_LOG_ENTRIES_COMPLETED,
+      recentLogEntries: recentLogEntriesLocal,
+    });
+    yield put({
+      type: UPDATE_INCIDENTS_LIST, addList, updateList, removeList,
+    });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES_ERROR, message: e.message });
   }
-};
+}
 
 export function* cleanRecentLogEntriesAsync() {
   yield takeLatest(CLEAN_RECENT_LOG_ENTRIES, cleanRecentLogEntries);
-};
+}
 
 export function* cleanRecentLogEntries(action) {
   try {
     // Sort recent log entries by descending date and reduce this down to the last 100 items
-    let { recentLogEntries } = yield select(selectLogEntries);
-    let cleanedRecentLogEntries = [...recentLogEntries];
+    const { recentLogEntries } = yield select(selectLogEntries);
+    const cleanedRecentLogEntries = [...recentLogEntries];
     cleanedRecentLogEntries.sort((a, b) => b.date - a.date).slice(0, 100);
 
-    yield put({ type: CLEAN_RECENT_LOG_ENTRIES_COMPLETED, recentLogEntries: cleanedRecentLogEntries });
-
+    yield put({
+      type: CLEAN_RECENT_LOG_ENTRIES_COMPLETED,
+      recentLogEntries: cleanedRecentLogEntries,
+    });
   } catch (e) {
     yield put({ type: CLEAN_RECENT_LOG_ENTRIES_ERROR, message: e.message });
   }
-};
+}

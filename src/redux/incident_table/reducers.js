@@ -1,5 +1,6 @@
-import produce from "immer";
+import produce from 'immer';
 
+import { getIncidentTableColumns } from 'util/incident-table-columns';
 import {
   TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED,
   TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
@@ -10,19 +11,17 @@ import {
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
   SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
   SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
-} from "./actions";
-
-import { getIncidentTableColumns } from "util/incident-table-columns";
+} from './actions';
 
 const defaultColumnNames = [
-  "#",
-  "Status",
-  "Priority",
-  "Title",
-  "Created At",
-  "Service",
-  "Latest Note"
-]
+  '#',
+  'Status',
+  'Priority',
+  'Title',
+  'Created At',
+  'Service',
+  'Latest Note',
+];
 
 const incidentTableSettings = produce(
   (draft, action) => {
@@ -81,8 +80,8 @@ const incidentTableSettings = produce(
     selectedRows: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default incidentTableSettings;

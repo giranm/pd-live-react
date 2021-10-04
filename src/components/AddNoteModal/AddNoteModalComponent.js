@@ -1,18 +1,11 @@
-import { useState } from "react";
-import { connect } from "react-redux";
+import { useState } from 'react';
+import { connect } from 'react-redux';
 
-import {
-  Modal,
-  Form,
-  Button
-} from 'react-bootstrap';
+import { Modal, Form, Button } from 'react-bootstrap';
 
-import {
-  toggleDisplayAddNoteModal,
-  addNote
-} from "redux/incident_actions/actions";
+import { toggleDisplayAddNoteModal, addNote } from 'redux/incident_actions/actions';
 
-import "./AddNoteModalComponent.css";
+import './AddNoteModalComponent.css';
 
 const AddNoteModalComponent = ({
   incidentActions,
@@ -20,17 +13,14 @@ const AddNoteModalComponent = ({
   toggleDisplayAddNoteModal,
   addNote,
 }) => {
-  let { displayAddNoteModal } = incidentActions;
-  let { selectedRows } = incidentTableSettings;
+  const { displayAddNoteModal } = incidentActions;
+  const { selectedRows } = incidentTableSettings;
 
   const [note, setNote] = useState(null);
 
   return (
     <div className="add-note-modal-ctr">
-      <Modal
-        show={displayAddNoteModal}
-        onHide={toggleDisplayAddNoteModal}
-      >
+      <Modal show={displayAddNoteModal} onHide={toggleDisplayAddNoteModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Note</Modal.Title>
         </Modal.Header>
@@ -40,7 +30,9 @@ const AddNoteModalComponent = ({
               as="textarea"
               placeholder="Add note to incident(s) here"
               minLength={1}
-              onChange={(e) => { setNote(e.target.value) }}
+              onChange={(e) => {
+                setNote(e.target.value);
+              }}
             />
           </Form>
         </Modal.Body>
@@ -48,14 +40,14 @@ const AddNoteModalComponent = ({
           <Button variant="outline-secondary" onClick={toggleDisplayAddNoteModal}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={() => addNote(selectedRows, note)} >
+          <Button variant="primary" onClick={() => addNote(selectedRows, note)}>
             Add Note
-            </Button>
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,

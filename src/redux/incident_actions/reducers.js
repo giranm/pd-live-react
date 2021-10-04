@@ -1,4 +1,4 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   ACKNOWLEDGE_REQUESTED,
@@ -38,8 +38,8 @@ import {
   RUN_CUSTOM_INCIDENT_ACTION_ERROR,
   SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED,
   SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED,
-  SYNC_WITH_EXTERNAL_SYSTEM_ERROR
-} from "./actions";
+  SYNC_WITH_EXTERNAL_SYSTEM_ERROR,
+} from './actions';
 
 const incidentActions = produce(
   (draft, action) => {
@@ -55,7 +55,7 @@ const incidentActions = produce(
 
       case ACKNOWLEDGE_ERROR:
         draft.status = ACKNOWLEDGE_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case ESCALATE_REQUESTED:
@@ -69,7 +69,7 @@ const incidentActions = produce(
 
       case ESCALATE_ERROR:
         draft.status = ESCALATE_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case REASSIGN_REQUESTED:
@@ -83,7 +83,7 @@ const incidentActions = produce(
 
       case REASSIGN_ERROR:
         draft.status = REASSIGN_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED:
@@ -106,7 +106,7 @@ const incidentActions = produce(
 
       case ADD_RESPONDER_ERROR:
         draft.status = ADD_RESPONDER_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_REQUESTED:
@@ -129,7 +129,7 @@ const incidentActions = produce(
 
       case SNOOZE_ERROR:
         draft.status = SNOOZE_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED:
@@ -152,7 +152,7 @@ const incidentActions = produce(
 
       case RESOLVE_ERROR:
         draft.status = RESOLVE_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case UPDATE_PRIORITY_REQUESTED:
@@ -166,7 +166,7 @@ const incidentActions = produce(
 
       case UPDATE_PRIORITY_ERROR:
         draft.status = UPDATE_PRIORITY_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case ADD_NOTE_REQUESTED:
@@ -180,7 +180,7 @@ const incidentActions = produce(
 
       case ADD_NOTE_ERROR:
         draft.status = ADD_NOTE_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED:
@@ -203,7 +203,7 @@ const incidentActions = produce(
 
       case RUN_CUSTOM_INCIDENT_ACTION_ERROR:
         draft.status = RUN_CUSTOM_INCIDENT_ACTION_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED:
@@ -217,7 +217,7 @@ const incidentActions = produce(
 
       case SYNC_WITH_EXTERNAL_SYSTEM_ERROR:
         draft.status = SYNC_WITH_EXTERNAL_SYSTEM_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -241,8 +241,8 @@ const incidentActions = produce(
     displayAddNoteModal: false,
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default incidentActions;

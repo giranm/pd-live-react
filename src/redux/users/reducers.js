@@ -1,4 +1,4 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   GET_USERS_REQUESTED,
@@ -6,8 +6,8 @@ import {
   GET_USERS_ERROR,
   GET_CURRENT_USER_REQUESTED,
   GET_CURRENT_USER_COMPLETED,
-  GET_CURRENT_USER_ERROR
-} from "./actions";
+  GET_CURRENT_USER_ERROR,
+} from './actions';
 
 const users = produce(
   (draft, action) => {
@@ -23,7 +23,7 @@ const users = produce(
 
       case GET_USERS_ERROR:
         draft.status = GET_USERS_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case GET_CURRENT_USER_REQUESTED:
@@ -37,7 +37,7 @@ const users = produce(
 
       case GET_CURRENT_USER_ERROR:
         draft.status = GET_CURRENT_USER_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -49,8 +49,8 @@ const users = produce(
     currentUser: null,
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default users;

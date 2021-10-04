@@ -1,10 +1,6 @@
-import produce from "immer";
+import produce from 'immer';
 
-import {
-  FETCH_TEAMS_REQUESTED,
-  FETCH_TEAMS_COMPLETED,
-  FETCH_TEAMS_ERROR,
-} from "./actions";
+import { FETCH_TEAMS_REQUESTED, FETCH_TEAMS_COMPLETED, FETCH_TEAMS_ERROR } from './actions';
 
 const teams = produce(
   (draft, action) => {
@@ -23,7 +19,7 @@ const teams = produce(
       case FETCH_TEAMS_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_TEAMS_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -34,8 +30,8 @@ const teams = produce(
     teams: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default teams;

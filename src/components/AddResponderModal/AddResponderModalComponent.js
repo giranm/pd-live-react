@@ -1,20 +1,13 @@
-import { useState } from "react";
-import { connect } from "react-redux";
+import { useState } from 'react';
+import { connect } from 'react-redux';
 
-import {
-  Modal,
-  Form,
-  Button
-} from 'react-bootstrap';
-import Select from 'react-select'
+import { Modal, Form, Button } from 'react-bootstrap';
+import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import {
-  toggleDisplayAddResponderModal,
-  addResponder
-} from "redux/incident_actions/actions";
+import { toggleDisplayAddResponderModal, addResponder } from 'redux/incident_actions/actions';
 
-import "./AddResponderModalComponent.css";
+import './AddResponderModalComponent.css';
 
 const animatedComponents = makeAnimated();
 
@@ -26,33 +19,30 @@ const AddResponderModalComponent = ({
   toggleDisplayAddResponderModal,
   addResponder,
 }) => {
-  let { displayAddResponderModal } = incidentActions;
-  let { selectedRows } = incidentTableSettings;
+  const { displayAddResponderModal } = incidentActions;
+  const { selectedRows } = incidentTableSettings;
 
-  let messageMaxChars = 110;
+  const messageMaxChars = 110;
 
   const [responderRequestTargets, setResponderRequestTargets] = useState([]);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   // Generate lists/data from store
-  let selectListResponderRequestTargets = escalationPolicies.map(escalationPolicy => {
-    return {
+  const selectListResponderRequestTargets = escalationPolicies
+    .map((escalationPolicy) => ({
       label: `EP: ${escalationPolicy.name}`,
       name: escalationPolicy.name,
       value: escalationPolicy.id,
-      type: "escalation_policy"
-    }
-  }).concat(
-    users.map(user => {
-      return {
+      type: 'escalation_policy',
+    }))
+    .concat(
+      users.map((user) => ({
         label: `User: ${user.name}`,
         name: user.name,
         value: user.id,
-        type: "user"
-      }
-    })
-  );
-
+        type: 'user',
+      })),
+    );
 
   return (
     <div className="add-responder-modal-ctr">
@@ -72,7 +62,7 @@ const AddResponderModalComponent = ({
               <Form.Label>Responders</Form.Label>
               <Select
                 onChange={(selectedTargets) => {
-                  setResponderRequestTargets(selectedTargets)
+                  setResponderRequestTargets(selectedTargets);
                 }}
                 components={animatedComponents}
                 options={selectListResponderRequestTargets}
@@ -87,7 +77,9 @@ const AddResponderModalComponent = ({
                 placeholder="Provide brief message for additional responders"
                 minLength={1}
                 maxLength={messageMaxChars}
-                onChange={(e) => { setMessage(e.target.value) }}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                }}
               />
               <div className="add-responder-message-remaining-chars">
                 {`${messageMaxChars - message.length} characters remaining`}
@@ -107,7 +99,7 @@ const AddResponderModalComponent = ({
           </Button>
           <Button
             variant="primary"
-            disabled={responderRequestTargets.length === 0 ? true : false}
+            disabled={responderRequestTargets.length === 0}
             onClick={() => {
               setResponderRequestTargets([]);
               addResponder(selectedRows, responderRequestTargets, message);
@@ -118,8 +110,8 @@ const AddResponderModalComponent = ({
         </Modal.Footer>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,

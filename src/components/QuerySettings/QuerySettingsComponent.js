@@ -1,4 +1,4 @@
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
 import {
   Row,
@@ -8,14 +8,14 @@ import {
   ToggleButtonGroup,
   Form,
   Accordion,
-  Container
+  Container,
 } from 'react-bootstrap';
-import Select from 'react-select'
+import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import DatePicker from "react-datepicker";
+import DatePicker from 'react-datepicker';
 
-import "./QuerySettingsComponent.css";
+import './QuerySettingsComponent.css';
 
 import {
   updateQuerySettingsSinceDate,
@@ -23,16 +23,12 @@ import {
   updateQuerySettingsIncidentUrgency,
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
-  updateQuerySettingsServices
-} from "redux/query_settings/actions";
+  updateQuerySettingsServices,
+} from 'redux/query_settings/actions';
 
 import {
-  TRIGGERED,
-  ACKNOWLEDGED,
-  RESOLVED,
-  HIGH,
-  LOW
-} from "util/incidents";
+  TRIGGERED, ACKNOWLEDGED, RESOLVED, HIGH, LOW,
+} from 'util/incidents';
 
 const animatedComponents = makeAnimated();
 
@@ -46,38 +42,28 @@ const QuerySettingsComponent = ({
   updateQuerySettingsIncidentUrgency,
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
-  updateQuerySettingsServices
+  updateQuerySettingsServices,
 }) => {
-  let {
-    displayQuerySettings,
-    sinceDate,
-    incidentStatus,
-    incidentUrgency,
-    incidentPriority,
+  const {
+    displayQuerySettings, sinceDate, incidentStatus, incidentUrgency, incidentPriority,
   } = querySettings;
-  let eventKey = displayQuerySettings ? "0" : "1"
+  const eventKey = displayQuerySettings ? '0' : '1';
 
   // Generate lists/data from store
-  let selectListServices = services.map(service => {
-    return {
-      label: service.name,
-      value: service.id
-    }
-  });
+  const selectListServices = services.map((service) => ({
+    label: service.name,
+    value: service.id,
+  }));
 
-  let selectListTeams = teams.map(team => {
-    return {
-      label: team.name,
-      value: team.id
-    }
-  });
+  const selectListTeams = teams.map((team) => ({
+    label: team.name,
+    value: team.id,
+  }));
 
-  let selectListPriorities = priorities.map(priority => {
-    return {
-      label: priority.name,
-      value: priority.id
-    }
-  });
+  const selectListPriorities = priorities.map((priority) => ({
+    label: priority.name,
+    value: priority.id,
+  }));
 
   return (
     <div className="query-settings-ctr">
@@ -90,52 +76,76 @@ const QuerySettingsComponent = ({
                 <DatePicker
                   className="date-picker"
                   dateFormat="dd/MM/yyyy"
-                  todayButton={"Today"}
+                  todayButton="Today"
                   selected={sinceDate}
                   onChange={(date) => updateQuerySettingsSinceDate(date)}
                 />
               </Col>
               <Col xs="auto">
-                State: {' '}
+                State:{' '}
                 <Form.Group>
-                  <ToggleButtonGroup type="checkbox" value={incidentStatus} onChange={(val) => updateQuerySettingsIncidentStatus(val)}>
-                    <ToggleButton variant="outline-dark" value={TRIGGERED} >Triggered</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={ACKNOWLEDGED}>Acknowleged</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={RESOLVED}>Resolved</ToggleButton>
+                  <ToggleButtonGroup
+                    type="checkbox"
+                    value={incidentStatus}
+                    onChange={(val) => updateQuerySettingsIncidentStatus(val)}
+                  >
+                    <ToggleButton variant="outline-dark" value={TRIGGERED}>
+                      Triggered
+                    </ToggleButton>
+                    <ToggleButton variant="outline-dark" value={ACKNOWLEDGED}>
+                      Acknowleged
+                    </ToggleButton>
+                    <ToggleButton variant="outline-dark" value={RESOLVED}>
+                      Resolved
+                    </ToggleButton>
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
               <Col xs="auto">
-                Urgency: {' '}
+                Urgency:{' '}
                 <Form.Group>
-                  <ToggleButtonGroup type="checkbox" value={incidentUrgency} onChange={(val) => updateQuerySettingsIncidentUrgency(val)}>
-                    <ToggleButton variant="outline-dark" value={HIGH}>High</ToggleButton>
-                    <ToggleButton variant="outline-dark" value={LOW}>Low</ToggleButton>
+                  <ToggleButtonGroup
+                    type="checkbox"
+                    value={incidentUrgency}
+                    onChange={(val) => updateQuerySettingsIncidentUrgency(val)}
+                  >
+                    <ToggleButton variant="outline-dark" value={HIGH}>
+                      High
+                    </ToggleButton>
+                    <ToggleButton variant="outline-dark" value={LOW}>
+                      Low
+                    </ToggleButton>
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
               <Col xs="auto">
-                Priorities: {' '}
+                Priorities:{' '}
                 <Form.Group>
-                  <ToggleButtonGroup type="checkbox" value={incidentPriority} onChange={(val) => updateQuerySettingsIncidentPriority(val)}>
-                    {selectListPriorities.map(priority => {
-                      return (
-                        <ToggleButton key={priority.value} variant="outline-dark" value={priority.value}>
-                          {priority.label}
-                        </ToggleButton>
-                      )
-                    })}
+                  <ToggleButtonGroup
+                    type="checkbox"
+                    value={incidentPriority}
+                    onChange={(val) => updateQuerySettingsIncidentPriority(val)}
+                  >
+                    {selectListPriorities.map((priority) => (
+                      <ToggleButton
+                        key={priority.value}
+                        variant="outline-dark"
+                        value={priority.value}
+                      >
+                        {priority.label}
+                      </ToggleButton>
+                    ))}
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col>
-                Team: {' '}
+                Team:{' '}
                 <Form.Group>
                   <Select
                     onChange={(selectedTeams) => {
-                      let teamIds = selectedTeams.map(team => team.value);
+                      const teamIds = selectedTeams.map((team) => team.value);
                       updateQuerySettingsTeams(teamIds);
                     }}
                     components={animatedComponents}
@@ -145,11 +155,11 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col>
-                Service: {' '}
+                Service:{' '}
                 <Form.Group>
                   <Select
                     onChange={(selectedServices) => {
-                      let serviceIds = selectedServices.map(service => service.value);
+                      const serviceIds = selectedServices.map((service) => service.value);
                       updateQuerySettingsServices(serviceIds);
                     }}
                     components={animatedComponents}
@@ -162,15 +172,15 @@ const QuerySettingsComponent = ({
           </Container>
         </Accordion.Collapse>
       </Accordion>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   querySettings: state.querySettings,
   services: state.services.services,
   teams: state.teams.teams,
-  priorities: state.priorities.priorities
+  priorities: state.priorities.priorities,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -179,7 +189,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(updateQuerySettingsIncidentUrgency(incidentUrgency)),
   updateQuerySettingsIncidentPriority: (incidentPriority) => dispatch(updateQuerySettingsIncidentPriority(incidentPriority)),
   updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeams(teamIds)),
-  updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServices(serviceIds))
+  updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServices(serviceIds)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);

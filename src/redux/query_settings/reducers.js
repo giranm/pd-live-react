@@ -1,6 +1,9 @@
-import produce from "immer";
-import moment from "moment";
+import produce from 'immer';
+import moment from 'moment';
 
+import {
+  TRIGGERED, ACKNOWLEDGED, RESOLVED, HIGH, LOW,
+} from 'util/incidents';
 import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
   TOGGLE_DISPLAY_QUERY_SETTINGS_COMPLETED,
@@ -15,16 +18,8 @@ import {
   UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
-  UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED
-} from "./actions";
-
-import {
-  TRIGGERED,
-  ACKNOWLEDGED,
-  RESOLVED,
-  HIGH,
-  LOW,
-} from "util/incidents";
+  UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+} from './actions';
 
 const querySettings = produce(
   (draft, action) => {
@@ -98,7 +93,7 @@ const querySettings = produce(
   },
   {
     displayQuerySettings: true,
-    sinceDate: moment().subtract(1, "days").toDate(),
+    sinceDate: moment().subtract(1, 'days').toDate(),
     untilDate: new Date(),
     incidentStatus: [TRIGGERED, ACKNOWLEDGED],
     incidentUrgency: [HIGH, LOW],
@@ -107,8 +102,8 @@ const querySettings = produce(
     serviceIds: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default querySettings;

@@ -1,29 +1,18 @@
-import { useState } from "react";
-import { connect } from "react-redux";
-import moment from "moment";
+import { useState } from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
 
 import {
-  Modal,
-  Form,
-  Button,
-  Row,
-  Col
+  Modal, Form, Button, Row, Col,
 } from 'react-bootstrap';
 
 import DatePicker from 'react-datepicker';
 
-import {
-  toggleDisplayCustomSnoozeModal,
-  snooze
-} from "redux/incident_actions/actions";
+import { toggleDisplayCustomSnoozeModal, snooze } from 'redux/incident_actions/actions';
 
-import {
-  TRIGGERED,
-  ACKNOWLEDGED,
-  filterIncidentsByField
-} from "util/incidents";
+import { TRIGGERED, ACKNOWLEDGED, filterIncidentsByField } from 'util/incidents';
 
-import "./CustomSnoozeModalComponent.css";
+import './CustomSnoozeModalComponent.css';
 
 const CustomSnoozeModalComponent = ({
   toggleDisplayCustomSnoozeModal,
@@ -31,43 +20,43 @@ const CustomSnoozeModalComponent = ({
   incidentActions,
   incidentTableSettings,
 }) => {
-  let {
-    displayCustomSnoozeModal,
-  } = incidentActions;
+  const { displayCustomSnoozeModal } = incidentActions;
 
   // Internal state for snooze in hours
   const defaultSnoozeTimeHours = 1;
-  const initialSnoozeTime = moment().add({ "hour": defaultSnoozeTimeHours })
+  const initialSnoozeTime = moment().add({ hour: defaultSnoozeTimeHours });
   const [snoozeTime, setSnoozeTime] = useState(initialSnoozeTime.toDate());
   const snoozeDuration = moment(snoozeTime).diff(moment());
   const snoozeDurationFormatted = moment(snoozeDuration).format('H[ hour(s)]');
 
   // Internal state for snooze after tomorrow
-  const tomorrow = moment()
-    .add({ "days": 1 })
-    .set({ "hour": 8, "minute": 0 });
+  const tomorrow = moment().add({ days: 1 }).set({ hour: 8, minute: 0 });
   const [tomorrowSnoozeDate, setTomorrowSnoozeDate] = useState(tomorrow.toDate());
   const tomorrowDuration = moment(tomorrowSnoozeDate).diff(moment());
   const tomorrowDurationFormatted = moment(tomorrowDuration).format('H[ hour(s)] m[ minute(s)]');
 
   // Only unresolved incidents can be snoozed
-  let { selectedRows } = incidentTableSettings;
-  let unresolvedIncidents = filterIncidentsByField(selectedRows, "status", [TRIGGERED, ACKNOWLEDGED]);
-  let modalTitle = unresolvedIncidents.length === 1
+  const { selectedRows } = incidentTableSettings;
+  const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
+    TRIGGERED,
+    ACKNOWLEDGED,
+  ]);
+  const modalTitle = unresolvedIncidents.length === 1
     ? `Snooze Incident #${unresolvedIncidents[0].incident_number}`
     : `Snooze ${unresolvedIncidents.length} incidents`;
 
   // Internal state to find active radio button
-  const [activeButtonId, setActiveButton] = useState("snooze-hours")
-  let duration = activeButtonId === "snooze-hours" ? parseInt(snoozeDuration / 1000) : parseInt(tomorrowDuration / 1000);
-  let modalAction = `${modalTitle} for ${activeButtonId === "snooze-hours" ? snoozeDurationFormatted : tomorrowDurationFormatted}`
+  const [activeButtonId, setActiveButton] = useState('snooze-hours');
+  const duration = activeButtonId === 'snooze-hours'
+    ? parseInt(snoozeDuration / 1000)
+    : parseInt(tomorrowDuration / 1000);
+  const modalAction = `${modalTitle} for ${
+    activeButtonId === 'snooze-hours' ? snoozeDurationFormatted : tomorrowDurationFormatted
+  }`;
 
   return (
     <div className="custom-snooze-modal-ctr">
-      <Modal
-        show={displayCustomSnoozeModal}
-        onHide={toggleDisplayCustomSnoozeModal}
-      >
+      <Modal show={displayCustomSnoozeModal} onHide={toggleDisplayCustomSnoozeModal}>
         <Modal.Header closeButton>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
@@ -80,7 +69,7 @@ const CustomSnoozeModalComponent = ({
                   label="Snooze for the following hours"
                   name="snooze-group"
                   id="snooze-hours"
-                  onChange={e => setActiveButton(e.target.id)}
+                  onChange={(e) => setActiveButton(e.target.id)}
                   defaultChecked
                 />
               </Col>
@@ -90,7 +79,7 @@ const CustomSnoozeModalComponent = ({
                   min={1}
                   max={24}
                   defaultValue={defaultSnoozeTimeHours}
-                  onChange={e => setSnoozeTime(moment().add(e.target.value, "hours"))}
+                  onChange={(e) => setSnoozeTime(moment().add(e.target.value, 'hours'))}
                 />
               </Col>
             </Row>
@@ -102,15 +91,15 @@ const CustomSnoozeModalComponent = ({
                   label="Snooze until tomorrow at"
                   name="snooze-group"
                   id="snooze-tomorrow"
-                  onChange={e => setActiveButton(e.target.id)}
+                  onChange={(e) => setActiveButton(e.target.id)}
                 />
               </Col>
               <Col>
                 <DatePicker
                   selected={tomorrowSnoozeDate}
-                  onChange={date => setTomorrowSnoozeDate(date)}
-                  minTime={moment().set({ "hours": 0, "minutes": 0 }).toDate()}
-                  maxTime={moment().set({ "hours": 12, "minutes": 0 }).toDate()}
+                  onChange={(date) => setTomorrowSnoozeDate(date)}
+                  minTime={moment().set({ hours: 0, minutes: 0 }).toDate()}
+                  maxTime={moment().set({ hours: 12, minutes: 0 }).toDate()}
                   showTimeSelect
                   showTimeSelectOnly
                   timeIntervals={60}
@@ -122,10 +111,7 @@ const CustomSnoozeModalComponent = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="outline-secondary"
-            onClick={toggleDisplayCustomSnoozeModal}
-          >
+          <Button variant="outline-secondary" onClick={toggleDisplayCustomSnoozeModal}>
             Cancel
           </Button>
           <Button
@@ -140,12 +126,12 @@ const CustomSnoozeModalComponent = ({
         </Modal.Footer>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,
-  incidentTableSettings: state.incidentTableSettings
+  incidentTableSettings: state.incidentTableSettings,
 });
 
 const mapDispatchToProps = (dispatch) => ({

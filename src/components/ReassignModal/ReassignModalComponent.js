@@ -1,20 +1,13 @@
-import { useState } from "react";
-import { connect } from "react-redux";
+import { useState } from 'react';
+import { connect } from 'react-redux';
 
-import {
-  Modal,
-  Form,
-  Button
-} from 'react-bootstrap';
-import Select from 'react-select'
+import { Modal, Form, Button } from 'react-bootstrap';
+import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import {
-  toggleDisplayReassignModal,
-  reassign
-} from "redux/incident_actions/actions";
+import { toggleDisplayReassignModal, reassign } from 'redux/incident_actions/actions';
 
-import "./ReassignModalComponent.css";
+import './ReassignModalComponent.css';
 
 const animatedComponents = makeAnimated();
 
@@ -26,30 +19,27 @@ const ReassignModalComponent = ({
   toggleDisplayReassignModal,
   reassign,
 }) => {
-  let { displayReassignModal } = incidentActions;
-  let { selectedRows } = incidentTableSettings;
+  const { displayReassignModal } = incidentActions;
+  const { selectedRows } = incidentTableSettings;
 
   const [assignment, setAssignment] = useState(null);
 
   // Generate lists/data from store
-  let selectListAssignments = escalationPolicies.map(escalationPolicy => {
-    return {
+  const selectListAssignments = escalationPolicies
+    .map((escalationPolicy) => ({
       label: `EP: ${escalationPolicy.name}`,
       name: escalationPolicy.name,
       value: escalationPolicy.id,
-      type: "escalation_policy"
-    }
-  }).concat(
-    users.map(user => {
-      return {
+      type: 'escalation_policy',
+    }))
+    .concat(
+      users.map((user) => ({
         label: `User: ${user.name}`,
         name: user.name,
         value: user.id,
-        type: "user"
-      }
-    })
-  );
-
+        type: 'user',
+      })),
+    );
 
   return (
     <div className="resassign-modal-ctr">
@@ -67,7 +57,7 @@ const ReassignModalComponent = ({
           <Form>
             <Select
               onChange={(selectedAssignment) => {
-                setAssignment(selectedAssignment)
+                setAssignment(selectedAssignment);
               }}
               components={animatedComponents}
               options={selectListAssignments}
@@ -87,7 +77,7 @@ const ReassignModalComponent = ({
           </Button>
           <Button
             variant="primary"
-            disabled={assignment === null ? true : false}
+            disabled={assignment === null}
             onClick={() => {
               setAssignment(null);
               reassign(selectedRows, assignment);
@@ -98,8 +88,8 @@ const ReassignModalComponent = ({
         </Modal.Footer>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,

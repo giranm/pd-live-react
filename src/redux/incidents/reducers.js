@@ -1,4 +1,4 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   FETCH_INCIDENTS_REQUESTED,
@@ -24,8 +24,8 @@ import {
   FILTER_INCIDENTS_LIST_BY_TEAM_ERROR,
   FILTER_INCIDENTS_LIST_BY_SERVICE,
   FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
-  FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR
-} from "./actions";
+  FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
+} from './actions';
 
 const incidents = produce(
   (draft, action) => {
@@ -44,7 +44,7 @@ const incidents = produce(
       case FETCH_INCIDENTS_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_INCIDENTS_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case FETCH_INCIDENT_NOTES_REQUESTED:
@@ -62,7 +62,7 @@ const incidents = produce(
       case FETCH_INCIDENT_NOTES_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_INCIDENT_NOTES_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case UPDATE_INCIDENTS_LIST:
@@ -79,7 +79,7 @@ const incidents = produce(
       case UPDATE_INCIDENTS_LIST_ERROR:
         draft.fetchingData = false;
         draft.status = UPDATE_INCIDENTS_LIST_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case FILTER_INCIDENTS_LIST_BY_PRIORITY:
@@ -96,7 +96,7 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case FILTER_INCIDENTS_LIST_BY_STATUS:
@@ -113,7 +113,7 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_STATUS_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_STATUS_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case FILTER_INCIDENTS_LIST_BY_URGENCY:
@@ -130,7 +130,7 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case FILTER_INCIDENTS_LIST_BY_TEAM:
@@ -147,7 +147,7 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_TEAM_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_TEAM_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case FILTER_INCIDENTS_LIST_BY_SERVICE:
@@ -164,7 +164,7 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -175,8 +175,8 @@ const incidents = produce(
     incidents: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default incidents;

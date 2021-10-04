@@ -1,5 +1,5 @@
-import produce from "immer";
-import moment from "moment";
+import produce from 'immer';
+import moment from 'moment';
 
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
@@ -10,8 +10,8 @@ import {
   UPDATE_RECENT_LOG_ENTRIES_ERROR,
   CLEAN_RECENT_LOG_ENTRIES,
   CLEAN_RECENT_LOG_ENTRIES_COMPLETED,
-  CLEAN_RECENT_LOG_ENTRIES_ERROR
-} from "./actions";
+  CLEAN_RECENT_LOG_ENTRIES_ERROR,
+} from './actions';
 
 const logEntries = produce(
   (draft, action) => {
@@ -31,7 +31,7 @@ const logEntries = produce(
       case FETCH_LOG_ENTRIES_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_LOG_ENTRIES_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case UPDATE_RECENT_LOG_ENTRIES:
@@ -51,7 +51,7 @@ const logEntries = produce(
       case UPDATE_RECENT_LOG_ENTRIES_ERROR:
         draft.fetchingData = false;
         draft.status = UPDATE_RECENT_LOG_ENTRIES_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       case CLEAN_RECENT_LOG_ENTRIES:
@@ -68,7 +68,7 @@ const logEntries = produce(
       case CLEAN_RECENT_LOG_ENTRIES_ERROR:
         draft.fetchingData = false;
         draft.status = CLEAN_RECENT_LOG_ENTRIES_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -84,8 +84,8 @@ const logEntries = produce(
     status: null,
     fetchingData: false,
     error: null,
-    lastPolled: moment().subtract(1, "minutes").toDate()
-  }
+    lastPolled: moment().subtract(1, 'minutes').toDate(),
+  },
 );
 
 export default logEntries;

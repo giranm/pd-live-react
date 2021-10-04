@@ -1,10 +1,10 @@
-import produce from "immer";
+import produce from 'immer';
 
 import {
   FETCH_PRIORITIES_REQUESTED,
   FETCH_PRIORITIES_COMPLETED,
   FETCH_PRIORITIES_ERROR,
-} from "./actions";
+} from './actions';
 
 const priorities = produce(
   (draft, action) => {
@@ -23,7 +23,7 @@ const priorities = produce(
       case FETCH_PRIORITIES_ERROR:
         draft.fetchingData = false;
         draft.status = FETCH_PRIORITIES_ERROR;
-        draft.error = action.message
+        draft.error = action.message;
         break;
 
       default:
@@ -34,8 +34,8 @@ const priorities = produce(
     priorities: [],
     status: null,
     fetchingData: false,
-    error: null
-  }
+    error: null,
+  },
 );
 
 export default priorities;
