@@ -52,6 +52,10 @@ import {
 
 import { SELECT_INCIDENT_TABLE_ROWS_REQUESTED } from "redux/incident_table/actions";
 
+import { UPDATE_INCIDENTS_LIST } from "redux/incidents/actions";
+
+import { getIncidentByIdRequest } from "redux/incidents/sagas";
+
 import { selectIncidentActions } from "./selectors";
 import { selectPriorities } from "redux/priorities/selectors";
 import { selectIncidentTableSettings } from "redux/incident_table/selectors";
@@ -593,15 +597,10 @@ export function* syncWithExternalSystem(action) {
     // Invoke parallel calls for optimal performance
     let responses = yield all(externalSystemSyncRequests);
     if (responses.every((response) => response.ok)) {
+
       // Re-request incident data as external_reference is not available under ILE
       let updatedIncidentRequests = selectedIncidents.map(incident => {
-        return call(pd, {
-          method: "get",
-          endpoint: `incidents/${incident.id}`,
-          data: {
-            "include[]": ["external_references"]
-          }
-        })
+        return getIncidentByIdRequest(incident.id)
       });
       let updatedIncidentResponses = yield all(updatedIncidentRequests);
       let updatedIncidents = updatedIncidentResponses.map(response => response.data.incident);
@@ -613,6 +612,17 @@ export function* syncWithExternalSystem(action) {
         allSelected,
         selectedCount,
         selectedRows: updatedSelectedRows
+      });
+
+      // TODO: Update incidents in store to prevent further display bugs (not sure why not dispatching)
+      yield put({
+        type: UPDATE_INCIDENTS_LIST,
+        updateList: updatedSelectedRows.map(incident => {
+          // Artificially re-create updateItem object schema
+          return {
+            "incident": incident
+          }
+        })
       });
 
       // Render modal

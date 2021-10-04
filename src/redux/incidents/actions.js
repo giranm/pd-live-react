@@ -40,7 +40,7 @@ export const getIncidentNotesAsync = (incidentId) => ({
   type: FETCH_INCIDENT_NOTES_REQUESTED, incidentId
 });
 
-export const updateIncidentsListAsync = (addList, updateList, removeList) => ({
+export const updateIncidentsListAsync = (addList = [], updateList = [], removeList = []) => ({
   type: UPDATE_INCIDENTS_LIST,
   addList,
   updateList,

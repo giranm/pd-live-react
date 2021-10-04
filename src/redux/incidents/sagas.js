@@ -38,6 +38,16 @@ import { filterIncidentsByField, filterIncidentsByFieldOfList } from "util/incid
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
+export const getIncidentByIdRequest = (incidentId) => {
+  return call(pd, {
+    method: "get",
+    endpoint: `incidents/${incidentId}`,
+    data: {
+      "include[]": ["external_references"]
+    }
+  })
+};
+
 export function* getIncidentsAsync() {
   yield takeLatest(FETCH_INCIDENTS_REQUESTED, getIncidents);
 };
@@ -133,7 +143,7 @@ export function* getIncidentNotes(action) {
 };
 
 export function* updateIncidentsListAsync() {
-  yield takeLatest(UPDATE_INCIDENTS_LIST, updateIncidentsList);
+  yield takeEvery(UPDATE_INCIDENTS_LIST, updateIncidentsList);
 };
 
 export function* updateIncidentsList(action) {
@@ -149,11 +159,15 @@ export function* updateIncidentsList(action) {
     } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
-    // Add new incidents to list
-    addList.map(addItem => {
+    // Add new incidents to list (need to re-query to get external_references)
+    let addListRequests = addList.map(addItem => {
       if (addItem.incident)
-        updatedIncidentsList.push(addItem.incident)
+        return getIncidentByIdRequest(addItem.incident.id)
     });
+    let addListResponses = yield all(addListRequests);
+    addListResponses.map(
+      response => updatedIncidentsList.push(response.data.incident)
+    );
 
     // Update existing incidents within list
     if (incidents.length && updateList.length) {

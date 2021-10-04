@@ -21,6 +21,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 
 - [x] Minor display bugs (incident resolution and creation duplication)
 - [] Selected incidents which disappear post-action keeps state (e.g. enablePostActions remains true)
+- [] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
 
 ## Local Development
 
