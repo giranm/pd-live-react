@@ -18,8 +18,8 @@ import {
 import { availableIncidentTableColumns } from 'util/incident-table-columns';
 
 const columnMapper = (column) => ({
-  label: column.name,
-  value: column.name,
+  label: column.Header,
+  value: column.Header,
 });
 
 const IncidentTableSettingsComponent = ({

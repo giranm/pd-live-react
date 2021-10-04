@@ -1,6 +1,24 @@
 /* Table Positioning */
 .incident-table-ctr {
   margin-top: 10px;
+  display: block;
+  overflow: auto;
+}
+
+.table {
+  border-spacing: 0;
+  border: 1px solid black;
+}
+
+.thead {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tbody {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 250px;
 }
 
 /* Button Overrides */
@@ -76,8 +94,6 @@
 .incident-table-settings-btn {
   position: relative;
   float: right;
-  bottom: 44px;
-  right: 10px;
   background-color: var(--brand-gray-dark);
 }
 
@@ -110,4 +126,21 @@
   white-space: nowrap;
   padding: 5px 10px 3px;
   border-radius: 5px;
+}
+
+/* React-Table CSS */
+
+.resizer {
+  display: inline-block;
+  width: 10px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(50%);
+  z-index: 1;
+  touch-action: none;
+  /* &.isResizing {
+    background: red;
+  } */
 }
