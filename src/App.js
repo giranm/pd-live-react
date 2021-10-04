@@ -40,9 +40,6 @@ const App = ({
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
-  const now = new Date();
-  const until = moment(now).subtract(5, 'minutes').toDate();
-
   // Initial load of objects from API
   useEffect(() => {
     getUsersAsync();
@@ -59,13 +56,22 @@ const App = ({
   // Setup log entry polling.
   useEffect(() => {
     const pollingIntervalSeconds = 5;
-    const interval = setInterval(() => {
-      // FIXME: Find out why lastPolled does not update in store
-      // let lastPolledDate = moment().subtract(2 * pollingIntervalSeconds, "seconds").toDate()
-      const lastPolledDate = logEntries.lastPolled;
+    const pollingInterval = setInterval(() => {
+      const lastPolledDate = moment()
+        .subtract(2 * pollingIntervalSeconds, 'seconds')
+        .toDate();
       getLogEntriesAsync(lastPolledDate);
     }, pollingIntervalSeconds * 1000);
-    return () => clearInterval(interval);
+    return () => clearInterval(pollingInterval);
+  }, []);
+
+  // Setup log entry clearing
+  useEffect(() => {
+    const clearingIntervalSeconds = 600;
+    const clearingInterval = setInterval(() => {
+      cleanRecentLogEntriesAsync();
+    }, clearingIntervalSeconds * 1000);
+    return () => clearInterval(clearingInterval);
   }, []);
 
   return (

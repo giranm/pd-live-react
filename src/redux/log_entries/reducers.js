@@ -25,7 +25,6 @@ const logEntries = produce(
         draft.fetchingData = false;
         draft.status = FETCH_LOG_ENTRIES_COMPLETED;
         draft.logEntries = action.logEntries;
-        draft.lastPolled = new Date();
         break;
 
       case FETCH_LOG_ENTRIES_ERROR:
@@ -84,7 +83,6 @@ const logEntries = produce(
     status: null,
     fetchingData: false,
     error: null,
-    lastPolled: moment().subtract(1, 'minutes').toDate(),
   },
 );
 
