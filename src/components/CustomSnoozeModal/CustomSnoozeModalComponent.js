@@ -41,15 +41,17 @@ const CustomSnoozeModalComponent = ({
     TRIGGERED,
     ACKNOWLEDGED,
   ]);
-  const modalTitle = unresolvedIncidents.length === 1
-    ? `Snooze Incident #${unresolvedIncidents[0].incident_number}`
-    : `Snooze ${unresolvedIncidents.length} incidents`;
+  const modalTitle =
+    unresolvedIncidents.length === 1
+      ? `Snooze Incident #${unresolvedIncidents[0].incident_number}`
+      : `Snooze ${unresolvedIncidents.length} incidents`;
 
   // Internal state to find active radio button
   const [activeButtonId, setActiveButton] = useState('snooze-hours');
-  const duration = activeButtonId === 'snooze-hours'
-    ? parseInt(snoozeDuration / 1000)
-    : parseInt(tomorrowDuration / 1000);
+  const duration =
+    activeButtonId === 'snooze-hours'
+      ? parseInt(snoozeDuration / 1000, 10)
+      : parseInt(tomorrowDuration / 1000, 10);
   const modalAction = `${modalTitle} for ${
     activeButtonId === 'snooze-hours' ? snoozeDurationFormatted : tomorrowDurationFormatted
   }`;

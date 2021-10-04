@@ -126,7 +126,10 @@ export function* getIncidentNotes(action) {
     });
 
     // Update store with incident having notes data
-    yield put({ type: FETCH_INCIDENT_NOTES_COMPLETED, incidents: updatedIncidentsList });
+    yield put({
+      type: FETCH_INCIDENT_NOTES_COMPLETED,
+      incidents: updatedIncidentsList,
+    });
   } catch (e) {
     yield put({ type: FETCH_INCIDENT_NOTES_ERROR, message: e.message });
   }
@@ -192,7 +195,10 @@ export function* updateIncidentsList(action) {
     );
 
     // Update store with updated list of incidents
-    yield put({ type: UPDATE_INCIDENTS_LIST_COMPLETED, incidents: uniqueUpdatedIncidentsList });
+    yield put({
+      type: UPDATE_INCIDENTS_LIST_COMPLETED,
+      incidents: uniqueUpdatedIncidentsList,
+    });
 
     /*
       Apply filters that already are configured down below
@@ -252,7 +258,10 @@ export function* filterIncidentsByPriorityImpl(action) {
       incidents: filteredIncidentsByPriorityList,
     });
   } catch (e) {
-    yield put({ type: FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR, message: e.message });
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
+      message: e.message,
+    });
   }
 }
 
@@ -275,7 +284,10 @@ export function* filterIncidentsByStatusImpl(action) {
       incidents: filteredIncidentsByStatusList,
     });
   } catch (e) {
-    yield put({ type: FILTER_INCIDENTS_LIST_BY_STATUS_ERROR, message: e.message });
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_STATUS_ERROR,
+      message: e.message,
+    });
   }
 }
 
@@ -298,7 +310,10 @@ export function* filterIncidentsByUrgencyImpl(action) {
       incidents: filteredIncidentsByUrgencyList,
     });
   } catch (e) {
-    yield put({ type: FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR, message: e.message });
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_URGENCY_ERROR,
+      message: e.message,
+    });
   }
 }
 
@@ -327,7 +342,10 @@ export function* filterIncidentsByTeamImpl(action) {
       incidents: filteredIncidentsByTeamList,
     });
   } catch (e) {
-    yield put({ type: FILTER_INCIDENTS_LIST_BY_TEAM_ERROR, message: e.message });
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_TEAM_ERROR,
+      message: e.message,
+    });
   }
 }
 
@@ -358,6 +376,9 @@ export function* filterIncidentsByServiceImpl(action) {
       incidents: filteredIncidentsByServiceList,
     });
   } catch (e) {
-    yield put({ type: FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR, message: e.message });
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
+      message: e.message,
+    });
   }
 }

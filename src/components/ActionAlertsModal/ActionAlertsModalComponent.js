@@ -7,7 +7,8 @@ import { toggleDisplayActionAlertsModal } from 'redux/action_alerts/actions';
 import './ActionAlertsModelComponent.css';
 
 const ActionAlertsModalComponent = ({ toggleDisplayActionAlertsModal, actionAlertsModalData }) => {
-  const { displayActionAlertsModal, actionAlertsModalType, actionAlertsModalMessage } = actionAlertsModalData;
+  const { displayActionAlertsModal, actionAlertsModalType, actionAlertsModalMessage } =
+    actionAlertsModalData;
 
   return (
     <div className="action-alerts-modal-ctr">

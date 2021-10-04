@@ -46,7 +46,8 @@ const QuerySettingsComponent = ({
 }) => {
   const {
     displayQuerySettings, sinceDate, incidentStatus, incidentUrgency, incidentPriority,
-  } = querySettings;
+  } =
+    querySettings;
   const eventKey = displayQuerySettings ? '0' : '1';
 
   // Generate lists/data from store

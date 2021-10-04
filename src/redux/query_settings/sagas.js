@@ -55,7 +55,10 @@ export function* updateQuerySettingsIncidentStatus() {
 export function* updateQuerySettingsIncidentStatusImpl(action) {
   // Update incident status and re-request incidents list
   const { incidentStatus } = action;
-  yield put({ type: UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED, incidentStatus });
+  yield put({
+    type: UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
+    incidentStatus,
+  });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
 }
 
@@ -69,7 +72,10 @@ export function* updateQuerySettingsIncidentUrgency() {
 export function* updateQuerySettingsIncidentUrgencyImpl(action) {
   // Update incident urgency and re-request incidents list
   const { incidentUrgency } = action;
-  yield put({ type: UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED, incidentUrgency });
+  yield put({
+    type: UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED,
+    incidentUrgency,
+  });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
 }
 
@@ -83,7 +89,10 @@ export function* updateQuerySettingsIncidentPriority() {
 export function* updateQuerySettingsIncidentPriorityImpl(action) {
   // Update incident priority, re-request incidents list, and then apply priority filtering
   const { incidentPriority } = action;
-  yield put({ type: UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED, incidentPriority });
+  yield put({
+    type: UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
+    incidentPriority,
+  });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
 }
 

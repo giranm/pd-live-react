@@ -67,16 +67,16 @@ export function* mapServicesToExtensionsImpl() {
 
               // ServiceNow
             } else if (
-              extensionSummary.includes('ServiceNow')
-              && modifiedExtension.config.sync_options === 'manual_sync'
+              extensionSummary.includes('ServiceNow') &&
+              modifiedExtension.config.sync_options === 'manual_sync'
             ) {
               modifiedExtension.extension_type = EXTERNAL_SYSTEM;
               modifiedExtension.extension_label = 'Sync with ServiceNow';
 
               // Jira
             } else if (
-              extensionSummary.includes('Jira')
-              && !modifiedExtension.config.jira.createIssueOnIncidentTrigger
+              extensionSummary.includes('Jira') &&
+              !modifiedExtension.config.jira.createIssueOnIncidentTrigger
             ) {
               modifiedExtension.extension_type = EXTERNAL_SYSTEM;
               modifiedExtension.extension_label = `Sync with ${extensionSummary}`;
@@ -96,7 +96,10 @@ export function* mapServicesToExtensionsImpl() {
       serviceExtensionMap[service.id] = serviceExtensions;
     });
 
-    yield put({ type: MAP_SERVICES_TO_EXTENSIONS_COMPLETED, serviceExtensionMap });
+    yield put({
+      type: MAP_SERVICES_TO_EXTENSIONS_COMPLETED,
+      serviceExtensionMap,
+    });
   } catch (e) {
     yield put({ type: MAP_SERVICES_TO_EXTENSIONS_ERROR, message: e.message });
   }

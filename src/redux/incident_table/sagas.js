@@ -40,7 +40,10 @@ export function* saveIncidentTableSettingsImpl(action) {
     // Update incident table columns
     const updatedIncidentTableColumnNames = updatedIncidentTableColumns.map((col) => col.value);
     const incidentTableColumns = getIncidentTableColumns(updatedIncidentTableColumnNames);
-    yield put({ type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED, incidentTableColumns });
+    yield put({
+      type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
+      incidentTableColumns,
+    });
 
     // TODO: Other table settings can be dispatched here...
 
@@ -62,7 +65,10 @@ export function* updateIncidentTableColumns() {
 
 export function* updateIncidentTableColumnsImpl(action) {
   const { incidentTableColumns } = action;
-  yield put({ type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED, incidentTableColumns });
+  yield put({
+    type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
+    incidentTableColumns,
+  });
 }
 
 export function* selectIncidentTableRows() {

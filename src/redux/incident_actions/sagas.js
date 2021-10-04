@@ -623,11 +623,9 @@ export function* syncWithExternalSystem(action) {
       // TODO: Update incidents in store to prevent further display bugs (not sure why not dispatching)
       yield put({
         type: UPDATE_INCIDENTS_LIST,
-        updateList: updatedSelectedRows.map((incident) =>
-          // Artificially re-create updateItem object schema
-          ({
-            incident,
-          })),
+        updateList: updatedSelectedRows.map((incident) => ({
+          incident, // Artificially re-create updateItem object schema
+        })),
       });
 
       // Render modal

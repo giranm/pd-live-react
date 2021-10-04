@@ -27,8 +27,24 @@ module.exports = {
     "prettier"
   ],
   rules: {
+    'max-len': [WARN, { "code": 100 }],
     "react/prop-types": OFF,
     "react/jsx-one-expression-per-line": OFF,
+    "react/jsx-props-no-spreading": OFF,
+    "import/extensions": OFF,
+    "react/react-in-jsx-scope": OFF,
+    "react/jsx-filename-extension": OFF,
+    "operator-linebreak": OFF,
+    "no-unused-vars": WARN,
+    "no-shadow": WARN,
+    "no-param-reassign": WARN,
+    "no-use-before-define": WARN,
+    "prefer-const": WARN,
+    "import/prefer-default-export": WARN,
+    "consistent-return": WARN,
+    "no-plusplus": OFF,
+    "import/no-cycle": WARN,
+    "no-nested-ternary": WARN,
   },
   overrides: [
     {
@@ -47,11 +63,9 @@ module.exports = {
   ],
   settings: {
     "import/resolver": {
-      alias: {
-        map: [
-          ["src", "./src"],
-        ],
+      node: {
         extensions: [".ts", ".js", ".jsx", ".json"],
+        paths: ["node_modules/", "node_modules/@types", "src/"],
       },
     },
   },
