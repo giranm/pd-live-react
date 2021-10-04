@@ -35,7 +35,10 @@ import {
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
   RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
   RUN_CUSTOM_INCIDENT_ACTION_COMPLETED,
-  RUN_CUSTOM_INCIDENT_ACTION_ERROR
+  RUN_CUSTOM_INCIDENT_ACTION_ERROR,
+  SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED,
+  SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED,
+  SYNC_WITH_EXTERNAL_SYSTEM_ERROR
 } from "./actions";
 
 const incidentActions = produce(
@@ -203,6 +206,20 @@ const incidentActions = produce(
         draft.error = action.message
         break;
 
+      case SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED:
+        draft.status = SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED;
+        break;
+
+      case SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED:
+        draft.externalSystemSyncRequests = action.externalSystemSyncRequests;
+        draft.status = SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED;
+        break;
+
+      case SYNC_WITH_EXTERNAL_SYSTEM_ERROR:
+        draft.status = SYNC_WITH_EXTERNAL_SYSTEM_ERROR;
+        draft.error = action.message
+        break;
+
       default:
         break;
     }
@@ -217,6 +234,7 @@ const incidentActions = produce(
     updatedIncidentNotes: [],
     updatedIncidentPriorities: [],
     customIncidentActionRequests: [],
+    externalSystemSyncRequests: [],
     displayReassignModal: false,
     displayAddResponderModal: false,
     displayCustomSnoozeModal: false,

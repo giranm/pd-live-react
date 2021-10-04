@@ -44,11 +44,17 @@ import {
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
   RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
   RUN_CUSTOM_INCIDENT_ACTION_COMPLETED,
-  RUN_CUSTOM_INCIDENT_ACTION_ERROR
+  RUN_CUSTOM_INCIDENT_ACTION_ERROR,
+  SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED,
+  SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED,
+  SYNC_WITH_EXTERNAL_SYSTEM_ERROR
 } from "./actions";
+
+import { SELECT_INCIDENT_TABLE_ROWS_REQUESTED } from "redux/incident_table/actions";
 
 import { selectIncidentActions } from "./selectors";
 import { selectPriorities } from "redux/priorities/selectors";
+import { selectIncidentTableSettings } from "redux/incident_table/selectors";
 
 import {
   TRIGGERED,
@@ -59,6 +65,8 @@ import {
   filterIncidentsByField,
   generateIncidentActionModal
 } from "util/incidents";
+
+import { getObjectsFromList } from "util/helpers";
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
@@ -545,5 +553,87 @@ export function* runCustomIncidentAction(action) {
   } catch (e) {
     console.log(e)
     handleSagaError(RUN_CUSTOM_INCIDENT_ACTION_ERROR, e);
+  }
+};
+
+export function* syncWithExternalSystemAsync() {
+  yield takeLatest(SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED, syncWithExternalSystem);
+};
+
+export function* syncWithExternalSystem(action) {
+  try {
+    let { incidents: selectedIncidents, webhook, displayModal } = action;
+    let { allSelected, selectedCount } = yield select(selectIncidentTableSettings);
+
+    // Build individual requests as the endpoint supports singular PUT
+    let externalSystemSyncRequests = selectedIncidents.map(incident => {
+      // Update existing references (assumption is there could be more than 1 system)
+      let tempExternalReferences = [...incident.external_references];
+      tempExternalReferences.push({
+        "type": "external_reference",
+        "webhook": {
+          "type": "webhook",
+          "id": webhook.id
+        },
+        "sync": true
+      });
+      return call(pd, {
+        method: "put",
+        endpoint: `incidents/${incident.id}`,
+        data: {
+          "incident": {
+            "id": incident.id,
+            "type": "incident",
+            "external_references": tempExternalReferences
+          }
+        }
+      });
+    });
+
+    // Invoke parallel calls for optimal performance
+    let responses = yield all(externalSystemSyncRequests);
+    if (responses.every((response) => response.ok)) {
+      // Re-request incident data as external_reference is not available under ILE
+      let updatedIncidentRequests = selectedIncidents.map(incident => {
+        return call(pd, {
+          method: "get",
+          endpoint: `incidents/${incident.id}`,
+          data: {
+            "include[]": ["external_references"]
+          }
+        })
+      });
+      let updatedIncidentResponses = yield all(updatedIncidentRequests);
+      let updatedIncidents = updatedIncidentResponses.map(response => response.data.incident);
+
+      // Update selected incidents with newer incident data (to re-render components)
+      let updatedSelectedRows = getObjectsFromList(updatedIncidents, selectedIncidents.map(incident => incident.id), "id");
+      yield put({
+        type: SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
+        allSelected,
+        selectedCount,
+        selectedRows: updatedSelectedRows
+      });
+
+      // Render modal
+      yield put({
+        type: SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED,
+        externalSystemSyncRequests: responses
+      });
+      if (displayModal) {
+        let actionAlertsModalType = "success"
+        let actionAlertsModalMessage = `Synced with "${webhook.name}" on incident(s) ${selectedIncidents
+          .map(i => i.incident_number)
+          .join(", ")}.`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      };
+
+    } else {
+      handleMultipleAPIErrorResponses(responses);
+    };
+
+  } catch (e) {
+    console.log(e)
+    handleSagaError(SYNC_WITH_EXTERNAL_SYSTEM_ERROR, e);
   }
 };

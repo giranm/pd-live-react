@@ -18,7 +18,7 @@ import {
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED
 } from "./actions";
 
-import { FETCH_INCIDENTS_REQUESTED } from "redux/incidents/actions"
+import { FETCH_INCIDENTS_REQUESTED } from "redux/incidents/actions";
 import { FETCH_SERVICES_REQUESTED } from "redux/services/actions";
 
 import { selectQuerySettings } from "./selectors";

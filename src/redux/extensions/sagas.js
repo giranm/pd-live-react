@@ -14,6 +14,11 @@ import {
 import { selectExtensions } from "./selectors";
 import { selectServices } from "redux/services/selectors"
 
+import {
+  CUSTOM_INCIDENT_ACTION,
+  EXTERNAL_SYSTEM
+} from "util/extensions";
+
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
@@ -60,22 +65,22 @@ export function* mapServicesToExtensionsImpl() {
             let extensionSummary = modifiedExtension.extension_schema.summary;
 
             // Custom Incident Action
-            if (extensionSummary === "Custom Incident Action") {
-              modifiedExtension["extension_type"] = "Custom Incident Action";
+            if (extensionSummary === CUSTOM_INCIDENT_ACTION) {
+              modifiedExtension["extension_type"] = CUSTOM_INCIDENT_ACTION;
 
               // ServiceNow
             } else if (extensionSummary.includes("ServiceNow") && modifiedExtension.config.sync_options === "manual_sync") {
-              modifiedExtension["extension_type"] = "Ticketing";
+              modifiedExtension["extension_type"] = EXTERNAL_SYSTEM;
               modifiedExtension["extension_label"] = "Sync with ServiceNow";
 
               // Jira
             } else if (extensionSummary.includes("Jira") && !modifiedExtension.config.jira.createIssueOnIncidentTrigger) {
-              modifiedExtension["extension_type"] = "Ticketing"
+              modifiedExtension["extension_type"] = EXTERNAL_SYSTEM
               modifiedExtension["extension_label"] = `Sync with ${extensionSummary}`;
 
               // Zendesk
             } else if (extensionSummary === "Zendesk") {
-              modifiedExtension["extension_type"] = "Ticketing";
+              modifiedExtension["extension_type"] = EXTERNAL_SYSTEM;
               modifiedExtension["extension_label"] = "Sync with Zendesk";
             }
 

@@ -53,6 +53,7 @@ import {
   addNoteAsync,
   toggleDisplayAddNoteModal,
   runCustomIncidentActionAsync,
+  syncWithExternalSystemAsync,
 } from "./incident_actions/sagas";
 
 import {
@@ -126,6 +127,7 @@ export default function* rootSaga() {
     addNoteAsync(),
     toggleDisplayAddNoteModal(),
     runCustomIncidentActionAsync(),
+    syncWithExternalSystemAsync(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

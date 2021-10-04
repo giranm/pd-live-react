@@ -47,6 +47,10 @@ export const RUN_CUSTOM_INCIDENT_ACTION_REQUESTED = "RUN_CUSTOM_INCIDENT_ACTION_
 export const RUN_CUSTOM_INCIDENT_ACTION_COMPLETED = "RUN_CUSTOM_INCIDENT_ACTION_COMPLETED";
 export const RUN_CUSTOM_INCIDENT_ACTION_ERROR = "RUN_CUSTOM_INCIDENT_ACTION_ERROR";
 
+export const SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED = "SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED";
+export const SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED = "SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED";
+export const SYNC_WITH_EXTERNAL_SYSTEM_ERROR = "SYNC_WITH_EXTERNAL_SYSTEM_ERROR";
+
 export const acknowledge = (incidents, displayModal = true) => ({
   type: ACKNOWLEDGE_REQUESTED,
   incidents,
@@ -120,6 +124,13 @@ export const toggleDisplayAddNoteModal = () => ({
 
 export const runCustomIncidentAction = (incidents, webhook, displayModal = true) => ({
   type: RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
+  incidents,
+  webhook,
+  displayModal
+});
+
+export const syncWithExternalSystem = (incidents, webhook, displayModal = true) => ({
+  type: SYNC_WITH_EXTERNAL_SYSTEM_REQUESTED,
   incidents,
   webhook,
   displayModal

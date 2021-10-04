@@ -25,7 +25,8 @@ import {
   resolve,
   updatePriority,
   toggleDisplayAddNoteModal,
-  runCustomIncidentAction
+  runCustomIncidentAction,
+  syncWithExternalSystem
 } from "redux/incident_actions/actions";
 
 import {
@@ -40,6 +41,11 @@ import {
   filterIncidentsByField,
   HIGH
 } from "util/incidents";
+
+import {
+  CUSTOM_INCIDENT_ACTION,
+  EXTERNAL_SYSTEM
+} from "util/extensions";
 
 import { getObjectsFromListbyKey } from "util/helpers";
 
@@ -63,6 +69,7 @@ const IncidentActionsComponent = ({
   toggleDisplayAddNoteModal,
   runCustomIncidentAction,
   runResponsePlayAsync,
+  syncWithExternalSystem,
 }) => {
 
   let { selectedCount, selectedRows } = incidentTableSettings;
@@ -77,7 +84,7 @@ const IncidentActionsComponent = ({
   let enableEscalationAction = (selectedCount === 1 && highUrgencyIncidents.length && selectedIncident["status"] !== RESOLVED) ? false : true;
 
   // Create internal variables and state for escalate
-  let selectedEscalationPolicyId = selectedCount > 0 ? selectedRows[0]["escalation_policy"]["id"] : null;
+  let selectedEscalationPolicyId = selectedIncident ? selectedRows[0]["escalation_policy"]["id"] : null;
   let selectedEscalationPolicy = getObjectsFromListbyKey(escalationPolicies, "id", selectedEscalationPolicyId)[0];
   let selectedEscalationRules = selectedEscalationPolicy ? selectedEscalationPolicy.escalation_rules.slice(0).reverse() : [];
 
@@ -118,19 +125,20 @@ const IncidentActionsComponent = ({
   let { serviceExtensionMap } = extensions;
   let serviceExtensions = selectedIncident ? serviceExtensionMap[selectedIncident.service.id] : [];
   let customIncidentActions = serviceExtensions.length > 0 ? serviceExtensions.filter(
-    serviceExtension => serviceExtension.extension_type === "Custom Incident Action"
+    serviceExtension => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION
   ) : [];
-  let ticketingActionsTemp = serviceExtensions.length > 0 ? serviceExtensions.filter(
-    serviceExtension => serviceExtension.extension_type === "Ticketing"
+  let externalSystemsTemp = serviceExtensions.length > 0 ? serviceExtensions.filter(
+    serviceExtension => serviceExtension.extension_type === EXTERNAL_SYSTEM
   ) : [];
 
-  // Identify extensions (ticketing) that have already been sync'd with on the selected incident
-  // NB - need intermediate variable to stop race condition of empty array
-  let ticketingActions = ticketingActionsTemp.map(serviceExtension => {
+  // Identify extensions (ext systems) that have already been sync'd with on the selected incident
+  // NB - need intermediate variables to stop race condition of empty array
+  let externalSystems = selectedIncident ? externalSystemsTemp.map(serviceExtension => {
     let tempServiceExtension = { ...serviceExtension };
-    let result = selectedIncident.external_references.find(
+    let result;
+    result = selectedIncident.external_references ? selectedIncident.external_references.find(
       ({ webhook }) => webhook.id === serviceExtension.id
-    );
+    ) : null;
     if (result) {
       tempServiceExtension.synced = true;
       tempServiceExtension.extension_label = `Synced with ${result.webhook.summary} (${result.external_id})`;
@@ -138,7 +146,7 @@ const IncidentActionsComponent = ({
       tempServiceExtension.synced = false;
     }
     return tempServiceExtension;
-  });
+  }) : [];
 
   return (
     <div>
@@ -313,20 +321,20 @@ const IncidentActionsComponent = ({
                   <Dropdown.Divider />
                 </>
               ) : <></>}
-              {ticketingActions.length > 0 ? (
+              {externalSystems.length > 0 ? (
                 <>
-                  <Dropdown.Header>Sync</Dropdown.Header>
-                  {ticketingActions.map((ticketingAction) => {
+                  <Dropdown.Header>External Systems</Dropdown.Header>
+                  {externalSystems.map((externalSystem) => {
                     return (
                       <Dropdown.Item
-                        key={ticketingAction.id}
-                        disabled={ticketingAction.synced}
+                        key={externalSystem.id}
+                        disabled={externalSystem.synced}
                         onClick={() => {
-                          // runTicketingSync(selectedRows, ticketingAction);
+                          syncWithExternalSystem(selectedRows, externalSystem);
                           toggleRunActions(!displayRunActions);
                         }}
                       >
-                        {ticketingAction.extension_label}
+                        {externalSystem.extension_label}
                       </Dropdown.Item>
                     )
                   })}
@@ -362,6 +370,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
   runCustomIncidentAction: (incidents, webhook) => dispatch(runCustomIncidentAction(incidents, webhook)),
   runResponsePlayAsync: (incidents, responsePlay) => dispatch(runResponsePlayAsync(incidents, responsePlay)),
+  syncWithExternalSystem: (incidents, webhook) => dispatch(syncWithExternalSystem(incidents, webhook))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentActionsComponent);
