@@ -58,7 +58,10 @@ export function* getIncidents(action) {
     let params = {
       since: sinceDate.toISOString(),
       until: untilDate.toISOString(),
-      'include[]': 'first_trigger_log_entries',
+      "include[]": [
+        "first_trigger_log_entries",
+        "external_references"
+      ]
     };
 
     if (incidentStatus)

@@ -120,9 +120,25 @@ const IncidentActionsComponent = ({
   let customIncidentActions = serviceExtensions.length > 0 ? serviceExtensions.filter(
     serviceExtension => serviceExtension.extension_type === "Custom Incident Action"
   ) : [];
-  let ticketingActions = serviceExtensions.length > 0 ? serviceExtensions.filter(
+  let ticketingActionsTemp = serviceExtensions.length > 0 ? serviceExtensions.filter(
     serviceExtension => serviceExtension.extension_type === "Ticketing"
   ) : [];
+
+  // Identify extensions (ticketing) that have already been sync'd with on the selected incident
+  // NB - need intermediate variable to stop race condition of empty array
+  let ticketingActions = ticketingActionsTemp.map(serviceExtension => {
+    let tempServiceExtension = { ...serviceExtension };
+    let result = selectedIncident.external_references.find(
+      ({ webhook }) => webhook.id === serviceExtension.id
+    );
+    if (result) {
+      tempServiceExtension.synced = true;
+      tempServiceExtension.extension_label = `Synced with ${result.webhook.summary} (${result.external_id})`;
+    } else {
+      tempServiceExtension.synced = false;
+    }
+    return tempServiceExtension;
+  });
 
   return (
     <div>
@@ -304,6 +320,7 @@ const IncidentActionsComponent = ({
                     return (
                       <Dropdown.Item
                         key={ticketingAction.id}
+                        disabled={ticketingAction.synced}
                         onClick={() => {
                           // runTicketingSync(selectedRows, ticketingAction);
                           toggleRunActions(!displayRunActions);
