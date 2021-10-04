@@ -110,7 +110,10 @@ export function* updateRecentLogEntries(action) {
       recentLogEntries: recentLogEntriesLocal,
     });
     yield put({
-      type: UPDATE_INCIDENTS_LIST, addList, updateList, removeList,
+      type: UPDATE_INCIDENTS_LIST,
+      addList,
+      updateList,
+      removeList,
     });
   } catch (e) {
     console.log(e);

@@ -1,2 +1,3 @@
-.App {
+body {
+  background-color: var(--brand-background);
 }

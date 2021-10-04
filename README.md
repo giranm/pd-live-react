@@ -15,6 +15,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [ ] Review appropriate React table (with resizeable columns)
 - [ ] Store query/settings using session data
 - [x] Linting + Formatting (via `prettier-eslint`)
+- [ ] PagerDuty Themeing
 - [ ] Tests (including suitable framework)
 - [ ] Deployment/Bundling Steps
 

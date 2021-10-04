@@ -179,9 +179,11 @@ export function* updateIncidentsList(action) {
     }
 
     // Remove incidents within list
-    updatedIncidentsList = updatedIncidentsList.filter((existingIncident) => !removeList.some((removeItem) => {
-      if (removeItem.incident) return removeItem.incident.id === existingIncident.id;
-    }));
+    updatedIncidentsList = updatedIncidentsList.filter(
+      (existingIncident) => !removeList.some((removeItem) => {
+        if (removeItem.incident) return removeItem.incident.id === existingIncident.id;
+      }),
+    );
 
     // Remove any unintentional duplicate incidents (i.e. new incident triggered)
     const updatedIncidentsIds = updatedIncidentsList.map((o) => o.id);
@@ -263,7 +265,11 @@ export function* filterIncidentsByStatusImpl(action) {
   try {
     const { incidentStatus } = action;
     const { incidents } = yield select(selectIncidents);
-    const filteredIncidentsByStatusList = filterIncidentsByField(incidents, 'status', incidentStatus);
+    const filteredIncidentsByStatusList = filterIncidentsByField(
+      incidents,
+      'status',
+      incidentStatus,
+    );
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_STATUS_COMPLETED,
       incidents: filteredIncidentsByStatusList,

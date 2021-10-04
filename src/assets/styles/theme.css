@@ -1,0 +1,87 @@
+/* Overriding Theme on rect-bootstrap */
+:root {
+  --blue: #1155e6;
+  --indigo: #004c8e;
+  --purple: #6815b1;
+  --pink: #e83e8c;
+  --red: #c13737;
+  --orange: #d14905;
+  --yellow: #ffdc00;
+  --green: #21783e;
+  --teal: #5ccb7c;
+  --cyan: #00adee;
+  --white: #fff;
+  --gray: #666;
+  --gray-dark: #333;
+  --dark-blue: #004c8e;
+  --black: #000;
+  --dark: #333;
+  --gray-medium: #ced4da;
+  --brand-background: #f6f6f6;
+  --brand-background-2: #f9f9f9;
+  --brand-green: #21783e;
+  --brand-white: #fff;
+  --brand-black: #282424;
+  --brand-gray-dark: #333;
+  --brand-gray-light: #e5e5e5;
+  --brand-secondary-dark: #4c5b5e;
+  --brand-secondary-light: #abb2b5;
+  --primary: #1155e6;
+  --secondary: #e5e5e5;
+  --success: #21783e;
+  --info: #00adee;
+  --warning: #ffdc00;
+  --danger: #c13737;
+  --light: #e5e5e5;
+  --dark: #282424;
+}
+
+.bg-light {
+  background-color: var(--white) !important;
+}
+
+.btn-primary {
+  color: var(--brand-white);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  color: var(--brand-white);
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+
+.btn-outline-secondary {
+  color: var(--brand-black);
+  background-color: var(--brand-white);
+  border-color: var(--brand-secondary-light);
+}
+
+.btn-outline-secondary:hover {
+  color: var(--brand-black);
+  background-color: var(--brand-gray-light);
+  border-color: var(--brand-secondary-light);
+}
+
+.btn-outline-dark {
+  color: var(--brand-gray-dark);
+  background-color: var(--white);
+  border-color: var(--brand-secondary-light);
+}
+
+.btn-outline-dark:disabled {
+  color: var(--brand-gray-dark);
+  background-color: var(--white);
+  border-color: var(--brand-secondary-light);
+}
+
+.btn-outline-dark:hover {
+  background-color: var(--brand-gray-dark);
+  border-color: var(--brand-gray-dark);
+}
+
+.btn-outline-dark:not(:disabled):not(.disabled).active {
+  background-color: var(--brand-gray-dark);
+  border-color: var(--brand-gray-dark);
+}

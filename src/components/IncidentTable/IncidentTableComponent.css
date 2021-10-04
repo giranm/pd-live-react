@@ -52,7 +52,7 @@
 }
 
 .rdt_TableHeadRow {
-  background-color: rgba(0, 0, 0, 0.06) !important;
+  background-color: var(--brand-background-2) !important;
   border-style: solid;
   border-width: 1px;
   border-radius: 4px;
@@ -69,6 +69,8 @@
   position: relative;
   right: 80px;
   border-top: unset;
+  background-color: var(--brand-background) !important;
+  color: var(--brand-gray-dark) !important;
 }
 
 .incident-table-settings-btn {
@@ -76,6 +78,7 @@
   float: right;
   bottom: 44px;
   right: 10px;
+  background-color: var(--brand-gray-dark);
 }
 
 /* Priority Pill */

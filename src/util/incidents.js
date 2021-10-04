@@ -38,7 +38,10 @@ export const filterIncidentsByFieldOfList = (
 // Helper function to generate modal message based on action
 export const generateIncidentActionModal = (incidents, action) => {
   // Split incidents based on status
-  const unresolvedIncidents = filterIncidentsByField(incidents, 'status', [TRIGGERED, ACKNOWLEDGED]);
+  const unresolvedIncidents = filterIncidentsByField(incidents, 'status', [
+    TRIGGERED,
+    ACKNOWLEDGED,
+  ]);
   const resolvedIncidents = filterIncidentsByField(incidents, 'status', [RESOLVED]);
 
   // Create message based on action and incident status

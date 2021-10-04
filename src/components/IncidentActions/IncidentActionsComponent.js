@@ -78,12 +78,14 @@ const IncidentActionsComponent = ({
   const enableActions = !(unresolvedIncidents.length > 0);
   const enablePostActions = !(selectedCount > 0);
   const enablePostSingularAction = selectedCount !== 1;
-  const enableEscalationAction = !(selectedCount === 1 && highUrgencyIncidents.length && selectedIncident.status !== RESOLVED);
+  const enableEscalationAction = !(
+    selectedCount === 1
+    && highUrgencyIncidents.length
+    && selectedIncident.status !== RESOLVED
+  );
 
   // Create internal variables and state for escalate
-  const selectedEscalationPolicyId = selectedIncident
-    ? selectedRows[0].escalation_policy.id
-    : null;
+  const selectedEscalationPolicyId = selectedIncident ? selectedRows[0].escalation_policy.id : null;
   const selectedEscalationPolicy = getObjectsFromListbyKey(
     escalationPolicies,
     'id',
@@ -128,7 +130,9 @@ const IncidentActionsComponent = ({
 
   // Generate extension types per selected incident's service
   const { serviceExtensionMap } = extensions;
-  const serviceExtensions = selectedIncident ? serviceExtensionMap[selectedIncident.service.id] : [];
+  const serviceExtensions = selectedIncident
+    ? serviceExtensionMap[selectedIncident.service.id]
+    : [];
   const customIncidentActions = serviceExtensions.length > 0
     ? serviceExtensions.filter(
       (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
