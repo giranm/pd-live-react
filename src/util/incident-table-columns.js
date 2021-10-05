@@ -128,7 +128,8 @@ export const availableIncidentTableColumns = [
     },
     Header: 'Priority',
     sortable: true,
-    // width: '100px',
+    minWidth: 100,
+    width: 100,
     allowOverflow: true,
     sortFunction: (row1, row2) => null, // TBD - this needs to be custom implemented
   },

@@ -5,6 +5,20 @@
   white-space: nowrap;
 }
 
+.incident-table-ctr::-webkit-scrollbar {
+  height: 8px;
+}
+
+.incident-table-ctr::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--light);
+}
+
+.incident-table-ctr::-webkit-scrollbar-thumb:hover {
+  border-radius: 10px;
+  background-color: var(--gray);
+}
+
 .incident-table-settings-btn {
   position: relative;
   float: right;
@@ -51,10 +65,14 @@
 .thead {
   overflow-y: auto;
   overflow-x: hidden;
+  border-bottom: unset;
 }
 
 .th {
   padding: 10px !important;
+  background-color: white;
+  color: var(--dark);
+  font-weight: 700;
 }
 
 .resizer {

@@ -121,7 +121,13 @@ const IncidentTableComponent = ({
 
   return (
     <div className="incident-table-ctr">
-      <BTable responsive="sm" striped bordered hover size="sm" {...getTableProps()}>
+      <BTable
+        responsive="sm"
+        striped
+        hover
+        size="sm"
+        {...getTableProps()}
+      >
         <table className="table">
           <thead className="thead">
             {headerGroups.map((headerGroup) => (
