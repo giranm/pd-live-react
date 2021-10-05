@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import {
   useEffect,
   useState,
@@ -11,7 +12,6 @@ import {
   Button,
   DropdownButton,
   Dropdown,
-  Form,
   Row,
   Col,
   Badge,
@@ -21,6 +21,8 @@ import BTable from 'react-bootstrap/Table';
 
 import {
   useTable,
+  useGlobalFilter,
+  useAsyncDebounce,
   useSortBy,
   useRowSelect,
   useBlockLayout,
@@ -56,6 +58,30 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   );
 });
 
+const TWO_HUNDRED_MS = 200;
+
+const GlobalFilter = ({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter,
+}) => {
+  const [value, setValue] = useState(globalFilter);
+  const onChange = useAsyncDebounce((val) => {
+    setGlobalFilter(val || undefined);
+  }, TWO_HUNDRED_MS);
+
+  return (
+    <input
+      value={value || ''}
+      onChange={(e) => {
+        setValue(e.target.value);
+        onChange(e.target.value);
+      }}
+      placeholder="Search"
+    />
+  );
+};
+
 const IncidentTableComponent = ({
   toggleIncidentTableSettings,
   selectIncidentTableRows,
@@ -79,7 +105,7 @@ const IncidentTableComponent = ({
   const [visibleIncidents, setVisibleIncidents] = useState([]);
 
   const {
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, globalFilter },
     // Core Table
     getTableProps,
     getTableBodyProps,
@@ -97,6 +123,10 @@ const IncidentTableComponent = ({
     nextPage,
     previousPage,
     setPageSize,
+    // Global Search
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
   } = useTable(
     {
       columns: incidentTableColumns,
@@ -116,6 +146,7 @@ const IncidentTableComponent = ({
       pageCount: initialPageCount,
     },
     // Plugins
+    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
@@ -169,6 +200,11 @@ const IncidentTableComponent = ({
   return (
     <div className="incident-table-ctr">
       <div className="incident-table">
+        <GlobalFilter
+          preGlobalFilteredRows={preGlobalFilteredRows}
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+        />
         <BTable
           responsive="sm"
           striped
@@ -185,8 +221,13 @@ const IncidentTableComponent = ({
                   // we can add them into the header props
                     <th {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
                       {column.render('Header')}
-                      {/* Add a sort direction indicator */}
-                      <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                      <span>
+                        {column.isSorted
+                          ? column.isSortedDesc
+                            ? ' ⬇️'
+                            : ' ⬆️'
+                          : ''}
+                      </span>
                       {column.canResize && (
                       <div
                         {...column.getResizerProps()}
