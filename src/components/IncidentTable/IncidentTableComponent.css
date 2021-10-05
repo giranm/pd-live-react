@@ -66,9 +66,6 @@
 }
 
 .thead {
-  position: fixed;
-  top: 1;
-  z-index: 0;
 }
 
 .th {
@@ -76,6 +73,9 @@
   background-color: white;
   color: var(--dark);
   font-weight: 700;
+  position: fixed;
+  top: 1;
+  z-index: 0;
 }
 
 .resizer {
