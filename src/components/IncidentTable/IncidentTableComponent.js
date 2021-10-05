@@ -1,22 +1,37 @@
 import {
-  useEffect, useState, useMemo, forwardRef, useRef,
+  useEffect,
+  useState,
+  useMemo,
+  forwardRef,
+  useRef,
 } from 'react';
 import { connect } from 'react-redux';
 
-import { Button } from 'react-bootstrap';
+import {
+  Button,
+  DropdownButton,
+  Dropdown,
+  Form,
+  Row,
+  Col,
+  Badge,
+  Container,
+} from 'react-bootstrap';
 import BTable from 'react-bootstrap/Table';
 
 import {
-  useTable, useSortBy, useRowSelect, useBlockLayout, useResizeColumns,
+  useTable,
+  useSortBy,
+  useRowSelect,
+  useBlockLayout,
+  useResizeColumns,
+  usePagination,
 } from 'react-table';
 
 import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/incident_table/actions';
 
 // import { ReactComponent as EmptyIncidents } from "assets/images/empty_incidents.svg"
 
-import IncidentTableSettingsComponent from './IncidentTableSettingsComponent';
-
-// import 'react-data-table-component-extensions/dist/index.css';
 import './IncidentTableComponent.css';
 
 const EmptyIncidentsComponent = () => (
@@ -49,6 +64,7 @@ const IncidentTableComponent = ({
 }) => {
   const { incidentTableColumns } = incidentTableSettings;
 
+  // React Table Config
   const defaultColumn = useMemo(
     () => ({
       minWidth: 30,
@@ -58,20 +74,35 @@ const IncidentTableComponent = ({
     [],
   );
 
+  // Pagination
+  const [initialPageCount, setPageCount] = useState(0);
+  const [visibleIncidents, setVisibleIncidents] = useState([]);
+
   const {
+    state: { pageIndex, pageSize },
+    // Core Table
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-    resetResizing,
     selectedFlatRows,
-    state,
+    // Pagination
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
   } = useTable(
     {
       columns: incidentTableColumns,
-      data: incidents,
+      data: visibleIncidents,
       defaultColumn,
+      // Prevent re-render when redux store updates
       autoResetPage: false,
       autoResetExpanded: false,
       autoResetGroupBy: false,
@@ -79,8 +110,14 @@ const IncidentTableComponent = ({
       autoResetSortBy: false,
       autoResetFilters: false,
       autoResetRowState: false,
+      // Pagination
+      initialState: { pageIndex: 0 },
+      manualPagination: true,
+      pageCount: initialPageCount,
     },
+    // Plugins
     useSortBy,
+    usePagination,
     useRowSelect,
     useBlockLayout,
     useResizeColumns,
@@ -113,74 +150,165 @@ const IncidentTableComponent = ({
     },
   );
 
+  // Row selection hooks
   useEffect(() => {
     const selectedRows = selectedFlatRows.map((row) => row.original);
     selectIncidentTableRows(true, selectedRows.length, selectedRows);
     return () => { };
   }, [selectedFlatRows]);
 
+  // Pagination Hooks
+  useEffect(() => {
+    const startRow = pageSize * pageIndex;
+    const endRow = startRow + pageSize;
+    const tempVisibleIncidents = [...incidents];
+    setPageCount(Math.ceil(incidents.length / pageSize));
+    setVisibleIncidents(tempVisibleIncidents.slice(startRow, endRow));
+  }, [incidents]);
+
   return (
     <div className="incident-table-ctr">
-      <BTable
-        responsive="sm"
-        striped
-        hover
-        size="sm"
-        {...getTableProps()}
-      >
-        <table className="table">
-          <thead className="thead">
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+      <div className="incident-table">
+        <BTable
+          responsive="sm"
+          striped
+          hover
+          size="sm"
+          {...getTableProps()}
+        >
+          <table className="table">
+            <thead className="thead">
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
                   // Add the sorting props to control sorting. For this example
                   // we can add them into the header props
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
-                    {column.render('Header')}
-                    {/* Add a sort direction indicator */}
-                    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
-                    {column.canResize && (
+                    <th {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
+                      {column.render('Header')}
+                      {/* Add a sort direction indicator */}
+                      <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                      {column.canResize && (
                       <div
                         {...column.getResizerProps()}
                         className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
                       />
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()} className="tbody">
-            {rows.map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()} className="tr">
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()} className="td">
-                      {cell.render('Cell')}
-                    </td>
+                      )}
+                    </th>
                   ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </BTable>
-      {incidents.length ? (
-        <div className="incident-table-settings-ctr">
-          <Button
-            className="incident-table-settings-btn"
-            variant="secondary"
-            size="sm"
-            onClick={toggleIncidentTableSettings}
-          >
-            Settings
-          </Button>
-        </div>
-      ) : (
-        <></>
-      )}
-      <IncidentTableSettingsComponent />
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()} className="tbody">
+              {rows.map((row, i) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()} className="tr">
+                    {row.cells.map((cell) => (
+                      <td {...cell.getCellProps()} className="td">
+                        {cell.render('Cell')}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </BTable>
+      </div>
+      <br />
+      <div>
+        {incidents.length ? (
+          <div className="incident-table-settings-ctr">
+            <div className="pagination-results">
+              {`Total: ${incidents.length} Incidents`}
+            </div>
+            <Container fluid>
+              <Row>
+                <Col />
+                <Col className="pagination-setting-pages" sm={{ span: -1 }}>
+                  <DropdownButton
+                    size="sm"
+                    variant="outline-secondary"
+                    title={`Show ${pageSize} results`}
+                    drop="up"
+                  >
+                    {[10, 20, 30, 40, 50].map((pgSize) => (
+                      <Dropdown.Item
+                        key={pgSize}
+                        name={pgSize}
+                        onClick={(e) => {
+                          setPageSize(Number(e.target.name));
+                        }}
+                      >
+                        Show {pgSize} results
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                  <div className="mr-2" />
+                  <Button
+                    className="pagination-buttons"
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => gotoPage(0)}
+                    disabled={!canPreviousPage}
+                  >
+                    {'<<'}
+                  </Button>
+                  <Button
+                    className="pagination-buttons"
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => previousPage()}
+                    disabled={!canPreviousPage}
+                  >
+                    {'<'}
+                  </Button>
+                  <div className="pagination-current-page-badge">
+                    <Badge
+                      className="pagination-buttons"
+                      variant="secondary"
+                    >
+                      {`Page ${pageIndex + 1} of ${pageOptions.length}`}
+                    </Badge>
+                  </div>
+                  <Button
+                    className="pagination-buttons"
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => nextPage()}
+                    disabled={!canNextPage}
+                  >
+                    {'>'}
+                  </Button>
+                  <Button
+                    className="pagination-buttons"
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => gotoPage(pageCount - 1)}
+                    disabled={!canNextPage}
+                  >
+                    {'>>'}
+                  </Button>
+                  {/* Disabling until we have better UX */}
+                  {/* <Form.Control
+                    type="number"
+                    size="sm"
+                    min={1}
+                    max={pageCount}
+                    defaultValue={pageIndex + 1}
+                    onChange={(e) => {
+                      const targetPage = e.target.value ? Number(e.target.value) - 1 : 0;
+                      gotoPage(targetPage);
+                    }}
+                  /> */}
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 };
@@ -192,7 +320,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   toggleIncidentTableSettings: () => dispatch(toggleIncidentTableSettings()),
-  selectIncidentTableRows: (allSelected, selectedCount, selectedRows) => dispatch(selectIncidentTableRows(allSelected, selectedCount, selectedRows)),
+  selectIncidentTableRows: (allSelected, selectedCount, selectedRows) => {
+    dispatch(selectIncidentTableRows(allSelected, selectedCount, selectedRows));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentTableComponent);
