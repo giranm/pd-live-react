@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 import BTable from 'react-bootstrap/Table';
 
 import {
-  useTable, useSortBy, useRowSelect, useFlexLayout, useResizeColumns,
+  useTable, useSortBy, useRowSelect, useBlockLayout, useResizeColumns,
 } from 'react-table';
 
 import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/incident_table/actions';
@@ -82,7 +82,7 @@ const IncidentTableComponent = ({
     },
     useSortBy,
     useRowSelect,
-    useFlexLayout,
+    useBlockLayout,
     useResizeColumns,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
@@ -129,7 +129,7 @@ const IncidentTableComponent = ({
                 {headerGroup.headers.map((column) => (
                   // Add the sorting props to control sorting. For this example
                   // we can add them into the header props
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
                     {column.render('Header')}
                     {/* Add a sort direction indicator */}
                     <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
@@ -148,9 +148,11 @@ const IncidentTableComponent = ({
             {rows.map((row, i) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
+                <tr {...row.getRowProps()} className="tr">
                   {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    <td {...cell.getCellProps()} className="td">
+                      {cell.render('Cell')}
+                    </td>
                   ))}
                 </tr>
               );
@@ -172,35 +174,6 @@ const IncidentTableComponent = ({
       ) : (
         <></>
       )}
-      {/* <DataTableExtensions columns={incidentTableColumns} data={incidents}>
-        <DataTable
-          noHeader
-          striped
-          highlightOnHover
-          selectableRows
-          selectableRowsHighlight
-          fixedHeader
-          fixedHeaderScrollHeight="45vh"
-          pagination
-          paginationRowsPerPageOptions={[10, 15, 20, 25, 30]}
-          noDataComponent={EmptyIncidentsComponent()}
-          onSelectedRowsChange={({ allSelected, selectedCount, selectedRows }) => selectIncidentTableRows(allSelected, selectedCount, selectedRows)}
-        />
-      </DataTableExtensions>
-      {incidents.length ? (
-        <div className="incident-table-settings-ctr">
-          <Button
-            className="incident-table-settings-btn"
-            variant="secondary"
-            size="sm"
-            onClick={toggleIncidentTableSettings}
-          >
-            Settings
-          </Button>
-        </div>
-      ) : (
-        <></>
-      )} */}
       <IncidentTableSettingsComponent />
     </div>
   );

@@ -11,38 +11,50 @@ export const availableIncidentTableColumns = [
         {row.original.incident_number}
       </a>
     ),
+    minWidth: 60,
+    width: 60,
   },
   {
     accessor: 'title',
     Header: 'Title',
     sortable: true,
-    width: '500px',
+    minWidth: 400,
+    width: 400,
   },
   {
     accessor: 'description',
     Header: 'Description',
     sortable: true,
+    minWidth: 400,
+    width: 400,
   },
   {
     accessor: 'created_at',
     Header: 'Created At',
     sortable: true,
+    minWidth: 180,
+    width: 180,
   },
   {
     accessor: 'status',
     Header: 'Status',
     sortable: true,
-    width: '100px',
+    minWidth: 120,
+    width: 120,
   },
   {
     accessor: 'incident_key',
     Header: 'Incident Key',
     sortable: true,
+    minWidth: 300,
+    width: 300,
   },
   {
     accessor: 'service.summary',
     Header: 'Service',
     sortable: true,
+    minWidth: 200,
+    width: 200,
   },
   {
     accessor: (incident) => (incident.assignments
@@ -50,28 +62,36 @@ export const availableIncidentTableColumns = [
       : 'Unassigned'),
     Header: 'Assignees',
     sortable: true,
-    width: '100px',
+    minWidth: 200,
+    width: 200,
   },
   {
     accessor: 'last_status_change_at',
     Header: 'Last Status Change At',
     sortable: true,
+    minWidth: 220,
+    width: 220,
   },
   {
     accessor: 'alert_counts.all',
     Header: 'Num Alerts',
     sortable: true,
+    minWidth: 130,
+    width: 130,
   },
   {
     accessor: 'escalation_policy.summary',
     Header: 'Escalation Policy',
     sortable: true,
+    minWidth: 200,
+    width: 200,
   },
   {
     accessor: (incident) => (incident.teams ? incident.teams.map((team) => team.summary).join(', ') : 'N/A'),
     Header: 'Teams',
     sortable: true,
-    width: '100px',
+    minWidth: 200,
+    width: 200,
   },
   {
     accessor: (incident) => (incident.acknowledgements
@@ -79,12 +99,15 @@ export const availableIncidentTableColumns = [
       : 'N/A'),
     Header: 'Acknowledgments',
     sortable: true,
-    width: '100px',
+    minWidth: 250,
+    width: 250,
   },
   {
     accessor: 'last_status_change_by.summary',
     Header: 'Last Status Change By',
     sortable: true,
+    minWidth: 250,
+    width: 250,
   },
   {
     accessor: (incident) => {
@@ -105,7 +128,7 @@ export const availableIncidentTableColumns = [
     },
     Header: 'Priority',
     sortable: true,
-    width: '100px',
+    // width: '100px',
     allowOverflow: true,
     sortFunction: (row1, row2) => null, // TBD - this needs to be custom implemented
   },
@@ -114,17 +137,22 @@ export const availableIncidentTableColumns = [
     accessor: 'urgency',
     Header: 'Urgency',
     sortable: true,
+    minWidth: 120,
+    width: 120,
   },
   {
     accessor: 'id',
     Header: 'Incident ID',
     sortable: true,
+    minWidth: 130,
+    width: 130,
   },
   {
     accessor: 'summary',
     Header: 'Summary',
     sortable: true,
-    width: '500px',
+    minWidth: 400,
+    width: 400,
   },
   {
     accessor: (incident) => {
@@ -135,7 +163,9 @@ export const availableIncidentTableColumns = [
     },
     Header: 'Latest Note',
     sortable: true,
-    width: '400px',
+    minWidth: 200,
+    width: 200,
+    maxWidth: 500,
   },
 ];
 
