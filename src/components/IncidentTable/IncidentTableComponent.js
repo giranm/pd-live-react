@@ -5,14 +5,14 @@ import DataTableExtensions from 'react-data-table-component-extensions';
 
 import { Button } from 'react-bootstrap';
 
+import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/incident_table/actions';
+
 // import { ReactComponent as EmptyIncidents } from "assets/images/empty_incidents.svg"
 
 import IncidentTableSettingsComponent from './IncidentTableSettingsComponent';
 
 import 'react-data-table-component-extensions/dist/index.css';
 import './IncidentTableComponent.css';
-
-import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/incident_table/actions';
 
 const EmptyIncidentsComponent = () => (
   <div>
