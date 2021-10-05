@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import {
   Container,
+  Badge,
   Row,
   Col,
   Button,
@@ -174,6 +175,21 @@ const IncidentActionsComponent = ({
     <div>
       <Container className="incident-actions-ctr" fluid>
         <Row>
+          <Col sm={{ span: -1 }}>
+            <div className="selected-incidents-ctr">
+              <h4>
+                <Badge
+                  className="selected-incidents-badge"
+                  variant="primary"
+                >
+                  {selectedCount}
+                </Badge>
+              </h4>
+              <p className="selected-incidents">
+                Selected
+              </p>
+            </div>
+          </Col>
           <Col>
             <Button
               className="action-button"
@@ -367,6 +383,7 @@ const IncidentActionsComponent = ({
             </DropdownButton>
           </Col>
         </Row>
+
       </Container>
     </div>
   );

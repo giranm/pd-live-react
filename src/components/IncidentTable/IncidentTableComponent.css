@@ -2,7 +2,7 @@
 .incident-table {
   margin-top: 10px;
   white-space: nowrap;
-  height: 500px;
+  height: 530px;
   overflow-x: scroll;
   overflow-y: scroll;
 }

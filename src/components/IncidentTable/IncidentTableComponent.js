@@ -232,7 +232,7 @@ const IncidentTableComponent = ({
                     title={`Show ${pageSize} results`}
                     drop="up"
                   >
-                    {[10, 20, 30, 40, 50].map((pgSize) => (
+                    {[10, 25, 50, 100].map((pgSize) => (
                       <Dropdown.Item
                         key={pgSize}
                         name={pgSize}
