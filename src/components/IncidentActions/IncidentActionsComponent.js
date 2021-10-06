@@ -52,6 +52,7 @@ const animatedComponents = makeAnimated();
 const IncidentActionsComponent = ({
   incidentTableSettings,
   incidentActions,
+  incidents,
   priorities,
   escalationPolicies,
   extensions,
@@ -163,7 +164,8 @@ const IncidentActionsComponent = ({
         : null;
       if (result) {
         tempServiceExtension.synced = true;
-        tempServiceExtension.extension_label = `Synced with ${result.webhook.summary} (${result.external_id})`;
+        tempServiceExtension.extension_label
+          = `Synced with ${result.webhook.summary} (${result.external_id})`;
       } else {
         tempServiceExtension.synced = false;
       }
@@ -182,7 +184,7 @@ const IncidentActionsComponent = ({
                   className="selected-incidents-badge"
                   variant="primary"
                 >
-                  {selectedCount}
+                  {`${selectedCount}/${incidents.length}`}
                 </Badge>
               </h4>
               <p className="selected-incidents">
@@ -392,6 +394,7 @@ const IncidentActionsComponent = ({
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
   incidentActions: state.incidentActions,
+  incidents: state.incidents.incidents,
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   extensions: state.extensions,

@@ -200,11 +200,11 @@ const IncidentTableComponent = ({
   return (
     <div className="incident-table-ctr">
       <div className="incident-table">
-        <GlobalFilter
+        {/* <GlobalFilter
           preGlobalFilteredRows={preGlobalFilteredRows}
           globalFilter={globalFilter}
           setGlobalFilter={setGlobalFilter}
-        />
+        /> */}
         <BTable
           responsive="sm"
           striped
@@ -260,9 +260,6 @@ const IncidentTableComponent = ({
       <div>
         {incidents.length ? (
           <div className="incident-table-settings-ctr">
-            <div className="pagination-results">
-              {`Total: ${incidents.length} Incidents`}
-            </div>
             <Container fluid>
               <Row>
                 <Col />
