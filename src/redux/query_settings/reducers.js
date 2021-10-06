@@ -19,6 +19,8 @@ import {
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+  UPDATE_SEARCH_QUERY_REQUESTED,
+  UPDATE_SEARCH_QUERY_COMPLETED,
 } from './actions';
 
 const querySettings = produce(
@@ -87,6 +89,14 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED;
         break;
 
+      case UPDATE_SEARCH_QUERY_REQUESTED:
+        draft.status = UPDATE_SEARCH_QUERY_REQUESTED;
+        break;
+
+      case UPDATE_SEARCH_QUERY_COMPLETED:
+        draft.searchQuery = action.searchQuery;
+        draft.status = UPDATE_SEARCH_QUERY_COMPLETED;
+        break;
       default:
         break;
     }
@@ -100,6 +110,7 @@ const querySettings = produce(
     incidentPriority: [],
     teamIds: [],
     serviceIds: [],
+    searchQuery: '',
     status: null,
     fetchingData: false,
     error: null,

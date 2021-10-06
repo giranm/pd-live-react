@@ -19,4 +19,6 @@
 .settings-toggle {
   width: 30px;
   fill: var(--black);
+  position: relative;
+  top: 3px;
 }

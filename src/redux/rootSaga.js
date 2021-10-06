@@ -13,6 +13,7 @@ import {
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
   updateQuerySettingsServices,
+  updateSearchQuery,
 } from './query_settings/sagas';
 
 import {
@@ -79,6 +80,7 @@ export default function* rootSaga() {
     updateQuerySettingsIncidentPriority(),
     updateQuerySettingsTeams(),
     updateQuerySettingsServices(),
+    updateSearchQuery(),
 
     // Incidents
     getIncidentsAsync(),

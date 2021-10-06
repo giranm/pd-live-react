@@ -18,6 +18,8 @@ import {
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+  UPDATE_SEARCH_QUERY_REQUESTED,
+  UPDATE_SEARCH_QUERY_COMPLETED,
 } from './actions';
 
 import { selectQuerySettings } from './selectors';
@@ -117,4 +119,17 @@ export function* updateQuerySettingsServicesImpl(action) {
   const { serviceIds } = action;
   yield put({ type: UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED, serviceIds });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
+}
+
+export function* updateSearchQuery() {
+  yield takeLatest(UPDATE_SEARCH_QUERY_REQUESTED, updateSearchQueryImpl);
+}
+
+export function* updateSearchQueryImpl(action) {
+  // Update search query and filter incidents using list
+  const { searchQuery } = action;
+  yield put({ type: UPDATE_SEARCH_QUERY_COMPLETED, searchQuery });
+
+  // filter with incidents action
+  // yield put({ type: FETCH_INCIDENTS_REQUESTED });
 }
