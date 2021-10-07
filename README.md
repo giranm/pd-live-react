@@ -3,7 +3,9 @@
 This repository hosts the source code for the React implementation of [PDLive](https://github.com/martindstone/PDlive).  
 It has been bootstrapped using [create-react-app](https://github.com/facebook/create-react-app).
 
-#### TODO
+### TODO
+
+##### Functionality
 
 - [ ] OAuth2 Login (will replace steps 2 + 3 from development use)
 - [x] Escalate Incident
@@ -12,8 +14,13 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] Update Priority of Incident
 - [x] Custom snooze duration for Incident
 - [x] Run Action (including Custom Incident Actions, Webhooks, and Response Plays)
-- [ ] Review appropriate React table (with resizeable columns)
+- [x] Review appropriate React table (with resizeable columns)
+- [x] Global Search against incident data
+- [ ] Add loading modal when fetching data from `/incidents` endpoint
 - [ ] Store query/settings using session data
+
+##### Code
+
 - [x] Linting + Formatting (via `prettier-eslint`)
 - [ ] PagerDuty Themeing
 - [ ] Tests (including suitable framework)
@@ -24,6 +31,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] Minor display bugs (incident resolution and creation duplication)
 - [ ] Selected incidents which disappear post-action keeps state (e.g. enablePostActions remains true)
 - [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
+- [x] Slow rendering with pagination implementation
 
 ## Local Development
 

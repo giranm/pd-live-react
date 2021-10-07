@@ -25,6 +25,9 @@ import {
   FILTER_INCIDENTS_LIST_BY_SERVICE,
   FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
+  FILTER_INCIDENTS_LIST_BY_QUERY,
+  FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_QUERY_ERROR,
 } from './actions';
 
 const incidents = produce(
@@ -167,12 +170,30 @@ const incidents = produce(
         draft.error = action.message;
         break;
 
+      case FILTER_INCIDENTS_LIST_BY_QUERY:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_QUERY;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED;
+        draft.filteredIncidentsByQuery = action.filteredIncidentsByQuery;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_QUERY_ERROR:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_QUERY_ERROR;
+        draft.error = action.message;
+        break;
+
       default:
         break;
     }
   },
   {
     incidents: [],
+    filteredIncidentsByQuery: [],
     status: null,
     fetchingData: false,
     error: null,

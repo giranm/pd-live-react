@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import {
   Container,
+  Badge,
   Row,
   Col,
   Button,
@@ -51,6 +52,7 @@ const animatedComponents = makeAnimated();
 const IncidentActionsComponent = ({
   incidentTableSettings,
   incidentActions,
+  incidents,
   priorities,
   escalationPolicies,
   extensions,
@@ -68,6 +70,7 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
+  const { filteredIncidentsByQuery } = incidents;
   const { selectedCount, selectedRows } = incidentTableSettings;
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
@@ -162,7 +165,8 @@ const IncidentActionsComponent = ({
         : null;
       if (result) {
         tempServiceExtension.synced = true;
-        tempServiceExtension.extension_label = `Synced with ${result.webhook.summary} (${result.external_id})`;
+        tempServiceExtension.extension_label
+          = `Synced with ${result.webhook.summary} (${result.external_id})`;
       } else {
         tempServiceExtension.synced = false;
       }
@@ -174,6 +178,21 @@ const IncidentActionsComponent = ({
     <div>
       <Container className="incident-actions-ctr" fluid>
         <Row>
+          <Col sm={{ span: -1 }}>
+            <div className="selected-incidents-ctr">
+              <h4>
+                <Badge
+                  className="selected-incidents-badge"
+                  variant={filteredIncidentsByQuery.length ? 'primary' : 'secondary'}
+                >
+                  {`${selectedCount}/${filteredIncidentsByQuery.length}`}
+                </Badge>
+              </h4>
+              <p className="selected-incidents">
+                Selected
+              </p>
+            </div>
+          </Col>
           <Col>
             <Button
               className="action-button"
@@ -367,6 +386,7 @@ const IncidentActionsComponent = ({
             </DropdownButton>
           </Col>
         </Row>
+
       </Container>
     </div>
   );
@@ -375,6 +395,7 @@ const IncidentActionsComponent = ({
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
   incidentActions: state.incidentActions,
+  incidents: state.incidents,
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   extensions: state.extensions,
