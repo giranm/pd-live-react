@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
+import PDOAuth from 'pdoauth';
+
 import {
   Container,
   Row,
@@ -365,6 +367,14 @@ const IncidentActionsComponent = ({
                 <></>
               )}
             </DropdownButton>
+            <Button
+              className="action-button"
+              variant="outline-dark"
+              onClick={() => PDOAuth.logout()}
+            >
+              Logout
+            </Button>
+
           </Col>
         </Row>
       </Container>

@@ -12,8 +12,8 @@ import {
 
 import { selectServices } from './selectors';
 
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
+const token = sessionStorage.getItem('pd_access_token');
+const pd = api({ token, tokenType: 'bearer' });
 
 export function* getServicesAsync() {
   yield takeLatest(FETCH_SERVICES_REQUESTED, getServices);

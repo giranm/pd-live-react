@@ -32,11 +32,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 
 2. `git clone` repo to desired destination and `cd` into directory.
 
-3. Create `.env.local` environment file with the following contents:
-
-   ```properties
-   REACT_APP_PD_TOKEN=PAGERDUTY_PERSONAL_API_KEY_HERE
-   ```
+3. (Optional unless you are not serving at http://localhost:3000) Go into PD developer mode, create a new app, add OAuth 2.0 and add a URL to the base of wherever you are serving the app; put the Client ID from this app into App.js as the argument to `PDOAuth.login`
 
 4. Install dependencies with `npm install` and run application locally using `npm start`  
    (e.g. served under http://localhost:3000/)

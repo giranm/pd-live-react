@@ -8,8 +8,8 @@ import { FETCH_TEAMS_REQUESTED, FETCH_TEAMS_COMPLETED, FETCH_TEAMS_ERROR } from 
 
 import { selectTeams } from './selectors';
 
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
+const token = sessionStorage.getItem('pd_access_token');
+const pd = api({ token, tokenType: 'bearer' });
 
 export function* getTeamsAsync() {
   yield takeLatest(FETCH_TEAMS_REQUESTED, getTeams);

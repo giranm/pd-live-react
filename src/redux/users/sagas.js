@@ -15,8 +15,8 @@ import {
 
 import { selectUsers } from './selectors';
 
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
+const token = sessionStorage.getItem('pd_access_token');
+const pd = api({ token, tokenType: 'bearer' });
 
 export function* getUsersAsync() {
   yield takeLatest(GET_USERS_REQUESTED, getUsers);

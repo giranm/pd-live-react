@@ -1,5 +1,6 @@
 {
   "name": "pd-live-react",
+  "homepage": "https://giranm.github.io/pd-live-react/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

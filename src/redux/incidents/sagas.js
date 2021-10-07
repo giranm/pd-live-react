@@ -36,8 +36,8 @@ import {
   FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
 } from './actions';
 
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
+const token = sessionStorage.getItem('pd_access_token');
+const pd = api({ token, tokenType: 'bearer' });
 
 export const getIncidentByIdRequest = (incidentId) => call(pd, {
   method: 'get',

@@ -24,6 +24,8 @@ import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 
+import PDOAuth from 'pdoauth';
+
 import 'App.css';
 
 const App = ({
@@ -41,6 +43,19 @@ const App = ({
   cleanRecentLogEntriesAsync,
 }) => {
   // Initial load of objects from API
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('pd_access_token');
+    if (!token) {
+      PDOAuth.login('b0770bc5-8649-4f60-9b16-1ba9360e2a82');
+    }
+  }, []);
+
+  const token = sessionStorage.getItem('pd_access_token');
+  if (!token) {
+    return null;
+  }
+
   useEffect(() => {
     getUsersAsync();
     getCurrentUserAsync();
