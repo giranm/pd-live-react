@@ -77,9 +77,9 @@ const IncidentTableComponent = ({
     [],
   );
 
-  // Pagination
-  const [initialPageCount, setPageCount] = useState(0);
-  const [visibleIncidents, setVisibleIncidents] = useState([]);
+  const memoizedFilteredIncidentsByQuery = useMemo(
+    () => filteredIncidentsByQuery, [filteredIncidentsByQuery],
+  );
 
   const {
     state: { pageIndex, pageSize },
@@ -87,7 +87,7 @@ const IncidentTableComponent = ({
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    // rows, // Disabled as we are using pagination (see variable substitute)
     prepareRow,
     selectedFlatRows,
     // Pagination
@@ -103,7 +103,7 @@ const IncidentTableComponent = ({
   } = useTable(
     {
       columns: incidentTableColumns,
-      data: visibleIncidents,
+      data: memoizedFilteredIncidentsByQuery,
       defaultColumn,
       // Prevent re-render when redux store updates
       autoResetPage: false,
@@ -115,8 +115,6 @@ const IncidentTableComponent = ({
       autoResetRowState: false,
       // Pagination
       initialState: { pageIndex: 0 },
-      manualPagination: true,
-      pageCount: initialPageCount,
     },
     // Plugins
     useSortBy,
@@ -160,18 +158,9 @@ const IncidentTableComponent = ({
     return () => { };
   }, [selectedFlatRows]);
 
-  // Pagination Hooks
-  useEffect(() => {
-    const startRow = pageSize * pageIndex;
-    const endRow = startRow + pageSize;
-    const tempVisibleIncidents = [...filteredIncidentsByQuery];
-    setPageCount(Math.ceil(filteredIncidentsByQuery.length / pageSize));
-    setVisibleIncidents(tempVisibleIncidents.slice(startRow, endRow));
-  }, [filteredIncidentsByQuery]);
-
   return (
     <div className="incident-table-ctr">
-      {filteredIncidentsByQuery && filteredIncidentsByQuery.length ? (
+      {memoizedFilteredIncidentsByQuery && memoizedFilteredIncidentsByQuery.length ? (
         <div>
           <div className="incident-table">
             <BTable
@@ -209,7 +198,7 @@ const IncidentTableComponent = ({
                   ))}
                 </thead>
                 <tbody {...getTableBodyProps()} className="tbody">
-                  {rows.map((row, i) => {
+                  {page.map((row, i) => {
                     prepareRow(row);
                     return (
                       <tr {...row.getRowProps()} className="tr">
@@ -243,7 +232,7 @@ const IncidentTableComponent = ({
                           key={pgSize}
                           name={pgSize}
                           onClick={(e) => {
-                            setPageSize(Number(e.target.name));
+                            setPageSize(Number(e.target.name, 10));
                           }}
                         >
                           Show {pgSize} results
