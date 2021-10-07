@@ -3,91 +3,114 @@ import { getObjectsFromList } from './helpers';
 // Define all possible columns for incidents under PagerDuty's API
 export const availableIncidentTableColumns = [
   {
-    selector: 'incident_number',
-    name: '#',
+    accessor: 'incident_number',
+    Header: '#',
     sortable: true,
-    cell: (incident) => (
-      <a href={incident.html_url} target="_blank" rel="noopener noreferrer">
-        {incident.incident_number}
+    Cell: ({ row }) => (
+      <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
+        {row.original.incident_number}
       </a>
     ),
+    minWidth: 60,
+    width: 60,
   },
   {
-    selector: 'title',
-    name: 'Title',
+    accessor: 'title',
+    Header: 'Title',
     sortable: true,
-    minWidth: '500px',
+    minWidth: 400,
+    width: 400,
   },
   {
-    selector: 'description',
-    name: 'Description',
+    accessor: 'description',
+    Header: 'Description',
     sortable: true,
+    minWidth: 400,
+    width: 400,
   },
   {
-    selector: 'created_at',
-    name: 'Created At',
+    accessor: 'created_at',
+    Header: 'Created At',
     sortable: true,
+    minWidth: 180,
+    width: 180,
   },
   {
-    selector: 'status',
-    name: 'Status',
+    accessor: 'status',
+    Header: 'Status',
     sortable: true,
-    minWidth: '100px',
+    minWidth: 120,
+    width: 120,
   },
   {
-    selector: 'incident_key',
-    name: 'Incident Key',
+    accessor: 'incident_key',
+    Header: 'Incident Key',
     sortable: true,
+    minWidth: 300,
+    width: 300,
   },
   {
-    selector: 'service.summary',
-    name: 'Service',
+    accessor: 'service.summary',
+    Header: 'Service',
     sortable: true,
+    minWidth: 200,
+    width: 200,
   },
   {
-    selector: (incident) => (incident.assignments
+    accessor: (incident) => (incident.assignments
       ? incident.assignments.map(({ assignee }) => assignee.summary).join(', ')
       : 'Unassigned'),
-    name: 'Assignees',
+    Header: 'Assignees',
     sortable: true,
-    minWidth: '100px',
+    minWidth: 200,
+    width: 200,
   },
   {
-    selector: 'last_status_change_at',
-    name: 'Last Status Change At',
+    accessor: 'last_status_change_at',
+    Header: 'Last Status Change At',
     sortable: true,
+    minWidth: 220,
+    width: 220,
   },
   {
-    selector: 'alert_counts.all',
-    name: 'Num Alerts',
+    accessor: 'alert_counts.all',
+    Header: 'Num Alerts',
     sortable: true,
+    minWidth: 130,
+    width: 130,
   },
   {
-    selector: 'escalation_policy.summary',
-    name: 'Escalation Policy',
+    accessor: 'escalation_policy.summary',
+    Header: 'Escalation Policy',
     sortable: true,
+    minWidth: 200,
+    width: 200,
   },
   {
-    selector: (incident) => (incident.teams ? incident.teams.map((team) => team.summary).join(', ') : 'N/A'),
-    name: 'Teams',
+    accessor: (incident) => (incident.teams ? incident.teams.map((team) => team.summary).join(', ') : 'N/A'),
+    Header: 'Teams',
     sortable: true,
-    minWidth: '100px',
+    minWidth: 200,
+    width: 200,
   },
   {
-    selector: (incident) => (incident.acknowledgements
+    accessor: (incident) => (incident.acknowledgements
       ? incident.acknowledgements.map(({ acknowledger }) => acknowledger.summary).join(', ')
       : 'N/A'),
-    name: 'Acknowledgments',
+    Header: 'Acknowledgments',
     sortable: true,
-    minWidth: '100px',
+    minWidth: 250,
+    width: 250,
   },
   {
-    selector: 'last_status_change_by.summary',
-    name: 'Last Status Change By',
+    accessor: 'last_status_change_by.summary',
+    Header: 'Last Status Change By',
     sortable: true,
+    minWidth: 250,
+    width: 250,
   },
   {
-    selector: (incident) => {
+    accessor: (incident) => {
       if (incident.priority) {
         return (
           <p
@@ -103,41 +126,49 @@ export const availableIncidentTableColumns = [
       }
       return <p className="priority-label">--</p>;
     },
-    name: 'Priority',
+    Header: 'Priority',
     sortable: true,
-    minWidth: '100px',
+    minWidth: 100,
+    width: 100,
     allowOverflow: true,
     sortFunction: (row1, row2) => null, // TBD - this needs to be custom implemented
   },
   // TODO: incidents_responders, responder_requests, subscriber_requests
   {
-    selector: 'urgency',
-    name: 'Urgency',
+    accessor: 'urgency',
+    Header: 'Urgency',
     sortable: true,
+    minWidth: 120,
+    width: 120,
   },
   {
-    selector: 'id',
-    name: 'Incident ID',
+    accessor: 'id',
+    Header: 'Incident ID',
     sortable: true,
+    minWidth: 130,
+    width: 130,
   },
   {
-    selector: 'summary',
-    name: 'Summary',
+    accessor: 'summary',
+    Header: 'Summary',
     sortable: true,
-    minWidth: '500px',
+    minWidth: 400,
+    width: 400,
   },
   {
-    selector: (incident) => {
+    accessor: (incident) => {
       if (incident.notes && incident.notes.length > 0) {
         return incident.notes[0].content;
       }
       return '--';
     },
-    name: 'Latest Note',
+    Header: 'Latest Note',
     sortable: true,
-    minWidth: '400px',
+    minWidth: 200,
+    width: 200,
+    maxWidth: 500,
   },
 ];
 
 // Helper function to retrieve columns definitions from list of names
-export const getIncidentTableColumns = (columnNames) => getObjectsFromList(availableIncidentTableColumns, columnNames, 'name');
+export const getIncidentTableColumns = (columnNames) => getObjectsFromList(availableIncidentTableColumns, columnNames, 'Header');

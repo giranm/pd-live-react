@@ -1,83 +1,40 @@
+/* Empty Incidents */
+.empty-incidents {
+  height: 500px;
+  text-align: center;
+}
+
+.empty-incidents-badge {
+  padding-top: 20px;
+}
+
 /* Table Positioning */
-.incident-table-ctr {
+.incident-table {
   margin-top: 10px;
+  white-space: nowrap;
+  height: 570px;
+  overflow-x: scroll;
+  overflow-y: scroll;
 }
 
-/* Button Overrides */
-
-.buttons-excel {
-  background-image: url("https://visualpharm.com/assets/783/Microsoft%20Excel-595b40b75ba036ed117d8166.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: transparent;
-  border: transparent;
-  height: 30px;
-  width: 30px;
+.incident-table::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
 }
 
-.buttons-csv {
-  background-image: url("https://visualpharm.com/assets/977/CSV-595b40b85ba036ed117dce43.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: transparent;
-  border: transparent;
-  height: 30px;
-  width: 30px;
-}
-
-.buttons-pdf {
-  background-image: url("https://visualpharm.com/assets/795/PDF-595b40b75ba036ed117d6b2b.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: transparent;
-  border: transparent;
-  height: 30px;
-  width: 30px;
-}
-
-/* Table Overrides */
-
-.data-table-extensions {
-  /* display: block; */
-  position: fixed;
-  top: 0.5%;
-  width: 30%;
-  height: 50px;
-  right: 60px;
+.incident-table::-webkit-scrollbar-thumb {
+  border-radius: 10px;
   background-color: var(--light);
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 4px;
-  border-color: rgba(0, 0, 0, 0.125);
 }
 
-.rdt_TableHeadRow {
-  background-color: var(--brand-background-2) !important;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 4px;
-  border-color: rgba(0, 0, 0, 0.125);
-}
-
-.rdt_TableCol {
-  font-size: 16px !important;
-  font-weight: 600 !important;
-}
-
-/* Table Settings */
-.rdt_Pagination {
-  position: relative;
-  right: 80px;
-  border-top: unset;
-  background-color: var(--brand-background) !important;
-  color: var(--brand-gray-dark) !important;
+.incident-table::-webkit-scrollbar-thumb:hover {
+  border-radius: 10px;
+  background-color: var(--gray);
 }
 
 .incident-table-settings-btn {
   position: relative;
   float: right;
-  bottom: 44px;
-  right: 10px;
   background-color: var(--brand-gray-dark);
 }
 
@@ -110,4 +67,70 @@
   white-space: nowrap;
   padding: 5px 10px 3px;
   border-radius: 5px;
+}
+
+/* React-Table CSS */
+
+.table {
+  border-spacing: 0;
+}
+
+.thead {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+}
+
+.th {
+  padding: 10px !important;
+  background-color: white;
+  color: var(--dark);
+  font-weight: 700;
+}
+
+.resizer {
+  display: inline-block;
+  width: 10px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(50%);
+  z-index: 1;
+  touch-action: none;
+  /* &.isResizing {
+    background: red;
+  } */
+}
+
+.tbody {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.tr {
+  font-size: 14px;
+}
+
+.td {
+  padding: 10px !important;
+}
+
+.pagination-results {
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+  padding-bottom: 5px;
+}
+
+.pagination-setting-pages {
+  display: flex;
+}
+
+.pagination-buttons {
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+.pagination-current-page-badge {
+  margin-top: 4px;
 }

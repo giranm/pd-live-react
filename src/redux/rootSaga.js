@@ -13,6 +13,7 @@ import {
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
   updateQuerySettingsServices,
+  updateSearchQuery,
 } from './query_settings/sagas';
 
 import {
@@ -24,6 +25,7 @@ import {
   filterIncidentsByUrgency,
   filterIncidentsByTeam,
   filterIncidentsByService,
+  filterIncidentsByQuery,
 } from './incidents/sagas';
 
 import {
@@ -79,6 +81,7 @@ export default function* rootSaga() {
     updateQuerySettingsIncidentPriority(),
     updateQuerySettingsTeams(),
     updateQuerySettingsServices(),
+    updateSearchQuery(),
 
     // Incidents
     getIncidentsAsync(),
@@ -89,6 +92,7 @@ export default function* rootSaga() {
     filterIncidentsByUrgency(),
     filterIncidentsByTeam(),
     filterIncidentsByService(),
+    filterIncidentsByQuery(),
 
     // Log Entries
     getLogEntriesAsync(),

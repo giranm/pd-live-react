@@ -1,6 +1,7 @@
 .query-settings-inner-ctr {
   padding-top: 10px;
   border: 1px solid var(--gray-medium);
+  margin-top: 10px;
 }
 
 .date-picker {

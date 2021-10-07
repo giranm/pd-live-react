@@ -1,8 +1,24 @@
-.nav-bar-logo {
-  max-width: 30px;
+.navbar-ctr {
+  border-bottom: 1px solid var(--brand-gray-light);
+}
+
+.nav-bar-logo-ctr {
+  min-width: 130px;
+}
+
+.nav-bar-logo-black {
+  background-image: url('assets/images/pd_logo_black.svg');
+  background-repeat: no-repeat;
+  background-color: var(--white);
+  background-size: 118px;
+  color: transparent;
+  position: relative;
+  top: 5px;
 }
 
 .settings-toggle {
-  width:  30px;
-  fill: white;
+  width: 30px;
+  fill: var(--black);
+  position: relative;
+  top: 3px;
 }

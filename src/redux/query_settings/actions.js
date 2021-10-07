@@ -28,6 +28,9 @@ export const UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED = 'UPDATE_QUERY_SETTINGS_TEAM
 export const UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED = 'UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED';
 export const UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED = 'UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED';
 
+export const UPDATE_SEARCH_QUERY_REQUESTED = 'UPDATE_SEARCH_QUERY_REQUESTED';
+export const UPDATE_SEARCH_QUERY_COMPLETED = 'UPDATE_SEARCH_QUERY_COMPLETED';
+
 // Define Actions
 export const toggleDisplayQuerySettings = () => ({
   type: TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
@@ -61,4 +64,9 @@ export const updateQuerySettingsTeams = (teamIds) => ({
 export const updateQuerySettingsServices = (serviceIds) => ({
   type: UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   serviceIds,
+});
+
+export const updateSearchQuery = (searchQuery) => ({
+  type: UPDATE_SEARCH_QUERY_REQUESTED,
+  searchQuery,
 });
