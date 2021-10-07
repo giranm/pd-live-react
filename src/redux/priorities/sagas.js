@@ -2,9 +2,9 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
 import { UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED } from 'redux/query_settings/actions';
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_PRIORITIES_REQUESTED,
   FETCH_PRIORITIES_COMPLETED,
@@ -12,9 +12,6 @@ import {
 } from './actions';
 
 import { selectPriorities } from './selectors';
-
-const token = sessionStorage.getItem('pd_access_token');
-const pd = api({ token, tokenType: 'bearer' });
 
 export function* getPrioritiesAsync() {
   yield takeLatest(FETCH_PRIORITIES_REQUESTED, getPriorities);

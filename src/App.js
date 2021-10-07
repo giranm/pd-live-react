@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'react-bootstrap';
 
+import PDOAuth from 'util/pdoauth';
+
 import moment from 'moment';
 
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
@@ -25,12 +27,9 @@ import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 
-import PDOAuth from 'pdoauth';
-
 import 'App.css';
 
 const App = ({
-  logEntries,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
@@ -43,8 +42,7 @@ const App = ({
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
-  // Initial load of objects from API
-
+  // Verify OAuth Session
   useEffect(() => {
     const token = sessionStorage.getItem('pd_access_token');
     if (!token) {
@@ -57,6 +55,7 @@ const App = ({
     return null;
   }
 
+  // Initial load of objects from API
   useEffect(() => {
     getUsersAsync();
     getCurrentUserAsync();
@@ -108,10 +107,6 @@ const App = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  logEntries: state.logEntries,
-});
-
 const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
@@ -126,4 +121,4 @@ const mapDispatchToProps = (dispatch) => ({
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);

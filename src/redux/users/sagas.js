@@ -2,8 +2,8 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
+import { pd } from 'util/pd-api-wrapper';
 import {
   GET_USERS_REQUESTED,
   GET_USERS_COMPLETED,
@@ -14,9 +14,6 @@ import {
 } from './actions';
 
 import { selectUsers } from './selectors';
-
-const token = sessionStorage.getItem('pd_access_token');
-const pd = api({ token, tokenType: 'bearer' });
 
 export function* getUsersAsync() {
   yield takeLatest(GET_USERS_REQUESTED, getUsers);

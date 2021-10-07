@@ -2,7 +2,6 @@
 import {
   put, call, select, takeLatest, all,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
 import {
   handleSagaError,
@@ -10,6 +9,7 @@ import {
   displayActionModal,
 } from 'redux/rootSaga';
 
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_RESPONSE_PLAYS_REQUESTED,
   FETCH_RESPONSE_PLAYS_COMPLETED,
@@ -20,9 +20,6 @@ import {
 } from './actions';
 
 import { selectResponsePlays } from './selectors';
-
-const token = sessionStorage.getItem('pd_access_token');
-const pd = api({ token, tokenType: 'bearer' });
 
 export function* getResponsePlaysAsync() {
   yield takeLatest(FETCH_RESPONSE_PLAYS_REQUESTED, getResponsePlays);

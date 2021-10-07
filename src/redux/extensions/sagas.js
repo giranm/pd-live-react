@@ -2,10 +2,10 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
 import { selectServices } from 'redux/services/selectors';
 import { CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM } from 'util/extensions';
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_EXTENSIONS_REQUESTED,
   FETCH_EXTENSIONS_COMPLETED,
@@ -16,9 +16,6 @@ import {
 } from './actions';
 
 import { selectExtensions } from './selectors';
-
-const token = sessionStorage.getItem('pd_access_token');
-const pd = api({ token, tokenType: 'bearer' });
 
 export function* getExtensionsAsync() {
   yield takeLatest(FETCH_EXTENSIONS_REQUESTED, getExtensions);

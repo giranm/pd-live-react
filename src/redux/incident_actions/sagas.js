@@ -2,7 +2,6 @@
 import {
   put, call, select, takeLatest, all,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
 import {
   handleSagaError,
@@ -31,6 +30,7 @@ import {
 } from 'util/incidents';
 
 import { getObjectsFromList } from 'util/helpers';
+import { pd } from 'util/pd-api-wrapper';
 import { selectIncidentActions } from './selectors';
 import {
   ACKNOWLEDGE_REQUESTED,
@@ -72,9 +72,6 @@ import {
   SYNC_WITH_EXTERNAL_SYSTEM_COMPLETED,
   SYNC_WITH_EXTERNAL_SYSTEM_ERROR,
 } from './actions';
-
-const token = sessionStorage.getItem('pd_access_token');
-const pd = api({ token, tokenType: 'bearer' });
 
 export function* acknowledgeAsync() {
   yield takeLatest(ACKNOWLEDGE_REQUESTED, acknowledge);

@@ -2,8 +2,8 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_ESCALATION_POLICIES_REQUESTED,
   FETCH_ESCALATION_POLICIES_COMPLETED,
@@ -11,9 +11,6 @@ import {
 } from './actions';
 
 import { selectEscalationPolicies } from './selectors';
-
-const token = sessionStorage.getItem('pd_access_token');
-const pd = api({ token, tokenType: 'bearer' });
 
 export function* getEscalationPoliciesAsync() {
   yield takeLatest(FETCH_ESCALATION_POLICIES_REQUESTED, getEscalationPolicies);

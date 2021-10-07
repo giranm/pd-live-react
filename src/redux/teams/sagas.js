@@ -2,14 +2,11 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
+import { pd } from 'util/pd-api-wrapper';
 import { FETCH_TEAMS_REQUESTED, FETCH_TEAMS_COMPLETED, FETCH_TEAMS_ERROR } from './actions';
 
 import { selectTeams } from './selectors';
-
-const token = sessionStorage.getItem('pd_access_token');
-const pd = api({ token, tokenType: 'bearer' });
 
 export function* getTeamsAsync() {
   yield takeLatest(FETCH_TEAMS_REQUESTED, getTeams);
