@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 import { put, select, takeLatest } from 'redux-saga/effects';
 
-import { FETCH_INCIDENTS_REQUESTED } from 'redux/incidents/actions';
+import { FETCH_INCIDENTS_REQUESTED, FILTER_INCIDENTS_LIST_BY_QUERY } from 'redux/incidents/actions';
 import { FETCH_SERVICES_REQUESTED } from 'redux/services/actions';
 import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
@@ -126,10 +126,8 @@ export function* updateSearchQuery() {
 }
 
 export function* updateSearchQueryImpl(action) {
-  // Update search query and filter incidents using list
+  // Update search query and filter incidents
   const { searchQuery } = action;
   yield put({ type: UPDATE_SEARCH_QUERY_COMPLETED, searchQuery });
-
-  // filter with incidents action
-  // yield put({ type: FETCH_INCIDENTS_REQUESTED });
+  yield put({ type: FILTER_INCIDENTS_LIST_BY_QUERY, searchQuery });
 }

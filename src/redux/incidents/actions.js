@@ -35,6 +35,10 @@ export const FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED =
   'FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED';
 export const FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR = 'FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR';
 
+export const FILTER_INCIDENTS_LIST_BY_QUERY = 'FILTER_INCIDENTS_LIST_BY_QUERY';
+export const FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED = 'FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED';
+export const FILTER_INCIDENTS_LIST_BY_QUERY_ERROR = 'FILTER_INCIDENTS_LIST_BY_QUERY_ERROR';
+
 // Define Actions
 export const getIncidentsAsync = () => ({
   type: FETCH_INCIDENTS_REQUESTED,
@@ -75,4 +79,9 @@ export const filterIncidentsByTeam = (teamIds = []) => ({
 export const filterIncidentsByService = (serviceIds = []) => ({
   type: FILTER_INCIDENTS_LIST_BY_SERVICE,
   serviceIds,
+});
+
+export const filterIncidentsByQuery = (searchQuery = '') => ({
+  type: FILTER_INCIDENTS_LIST_BY_QUERY,
+  searchQuery,
 });

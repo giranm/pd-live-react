@@ -21,8 +21,6 @@ import BTable from 'react-bootstrap/Table';
 
 import {
   useTable,
-  useGlobalFilter,
-  useAsyncDebounce,
   useSortBy,
   useRowSelect,
   useBlockLayout,
@@ -32,14 +30,16 @@ import {
 
 import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/incident_table/actions';
 
-// import { ReactComponent as EmptyIncidents } from "assets/images/empty_incidents.svg"
+import { ReactComponent as EmptyIncidents } from 'assets/images/empty_incidents.svg';
 
 import './IncidentTableComponent.css';
 
 const EmptyIncidentsComponent = () => (
-  <div>
-    {/* <EmptyIncidents /> cannot import this for some reason */}
-    No incidents found!
+  <div className="empty-incidents">
+    <EmptyIncidents />
+    <h1 className="empty-incidents-badge">
+      <Badge bg="primary">No Incidents Found</Badge>
+    </h1>
   </div>
 );
 
@@ -58,30 +58,6 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   );
 });
 
-const TWO_HUNDRED_MS = 200;
-
-const GlobalFilter = ({
-  preGlobalFilteredRows,
-  globalFilter,
-  setGlobalFilter,
-}) => {
-  const [value, setValue] = useState(globalFilter);
-  const onChange = useAsyncDebounce((val) => {
-    setGlobalFilter(val || undefined);
-  }, TWO_HUNDRED_MS);
-
-  return (
-    <input
-      value={value || ''}
-      onChange={(e) => {
-        setValue(e.target.value);
-        onChange(e.target.value);
-      }}
-      placeholder="Search"
-    />
-  );
-};
-
 const IncidentTableComponent = ({
   toggleIncidentTableSettings,
   selectIncidentTableRows,
@@ -89,6 +65,7 @@ const IncidentTableComponent = ({
   incidents,
 }) => {
   const { incidentTableColumns } = incidentTableSettings;
+  const { filteredIncidentsByQuery } = incidents;
 
   // React Table Config
   const defaultColumn = useMemo(
@@ -105,7 +82,7 @@ const IncidentTableComponent = ({
   const [visibleIncidents, setVisibleIncidents] = useState([]);
 
   const {
-    state: { pageIndex, pageSize, globalFilter },
+    state: { pageIndex, pageSize },
     // Core Table
     getTableProps,
     getTableBodyProps,
@@ -123,10 +100,6 @@ const IncidentTableComponent = ({
     nextPage,
     previousPage,
     setPageSize,
-    // Global Search
-    visibleColumns,
-    preGlobalFilteredRows,
-    setGlobalFilter,
   } = useTable(
     {
       columns: incidentTableColumns,
@@ -146,7 +119,6 @@ const IncidentTableComponent = ({
       pageCount: initialPageCount,
     },
     // Plugins
-    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
@@ -192,143 +164,139 @@ const IncidentTableComponent = ({
   useEffect(() => {
     const startRow = pageSize * pageIndex;
     const endRow = startRow + pageSize;
-    const tempVisibleIncidents = [...incidents];
-    setPageCount(Math.ceil(incidents.length / pageSize));
+    const tempVisibleIncidents = [...filteredIncidentsByQuery];
+    setPageCount(Math.ceil(filteredIncidentsByQuery.length / pageSize));
     setVisibleIncidents(tempVisibleIncidents.slice(startRow, endRow));
-  }, [incidents]);
+  }, [filteredIncidentsByQuery]);
 
   return (
     <div className="incident-table-ctr">
-      <div className="incident-table">
-        {/* <GlobalFilter
-          preGlobalFilteredRows={preGlobalFilteredRows}
-          globalFilter={globalFilter}
-          setGlobalFilter={setGlobalFilter}
-        /> */}
-        <BTable
-          responsive="sm"
-          striped
-          hover
-          size="sm"
-          {...getTableProps()}
-        >
-          <table className="table">
-            <thead className="thead">
-              {headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
-                  // Add the sorting props to control sorting. For this example
-                  // we can add them into the header props
-                    <th {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
-                      {column.render('Header')}
-                      <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? ' ⬇️'
-                            : ' ⬆️'
-                          : ''}
-                      </span>
-                      {column.canResize && (
-                      <div
-                        {...column.getResizerProps()}
-                        className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-                      />
-                      )}
-                    </th>
+      {filteredIncidentsByQuery && filteredIncidentsByQuery.length ? (
+        <div>
+          <div className="incident-table">
+            <BTable
+              responsive="sm"
+              striped
+              hover
+              size="sm"
+              {...getTableProps()}
+            >
+              <table className="table">
+                <thead className="thead">
+                  {headerGroups.map((headerGroup) => (
+                    <tr {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column) => (
+                        // Add the sorting props to control sorting. For this example
+                        // we can add them into the header props
+                        <th {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
+                          {column.render('Header')}
+                          <span>
+                            {column.isSorted
+                              ? column.isSortedDesc
+                                ? ' ⬇️'
+                                : ' ⬆️'
+                              : ''}
+                          </span>
+                          {column.canResize && (
+                            <div
+                              {...column.getResizerProps()}
+                              className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                            />
+                          )}
+                        </th>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()} className="tbody">
-              {rows.map((row, i) => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()} className="tr">
-                    {row.cells.map((cell) => (
-                      <td {...cell.getCellProps()} className="td">
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </BTable>
-      </div>
-      <br />
-      <div>
-        {incidents.length ? (
-          <div className="incident-table-settings-ctr">
-            <Container fluid>
-              <Row>
-                <Col />
-                <Col className="pagination-setting-pages" sm={{ span: -1 }}>
-                  <DropdownButton
-                    size="sm"
-                    variant="outline-secondary"
-                    title={`Show ${pageSize} results`}
-                    drop="up"
-                  >
-                    {[10, 25, 50, 100].map((pgSize) => (
-                      <Dropdown.Item
-                        key={pgSize}
-                        name={pgSize}
-                        onClick={(e) => {
-                          setPageSize(Number(e.target.name));
-                        }}
-                      >
-                        Show {pgSize} results
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
-                  <div className="mr-2" />
-                  <Button
-                    className="pagination-buttons"
-                    variant="outline-secondary"
-                    size="sm"
-                    onClick={() => gotoPage(0)}
-                    disabled={!canPreviousPage}
-                  >
-                    {'<<'}
-                  </Button>
-                  <Button
-                    className="pagination-buttons"
-                    variant="outline-secondary"
-                    size="sm"
-                    onClick={() => previousPage()}
-                    disabled={!canPreviousPage}
-                  >
-                    {'<'}
-                  </Button>
-                  <div className="pagination-current-page-badge">
-                    <Badge
-                      className="pagination-buttons"
-                      variant="secondary"
+                </thead>
+                <tbody {...getTableBodyProps()} className="tbody">
+                  {rows.map((row, i) => {
+                    prepareRow(row);
+                    return (
+                      <tr {...row.getRowProps()} className="tr">
+                        {row.cells.map((cell) => (
+                          <td {...cell.getCellProps()} className="td">
+                            {cell.render('Cell')}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </BTable>
+          </div>
+          <br />
+          <div>
+            <div className="incident-table-settings-ctr">
+              <Container fluid>
+                <Row>
+                  <Col />
+                  <Col className="pagination-setting-pages" sm={{ span: -1 }}>
+                    <DropdownButton
+                      size="sm"
+                      variant="outline-secondary"
+                      title={`Show ${pageSize} results`}
+                      drop="up"
                     >
-                      {`Page ${pageIndex + 1} of ${pageOptions.length}`}
-                    </Badge>
-                  </div>
-                  <Button
-                    className="pagination-buttons"
-                    variant="outline-secondary"
-                    size="sm"
-                    onClick={() => nextPage()}
-                    disabled={!canNextPage}
-                  >
-                    {'>'}
-                  </Button>
-                  <Button
-                    className="pagination-buttons"
-                    variant="outline-secondary"
-                    size="sm"
-                    onClick={() => gotoPage(pageCount - 1)}
-                    disabled={!canNextPage}
-                  >
-                    {'>>'}
-                  </Button>
-                  {/* Disabling until we have better UX */}
-                  {/* <Form.Control
+                      {[10, 25, 50, 100].map((pgSize) => (
+                        <Dropdown.Item
+                          key={pgSize}
+                          name={pgSize}
+                          onClick={(e) => {
+                            setPageSize(Number(e.target.name));
+                          }}
+                        >
+                          Show {pgSize} results
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
+                    <div className="mr-2" />
+                    <Button
+                      className="pagination-buttons"
+                      variant="outline-secondary"
+                      size="sm"
+                      onClick={() => gotoPage(0)}
+                      disabled={!canPreviousPage}
+                    >
+                      {'<<'}
+                    </Button>
+                    <Button
+                      className="pagination-buttons"
+                      variant="outline-secondary"
+                      size="sm"
+                      onClick={() => previousPage()}
+                      disabled={!canPreviousPage}
+                    >
+                      {'<'}
+                    </Button>
+                    <div className="pagination-current-page-badge">
+                      <Badge
+                        className="pagination-buttons"
+                        variant="secondary"
+                      >
+                        {`Page ${pageIndex + 1} of ${pageOptions.length}`}
+                      </Badge>
+                    </div>
+                    <Button
+                      className="pagination-buttons"
+                      variant="outline-secondary"
+                      size="sm"
+                      onClick={() => nextPage()}
+                      disabled={!canNextPage}
+                    >
+                      {'>'}
+                    </Button>
+                    <Button
+                      className="pagination-buttons"
+                      variant="outline-secondary"
+                      size="sm"
+                      onClick={() => gotoPage(pageCount - 1)}
+                      disabled={!canNextPage}
+                    >
+                      {'>>'}
+                    </Button>
+                    {/* Disabling until we have better UX */}
+                    {/* <Form.Control
                     type="number"
                     size="sm"
                     min={1}
@@ -339,21 +307,22 @@ const IncidentTableComponent = ({
                       gotoPage(targetPage);
                     }}
                   /> */}
-                </Col>
-              </Row>
-            </Container>
+                  </Col>
+                </Row>
+              </Container>
+            </div>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
+        </div>
+      ) : (
+        <EmptyIncidentsComponent />
+      )}
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
-  incidents: state.incidents.incidents,
+  incidents: state.incidents,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -70,6 +70,7 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
+  const { filteredIncidentsByQuery } = incidents;
   const { selectedCount, selectedRows } = incidentTableSettings;
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
@@ -182,9 +183,9 @@ const IncidentActionsComponent = ({
               <h4>
                 <Badge
                   className="selected-incidents-badge"
-                  variant="primary"
+                  variant={filteredIncidentsByQuery.length ? 'primary' : 'secondary'}
                 >
-                  {`${selectedCount}/${incidents.length}`}
+                  {`${selectedCount}/${filteredIncidentsByQuery.length}`}
                 </Badge>
               </h4>
               <p className="selected-incidents">
@@ -394,7 +395,7 @@ const IncidentActionsComponent = ({
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
   incidentActions: state.incidentActions,
-  incidents: state.incidents.incidents,
+  incidents: state.incidents,
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   extensions: state.extensions,

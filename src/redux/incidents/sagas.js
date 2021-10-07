@@ -2,13 +2,17 @@
 import {
   put, call, select, takeLatest, takeEvery, all,
 } from 'redux-saga/effects';
+
 import { api } from '@pagerduty/pdjs';
+
+import Fuse from 'fuse.js';
 
 import { selectQuerySettings } from 'redux/query_settings/selectors';
 
 import { pushToArray } from 'util/helpers';
 import { filterIncidentsByField, filterIncidentsByFieldOfList } from 'util/incidents';
-import { selectIncidents } from './selectors';
+import { fuseOptions } from 'util/fuse-config';
+
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -34,7 +38,11 @@ import {
   FILTER_INCIDENTS_LIST_BY_SERVICE,
   FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
+  FILTER_INCIDENTS_LIST_BY_QUERY,
+  FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_QUERY_ERROR,
 } from './actions';
+import { selectIncidents } from './selectors';
 
 // TODO: Update with Bearer token OAuth
 const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
@@ -144,10 +152,13 @@ export function* updateIncidentsList(action) {
     const { addList, updateList, removeList } = action;
     const { incidents } = yield select(selectIncidents);
     const {
-      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds,
-    } = yield select(
-      selectQuerySettings,
-    );
+      incidentPriority,
+      incidentStatus,
+      incidentUrgency,
+      teamIds,
+      serviceIds,
+      searchQuery,
+    } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
     // Add new incidents to list (need to re-query to get external_references)
@@ -232,6 +243,12 @@ export function* updateIncidentsList(action) {
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_SERVICE,
       serviceIds,
+    });
+
+    // Filter updated incident list by query
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_QUERY,
+      searchQuery,
     });
   } catch (e) {
     yield put({ type: UPDATE_INCIDENTS_LIST_ERROR, message: e.message });
@@ -378,6 +395,38 @@ export function* filterIncidentsByServiceImpl(action) {
   } catch (e) {
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
+      message: e.message,
+    });
+  }
+}
+
+export function* filterIncidentsByQuery() {
+  yield takeLatest(FILTER_INCIDENTS_LIST_BY_QUERY, filterIncidentsByQueryImpl);
+}
+
+export function* filterIncidentsByQueryImpl(action) {
+  // Filter current incident list by query (aka Global Search)
+  try {
+    const { searchQuery } = action;
+    const { incidents } = yield select(selectIncidents);
+    let filteredIncidentsByQuery;
+
+    if (searchQuery !== '') {
+      const fuse = new Fuse(incidents, fuseOptions);
+      filteredIncidentsByQuery = fuse
+        .search(searchQuery)
+        .map((res) => res.item);
+    } else {
+      filteredIncidentsByQuery = [...incidents];
+    }
+
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
+      filteredIncidentsByQuery,
+    });
+  } catch (e) {
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_QUERY_ERROR,
       message: e.message,
     });
   }

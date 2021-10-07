@@ -1,3 +1,13 @@
+/* Empty Incidents */
+.empty-incidents {
+  height: 500px;
+  text-align: center;
+}
+
+.empty-incidents-badge {
+  padding-top: 20px;
+}
+
 /* Table Positioning */
 .incident-table {
   margin-top: 10px;
