@@ -3,8 +3,6 @@ import {
   put, call, select, takeLatest, takeEvery, all,
 } from 'redux-saga/effects';
 
-import { api } from '@pagerduty/pdjs';
-
 import Fuse from 'fuse.js';
 
 import { selectQuerySettings } from 'redux/query_settings/selectors';
@@ -13,6 +11,7 @@ import { pushToArray } from 'util/helpers';
 import { filterIncidentsByField, filterIncidentsByFieldOfList } from 'util/incidents';
 import { fuseOptions } from 'util/fuse-config';
 
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -43,9 +42,6 @@ import {
   FILTER_INCIDENTS_LIST_BY_QUERY_ERROR,
 } from './actions';
 import { selectIncidents } from './selectors';
-
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
 export const getIncidentByIdRequest = (incidentId) => call(pd, {
   method: 'get',

@@ -2,8 +2,8 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
+import { pd } from 'util/pd-api-wrapper';
 import {
   GET_USERS_REQUESTED,
   GET_USERS_COMPLETED,
@@ -14,9 +14,6 @@ import {
 } from './actions';
 
 import { selectUsers } from './selectors';
-
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
 export function* getUsersAsync() {
   yield takeLatest(GET_USERS_REQUESTED, getUsers);

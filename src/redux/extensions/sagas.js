@@ -2,10 +2,10 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
 import { selectServices } from 'redux/services/selectors';
 import { CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM } from 'util/extensions';
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_EXTENSIONS_REQUESTED,
   FETCH_EXTENSIONS_COMPLETED,
@@ -16,9 +16,6 @@ import {
 } from './actions';
 
 import { selectExtensions } from './selectors';
-
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
 export function* getExtensionsAsync() {
   yield takeLatest(FETCH_EXTENSIONS_REQUESTED, getExtensions);

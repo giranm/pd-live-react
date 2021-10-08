@@ -16,6 +16,31 @@
   top: 5px;
 }
 
+.settings-panel-icon {
+  background-image: url('https://secure.gravatar.com/avatar/0ee453ea32f9f9702c809b4680237b50.png?d=mm&amp;r=PG');
+  background-repeat: no-repeat;
+  background-color: var(--white);
+  background-size: 35px;
+  max-width: 100%;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+}
+
+a.dropdown-toggle.nav-link::after {
+  content: none;
+}
+
+.nav-link {
+  padding: unset;
+}
+
+.filters-toggle {
+  position: relative;
+  top: 3px;
+  right: 20px;
+}
+
 .settings-toggle {
   width: 30px;
   fill: var(--black);

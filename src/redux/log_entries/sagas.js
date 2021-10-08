@@ -1,11 +1,11 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
 import { UPDATE_INCIDENTS_LIST } from 'redux/incidents/actions';
 
 import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from 'util/log_entries';
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
   FETCH_LOG_ENTRIES_COMPLETED,
@@ -19,9 +19,6 @@ import {
 } from './actions';
 
 import { selectLogEntries } from './selectors';
-
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
 export function* getLogEntriesAsync() {
   yield takeLatest(FETCH_LOG_ENTRIES_REQUESTED, getLogEntries);

@@ -2,8 +2,8 @@
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
-import { api } from '@pagerduty/pdjs';
 
+import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_SERVICES_REQUESTED,
   FETCH_SERVICES_COMPLETED,
@@ -11,9 +11,6 @@ import {
 } from './actions';
 
 import { selectServices } from './selectors';
-
-// TODO: Update with Bearer token OAuth
-const pd = api({ token: process.env.REACT_APP_PD_TOKEN });
 
 export function* getServicesAsync() {
   yield takeLatest(FETCH_SERVICES_REQUESTED, getServices);

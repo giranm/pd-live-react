@@ -2,6 +2,13 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'react-bootstrap';
 
+import PDOAuth from 'util/pdoauth';
+import {
+  PD_OAUTH_CLIENT_ID,
+  LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
+  LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
+} from 'util/constants';
+
 import moment from 'moment';
 
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
@@ -28,7 +35,6 @@ import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 import 'App.css';
 
 const App = ({
-  logEntries,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
@@ -41,6 +47,19 @@ const App = ({
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
+  // Verify OAuth Session
+  useEffect(() => {
+    const token = sessionStorage.getItem('pd_access_token');
+    if (!token) {
+      PDOAuth.login(PD_OAUTH_CLIENT_ID);
+    }
+  }, []);
+
+  const token = sessionStorage.getItem('pd_access_token');
+  if (!token) {
+    return null;
+  }
+
   // Initial load of objects from API
   useEffect(() => {
     getUsersAsync();
@@ -56,22 +75,20 @@ const App = ({
 
   // Setup log entry polling.
   useEffect(() => {
-    const pollingIntervalSeconds = 5;
     const pollingInterval = setInterval(() => {
       const lastPolledDate = moment()
-        .subtract(2 * pollingIntervalSeconds, 'seconds')
+        .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
         .toDate();
       getLogEntriesAsync(lastPolledDate);
-    }, pollingIntervalSeconds * 1000);
+    }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(pollingInterval);
   }, []);
 
   // Setup log entry clearing
   useEffect(() => {
-    const clearingIntervalSeconds = 600;
     const clearingInterval = setInterval(() => {
       cleanRecentLogEntriesAsync();
-    }, clearingIntervalSeconds * 1000);
+    }, LOG_ENTRIES_CLEARING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(clearingInterval);
   }, []);
 
@@ -93,10 +110,6 @@ const App = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  logEntries: state.logEntries,
-});
-
 const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
@@ -111,4 +124,4 @@ const mapDispatchToProps = (dispatch) => ({
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);
