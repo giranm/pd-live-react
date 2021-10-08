@@ -7,7 +7,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 
 ##### Functionality
 
-- [ ] OAuth2 Login (will replace steps 2 + 3 from development use)
+- [x] OAuth2 Login
 - [x] Escalate Incident
 - [x] Reassign Incident
 - [x] Add Responders to Incident
@@ -35,12 +35,12 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 
 ## Local Development
 
-1. Generate a personal PagerDuty REST API key and secure safely:  
-   https://support.pagerduty.com/docs/generating-api-keys#generating-a-personal-rest-api-key
+1. `git clone` repo to desired destination and `cd` into directory.
 
-2. `git clone` repo to desired destination and `cd` into directory.
+2. _(Optional unless you are not serving at http://localhost:3000)_
 
-3. (Optional unless you are not serving at http://localhost:3000) Go into PD developer mode, create a new app, add OAuth 2.0 and add a URL to the base of wherever you are serving the app; put the Client ID from this app into App.js as the argument to `PDOAuth.login`
+   - Go into PD developer mode, create a new app, add OAuth 2.0 and add a URL to the base of wherever you are serving the app
+   - Update `PD_OAUTH_CLIENT_ID` within `src/util/constants.js`, which is required for `PDOAuth.login()`
 
-4. Install dependencies with `npm install` and run application locally using `npm start`  
+3. Install dependencies with `npm install` and run application locally using `npm start`  
    (e.g. served under http://localhost:3000/)

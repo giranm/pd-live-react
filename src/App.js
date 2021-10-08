@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import { Container } from 'react-bootstrap';
 
 import PDOAuth from 'util/pdoauth';
+import {
+  PD_OAUTH_CLIENT_ID,
+  LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
+  LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
+} from 'util/constants';
 
 import moment from 'moment';
 
@@ -46,7 +51,7 @@ const App = ({
   useEffect(() => {
     const token = sessionStorage.getItem('pd_access_token');
     if (!token) {
-      PDOAuth.login('b0770bc5-8649-4f60-9b16-1ba9360e2a82');
+      PDOAuth.login(PD_OAUTH_CLIENT_ID);
     }
   }, []);
 
@@ -70,22 +75,20 @@ const App = ({
 
   // Setup log entry polling.
   useEffect(() => {
-    const pollingIntervalSeconds = 5;
     const pollingInterval = setInterval(() => {
       const lastPolledDate = moment()
-        .subtract(2 * pollingIntervalSeconds, 'seconds')
+        .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
         .toDate();
       getLogEntriesAsync(lastPolledDate);
-    }, pollingIntervalSeconds * 1000);
+    }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(pollingInterval);
   }, []);
 
   // Setup log entry clearing
   useEffect(() => {
-    const clearingIntervalSeconds = 600;
     const clearingInterval = setInterval(() => {
       cleanRecentLogEntriesAsync();
-    }, clearingIntervalSeconds * 1000);
+    }, LOG_ENTRIES_CLEARING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(clearingInterval);
   }, []);
 
