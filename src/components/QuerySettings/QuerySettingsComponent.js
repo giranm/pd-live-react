@@ -15,7 +15,7 @@ import makeAnimated from 'react-select/animated';
 
 import DatePicker from 'react-datepicker';
 
-import './QuerySettingsComponent.css';
+import './QuerySettingsComponent.scss';
 
 import {
   updateQuerySettingsSinceDate,

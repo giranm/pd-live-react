@@ -5,7 +5,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 
 import { toggleDisplayAddNoteModal, addNote } from 'redux/incident_actions/actions';
 
-import './AddNoteModalComponent.css';
+import './AddNoteModalComponent.scss';
 
 const AddNoteModalComponent = ({
   incidentActions,

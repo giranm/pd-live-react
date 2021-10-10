@@ -12,7 +12,7 @@ import { toggleDisplayCustomSnoozeModal, snooze } from 'redux/incident_actions/a
 
 import { TRIGGERED, ACKNOWLEDGED, filterIncidentsByField } from 'util/incidents';
 
-import './CustomSnoozeModalComponent.css';
+import './CustomSnoozeModalComponent.scss';
 
 const CustomSnoozeModalComponent = ({
   toggleDisplayCustomSnoozeModal,

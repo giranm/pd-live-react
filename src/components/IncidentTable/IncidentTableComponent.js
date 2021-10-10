@@ -32,7 +32,7 @@ import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/inci
 
 import { ReactComponent as EmptyIncidents } from 'assets/images/empty_incidents.svg';
 
-import './IncidentTableComponent.css';
+import './IncidentTableComponent.scss';
 
 const EmptyIncidentsComponent = () => (
   <div className="empty-incidents">
@@ -177,7 +177,10 @@ const IncidentTableComponent = ({
                       {headerGroup.headers.map((column) => (
                         // Add the sorting props to control sorting. For this example
                         // we can add them into the header props
-                        <th {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
+                        <th
+                          className="th"
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
+                        >
                           {column.render('Header')}
                           <span>
                             {column.isSorted
@@ -223,7 +226,7 @@ const IncidentTableComponent = ({
                   <Col className="pagination-setting-pages" sm={{ span: -1 }}>
                     <DropdownButton
                       size="sm"
-                      variant="outline-secondary"
+                      variant="secondary"
                       title={`Show ${pageSize} results`}
                       drop="up"
                     >
@@ -242,7 +245,7 @@ const IncidentTableComponent = ({
                     <div className="mr-2" />
                     <Button
                       className="pagination-buttons"
-                      variant="outline-secondary"
+                      variant="secondary"
                       size="sm"
                       onClick={() => gotoPage(0)}
                       disabled={!canPreviousPage}
@@ -251,7 +254,7 @@ const IncidentTableComponent = ({
                     </Button>
                     <Button
                       className="pagination-buttons"
-                      variant="outline-secondary"
+                      variant="secondary"
                       size="sm"
                       onClick={() => previousPage()}
                       disabled={!canPreviousPage}
@@ -261,14 +264,14 @@ const IncidentTableComponent = ({
                     <div className="pagination-current-page-badge">
                       <Badge
                         className="pagination-buttons"
-                        variant="secondary"
+                        variant="dark"
                       >
                         {`Page ${pageIndex + 1} of ${pageOptions.length}`}
                       </Badge>
                     </div>
                     <Button
                       className="pagination-buttons"
-                      variant="outline-secondary"
+                      variant="secondary"
                       size="sm"
                       onClick={() => nextPage()}
                       disabled={!canNextPage}
@@ -277,7 +280,7 @@ const IncidentTableComponent = ({
                     </Button>
                     <Button
                       className="pagination-buttons"
-                      variant="outline-secondary"
+                      variant="secondary"
                       size="sm"
                       onClick={() => gotoPage(pageCount - 1)}
                       disabled={!canNextPage}

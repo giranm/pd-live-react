@@ -8,7 +8,7 @@ import {
 import DualListBox from 'react-dual-listbox';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
-import './IncidentTableSettingsComponent.css';
+import './IncidentTableSettingsComponent.scss';
 
 import {
   toggleIncidentTableSettings,

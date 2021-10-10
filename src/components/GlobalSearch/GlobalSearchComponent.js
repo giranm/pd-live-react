@@ -8,7 +8,7 @@ import {
 
 import { ReactComponent as SearchGlass } from 'assets/images/search_glass.svg';
 
-import './GlobalSearchComponent.css';
+import './GlobalSearchComponent.scss';
 
 import { updateSearchQuery } from 'redux/query_settings/actions';
 

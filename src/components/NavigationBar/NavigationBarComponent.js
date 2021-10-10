@@ -5,7 +5,7 @@ import {
 
 import PDOAuth from 'util/pdoauth';
 
-import './NavigationBarComponent.css';
+import './NavigationBarComponent.scss';
 
 import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent';
 

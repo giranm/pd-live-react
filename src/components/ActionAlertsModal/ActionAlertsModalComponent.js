@@ -4,7 +4,7 @@ import { Modal, Alert } from 'react-bootstrap';
 
 import { toggleDisplayActionAlertsModal } from 'redux/action_alerts/actions';
 
-import './ActionAlertsModelComponent.css';
+import './ActionAlertsModelComponent.scss';
 
 const ActionAlertsModalComponent = ({ toggleDisplayActionAlertsModal, actionAlertsModalData }) => {
   const { displayActionAlertsModal, actionAlertsModalType, actionAlertsModalMessage } =

@@ -16,7 +16,7 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import './IncidentActionsComponent.css';
+import './IncidentActionsComponent.scss';
 
 import {
   acknowledge,

@@ -1,3 +1,5 @@
+@import 'assets/styles/pagerduty.scss';
+
 .incident-actions-ctr {
   position: absolute;
   bottom: 0px;
@@ -6,7 +8,7 @@
   padding-top: 10px;
   padding-bottom: 5px;
   border-top: 1px solid rgba(0, 0, 0, 0.125);
-  background-color: var(--white);
+  background-color: $pd-white;
 }
 
 .action-button {

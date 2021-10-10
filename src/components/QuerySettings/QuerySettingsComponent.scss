@@ -1,6 +1,8 @@
+@import 'assets/styles/pagerduty.scss';
+
 .query-settings-inner-ctr {
   padding-top: 10px;
-  border: 1px solid var(--gray-medium);
+  border: 1px solid $pd-gray-medium;
   margin-top: 10px;
 }
 

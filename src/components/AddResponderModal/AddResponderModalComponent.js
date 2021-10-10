@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/animated';
 
 import { toggleDisplayAddResponderModal, addResponder } from 'redux/incident_actions/actions';
 
-import './AddResponderModalComponent.css';
+import './AddResponderModalComponent.scss';
 
 const animatedComponents = makeAnimated();
 

@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/animated';
 
 import { toggleDisplayReassignModal, reassign } from 'redux/incident_actions/actions';
 
-import './ReassignModalComponent.css';
+import './ReassignModalComponent.scss';
 
 const animatedComponents = makeAnimated();
 
