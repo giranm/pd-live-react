@@ -11,6 +11,10 @@ body {
   border-color: $pd-brand-secondary-light;
 }
 
+.btn-outline-secondary:disabled {
+  color: $pd-brand-secondary-light !important;
+}
+
 .btn-outline-secondary:hover {
   color: $pd-brand-black;
   background-color: $pd-brand-gray-light;
