@@ -32,7 +32,7 @@ import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 
-import 'App.css';
+import 'App.scss';
 
 const App = ({
   getServicesAsync,

@@ -22,7 +22,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 ##### Code
 
 - [x] Linting + Formatting (via `prettier-eslint`)
-- [ ] PagerDuty Themeing
+- [x] PagerDuty Themeing
 - [ ] Tests (including suitable framework)
 - [ ] Deployment/Bundling Steps
 
