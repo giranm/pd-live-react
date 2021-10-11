@@ -178,15 +178,15 @@ const IncidentTableComponent = ({
                         // Add the sorting props to control sorting. For this example
                         // we can add them into the header props
                         <th
-                          className="th"
+                          className={column.isSorted ? 'th-sorted' : 'th'}
                           {...column.getHeaderProps(column.getSortByToggleProps())}
                         >
                           {column.render('Header')}
                           <span>
                             {column.isSorted
                               ? column.isSortedDesc
-                                ? ' ⬇️'
-                                : ' ⬆️'
+                                ? ' ▼'
+                                : ' ▲'
                               : ''}
                           </span>
                           {column.canResize && (

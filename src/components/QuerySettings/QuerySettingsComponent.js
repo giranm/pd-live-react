@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {
   Row,
   Col,
-  Button,
   ToggleButton,
   ToggleButtonGroup,
   Form,
@@ -14,6 +13,15 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import DatePicker from 'react-datepicker';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExclamationTriangle,
+  faShieldAlt,
+  faCheckCircle,
+  faChevronUp,
+  faChevronDown,
+} from '@fortawesome/free-solid-svg-icons';
 
 import './QuerySettingsComponent.scss';
 
@@ -64,6 +72,7 @@ const QuerySettingsComponent = ({
   const selectListPriorities = priorities.map((priority) => ({
     label: priority.name,
     value: priority.id,
+    color: priority.color,
   }));
 
   return (
@@ -90,13 +99,22 @@ const QuerySettingsComponent = ({
                     value={incidentStatus}
                     onChange={(val) => updateQuerySettingsIncidentStatus(val)}
                   >
-                    <ToggleButton variant="outline-dark" value={TRIGGERED}>
+                    <ToggleButton variant="outline-danger" value={TRIGGERED}>
+                      <div className="action-icon">
+                        <FontAwesomeIcon icon={faExclamationTriangle} />
+                      </div>
                       Triggered
                     </ToggleButton>
-                    <ToggleButton variant="outline-dark" value={ACKNOWLEDGED}>
+                    <ToggleButton variant="outline-warning" value={ACKNOWLEDGED}>
+                      <div className="action-icon">
+                        <FontAwesomeIcon icon={faShieldAlt} />
+                      </div>
                       Acknowleged
                     </ToggleButton>
-                    <ToggleButton variant="outline-dark" value={RESOLVED}>
+                    <ToggleButton variant="outline-success" value={RESOLVED}>
+                      <div className="action-icon">
+                        <FontAwesomeIcon icon={faCheckCircle} />
+                      </div>
                       Resolved
                     </ToggleButton>
                   </ToggleButtonGroup>
@@ -110,10 +128,16 @@ const QuerySettingsComponent = ({
                     value={incidentUrgency}
                     onChange={(val) => updateQuerySettingsIncidentUrgency(val)}
                   >
-                    <ToggleButton variant="outline-dark" value={HIGH}>
+                    <ToggleButton variant="outline-secondary" value={HIGH}>
+                      <div className="action-icon">
+                        <FontAwesomeIcon icon={faChevronUp} />
+                      </div>
                       High
                     </ToggleButton>
-                    <ToggleButton variant="outline-dark" value={LOW}>
+                    <ToggleButton variant="outline-secondary" value={LOW}>
+                      <div className="action-icon">
+                        <FontAwesomeIcon icon={faChevronDown} />
+                      </div>
                       Low
                     </ToggleButton>
                   </ToggleButtonGroup>
@@ -130,8 +154,12 @@ const QuerySettingsComponent = ({
                     {selectListPriorities.map((priority) => (
                       <ToggleButton
                         key={priority.value}
-                        variant="outline-dark"
+                        variant="outline-secondary"
                         value={priority.value}
+                        style={{
+                          color: `#${priority.color}`,
+                          fontWeight: 1000,
+                        }}
                       >
                         {priority.label}
                       </ToggleButton>

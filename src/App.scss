@@ -44,5 +44,6 @@ body {
 }
 
 .modal-content {
-  background-color: unset !important;
+  // TODO: Fix white-div from showing up
+  // background-color: $pd-brand-secondary-light !important;
 }

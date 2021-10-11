@@ -16,6 +16,19 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faShieldAlt,
+  faLevelUpAlt,
+  faExchangeAlt,
+  faUserPlus,
+  faClock,
+  faCheckCircle,
+  faExclamation,
+  faEdit,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
+
 import './IncidentActionsComponent.scss';
 
 import {
@@ -200,6 +213,9 @@ const IncidentActionsComponent = ({
               onClick={() => acknowledge(selectedRows)}
               disabled={enableActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faShieldAlt} />
+              </div>
               Acknowledge
             </Button>
             <DropdownButton
@@ -207,7 +223,14 @@ const IncidentActionsComponent = ({
               className="action-button"
               variant={enableEscalationAction ? 'outline-secondary' : 'outline-dark'}
               drop="up"
-              title="Escalate"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faLevelUpAlt} />
+                  </div>
+                  Escalate
+                </>
+              )}
               disabled={enableEscalationAction}
               show={displayEscalate}
               onClick={() => toggleEscalate(!displayEscalate)}
@@ -233,6 +256,9 @@ const IncidentActionsComponent = ({
               onClick={() => toggleDisplayReassignModal()}
               disabled={enableActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faExchangeAlt} />
+              </div>
               Reassign
             </Button>
             <Button
@@ -241,6 +267,9 @@ const IncidentActionsComponent = ({
               onClick={() => toggleDisplayAddResponderModal()}
               disabled={enableActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faUserPlus} />
+              </div>
               Add Responders
             </Button>
             <DropdownButton
@@ -248,7 +277,14 @@ const IncidentActionsComponent = ({
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'outline-dark'}
               drop="up"
-              title="Snooze"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faClock} />
+                  </div>
+                  Snooze
+                </>
+              )}
               disabled={enableActions}
               show={displaySnooze}
               onClick={() => toggleSnooze(!displaySnooze)}
@@ -271,6 +307,9 @@ const IncidentActionsComponent = ({
               disabled={enableActions}
               onClick={() => resolve(selectedRows)}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faCheckCircle} />
+              </div>
               Resolve
             </Button>
           </Col>
@@ -280,7 +319,14 @@ const IncidentActionsComponent = ({
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'outline-dark'}
               drop="up"
-              title="Update Priority"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faExclamation} />
+                  </div>
+                  Update Priority
+                </>
+              )}
               disabled={enableActions}
               show={displayPriority}
               onClick={() => togglePriority(!displayPriority)}
@@ -309,6 +355,9 @@ const IncidentActionsComponent = ({
               onClick={() => toggleDisplayAddNoteModal()}
               disabled={enablePostActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faEdit} />
+              </div>
               Add Note
             </Button>
             <DropdownButton
@@ -316,7 +365,14 @@ const IncidentActionsComponent = ({
               className="action-button"
               variant={enablePostSingularAction ? 'outline-secondary' : 'outline-dark'}
               drop="up"
-              title="Run Action"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faPlay} />
+                  </div>
+                  Run Action
+                </>
+              )}
               align="end"
               id="run-action"
               disabled={enablePostSingularAction}
