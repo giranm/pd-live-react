@@ -153,13 +153,13 @@ const IncidentActionsComponent = ({
     ? serviceExtensionMap[selectedIncident.service.id]
     : [];
   const customIncidentActions =
-    serviceExtensions.length > 0
+    serviceExtensions
       ? serviceExtensions.filter(
         (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
       )
       : [];
   const externalSystemsTemp =
-    serviceExtensions.length > 0
+    serviceExtensions
       ? serviceExtensions.filter(
         (serviceExtension) => serviceExtension.extension_type === EXTERNAL_SYSTEM,
       )
