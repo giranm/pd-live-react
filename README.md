@@ -16,6 +16,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] Run Action (including Custom Incident Actions, Webhooks, and Response Plays)
 - [x] Review appropriate React table (with resizeable columns)
 - [x] Global Search against incident data
+- [ ] Conditional formatting of cells (e.g. locale date format, status, CSS animation on new update etc)
 - [ ] Add loading modal when fetching data from `/incidents` endpoint
 - [ ] Store query/settings using session data
 
