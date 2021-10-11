@@ -120,6 +120,14 @@
   font-size: 14px;
 }
 
+.tr:nth-child(even) {
+  background-color: $pd-brand-background-2 !important;
+}
+
+.tr:hover {
+  background-color: $pd-gray-medium !important;
+}
+
 .td {
   padding: 10px !important;
 }
