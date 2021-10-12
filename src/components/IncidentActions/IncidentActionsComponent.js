@@ -12,6 +12,7 @@ import {
   Dropdown,
   DropdownButton,
   ButtonGroup,
+  Spinner,
 } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -83,7 +84,7 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
-  const { filteredIncidentsByQuery } = incidents;
+  const { fetchingData, filteredIncidentsByQuery } = incidents;
   const { selectedCount, selectedRows } = incidentTableSettings;
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
@@ -193,17 +194,28 @@ const IncidentActionsComponent = ({
         <Row>
           <Col sm={{ span: -1 }}>
             <div className="selected-incidents-ctr">
-              <h4>
-                <Badge
-                  className="selected-incidents-badge"
-                  variant={filteredIncidentsByQuery.length ? 'primary' : 'secondary'}
-                >
-                  {`${selectedCount}/${filteredIncidentsByQuery.length}`}
-                </Badge>
-              </h4>
-              <p className="selected-incidents">
-                Selected
-              </p>
+              {fetchingData ? (
+                <>
+                  <Spinner animation="border" variant="success" />
+                  <p className="selected-incidents">
+                    Querying
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h4>
+                    <Badge
+                      className="selected-incidents-badge"
+                      variant={filteredIncidentsByQuery.length ? 'primary' : 'secondary'}
+                    >
+                      {`${selectedCount}/${filteredIncidentsByQuery.length}`}
+                    </Badge>
+                  </h4>
+                  <p className="selected-incidents">
+                    Selected
+                  </p>
+                </>
+              )}
             </div>
           </Col>
           <Col>
