@@ -43,7 +43,19 @@ body {
   border-color: $pd-brand-gray-dark;
 }
 
+.btn {
+  box-shadow: 0 2px 2px 0 $pd-brand-gray-light !important;
+}
+
+.btn-light {
+  border-color: $pd-brand-secondary-light !important;
+}
+
 .modal-content {
   // TODO: Fix white-div from showing up
   // background-color: $pd-brand-secondary-light !important;
+}
+
+.modal-footer {
+  display: unset !important;
 }

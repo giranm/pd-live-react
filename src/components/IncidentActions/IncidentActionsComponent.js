@@ -209,7 +209,7 @@ const IncidentActionsComponent = ({
           <Col>
             <Button
               className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'outline-dark'}
+              variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => acknowledge(selectedRows)}
               disabled={enableActions}
             >
@@ -221,7 +221,7 @@ const IncidentActionsComponent = ({
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant={enableEscalationAction ? 'outline-secondary' : 'outline-dark'}
+              variant={enableEscalationAction ? 'outline-secondary' : 'light'}
               drop="up"
               title={(
                 <>
@@ -240,7 +240,7 @@ const IncidentActionsComponent = ({
                 return (
                   <Dropdown.Item
                     key={escalation_rule.id}
-                    variant="outline-dark"
+                    variant="light"
                     onClick={() => escalate(selectedRows, escalationLevel)}
                   >
                     {`Level ${escalationLevel}: ${escalation_rule.targets
@@ -252,7 +252,7 @@ const IncidentActionsComponent = ({
             </DropdownButton>
             <Button
               className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'outline-dark'}
+              variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayReassignModal()}
               disabled={enableActions}
             >
@@ -263,7 +263,7 @@ const IncidentActionsComponent = ({
             </Button>
             <Button
               className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'outline-dark'}
+              variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayAddResponderModal()}
               disabled={enableActions}
             >
@@ -275,7 +275,7 @@ const IncidentActionsComponent = ({
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'outline-dark'}
+              variant={enableActions ? 'outline-secondary' : 'light'}
               drop="up"
               title={(
                 <>
@@ -292,7 +292,7 @@ const IncidentActionsComponent = ({
               {Object.keys(SNOOZE_TIMES).map((duration) => (
                 <Dropdown.Item
                   key={duration}
-                  variant="outline-dark"
+                  variant="light"
                   onClick={() => snooze(selectedRows, duration)}
                 >
                   {duration}
@@ -303,7 +303,7 @@ const IncidentActionsComponent = ({
             </DropdownButton>
             <Button
               className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'outline-dark'}
+              variant={enableActions ? 'outline-secondary' : 'light'}
               disabled={enableActions}
               onClick={() => resolve(selectedRows)}
             >
@@ -317,7 +317,7 @@ const IncidentActionsComponent = ({
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'outline-dark'}
+              variant={enableActions ? 'outline-secondary' : 'light'}
               drop="up"
               title={(
                 <>
@@ -334,7 +334,7 @@ const IncidentActionsComponent = ({
               {priorities.map((priority) => (
                 <Dropdown.Item
                   key={priority.id}
-                  variant="outline-dark"
+                  variant="light"
                   onClick={() => updatePriority(selectedRows, priority.id)}
                 >
                   <p
@@ -351,7 +351,7 @@ const IncidentActionsComponent = ({
             </DropdownButton>
             <Button
               className="action-button"
-              variant={enablePostActions ? 'outline-secondary' : 'outline-dark'}
+              variant={enablePostActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayAddNoteModal()}
               disabled={enablePostActions}
             >
@@ -363,7 +363,7 @@ const IncidentActionsComponent = ({
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant={enablePostSingularAction ? 'outline-secondary' : 'outline-dark'}
+              variant={enablePostSingularAction ? 'outline-secondary' : 'light'}
               drop="up"
               title={(
                 <>
