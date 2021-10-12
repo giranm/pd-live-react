@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/animated';
 
 import { toggleDisplayReassignModal, reassign } from 'redux/incident_actions/actions';
 
-import './ReassignModalComponent.css';
+import './ReassignModalComponent.scss';
 
 const animatedComponents = makeAnimated();
 
@@ -67,15 +67,6 @@ const ReassignModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="outline-secondary"
-            onClick={() => {
-              setAssignment(null);
-              toggleDisplayReassignModal();
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
             variant="primary"
             disabled={assignment === null}
             onClick={() => {
@@ -84,6 +75,15 @@ const ReassignModalComponent = ({
             }}
           >
             Reassign
+          </Button>
+          <Button
+            variant="light"
+            onClick={() => {
+              setAssignment(null);
+              toggleDisplayReassignModal();
+            }}
+          >
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

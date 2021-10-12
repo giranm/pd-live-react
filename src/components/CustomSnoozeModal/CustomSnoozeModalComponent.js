@@ -12,7 +12,7 @@ import { toggleDisplayCustomSnoozeModal, snooze } from 'redux/incident_actions/a
 
 import { TRIGGERED, ACKNOWLEDGED, filterIncidentsByField } from 'util/incidents';
 
-import './CustomSnoozeModalComponent.css';
+import './CustomSnoozeModalComponent.scss';
 
 const CustomSnoozeModalComponent = ({
   toggleDisplayCustomSnoozeModal,
@@ -113,9 +113,6 @@ const CustomSnoozeModalComponent = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-secondary" onClick={toggleDisplayCustomSnoozeModal}>
-            Cancel
-          </Button>
           <Button
             variant="primary"
             onClick={() => {
@@ -124,6 +121,9 @@ const CustomSnoozeModalComponent = ({
             }}
           >
             {modalAction}
+          </Button>
+          <Button variant="light" onClick={toggleDisplayCustomSnoozeModal}>
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

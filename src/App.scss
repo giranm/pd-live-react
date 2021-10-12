@@ -1,0 +1,61 @@
+@import 'assets/styles/pagerduty.scss';
+
+// Bootstrap Overrides
+body {
+  background-color: $pd-brand-background !important;
+}
+
+.btn-outline-secondary {
+  color: $pd-brand-black;
+  background-color: $pd-brand-white;
+  border-color: $pd-brand-secondary-light;
+}
+
+.btn-outline-secondary:disabled {
+  color: $pd-brand-secondary-light !important;
+}
+
+.btn-outline-secondary:hover {
+  color: $pd-brand-black;
+  background-color: $pd-brand-gray-light;
+  border-color: $pd-brand-secondary-light;
+}
+
+.btn-outline-dark {
+  color: $pd-brand-gray-dark;
+  background-color: $pd-white;
+  border-color: $pd-brand-secondary-light;
+}
+
+.btn-outline-dark:disabled {
+  color: $pd-brand-gray-dark;
+  background-color: $pd-white;
+  border-color: $pd-brand-secondary-light;
+}
+
+.btn-outline-dark:hover {
+  background-color: $pd-brand-gray-dark;
+  border-color: $pd-brand-gray-dark;
+}
+
+.btn-outline-dark:not(:disabled):not(.disabled).active {
+  background-color: $pd-brand-gray-dark;
+  border-color: $pd-brand-gray-dark;
+}
+
+.btn {
+  box-shadow: 0 2px 2px 0 $pd-brand-gray-light !important;
+}
+
+.btn-light {
+  border-color: $pd-brand-secondary-light !important;
+}
+
+.modal-content {
+  // TODO: Fix white-div from showing up
+  // background-color: $pd-brand-secondary-light !important;
+}
+
+.modal-footer {
+  display: unset !important;
+}

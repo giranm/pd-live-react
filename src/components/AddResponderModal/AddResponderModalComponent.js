@@ -7,7 +7,7 @@ import makeAnimated from 'react-select/animated';
 
 import { toggleDisplayAddResponderModal, addResponder } from 'redux/incident_actions/actions';
 
-import './AddResponderModalComponent.css';
+import './AddResponderModalComponent.scss';
 
 const animatedComponents = makeAnimated();
 
@@ -89,15 +89,6 @@ const AddResponderModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="outline-secondary"
-            onClick={() => {
-              setResponderRequestTargets([]);
-              toggleDisplayAddResponderModal();
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
             variant="primary"
             disabled={responderRequestTargets.length === 0}
             onClick={() => {
@@ -106,6 +97,15 @@ const AddResponderModalComponent = ({
             }}
           >
             Add Responder(s)
+          </Button>
+          <Button
+            variant="light"
+            onClick={() => {
+              setResponderRequestTargets([]);
+              toggleDisplayAddResponderModal();
+            }}
+          >
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

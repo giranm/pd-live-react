@@ -5,7 +5,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 
 import { toggleDisplayAddNoteModal, addNote } from 'redux/incident_actions/actions';
 
-import './AddNoteModalComponent.css';
+import './AddNoteModalComponent.scss';
 
 const AddNoteModalComponent = ({
   incidentActions,
@@ -37,11 +37,15 @@ const AddNoteModalComponent = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-secondary" onClick={toggleDisplayAddNoteModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={() => addNote(selectedRows, note)}>
+          <Button
+            variant="primary"
+            onClick={() => addNote(selectedRows, note)}
+            disabled={note === null}
+          >
             Add Note
+          </Button>
+          <Button variant="light" onClick={toggleDisplayAddNoteModal}>
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

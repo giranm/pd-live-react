@@ -1,8 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'index.css';
-import 'assets/styles/theme.css';
-import 'react-datepicker/dist/react-datepicker.css';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -11,6 +6,9 @@ import store from 'redux/store';
 
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';
+
+import 'index.scss';
+import 'react-datepicker/dist/react-datepicker.css';
 
 ReactDOM.render(
   <Provider store={store}>

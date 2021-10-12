@@ -1,0 +1,8 @@
+.action-alerts-modal {
+  margin-bottom: 0px;
+}
+
+// TODO: Find out how to override .modal-dialog to stop the white overflow div (background) showing
+.fade .action-alerts-modal .alert .alert-success .show {
+  background-color: unset !important;
+}

@@ -16,7 +16,20 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import './IncidentActionsComponent.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faShieldAlt,
+  faLevelUpAlt,
+  faExchangeAlt,
+  faUserPlus,
+  faClock,
+  faCheckCircle,
+  faExclamation,
+  faEdit,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
+
+import './IncidentActionsComponent.scss';
 
 import {
   acknowledge,
@@ -140,13 +153,13 @@ const IncidentActionsComponent = ({
     ? serviceExtensionMap[selectedIncident.service.id]
     : [];
   const customIncidentActions =
-    serviceExtensions.length > 0
+    serviceExtensions
       ? serviceExtensions.filter(
         (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
       )
       : [];
   const externalSystemsTemp =
-    serviceExtensions.length > 0
+    serviceExtensions
       ? serviceExtensions.filter(
         (serviceExtension) => serviceExtension.extension_type === EXTERNAL_SYSTEM,
       )
@@ -196,18 +209,28 @@ const IncidentActionsComponent = ({
           <Col>
             <Button
               className="action-button"
-              variant="outline-dark"
+              variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => acknowledge(selectedRows)}
               disabled={enableActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faShieldAlt} />
+              </div>
               Acknowledge
             </Button>
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant="outline-dark"
+              variant={enableEscalationAction ? 'outline-secondary' : 'light'}
               drop="up"
-              title="Escalate"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faLevelUpAlt} />
+                  </div>
+                  Escalate
+                </>
+              )}
               disabled={enableEscalationAction}
               show={displayEscalate}
               onClick={() => toggleEscalate(!displayEscalate)}
@@ -217,7 +240,7 @@ const IncidentActionsComponent = ({
                 return (
                   <Dropdown.Item
                     key={escalation_rule.id}
-                    variant="outline-dark"
+                    variant="light"
                     onClick={() => escalate(selectedRows, escalationLevel)}
                   >
                     {`Level ${escalationLevel}: ${escalation_rule.targets
@@ -229,26 +252,39 @@ const IncidentActionsComponent = ({
             </DropdownButton>
             <Button
               className="action-button"
-              variant="outline-dark"
+              variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayReassignModal()}
               disabled={enableActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faExchangeAlt} />
+              </div>
               Reassign
             </Button>
             <Button
               className="action-button"
-              variant="outline-dark"
+              variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayAddResponderModal()}
               disabled={enableActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faUserPlus} />
+              </div>
               Add Responders
             </Button>
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant="outline-dark"
+              variant={enableActions ? 'outline-secondary' : 'light'}
               drop="up"
-              title="Snooze"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faClock} />
+                  </div>
+                  Snooze
+                </>
+              )}
               disabled={enableActions}
               show={displaySnooze}
               onClick={() => toggleSnooze(!displaySnooze)}
@@ -256,7 +292,7 @@ const IncidentActionsComponent = ({
               {Object.keys(SNOOZE_TIMES).map((duration) => (
                 <Dropdown.Item
                   key={duration}
-                  variant="outline-dark"
+                  variant="light"
                   onClick={() => snooze(selectedRows, duration)}
                 >
                   {duration}
@@ -267,10 +303,13 @@ const IncidentActionsComponent = ({
             </DropdownButton>
             <Button
               className="action-button"
-              variant="outline-dark"
+              variant={enableActions ? 'outline-secondary' : 'light'}
               disabled={enableActions}
               onClick={() => resolve(selectedRows)}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faCheckCircle} />
+              </div>
               Resolve
             </Button>
           </Col>
@@ -278,9 +317,16 @@ const IncidentActionsComponent = ({
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant="outline-dark"
+              variant={enableActions ? 'outline-secondary' : 'light'}
               drop="up"
-              title="Update Priority"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faExclamation} />
+                  </div>
+                  Update Priority
+                </>
+              )}
               disabled={enableActions}
               show={displayPriority}
               onClick={() => togglePriority(!displayPriority)}
@@ -288,7 +334,7 @@ const IncidentActionsComponent = ({
               {priorities.map((priority) => (
                 <Dropdown.Item
                   key={priority.id}
-                  variant="outline-dark"
+                  variant="light"
                   onClick={() => updatePriority(selectedRows, priority.id)}
                 >
                   <p
@@ -305,18 +351,28 @@ const IncidentActionsComponent = ({
             </DropdownButton>
             <Button
               className="action-button"
-              variant="outline-dark"
+              variant={enablePostActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayAddNoteModal()}
               disabled={enablePostActions}
             >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faEdit} />
+              </div>
               Add Note
             </Button>
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant="outline-dark"
+              variant={enablePostSingularAction ? 'outline-secondary' : 'light'}
               drop="up"
-              title="Run Action"
+              title={(
+                <>
+                  <div className="action-icon">
+                    <FontAwesomeIcon icon={faPlay} />
+                  </div>
+                  Run Action
+                </>
+              )}
               align="end"
               id="run-action"
               disabled={enablePostSingularAction}

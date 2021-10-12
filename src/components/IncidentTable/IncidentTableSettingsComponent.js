@@ -8,7 +8,7 @@ import {
 import DualListBox from 'react-dual-listbox';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
-import './IncidentTableSettingsComponent.css';
+import './IncidentTableSettingsComponent.scss';
 
 import {
   toggleIncidentTableSettings,
@@ -63,11 +63,11 @@ const IncidentTableSettingsComponent = ({
           </Tabs>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={toggleIncidentTableSettings}>
-            Close
-          </Button>
           <Button variant="primary" onClick={() => saveIncidentTableSettings(selectedColumns)}>
             Save Changes
+          </Button>
+          <Button variant="light" onClick={toggleIncidentTableSettings}>
+            Close
           </Button>
         </Modal.Footer>
       </Modal>

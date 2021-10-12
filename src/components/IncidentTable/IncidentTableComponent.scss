@@ -1,3 +1,5 @@
+@import 'assets/styles/pagerduty.scss';
+
 /* Empty Incidents */
 .empty-incidents {
   height: 500px;
@@ -24,18 +26,18 @@
 
 .incident-table::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-color: var(--light);
+  background-color: $pd-light;
 }
 
 .incident-table::-webkit-scrollbar-thumb:hover {
   border-radius: 10px;
-  background-color: var(--gray);
+  background-color: $pd-gray;
 }
 
 .incident-table-settings-btn {
   position: relative;
   float: right;
-  background-color: var(--brand-gray-dark);
+  background-color: $pd-brand-gray-dark;
 }
 
 /* Priority Pill */
@@ -83,8 +85,15 @@
 .th {
   padding: 10px !important;
   background-color: white;
-  color: var(--dark);
+  color: $pd-dark;
   font-weight: 700;
+}
+
+.th-sorted {
+  padding: 10px !important;
+  background-color: white;
+  color: $pd-primary;
+  font-weight: 1000;
 }
 
 .resizer {
@@ -109,6 +118,14 @@
 
 .tr {
   font-size: 14px;
+}
+
+.tr:nth-child(even) {
+  background-color: $pd-brand-background-2 !important;
+}
+
+.tr:hover {
+  background-color: $pd-gray-medium !important;
 }
 
 .td {

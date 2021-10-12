@@ -1,5 +1,11 @@
+@import 'assets/styles/pagerduty.scss';
+
+.navbar {
+  padding: 0.2rem 1rem !important;
+}
+
 .navbar-ctr {
-  border-bottom: 1px solid var(--brand-gray-light);
+  border-bottom: 1px solid $pd-brand-gray-light;
 }
 
 .nav-bar-logo-ctr {
@@ -7,19 +13,19 @@
 }
 
 .nav-bar-logo-black {
-  background-image: url('assets/images/pd_logo_black.svg');
+  background-image: url('/assets/images/pd_logo_black.svg');
   background-repeat: no-repeat;
-  background-color: var(--white);
-  background-size: 118px;
+  background-color: $pd-white;
+  background-size: 117px;
   color: transparent;
   position: relative;
-  top: 5px;
+  top: 4px;
 }
 
 .settings-panel-icon {
   background-image: url('https://secure.gravatar.com/avatar/0ee453ea32f9f9702c809b4680237b50.png?d=mm&amp;r=PG');
   background-repeat: no-repeat;
-  background-color: var(--white);
+  background-color: $pd-white;
   background-size: 35px;
   max-width: 100%;
   width: 35px;
@@ -37,13 +43,13 @@ a.dropdown-toggle.nav-link::after {
 
 .filters-toggle {
   position: relative;
-  top: 3px;
+  top: 10px;
   right: 20px;
 }
 
 .settings-toggle {
   width: 30px;
-  fill: var(--black);
+  fill: $pd-black;
   position: relative;
   top: 3px;
 }
