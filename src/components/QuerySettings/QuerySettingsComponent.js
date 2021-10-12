@@ -76,7 +76,7 @@ const QuerySettingsComponent = ({
   }));
 
   return (
-    <div className="query-settings-ctr">
+    <div className="query-settings-ctr" id="query-settings-ctr">
       <Accordion defaultActiveKey="0">
         <Accordion.Collapse eventKey={eventKey}>
           <Container className="card bg-light query-settings-inner-ctr" fluid>

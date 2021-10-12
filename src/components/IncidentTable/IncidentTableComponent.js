@@ -7,6 +7,7 @@ import {
   useRef,
 } from 'react';
 import { connect } from 'react-redux';
+import mezr from 'mezr';
 
 import {
   Button,
@@ -59,11 +60,13 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 });
 
 const IncidentTableComponent = ({
+  querySettings,
   toggleIncidentTableSettings,
   selectIncidentTableRows,
   incidentTableSettings,
   incidents,
 }) => {
+  const { displayQuerySettings } = querySettings;
   const { incidentTableColumns } = incidentTableSettings;
   const { filteredIncidentsByQuery } = incidents;
 
@@ -158,11 +161,22 @@ const IncidentTableComponent = ({
     return () => { };
   }, [selectedFlatRows]);
 
+  // Dynamic Table Height
+  const [tableHeight, setTableHeight] = useState(0);
+  useEffect(() => {
+    const querySettingsEl = document.getElementById('query-settings-ctr');
+    const incidentActions = document.getElementById('incident-actions-ctr');
+    const querySettingsElHeight = mezr.height(querySettingsEl);
+    const distance = mezr.distance([querySettingsEl, 'border'], [incidentActions, 'border']);
+    setTableHeight(distance);
+    console.log(distance, querySettingsElHeight);
+  }, [displayQuerySettings]);
+
   return (
     <div className="incident-table-ctr">
       {memoizedFilteredIncidentsByQuery && memoizedFilteredIncidentsByQuery.length ? (
         <div>
-          <div className="incident-table">
+          <div className="incident-table" style={{ height: `${tableHeight}px` }}>
             <BTable
               responsive="sm"
               striped
@@ -315,6 +329,7 @@ const IncidentTableComponent = ({
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
   incidents: state.incidents,
+  querySettings: state.querySettings,
 });
 
 const mapDispatchToProps = (dispatch) => ({
