@@ -40,6 +40,12 @@
   background-color: $pd-brand-gray-dark;
 }
 
+.incident-table-settings-ctr {
+  position: absolute;
+  width: 100%;
+  right: 10px;
+}
+
 /* Priority Pill */
 .priority-label {
   display: inline;
