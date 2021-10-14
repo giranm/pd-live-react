@@ -74,8 +74,6 @@ export function* getIncidents(action) {
       since: sinceDate.toISOString(),
       until: new Date().toISOString(),
       'include[]': ['first_trigger_log_entries', 'external_references'],
-      // https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTU4-pagination#pagination-response-fields
-      limit: INCIDENTS_PAGINATION_LIMIT,
     };
 
     if (incidentStatus) params['statuses[]'] = incidentStatus;
@@ -86,23 +84,19 @@ export function* getIncidents(action) {
 
     if (serviceIds.length) params['service_ids[]'] = serviceIds;
 
-    const response = yield call(pd.all, 'incidents', { data: { ...params } });
-    const incidents = response.resource;
-
-    console.log('Fetching Incidents with Alternative Approach');
-    const testIncidents = yield pdFetch('incidents', params);
+    const incidents = yield pdFetch('incidents', params);
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
       incidents,
     });
 
-    // Get notes for each incident (implictly updates store)
-    yield all(
-      incidents
-        .map((incident) => incident.id)
-        .map((incidentId) => put({ type: FETCH_INCIDENT_NOTES_REQUESTED, incidentId })),
-    );
+    // Get notes for each incident (implictly updates store) (DISABLING FOR PERFORMANCE ISSUES ATM)
+    // yield all(
+    //   incidents
+    //     .map((incident) => incident.id)
+    //     .map((incidentId) => put({ type: FETCH_INCIDENT_NOTES_REQUESTED, incidentId })),
+    // );
 
     // Filter incident list on priority (can't do this from API)
     yield put({

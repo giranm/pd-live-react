@@ -2,6 +2,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable max-len */
 /* eslint-disable no-loop-func */
+import axios from 'axios';
 import moment from 'moment';
 
 import { getPdAccessToken } from 'util/pd-api-wrapper';
@@ -14,28 +15,19 @@ function endpointIdentifier(endpoint) {
 }
 
 async function pdRequest(token, endpoint, method, params, data) {
-  let url = `https://api.pagerduty.com/${endpoint}`;
-  if (params) {
-    url += `?${new URLSearchParams(params)}`;
-  }
-  let body = null;
-  if (data) {
-    body = JSON.stringify(data);
-  }
-
-  const response = await fetch(url, {
+  const axiosResponse = await axios({
     method,
+    url: `https://api.pagerduty.com/${endpoint}`,
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: 'application/vnd.pagerduty+json;version=2',
+      'content-type': 'application/json; charset=utf-8',
     },
-    body,
+    params,
+    data,
   });
-  if (!response.ok) {
-    console.log('Invalid Response', response);
-  }
-  const responseData = await response.json();
-  return responseData;
+
+  return axiosResponse.data;
 }
 
 export const pdFetch = async (endpoint, params, progressCallback) => {
@@ -56,7 +48,7 @@ export const pdFetch = async (endpoint, params, progressCallback) => {
   }
 
   const firstPage = await pdRequest(token, endpoint, 'GET', requestParams);
-  console.log(`total is ${firstPage.total}`);
+  // console.log(`total is ${firstPage.total}`);
   let fetchedData = [...firstPage[endpointIdentifier(endpoint)]];
   requestParams.offset += requestParams.limit;
 
@@ -88,11 +80,11 @@ export const pdFetch = async (endpoint, params, progressCallback) => {
     await Promise.all(promises);
     fetchedData.sort((a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)));
     requestParams[reversedSortOrder ? 'until' : 'since'] = fetchedData[fetchedData.length - 1].created_at;
-    console.log(`hit 10000 request limit, setting outer offset to ${fetchedData.length} and setting ${reversedSortOrder ? 'until' : 'since'} to ${fetchedData[fetchedData.length - 1].created_at}`);
+    // console.log(`hit 10000 request limit, setting outer offset to ${fetchedData.length} and setting ${reversedSortOrder ? 'until' : 'since'} to ${fetchedData[fetchedData.length - 1].created_at}`);
     outerOffset = fetchedData.length;
     requestParams.offset = 0;
   }
-  console.log(`got ${fetchedData.length} ${endpointIdentifier(endpoint)}`);
+  // console.log(`got ${fetchedData.length} ${endpointIdentifier(endpoint)}`);
   fetchedData.sort((a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)));
   return fetchedData;
 };
