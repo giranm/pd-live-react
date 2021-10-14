@@ -14,7 +14,6 @@
 .incident-table {
   margin-top: 10px;
   white-space: nowrap;
-  height: 570px;
   overflow-x: scroll;
   overflow-y: scroll;
 }
@@ -38,6 +37,12 @@
   position: relative;
   float: right;
   background-color: $pd-brand-gray-dark;
+}
+
+.incident-table-settings-ctr {
+  position: absolute;
+  width: 100%;
+  right: 10px;
 }
 
 /* Priority Pill */

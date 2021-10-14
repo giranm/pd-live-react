@@ -190,7 +190,7 @@ const IncidentActionsComponent = ({
 
   return (
     <div>
-      <Container className="incident-actions-ctr" fluid>
+      <Container className="incident-actions-ctr" id="incident-actions-ctr" fluid>
         <Row>
           <Col sm={{ span: -1 }}>
             <div className="selected-incidents-ctr">

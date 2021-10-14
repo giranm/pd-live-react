@@ -1,12 +1,12 @@
 /* eslint-disable no-nested-ternary */
 import {
   useEffect,
-  useState,
   useMemo,
   forwardRef,
   useRef,
 } from 'react';
 import { connect } from 'react-redux';
+import mezr from 'mezr';
 
 import {
   Button,
@@ -158,11 +158,24 @@ const IncidentTableComponent = ({
     return () => { };
   }, [selectedFlatRows]);
 
+  // Dynamic Table Height
+  const querySettingsEl = document.getElementById('query-settings-ctr');
+  const incidentActionsEl = document.getElementById('incident-actions-ctr');
+  const incidentActionsHeight = incidentActionsEl
+    ? mezr.height(incidentActionsEl) + 20
+    : 0;
+  const distanceBetweenQueryAndAction = incidentActionsEl
+    ? mezr.distance([querySettingsEl, 'border'], [incidentActionsEl, 'border'])
+    : 0;
+
   return (
     <div className="incident-table-ctr">
       {memoizedFilteredIncidentsByQuery && memoizedFilteredIncidentsByQuery.length ? (
         <div>
-          <div className="incident-table">
+          <div
+            className="incident-table"
+            style={{ height: `${distanceBetweenQueryAndAction - incidentActionsHeight}px` }}
+          >
             <BTable
               responsive="sm"
               striped
@@ -219,7 +232,10 @@ const IncidentTableComponent = ({
           </div>
           <br />
           <div>
-            <div className="incident-table-settings-ctr">
+            <div
+              className="incident-table-settings-ctr"
+              style={{ bottom: `${incidentActionsHeight - 10}px` }}
+            >
               <Container fluid>
                 <Row>
                   <Col />

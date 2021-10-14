@@ -19,6 +19,7 @@
     "font-awesome": "^4.7.0",
     "fuse.js": "^6.4.6",
     "immer": "^9.0.6",
+    "mezr": "^0.6.2",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "prettier-eslint-cli": "^5.0.1",
