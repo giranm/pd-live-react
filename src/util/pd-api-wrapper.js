@@ -5,7 +5,7 @@ import { api } from '@pagerduty/pdjs';
 import { PD_OAUTH_CLIENT_ID } from 'util/constants';
 
 // TODO: Figure out how to get this from redux store via sessionStorage
-const getPdAccessToken = () => {
+export const getPdAccessToken = () => {
   const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
     PDOAuth.login(PD_OAUTH_CLIENT_ID);

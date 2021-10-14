@@ -13,6 +13,7 @@ import { INCIDENTS_PAGINATION_LIMIT } from 'util/constants';
 import { fuseOptions } from 'util/fuse-config';
 
 import { pd } from 'util/pd-api-wrapper';
+import { pdFetch } from 'util/pd-fetch-alt';
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -87,6 +88,9 @@ export function* getIncidents(action) {
 
     const response = yield call(pd.all, 'incidents', { data: { ...params } });
     const incidents = response.resource;
+
+    console.log('Fetching Incidents with Alternative Approach');
+    const testIncidents = yield pdFetch('incidents', params);
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
