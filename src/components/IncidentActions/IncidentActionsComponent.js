@@ -84,7 +84,7 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
-  const { fetchingData, filteredIncidentsByQuery } = incidents;
+  const { fetchingIncidents, filteredIncidentsByQuery } = incidents;
   const { selectedCount, selectedRows } = incidentTableSettings;
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
@@ -194,7 +194,7 @@ const IncidentActionsComponent = ({
         <Row>
           <Col sm={{ span: -1 }}>
             <div className="selected-incidents-ctr">
-              {fetchingData ? (
+              {fetchingIncidents ? (
                 <>
                   <Spinner animation="border" variant="success" />
                   <p className="selected-incidents">

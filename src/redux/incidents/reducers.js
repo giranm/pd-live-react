@@ -34,18 +34,18 @@ const incidents = produce(
   (draft, action) => {
     switch (action.type) {
       case FETCH_INCIDENTS_REQUESTED:
-        draft.fetchingData = true;
+        draft.fetchingIncidents = true;
         draft.status = FETCH_INCIDENTS_REQUESTED;
         break;
 
       case FETCH_INCIDENTS_COMPLETED:
-        draft.fetchingData = false;
+        draft.fetchingIncidents = false;
         draft.status = FETCH_INCIDENTS_COMPLETED;
         draft.incidents = action.incidents;
         break;
 
       case FETCH_INCIDENTS_ERROR:
-        draft.fetchingData = false;
+        draft.fetchingIncidents = false;
         draft.status = FETCH_INCIDENTS_ERROR;
         draft.error = action.message;
         break;
@@ -196,6 +196,7 @@ const incidents = produce(
     filteredIncidentsByQuery: [],
     status: null,
     fetchingData: false,
+    fetchingIncidents: false,
     error: null,
   },
 );

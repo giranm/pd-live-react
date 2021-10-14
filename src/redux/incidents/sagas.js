@@ -9,6 +9,7 @@ import { selectQuerySettings } from 'redux/query_settings/selectors';
 
 import { pushToArray } from 'util/helpers';
 import { filterIncidentsByField, filterIncidentsByFieldOfList } from 'util/incidents';
+import { INCIDENTS_PAGINATION_LIMIT } from 'util/constants';
 import { fuseOptions } from 'util/fuse-config';
 
 import { pd } from 'util/pd-api-wrapper';
@@ -70,8 +71,10 @@ export function* getIncidents(action) {
 
     const params = {
       since: sinceDate.toISOString(),
-      until: untilDate.toISOString(),
+      until: new Date().toISOString(),
       'include[]': ['first_trigger_log_entries', 'external_references'],
+      // https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTU4-pagination#pagination-response-fields
+      limit: INCIDENTS_PAGINATION_LIMIT,
     };
 
     if (incidentStatus) params['statuses[]'] = incidentStatus;
