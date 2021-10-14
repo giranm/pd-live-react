@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import {
   useEffect,
-  useState,
   useMemo,
   forwardRef,
   useRef,
@@ -60,13 +59,11 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 });
 
 const IncidentTableComponent = ({
-  querySettings,
   toggleIncidentTableSettings,
   selectIncidentTableRows,
   incidentTableSettings,
   incidents,
 }) => {
-  const { displayQuerySettings } = querySettings;
   const { incidentTableColumns } = incidentTableSettings;
   const { filteredIncidentsByQuery } = incidents;
 
@@ -334,7 +331,6 @@ const IncidentTableComponent = ({
 const mapStateToProps = (state) => ({
   incidentTableSettings: state.incidentTableSettings,
   incidents: state.incidents,
-  querySettings: state.querySettings,
 });
 
 const mapDispatchToProps = (dispatch) => ({
