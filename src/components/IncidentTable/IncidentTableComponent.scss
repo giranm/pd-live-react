@@ -107,6 +107,7 @@
 .thead {
   position: sticky;
   top: 0; /* Don't forget this, required for the stickiness */
+  z-index: 1000 !important;
 }
 
 .th {
