@@ -88,6 +88,16 @@
   left: 10px;
 }
 
+/* Assignment Badge */
+.assignment-badge {
+  width: 32px;
+  height: 32px;
+  line-height: initial;
+  text-align: center;
+  color: $pd-white;
+  border-radius: 100%;
+}
+
 /* React-Table CSS */
 
 .table {

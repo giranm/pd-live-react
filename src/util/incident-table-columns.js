@@ -1,8 +1,6 @@
 import moment from 'moment';
 
-import {
-  Badge,
-} from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,8 +10,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { DATE_FORMAT } from 'util/constants';
-import { TRIGGERED, ACKNOWLEDGED, RESOLVED } from 'util/incidents';
-import { getObjectsFromList } from './helpers';
+import {
+  TRIGGERED,
+  ACKNOWLEDGED,
+  RESOLVED,
+} from 'util/incidents';
+import {
+  getObjectsFromListbyKey,
+  getObjectsFromList,
+  getInitials,
+} from './helpers';
 
 // Define all possible columns for incidents under PagerDuty's API
 export const availableIncidentTableColumns = [
@@ -110,13 +116,51 @@ export const availableIncidentTableColumns = [
     ),
   },
   {
-    accessor: (incident) => (incident.assignments
-      ? incident.assignments.map(({ assignee }) => assignee.summary).join(', ')
-      : 'Unassigned'),
     Header: 'Assignees',
     sortable: true,
     minWidth: 200,
     width: 200,
+    Cell: ({ row }) => {
+      const { assignments } = row.original.assignments
+        ? row.original
+        : [];
+      const assignmentsByInitials = assignments.length > 0
+        ? assignments.map(
+          ({ assignee }) => ({
+            initials: getInitials(assignee.summary),
+            id: assignee.id,
+            html_url: assignee.html_url,
+          }),
+        )
+        : [];
+      if (assignmentsByInitials.length > 0) {
+        // TODO: Replace with component that is attached to store
+        // const user = getObjectsFromListbyKey();
+        // const backgroundColor = '';
+        return (
+          <div>
+            {assignmentsByInitials.map((assignee) => (
+              <div
+                idx={assignee.id}
+                // className="assignment-badge"
+                style={{
+                  backgroundColor: 'lime-green',
+                }}
+              >
+                {assignee.initials}
+              </div>
+            ))}
+          </div>
+        );
+      }
+      return (
+        <div>
+          <Badge>
+            Unassigned
+          </Badge>
+        </div>
+      );
+    },
   },
   {
     accessor: 'last_status_change_at',
