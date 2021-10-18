@@ -21,8 +21,8 @@ export const availableIncidentTableColumns = [
     accessor: 'incident_number',
     Header: '#',
     sortable: true,
-    minWidth: 60,
-    width: 60,
+    minWidth: 80,
+    width: 80,
     Cell: ({ row }) => (
       <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.incident_number}
@@ -56,11 +56,7 @@ export const availableIncidentTableColumns = [
     width: 180,
     Cell: ({ row }) => {
       const formattedDate = moment(row.original.created_at).format(DATE_FORMAT);
-      return (
-        <p>
-          {formattedDate}
-        </p>
-      );
+      return formattedDate;
     },
   },
   {
@@ -74,15 +70,21 @@ export const availableIncidentTableColumns = [
       let elem;
       if (status === TRIGGERED) {
         elem = (
-          <FontAwesomeIcon icon={faExclamationTriangle} />
+          <Badge className="status-badge" variant="danger">
+            <FontAwesomeIcon icon={faExclamationTriangle} />
+          </Badge>
         );
       } else if (status === ACKNOWLEDGED) {
         elem = (
-          <FontAwesomeIcon icon={faShieldAlt} />
+          <Badge className="status-badge" variant="warning">
+            <FontAwesomeIcon icon={faShieldAlt} />
+          </Badge>
         );
       } else if (status === RESOLVED) {
         elem = (
-          <FontAwesomeIcon icon={faCheckCircle} />
+          <Badge className="status-badge" variant="success">
+            <FontAwesomeIcon icon={faCheckCircle} />
+          </Badge>
         );
       }
       return elem;
@@ -124,11 +126,7 @@ export const availableIncidentTableColumns = [
     width: 220,
     Cell: ({ row }) => {
       const formattedDate = moment(row.original.last_status_change_at).format(DATE_FORMAT);
-      return (
-        <p>
-          {formattedDate}
-        </p>
-      );
+      return formattedDate;
     },
   },
   {
@@ -179,7 +177,7 @@ export const availableIncidentTableColumns = [
     accessor: (incident) => {
       if (incident.priority) {
         return (
-          <p
+          <div
             style={{
               backgroundColor: `#${incident.priority.color}`,
               color: 'white',
@@ -187,10 +185,10 @@ export const availableIncidentTableColumns = [
             className="priority-label"
           >
             {incident.priority.summary}
-          </p>
+          </div>
         );
       }
-      return <p className="priority-label">--</p>;
+      return <div className="priority-label">--</div>;
     },
     Header: 'Priority',
     sortable: true,
