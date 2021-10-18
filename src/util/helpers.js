@@ -34,3 +34,13 @@ Object.byString = function (o, s) {
   }
   return o;
 };
+
+// Get Browser Locale
+export const getLanguage = () => navigator.userLanguage
+  || (navigator.languages
+  && navigator.languages.length
+  && navigator.languages[0])
+  || navigator.language
+  || navigator.browserLanguage
+  || navigator.systemLanguage
+  || 'en';

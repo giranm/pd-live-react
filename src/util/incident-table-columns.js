@@ -1,3 +1,18 @@
+import moment from 'moment';
+
+import {
+  Badge,
+} from 'react-bootstrap';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExclamationTriangle,
+  faShieldAlt,
+  faCheckCircle,
+} from '@fortawesome/free-solid-svg-icons';
+
+import { DATE_FORMAT } from 'util/constants';
+import { TRIGGERED, ACKNOWLEDGED, RESOLVED } from 'util/incidents';
 import { getObjectsFromList } from './helpers';
 
 // Define all possible columns for incidents under PagerDuty's API
@@ -6,27 +21,32 @@ export const availableIncidentTableColumns = [
     accessor: 'incident_number',
     Header: '#',
     sortable: true,
+    minWidth: 60,
+    width: 60,
     Cell: ({ row }) => (
       <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.incident_number}
       </a>
     ),
-    minWidth: 60,
-    width: 60,
   },
   {
     accessor: 'title',
     Header: 'Title',
     sortable: true,
     minWidth: 400,
-    width: 400,
+    width: 600,
+    Cell: ({ row }) => (
+      <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
+        {row.original.title}
+      </a>
+    ),
   },
   {
     accessor: 'description',
     Header: 'Description',
     sortable: true,
     minWidth: 400,
-    width: 400,
+    width: 600,
   },
   {
     accessor: 'created_at',
@@ -34,6 +54,14 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 180,
     width: 180,
+    Cell: ({ row }) => {
+      const formattedDate = moment(row.original.created_at).format(DATE_FORMAT);
+      return (
+        <p>
+          {formattedDate}
+        </p>
+      );
+    },
   },
   {
     accessor: 'status',
@@ -41,6 +69,24 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 120,
     width: 120,
+    Cell: ({ row }) => {
+      const { status } = row.original;
+      let elem;
+      if (status === TRIGGERED) {
+        elem = (
+          <FontAwesomeIcon icon={faExclamationTriangle} />
+        );
+      } else if (status === ACKNOWLEDGED) {
+        elem = (
+          <FontAwesomeIcon icon={faShieldAlt} />
+        );
+      } else if (status === RESOLVED) {
+        elem = (
+          <FontAwesomeIcon icon={faCheckCircle} />
+        );
+      }
+      return elem;
+    },
   },
   {
     accessor: 'incident_key',
@@ -53,8 +99,13 @@ export const availableIncidentTableColumns = [
     accessor: 'service.summary',
     Header: 'Service',
     sortable: true,
-    minWidth: 200,
-    width: 200,
+    minWidth: 300,
+    width: 300,
+    Cell: ({ row }) => (
+      <a href={row.original.service.html_url} target="_blank" rel="noopener noreferrer">
+        {row.original.service.summary}
+      </a>
+    ),
   },
   {
     accessor: (incident) => (incident.assignments
@@ -71,6 +122,14 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 220,
     width: 220,
+    Cell: ({ row }) => {
+      const formattedDate = moment(row.original.last_status_change_at).format(DATE_FORMAT);
+      return (
+        <p>
+          {formattedDate}
+        </p>
+      );
+    },
   },
   {
     accessor: 'alert_counts.all',
@@ -85,9 +144,16 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 200,
     width: 200,
+    Cell: ({ row }) => (
+      <a href={row.original.escalation_policy.html_url} target="_blank" rel="noopener noreferrer">
+        {row.original.escalation_policy.summary}
+      </a>
+    ),
   },
   {
-    accessor: (incident) => (incident.teams ? incident.teams.map((team) => team.summary).join(', ') : 'N/A'),
+    accessor: (incident) => (incident.teams
+      ? incident.teams.map((team) => team.summary).join(', ')
+      : 'N/A'),
     Header: 'Teams',
     sortable: true,
     minWidth: 200,
@@ -145,15 +211,15 @@ export const availableIncidentTableColumns = [
     accessor: 'id',
     Header: 'Incident ID',
     sortable: true,
-    minWidth: 130,
-    width: 130,
+    minWidth: 160,
+    width: 160,
   },
   {
     accessor: 'summary',
     Header: 'Summary',
     sortable: true,
     minWidth: 400,
-    width: 400,
+    width: 600,
   },
   {
     accessor: (incident) => {
