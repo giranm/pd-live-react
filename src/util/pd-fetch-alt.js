@@ -7,12 +7,14 @@ import moment from 'moment';
 
 import { getPdAccessToken } from 'util/pd-api-wrapper';
 
-function endpointIdentifier(endpoint) {
+const endpointIdentifier = (endpoint) => {
   if (endpoint.match(/users\/P.*\/sessions/)) {
     return 'user_sessions';
   }
   return endpoint.split('/').pop();
-}
+};
+
+const compareCreatedAt = (a, b) => moment(a.created_at).diff(moment(b.created_at));
 
 async function pdRequest(token, endpoint, method, params, data) {
   const axiosResponse = await axios({
@@ -30,7 +32,7 @@ async function pdRequest(token, endpoint, method, params, data) {
   return axiosResponse.data;
 }
 
-export const pdFetch = async (endpoint, params, progressCallback) => {
+export const pdParallelFetch = async (endpoint, params, progressCallback) => {
   const token = getPdAccessToken();
 
   let requestParams = {
@@ -88,7 +90,3 @@ export const pdFetch = async (endpoint, params, progressCallback) => {
   fetchedData.sort((a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)));
   return fetchedData;
 };
-
-function compareCreatedAt(a, b) {
-  return moment(a.created_at).diff(moment(b.created_at));
-}

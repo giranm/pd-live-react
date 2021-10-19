@@ -7,6 +7,10 @@ export const FETCH_INCIDENT_NOTES_REQUESTED = 'FETCH_INCIDENT_NOTES_REQUESTED';
 export const FETCH_INCIDENT_NOTES_COMPLETED = 'FETCH_INCIDENT_NOTES_COMPLETED';
 export const FETCH_INCIDENT_NOTES_ERROR = 'FETCH_INCIDENT_NOTES_ERROR';
 
+export const FETCH_ALL_INCIDENT_NOTES_REQUESTED = 'FETCH_ALL_INCIDENT_NOTES_REQUESTED';
+export const FETCH_ALL_INCIDENT_NOTES_COMPLETED = 'FETCH_ALL_INCIDENT_NOTES_COMPLETED';
+export const FETCH_ALL_INCIDENT_NOTES_ERROR = 'FETCH_ALL_INCIDENT_NOTES_ERROR';
+
 export const UPDATE_INCIDENTS_LIST = 'UPDATE_INCIDENTS_LIST';
 export const UPDATE_INCIDENTS_LIST_COMPLETED = 'UPDATE_INCIDENTS_LIST_COMPLETED';
 export const UPDATE_INCIDENTS_LIST_ERROR = 'UPDATE_INCIDENTS_LIST_ERROR';
@@ -47,6 +51,10 @@ export const getIncidentsAsync = () => ({
 export const getIncidentNotesAsync = (incidentId) => ({
   type: FETCH_INCIDENT_NOTES_REQUESTED,
   incidentId,
+});
+
+export const getAllIncidentNotesAsync = () => ({
+  type: FETCH_ALL_INCIDENT_NOTES_REQUESTED,
 });
 
 export const updateIncidentsListAsync = (addList = [], updateList = [], removeList = []) => ({

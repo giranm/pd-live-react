@@ -5,15 +5,14 @@ import {
 
 import Fuse from 'fuse.js';
 
-import { selectQuerySettings } from 'redux/query_settings/selectors';
+import { pd, throttledPdAxiosRequest } from 'util/pd-api-wrapper';
+import { pdParallelFetch } from 'util/pd-fetch-alt';
 
 import { pushToArray } from 'util/helpers';
 import { filterIncidentsByField, filterIncidentsByFieldOfList } from 'util/incidents';
-import { INCIDENTS_PAGINATION_LIMIT } from 'util/constants';
 import { fuseOptions } from 'util/fuse-config';
 
-import { pd } from 'util/pd-api-wrapper';
-import { pdFetch } from 'util/pd-fetch-alt';
+import { selectQuerySettings } from 'redux/query_settings/selectors';
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -21,6 +20,9 @@ import {
   FETCH_INCIDENT_NOTES_REQUESTED,
   FETCH_INCIDENT_NOTES_COMPLETED,
   FETCH_INCIDENT_NOTES_ERROR,
+  FETCH_ALL_INCIDENT_NOTES_REQUESTED,
+  FETCH_ALL_INCIDENT_NOTES_COMPLETED,
+  FETCH_ALL_INCIDENT_NOTES_ERROR,
   UPDATE_INCIDENTS_LIST,
   UPDATE_INCIDENTS_LIST_COMPLETED,
   UPDATE_INCIDENTS_LIST_ERROR,
@@ -62,7 +64,6 @@ export function* getIncidents(action) {
     //  Build params from query settings and call pd lib
     const {
       sinceDate,
-      untilDate,
       incidentStatus,
       incidentUrgency,
       teamIds,
@@ -84,19 +85,15 @@ export function* getIncidents(action) {
 
     if (serviceIds.length) params['service_ids[]'] = serviceIds;
 
-    const incidents = yield pdFetch('incidents', params);
+    const incidents = yield pdParallelFetch('incidents', params);
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
       incidents,
     });
 
-    // Get notes for each incident (implictly updates store) (DISABLING FOR PERFORMANCE ISSUES ATM)
-    // yield all(
-    //   incidents
-    //     .map((incident) => incident.id)
-    //     .map((incidentId) => put({ type: FETCH_INCIDENT_NOTES_REQUESTED, incidentId })),
-    // );
+    // Get notes for each incident (implictly updates store)
+    yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 
     // Filter incident list on priority (can't do this from API)
     yield put({
@@ -137,6 +134,37 @@ export function* getIncidentNotes(action) {
     });
   } catch (e) {
     yield put({ type: FETCH_INCIDENT_NOTES_ERROR, message: e.message });
+  }
+}
+
+export function* getAllIncidentNotesAsync() {
+  yield takeEvery(FETCH_ALL_INCIDENT_NOTES_REQUESTED, getAllIncidentNotes);
+}
+
+export function* getAllIncidentNotes() {
+  try {
+    // Build list of promises to call PD endpoint
+    const { incidents } = yield select(selectIncidents);
+    const requests = incidents.map(
+      ({ id }) => throttledPdAxiosRequest('GET', `incidents/${id}/notes`),
+    );
+    const results = yield Promise.all(requests);
+
+    // Grab matching incident and apply note update
+    const updatedIncidentsList = incidents.map((incident, idx) => {
+      const tempIncident = { ...incident };
+      tempIncident.notes = results[idx].data.notes;
+      return tempIncident;
+    });
+
+    yield put({
+      type: FETCH_ALL_INCIDENT_NOTES_COMPLETED,
+      incidents: updatedIncidentsList,
+    });
+
+    // Update store with incident having notes data
+  } catch (e) {
+    yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
   }
 }
 
