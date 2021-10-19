@@ -2,21 +2,13 @@
 import {
   useEffect,
   useMemo,
-  forwardRef,
-  useRef,
+  useCallback,
 } from 'react';
 import { connect } from 'react-redux';
-import mezr from 'mezr';
 
-import {
-  Button,
-  DropdownButton,
-  Dropdown,
-  Row,
-  Col,
-  Badge,
-  Container,
-} from 'react-bootstrap';
+import mezr from 'mezr';
+import { FixedSizeList } from 'react-window';
+
 import BTable from 'react-bootstrap/Table';
 
 import {
@@ -25,38 +17,27 @@ import {
   useRowSelect,
   useBlockLayout,
   useResizeColumns,
-  usePagination,
 } from 'react-table';
 
 import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/incident_table/actions';
 
-import { ReactComponent as EmptyIncidents } from 'assets/images/empty_incidents.svg';
+import CheckboxComponent from './subcomponents/CheckboxComponent';
+import EmptyIncidentsComponent from './subcomponents/EmptyIncidentsComponent';
 
 import './IncidentTableComponent.scss';
 
-const EmptyIncidentsComponent = () => (
-  <div className="empty-incidents">
-    <EmptyIncidents />
-    <h1 className="empty-incidents-badge">
-      <Badge bg="primary">No Incidents Found</Badge>
-    </h1>
-  </div>
-);
-
-const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
-  const defaultRef = useRef();
-  const resolvedRef = ref || defaultRef;
-
-  useEffect(() => {
-    resolvedRef.current.indeterminate = indeterminate;
-  }, [resolvedRef, indeterminate]);
-
-  return (
-    <>
-      <input type="checkbox" ref={resolvedRef} {...rest} />
-    </>
+// Ref: https://davidwalsh.name/detect-scrollbar-width
+const scrollbarWidth = () => {
+  const scrollDiv = document.createElement('div');
+  scrollDiv.setAttribute(
+    'style',
+    'width: 100px; height: 100px; overflow: scroll; position:absolute; top:-9999px;',
   );
-});
+  document.body.appendChild(scrollDiv);
+  const scrollbarWidthDist = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+  document.body.removeChild(scrollDiv);
+  return scrollbarWidthDist;
+};
 
 const IncidentTableComponent = ({
   toggleIncidentTableSettings,
@@ -81,25 +62,18 @@ const IncidentTableComponent = ({
     () => filteredIncidentsByQuery, [filteredIncidentsByQuery],
   );
 
+  const scrollBarSize = useMemo(() => scrollbarWidth(), []);
+
   const {
-    state: { pageIndex, pageSize },
+    state: { selectedRowIds },
     // Core Table
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    // rows, // Disabled as we are using pagination (see variable substitute)
+    rows,
     prepareRow,
     selectedFlatRows,
-    // Pagination
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
+    totalColumnsWidth,
   } = useTable(
     {
       columns: incidentTableColumns,
@@ -113,12 +87,9 @@ const IncidentTableComponent = ({
       autoResetSortBy: false,
       autoResetFilters: false,
       autoResetRowState: false,
-      // Pagination
-      initialState: { pageIndex: 0 },
     },
     // Plugins
     useSortBy,
-    usePagination,
     useRowSelect,
     useBlockLayout,
     useResizeColumns,
@@ -135,20 +106,42 @@ const IncidentTableComponent = ({
           // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+              <CheckboxComponent {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
           // The cell can use the individual row's getToggleRowSelectedProps method
           // to the render a checkbox
           Cell: ({ row }) => (
             <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              <CheckboxComponent {...row.getToggleRowSelectedProps()} />
             </div>
           ),
         },
         ...columns,
       ]);
     },
+  );
+
+  const RenderRow = useCallback(
+    ({ index, style }) => {
+      const row = rows[index];
+      prepareRow(row);
+      return (
+        <tr
+          {...row.getRowProps({
+            style,
+          })}
+          className={index % 2 === 0 ? 'tr' : 'tr-odd'}
+        >
+          {row.cells.map((cell) => (
+            <td {...cell.getCellProps()} className="td">
+              {cell.render('Cell')}
+            </td>
+          ))}
+        </tr>
+      );
+    },
+    [prepareRow, rows, selectedRowIds],
   );
 
   // Row selection hooks
@@ -162,7 +155,7 @@ const IncidentTableComponent = ({
   const querySettingsEl = document.getElementById('query-settings-ctr');
   const incidentActionsEl = document.getElementById('incident-actions-ctr');
   const incidentActionsHeight = incidentActionsEl
-    ? mezr.height(incidentActionsEl) + 20
+    ? mezr.height(incidentActionsEl) + 50
     : 0;
   const distanceBetweenQueryAndAction = incidentActionsEl
     ? mezr.distance([querySettingsEl, 'border'], [incidentActionsEl, 'border'])
@@ -174,11 +167,10 @@ const IncidentTableComponent = ({
         <div>
           <div
             className="incident-table"
-            style={{ height: `${distanceBetweenQueryAndAction - incidentActionsHeight}px` }}
           >
             <BTable
               responsive="sm"
-              striped
+              // striped // This doesn't work nicely with FixedSizeList
               hover
               size="sm"
               {...getTableProps()}
@@ -214,111 +206,17 @@ const IncidentTableComponent = ({
                   ))}
                 </thead>
                 <tbody {...getTableBodyProps()} className="tbody">
-                  {page.map((row, i) => {
-                    prepareRow(row);
-                    return (
-                      <tr {...row.getRowProps()} className="tr">
-                        {row.cells.map((cell) => (
-                          <td {...cell.getCellProps()} className="td">
-                            {cell.render('Cell')}
-                          </td>
-                        ))}
-                      </tr>
-                    );
-                  })}
+                  <FixedSizeList
+                    height={(distanceBetweenQueryAndAction - incidentActionsHeight)}
+                    itemCount={rows.length}
+                    itemSize={50}
+                    width={totalColumnsWidth + scrollBarSize}
+                  >
+                    {RenderRow}
+                  </FixedSizeList>
                 </tbody>
               </table>
             </BTable>
-          </div>
-          <br />
-          <div>
-            <div
-              className="incident-table-settings-ctr"
-              style={{ bottom: `${incidentActionsHeight - 10}px` }}
-            >
-              <Container fluid>
-                <Row>
-                  <Col />
-                  <Col className="pagination-setting-pages" sm={{ span: -1 }}>
-                    <DropdownButton
-                      size="sm"
-                      variant="secondary"
-                      title={`Show ${pageSize} results`}
-                      drop="up"
-                    >
-                      {[10, 25, 50, 100].map((pgSize) => (
-                        <Dropdown.Item
-                          key={pgSize}
-                          name={pgSize}
-                          onClick={(e) => {
-                            setPageSize(Number(e.target.name, 10));
-                          }}
-                        >
-                          Show {pgSize} results
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-                    <div className="mr-2" />
-                    <Button
-                      className="pagination-buttons"
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => gotoPage(0)}
-                      disabled={!canPreviousPage}
-                    >
-                      {'<<'}
-                    </Button>
-                    <Button
-                      className="pagination-buttons"
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => previousPage()}
-                      disabled={!canPreviousPage}
-                    >
-                      {'<'}
-                    </Button>
-                    <div className="pagination-current-page-badge">
-                      <Badge
-                        className="pagination-buttons"
-                        variant="dark"
-                      >
-                        {`Page ${pageIndex + 1} of ${pageOptions.length}`}
-                      </Badge>
-                    </div>
-                    <Button
-                      className="pagination-buttons"
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => nextPage()}
-                      disabled={!canNextPage}
-                    >
-                      {'>'}
-                    </Button>
-                    <Button
-                      className="pagination-buttons"
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => gotoPage(pageCount - 1)}
-                      disabled={!canNextPage}
-                    >
-                      {'>>'}
-                    </Button>
-                    {/* Disabling until we have better UX */}
-                    {/* <Form.Control
-                    type="number"
-                    size="sm"
-                    min={1}
-                    max={pageCount}
-                    defaultValue={pageIndex + 1}
-                    onChange={(e) => {
-                      const targetPage = e.target.value ? Number(e.target.value) - 1 : 0;
-                      gotoPage(targetPage);
-                    }}
-                  /> */}
-                  </Col>
-                </Row>
-              </Container>
-            </div>
           </div>
         </div>
       ) : (

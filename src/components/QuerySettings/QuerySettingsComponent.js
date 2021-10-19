@@ -40,6 +40,14 @@ import {
 
 const animatedComponents = makeAnimated();
 
+const customStyles = {
+  // Ensure that dropdowns appear over table header
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 2,
+  }),
+};
+
 const QuerySettingsComponent = ({
   querySettings,
   services,
@@ -173,6 +181,7 @@ const QuerySettingsComponent = ({
                 Team:{' '}
                 <Form.Group>
                   <Select
+                    styles={customStyles}
                     onChange={(selectedTeams) => {
                       const teamIds = selectedTeams.map((team) => team.value);
                       updateQuerySettingsTeams(teamIds);
@@ -187,6 +196,7 @@ const QuerySettingsComponent = ({
                 Service:{' '}
                 <Form.Group>
                   <Select
+                    styles={customStyles}
                     onChange={(selectedServices) => {
                       const serviceIds = selectedServices.map((service) => service.value);
                       updateQuerySettingsServices(serviceIds);

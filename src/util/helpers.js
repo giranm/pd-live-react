@@ -1,3 +1,5 @@
+/* eslint-disable no-sequences */
+/* eslint-disable no-return-assign */
 export const pushToArray = (arr, obj, key) => {
   const index = arr.findIndex((e) => e[key] === obj[key]);
   if (index === -1) {
@@ -33,4 +35,30 @@ Object.byString = function (o, s) {
     }
   }
   return o;
+};
+
+// Convert list of objects to singular object traversed by "id"
+export const convertListToMapById = (list) => list.reduce(
+  (obj, item) => (obj[item.id] = item, obj), {},
+);
+// Get Browser Locale
+export const getLanguage = () => navigator.userLanguage
+  || (navigator.languages
+  && navigator.languages.length
+  && navigator.languages[0])
+  || navigator.language
+  || navigator.browserLanguage
+  || navigator.systemLanguage
+  || 'en';
+
+// Generate initials from full name
+export const getInitials = (fullName) => {
+  const allNames = fullName.trim().split(' ');
+  const initials = allNames.reduce((acc, curr, index) => {
+    if (index === 0 || index === allNames.length - 1) {
+      acc = `${acc}${curr.charAt(0).toUpperCase()}`;
+    }
+    return acc;
+  }, '');
+  return initials;
 };
