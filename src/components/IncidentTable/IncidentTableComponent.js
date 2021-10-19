@@ -131,7 +131,7 @@ const IncidentTableComponent = ({
           {...row.getRowProps({
             style,
           })}
-          className="tr"
+          className={index % 2 === 0 ? 'tr' : 'tr-odd'}
         >
           {row.cells.map((cell) => (
             <td {...cell.getCellProps()} className="td">
@@ -170,7 +170,7 @@ const IncidentTableComponent = ({
           >
             <BTable
               responsive="sm"
-              striped
+              // striped // This doesn't work nicely with FixedSizeList
               hover
               size="sm"
               {...getTableProps()}

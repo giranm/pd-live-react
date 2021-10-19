@@ -133,7 +133,7 @@
 
 .resizer {
   display: inline-block;
-  width: 10px;
+  width: 2px;
   height: 100%;
   position: absolute;
   right: 0;
@@ -141,9 +141,9 @@
   transform: translateX(50%);
   z-index: 1;
   touch-action: none;
-  /* &.isResizing {
-    background: red;
-  } */
+  &.isResizing {
+    background: $pd-primary;
+  }
 }
 
 .tbody {
@@ -153,10 +153,12 @@
 
 .tr {
   font-size: 14px;
+  background-color: $pd-brand-background-2 !important;
 }
 
-.tr:nth-child(even) {
-  background-color: $pd-brand-background-2 !important;
+.tr-odd {
+  font-size: 14px;
+  background-color: $pd-brand-background-3 !important;
 }
 
 .tr:hover {
@@ -168,24 +170,4 @@
   padding-left: 10px !important;
   align-items: center !important;
   display: flex !important;
-}
-
-.pagination-results {
-  display: flex;
-  justify-content: flex-end;
-  text-align: right;
-  padding-bottom: 5px;
-}
-
-.pagination-setting-pages {
-  display: flex;
-}
-
-.pagination-buttons {
-  margin-left: 5px;
-  font-size: 14px;
-}
-
-.pagination-current-page-badge {
-  margin-top: 4px;
 }
