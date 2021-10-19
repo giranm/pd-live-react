@@ -253,9 +253,8 @@ export const availableIncidentTableColumns = [
     },
     Header: 'Priority',
     sortable: true,
-    minWidth: 100,
-    width: 100,
-    allowOverflow: true,
+    minWidth: 80,
+    width: 80,
     sortFunction: (row1, row2) => null, // TBD - this needs to be custom implemented
   },
   // TODO: incidents_responders, responder_requests, subscriber_requests
@@ -296,7 +295,7 @@ export const availableIncidentTableColumns = [
     Header: 'Summary',
     sortable: true,
     minWidth: 400,
-    width: 600,
+    width: 800,
   },
   {
     accessor: (incident) => {
