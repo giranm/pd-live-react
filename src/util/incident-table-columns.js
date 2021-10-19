@@ -269,13 +269,13 @@ export const availableIncidentTableColumns = [
       let elem;
       if (urgency === HIGH) {
         elem = (
-          <Badge className="urgency-badge" variant="dark">
+          <Badge className="urgency-badge" variant="primary">
             <FontAwesomeIcon icon={faChevronUp} /> High
           </Badge>
         );
       } else if (urgency === LOW) {
         elem = (
-          <Badge className="urgency-badge" variant="light">
+          <Badge className="urgency-badge" variant="secondary">
             <FontAwesomeIcon icon={faChevronDown} /> Low
           </Badge>
         );

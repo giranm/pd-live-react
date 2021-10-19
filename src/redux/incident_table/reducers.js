@@ -15,10 +15,10 @@ import {
 
 const defaultColumnNames = [
   '#',
-  'Assignees',
   'Status',
   'Priority',
   'Title',
+  'Assignees',
   'Created At',
   'Service',
   'Latest Note',
