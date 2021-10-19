@@ -30,33 +30,10 @@ import {
 
 import { toggleIncidentTableSettings, selectIncidentTableRows } from 'redux/incident_table/actions';
 
-import { ReactComponent as EmptyIncidents } from 'assets/images/empty_incidents.svg';
+import CheckboxComponent from './subcomponents/CheckboxComponent';
+import EmptyIncidentsComponent from './subcomponents/EmptyIncidentsComponent';
 
 import './IncidentTableComponent.scss';
-
-const EmptyIncidentsComponent = () => (
-  <div className="empty-incidents">
-    <EmptyIncidents />
-    <h1 className="empty-incidents-badge">
-      <Badge bg="primary">No Incidents Found</Badge>
-    </h1>
-  </div>
-);
-
-const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
-  const defaultRef = useRef();
-  const resolvedRef = ref || defaultRef;
-
-  useEffect(() => {
-    resolvedRef.current.indeterminate = indeterminate;
-  }, [resolvedRef, indeterminate]);
-
-  return (
-    <>
-      <input type="checkbox" ref={resolvedRef} {...rest} />
-    </>
-  );
-});
 
 const IncidentTableComponent = ({
   toggleIncidentTableSettings,
@@ -135,14 +112,14 @@ const IncidentTableComponent = ({
           // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+              <CheckboxComponent {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
           // The cell can use the individual row's getToggleRowSelectedProps method
           // to the render a checkbox
           Cell: ({ row }) => (
             <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              <CheckboxComponent {...row.getToggleRowSelectedProps()} />
             </div>
           ),
         },
