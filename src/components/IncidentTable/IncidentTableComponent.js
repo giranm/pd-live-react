@@ -65,7 +65,7 @@ const IncidentTableComponent = ({
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
   const {
-    state,
+    state: { selectedRowIds },
     // Core Table
     getTableProps,
     getTableBodyProps,
@@ -141,7 +141,7 @@ const IncidentTableComponent = ({
         </tr>
       );
     },
-    [prepareRow, rows],
+    [prepareRow, rows, selectedRowIds],
   );
 
   // Row selection hooks
