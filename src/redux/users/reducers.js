@@ -18,6 +18,7 @@ const users = produce(
 
       case GET_USERS_COMPLETED:
         draft.users = action.users;
+        draft.usersMap = action.usersMap;
         draft.status = GET_USERS_COMPLETED;
         break;
 
@@ -46,6 +47,7 @@ const users = produce(
   },
   {
     users: [],
+    usersMap: {},
     currentUser: null,
     status: null,
     fetchingData: false,

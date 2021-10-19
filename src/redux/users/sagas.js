@@ -4,6 +4,8 @@ import {
 } from 'redux-saga/effects';
 
 import { pd } from 'util/pd-api-wrapper';
+import { convertListToMapById } from 'util/helpers';
+
 import {
   GET_USERS_REQUESTED,
   GET_USERS_COMPLETED,
@@ -22,9 +24,12 @@ export function* getUsersAsync() {
 export function* getUsers() {
   try {
     const response = yield call(pd.all, 'users');
+    const users = response.resource;
+    const usersMap = convertListToMapById(users);
     yield put({
       type: GET_USERS_COMPLETED,
-      users: response.resource,
+      users,
+      usersMap,
     });
   } catch (e) {
     yield put({ type: GET_USERS_ERROR, message: e.message });

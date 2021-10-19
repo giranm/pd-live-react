@@ -1,3 +1,5 @@
+/* eslint-disable no-sequences */
+/* eslint-disable no-return-assign */
 export const pushToArray = (arr, obj, key) => {
   const index = arr.findIndex((e) => e[key] === obj[key]);
   if (index === -1) {
@@ -35,6 +37,10 @@ Object.byString = function (o, s) {
   return o;
 };
 
+// Convert list of objects to singular object traversed by "id"
+export const convertListToMapById = (list) => list.reduce(
+  (obj, item) => (obj[item.id] = item, obj), {},
+);
 // Get Browser Locale
 export const getLanguage = () => navigator.userLanguage
   || (navigator.languages

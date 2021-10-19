@@ -11,6 +11,9 @@ import {
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
+import PersonInitialsComponent
+  from 'components/IncidentTable/subcomponents/PersonInitialsComponents';
+
 import { DATE_FORMAT } from 'util/constants';
 import {
   TRIGGERED,
@@ -20,9 +23,7 @@ import {
   LOW,
 } from 'util/incidents';
 import {
-  getObjectsFromListbyKey,
   getObjectsFromList,
-  getInitials,
 } from './helpers';
 
 // Define all possible columns for incidents under PagerDuty's API
@@ -126,48 +127,16 @@ export const availableIncidentTableColumns = [
       : 'Unassigned'),
     Header: 'Assignees',
     sortable: true,
-    minWidth: 200,
-    width: 200,
+    minWidth: 160,
+    width: 160,
     Cell: ({ row }) => {
       const { assignments } = row.original.assignments
         ? row.original
         : [];
-      const assignmentsByInitials = assignments.length > 0
-        ? assignments.map(
-          ({ assignee }) => ({
-            initials: getInitials(assignee.summary),
-            id: assignee.id,
-            html_url: assignee.html_url,
-          }),
-        )
+      const users = assignments.length > 0
+        ? assignments.map(({ assignee }) => ({ user: { ...assignee } }))
         : [];
-      if (assignmentsByInitials.length > 0) {
-        // TODO: Replace with component that is attached to store
-        // const user = getObjectsFromListbyKey();
-        // const backgroundColor = '';
-        return (
-          <div>
-            {assignmentsByInitials.map((assignee) => (
-              <div
-                idx={assignee.id}
-                // className="assignment-badge"
-                style={{
-                  backgroundColor: 'lime-green',
-                }}
-              >
-                {assignee.initials}
-              </div>
-            ))}
-          </div>
-        );
-      }
-      return (
-        <div>
-          <Badge>
-            Unassigned
-          </Badge>
-        </div>
-      );
+      return <PersonInitialsComponent displayedUsers={users} />;
     },
   },
   {
@@ -239,6 +208,15 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 250,
     width: 250,
+    Cell: ({ row }) => {
+      const { acknowledgements } = row.original.acknowledgements
+        ? row.original
+        : [];
+      const users = acknowledgements.length > 0
+        ? acknowledgements.map(({ acknowledger }) => ({ user: { ...acknowledger } }))
+        : [];
+      return <PersonInitialsComponent displayedUsers={users} />;
+    },
   },
   {
     accessor: 'last_status_change_by.summary',
@@ -336,4 +314,6 @@ export const availableIncidentTableColumns = [
 ];
 
 // Helper function to retrieve columns definitions from list of names
-export const getIncidentTableColumns = (columnNames) => getObjectsFromList(availableIncidentTableColumns, columnNames, 'Header');
+export const getIncidentTableColumns = (columnNames) => getObjectsFromList(
+  availableIncidentTableColumns, columnNames, 'Header',
+);
