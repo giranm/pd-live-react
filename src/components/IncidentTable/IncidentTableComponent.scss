@@ -80,12 +80,20 @@
 
 /* Status Badge */
 .status-badge {
-  width: 26px;
+  width: 160px;
   height: 26px;
   font-size: unset !important;
   padding-top: 5px !important;
   position: relative;
-  left: 10px;
+}
+
+/* Urgency Badge */
+.urgency-badge {
+  width: 80px;
+  height: 26px;
+  font-size: unset !important;
+  padding-top: 5px !important;
+  position: relative;
 }
 
 /* Assignment Badge */
@@ -107,7 +115,7 @@
 .thead {
   position: sticky;
   top: 0; /* Don't forget this, required for the stickiness */
-  z-index: 1000 !important;
+  z-index: 1 !important;
 }
 
 .th {

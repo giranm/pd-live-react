@@ -7,6 +7,8 @@ import {
   faExclamationTriangle,
   faShieldAlt,
   faCheckCircle,
+  faChevronUp,
+  faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { DATE_FORMAT } from 'util/constants';
@@ -14,6 +16,8 @@ import {
   TRIGGERED,
   ACKNOWLEDGED,
   RESOLVED,
+  HIGH,
+  LOW,
 } from 'util/incidents';
 import {
   getObjectsFromListbyKey,
@@ -69,27 +73,28 @@ export const availableIncidentTableColumns = [
     accessor: 'status',
     Header: 'Status',
     sortable: true,
-    minWidth: 120,
-    width: 120,
+    minWidth: 160,
+    width: 160,
+    maxWidth: 160,
     Cell: ({ row }) => {
       const { status } = row.original;
       let elem;
       if (status === TRIGGERED) {
         elem = (
           <Badge className="status-badge" variant="danger">
-            <FontAwesomeIcon icon={faExclamationTriangle} />
+            <FontAwesomeIcon icon={faExclamationTriangle} /> Triggered
           </Badge>
         );
       } else if (status === ACKNOWLEDGED) {
         elem = (
           <Badge className="status-badge" variant="warning">
-            <FontAwesomeIcon icon={faShieldAlt} />
+            <FontAwesomeIcon icon={faShieldAlt} /> Acknowledged
           </Badge>
         );
       } else if (status === RESOLVED) {
         elem = (
           <Badge className="status-badge" variant="success">
-            <FontAwesomeIcon icon={faCheckCircle} />
+            <FontAwesomeIcon icon={faCheckCircle} /> Resolved
           </Badge>
         );
       }
@@ -116,6 +121,9 @@ export const availableIncidentTableColumns = [
     ),
   },
   {
+    accessor: (incident) => (incident.assignments
+      ? incident.assignments.map(({ assignee }) => assignee.summary).join(', ')
+      : 'Unassigned'),
     Header: 'Assignees',
     sortable: true,
     minWidth: 200,
@@ -200,6 +208,28 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 200,
     width: 200,
+    Cell: ({ row }) => {
+      const { teams } = row.original.teams
+        ? row.original
+        : [];
+      if (teams.length > 0) {
+        return (
+          <div>
+            {teams.map((team, idx, { length }) => (
+              <a
+                idx={team.id}
+                href={team.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {team.summary}{length - 1 === idx ? null : ', '}
+              </a>
+            ))}
+          </div>
+        );
+      }
+      return null;
+    },
   },
   {
     accessor: (incident) => (incident.acknowledgements
@@ -216,6 +246,15 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 250,
     width: 250,
+    Cell: ({ row }) => (
+      <a
+        href={row.original.last_status_change_by.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {row.original.last_status_change_by.summary}
+      </a>
+    ),
   },
   {
     accessor: (incident) => {
@@ -248,6 +287,24 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 120,
     width: 120,
+    Cell: ({ row }) => {
+      const { urgency } = row.original;
+      let elem;
+      if (urgency === HIGH) {
+        elem = (
+          <Badge className="urgency-badge" variant="dark">
+            <FontAwesomeIcon icon={faChevronUp} /> High
+          </Badge>
+        );
+      } else if (urgency === LOW) {
+        elem = (
+          <Badge className="urgency-badge" variant="light">
+            <FontAwesomeIcon icon={faChevronDown} /> Low
+          </Badge>
+        );
+      }
+      return elem;
+    },
   },
   {
     accessor: 'id',
