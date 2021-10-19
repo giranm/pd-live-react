@@ -18,6 +18,7 @@ const defaultColumnNames = [
   'Status',
   'Priority',
   'Title',
+  'Assignees',
   'Created At',
   'Service',
   'Latest Note',

@@ -53,13 +53,15 @@
   letter-spacing: 1px;
   min-width: 40px;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   white-space: nowrap;
   margin-right: 5px;
   padding: 5px 10px 3px;
   border-radius: 5px;
   vertical-align: -4px;
   border-radius: 4px;
+  position: relative;
+  left: 5px;
 }
 
 .priority-label-dropdown {
@@ -76,6 +78,34 @@
   border-radius: 5px;
 }
 
+/* Status Badge */
+.status-badge {
+  width: 180px;
+  height: 26px;
+  font-size: unset !important;
+  padding-top: 5px !important;
+  position: relative;
+}
+
+/* Urgency Badge */
+.urgency-badge {
+  width: 80px;
+  height: 26px;
+  font-size: unset !important;
+  padding-top: 5px !important;
+  position: relative;
+}
+
+/* Assignment Badge */
+.assignment-badge {
+  width: 32px;
+  height: 32px;
+  line-height: initial;
+  text-align: center;
+  color: $pd-white;
+  border-radius: 100%;
+}
+
 /* React-Table CSS */
 
 .table {
@@ -85,6 +115,7 @@
 .thead {
   position: sticky;
   top: 0; /* Don't forget this, required for the stickiness */
+  z-index: 1 !important;
 }
 
 .th {
@@ -135,6 +166,9 @@
 
 .td {
   padding: 10px !important;
+  padding-left: 10px !important;
+  align-items: center !important;
+  display: flex !important;
 }
 
 .pagination-results {

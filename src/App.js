@@ -10,6 +10,7 @@ import {
 } from 'util/constants';
 
 import moment from 'moment';
+import 'moment/min/locales.min';
 
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
 import QuerySettingsComponent from 'components/QuerySettings/QuerySettingsComponent';
@@ -32,7 +33,11 @@ import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 
+import { getLanguage } from 'util/helpers';
+
 import 'App.scss';
+
+moment.locale(getLanguage());
 
 const App = ({
   getServicesAsync,
