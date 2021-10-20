@@ -13,14 +13,16 @@ const PersonInitialsComponent = ({ users, displayedUsers }) => {
   const { usersMap } = users;
   const displayedUsersByInitials = displayedUsers.length > 0
     ? displayedUsers.map(
-      ({ user }) => ({
-        summary: user.summary,
-        initials: getInitials(user.summary),
-        id: user.id,
-        html_url: user.html_url,
-        // User colors contain hypens - removing for JSX styling
-        color: usersMap[user.id].color.replace('-', ''),
-      }),
+      ({ user }) => {
+        const color = usersMap[user.id].color.replace('-', '');
+        return {
+          summary: user.summary,
+          initials: getInitials(user.summary),
+          id: user.id,
+          html_url: user.html_url,
+          color: CSS.supports('color', color) ? color : 'black',
+        };
+      },
     )
     : [];
 

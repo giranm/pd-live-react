@@ -45,7 +45,7 @@ export const availableIncidentTableColumns = [
     Header: 'Title',
     sortable: true,
     minWidth: 400,
-    width: 600,
+    width: 800,
     Cell: ({ row }) => (
       <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.title}
@@ -57,7 +57,7 @@ export const availableIncidentTableColumns = [
     Header: 'Description',
     sortable: true,
     minWidth: 400,
-    width: 600,
+    width: 800,
   },
   {
     accessor: 'created_at',
@@ -253,8 +253,8 @@ export const availableIncidentTableColumns = [
     },
     Header: 'Priority',
     sortable: true,
-    minWidth: 80,
-    width: 80,
+    minWidth: 90,
+    width: 90,
     sortFunction: (row1, row2) => null, // TBD - this needs to be custom implemented
   },
   // TODO: incidents_responders, responder_requests, subscriber_requests

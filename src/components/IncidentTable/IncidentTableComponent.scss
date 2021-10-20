@@ -161,7 +161,8 @@
   background-color: $pd-brand-background-3 !important;
 }
 
-.tr:hover {
+.tr:hover,
+.tr-odd:hover {
   background-color: $pd-gray-medium !important;
 }
 
