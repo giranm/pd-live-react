@@ -53,7 +53,7 @@ const IncidentTableComponent = ({
     () => ({
       minWidth: 30,
       width: 150,
-      maxWidth: 400,
+      maxWidth: 1000,
     }),
     [],
   );
@@ -209,7 +209,7 @@ const IncidentTableComponent = ({
                   <FixedSizeList
                     height={(distanceBetweenQueryAndAction - incidentActionsHeight)}
                     itemCount={rows.length}
-                    itemSize={50}
+                    itemSize={60}
                     width={totalColumnsWidth + scrollBarSize}
                   >
                     {RenderRow}
