@@ -74,16 +74,16 @@ export function* getIncidents(action) {
     const params = {
       since: sinceDate.toISOString(),
       until: new Date().toISOString(),
-      'include[]': ['first_trigger_log_entries', 'external_references'],
+      include: ['first_trigger_log_entries', 'external_references'],
     };
 
-    if (incidentStatus) params['statuses[]'] = incidentStatus;
+    if (incidentStatus) params.statuses = incidentStatus;
 
-    if (incidentUrgency) params['urgencies[]'] = incidentUrgency;
+    if (incidentUrgency) params.urgencies = incidentUrgency;
 
-    if (teamIds.length) params['team_ids[]'] = teamIds;
+    if (teamIds.length) params.team_ids = teamIds;
 
-    if (serviceIds.length) params['service_ids[]'] = serviceIds;
+    if (serviceIds.length) params.service_ids = serviceIds;
 
     const incidents = yield pdParallelFetch('incidents', params);
 
