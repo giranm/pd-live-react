@@ -35,6 +35,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
 - [ ] 429 (rate throttling) issues when requests notes for each incident (from large incident query above)
 - [ ] Slow query performance for large number of incidents (due to 100 results limit on API)
+- [x] Empty Incident component rendered before table (for non-empty incidents list)
 
 ## Local Development
 

@@ -3,12 +3,18 @@ import {
   useEffect,
   useMemo,
   useCallback,
+  useState,
 } from 'react';
 import { connect } from 'react-redux';
 
 import mezr from 'mezr';
 import { FixedSizeList } from 'react-window';
 
+import {
+  Container,
+  Row,
+  Spinner,
+} from 'react-bootstrap';
 import BTable from 'react-bootstrap/Table';
 
 import {
@@ -39,6 +45,20 @@ const scrollbarWidth = () => {
   return scrollbarWidthDist;
 };
 
+// Ref: https://stackoverflow.com/a/61390352/6480733
+const Delayed = ({ children, waitBeforeShow = 500 }) => {
+  const [isShown, setIsShown] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsShown(true);
+    }, waitBeforeShow);
+    return () => clearTimeout(timer);
+  }, [waitBeforeShow]);
+
+  return isShown ? children : null;
+};
+
 const IncidentTableComponent = ({
   toggleIncidentTableSettings,
   selectIncidentTableRows,
@@ -46,7 +66,7 @@ const IncidentTableComponent = ({
   incidents,
 }) => {
   const { incidentTableColumns } = incidentTableSettings;
-  const { filteredIncidentsByQuery } = incidents;
+  const { filteredIncidentsByQuery, fetchingIncidents } = incidents;
 
   // React Table Config
   const defaultColumn = useMemo(
@@ -64,9 +84,19 @@ const IncidentTableComponent = ({
 
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
+  // Dynamic Table Height
+  const querySettingsEl = document.getElementById('query-settings-ctr');
+  const incidentActionsEl = document.getElementById('incident-actions-ctr');
+  const incidentActionsHeight = incidentActionsEl
+    ? mezr.height(incidentActionsEl) + 50
+    : 0;
+  const distanceBetweenQueryAndAction = incidentActionsEl
+    ? mezr.distance([querySettingsEl, 'border'], [incidentActionsEl, 'border'])
+    : 0;
+
+  // Create instance of react-table with options and plugins
   const {
     state: { selectedRowIds },
-    // Core Table
     getTableProps,
     getTableBodyProps,
     headerGroups,
@@ -102,15 +132,11 @@ const IncidentTableComponent = ({
           minWidth: 35,
           width: 35,
           maxWidth: 35,
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div>
               <CheckboxComponent {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
           Cell: ({ row }) => (
             <div>
               <CheckboxComponent {...row.getToggleRowSelectedProps()} />
@@ -122,6 +148,7 @@ const IncidentTableComponent = ({
     },
   );
 
+  // Custom component required for virtualized rows
   const RenderRow = useCallback(
     ({ index, style }) => {
       const row = rows[index];
@@ -151,79 +178,88 @@ const IncidentTableComponent = ({
     return () => { };
   }, [selectedFlatRows]);
 
-  // Dynamic Table Height
-  const querySettingsEl = document.getElementById('query-settings-ctr');
-  const incidentActionsEl = document.getElementById('incident-actions-ctr');
-  const incidentActionsHeight = incidentActionsEl
-    ? mezr.height(incidentActionsEl) + 50
-    : 0;
-  const distanceBetweenQueryAndAction = incidentActionsEl
-    ? mezr.distance([querySettingsEl, 'border'], [incidentActionsEl, 'border'])
-    : 0;
+  // Render components based on application state
+  if (fetchingIncidents) {
+    return (
+      <Container fluid>
+        <br />
+        <Row className="justify-content-md-center">
+          <Spinner className="" animation="border" role="status" variant="success" />
+          <h5 className="querying-incidents">
+            <b>Querying PagerDuty API</b>
+          </h5>
+        </Row>
+      </Container>
+    );
+  }
 
-  return (
-    <div className="incident-table-ctr">
-      {memoizedFilteredIncidentsByQuery && memoizedFilteredIncidentsByQuery.length ? (
-        <div>
-          <div
-            className="incident-table"
-          >
-            <BTable
-              responsive="sm"
-              // striped // This doesn't work nicely with FixedSizeList
-              hover
-              size="sm"
-              {...getTableProps()}
-            >
-              <table className="table">
-                <thead className="thead">
-                  {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        // Add the sorting props to control sorting. For this example
-                        // we can add them into the header props
-                        <th
-                          className={column.isSorted ? 'th-sorted' : 'th'}
-                          {...column.getHeaderProps(column.getSortByToggleProps())}
-                        >
-                          {column.render('Header')}
-                          <span>
-                            {column.isSorted
-                              ? column.isSortedDesc
-                                ? ' ▼'
-                                : ' ▲'
-                              : ''}
-                          </span>
-                          {column.canResize && (
-                            <div
-                              {...column.getResizerProps()}
-                              className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-                            />
-                          )}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody {...getTableBodyProps()} className="tbody">
-                  <FixedSizeList
-                    height={(distanceBetweenQueryAndAction - incidentActionsHeight)}
-                    itemCount={rows.length}
-                    itemSize={60}
-                    width={totalColumnsWidth + scrollBarSize}
-                  >
-                    {RenderRow}
-                  </FixedSizeList>
-                </tbody>
-              </table>
-            </BTable>
-          </div>
-        </div>
-      ) : (
+  // TODO: Find a better way to prevent Empty Incidents from being shown during render
+  if (!fetchingIncidents
+    && filteredIncidentsByQuery.length === 0) {
+    return (
+      <Delayed waitBeforeShow={4000}>
         <EmptyIncidentsComponent />
-      )}
-    </div>
-  );
+      </Delayed>
+    );
+  }
+
+  if (!fetchingIncidents
+    && filteredIncidentsByQuery.length > 0) {
+    return (
+      <div className="incident-table-ctr">
+        <div
+          className="incident-table"
+        >
+          <BTable
+            responsive="sm"
+            hover
+            size="sm"
+            {...getTableProps()}
+          >
+            <table className="table">
+              <thead className="thead">
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th
+                        className={column.isSorted ? 'th-sorted' : 'th'}
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                      >
+                        {column.render('Header')}
+                        <span>
+                          {column.isSorted
+                            ? column.isSortedDesc
+                              ? ' ▼'
+                              : ' ▲'
+                            : ''}
+                        </span>
+                        {column.canResize && (
+                        <div
+                          {...column.getResizerProps()}
+                          className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                        />
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()} className="tbody">
+                <FixedSizeList
+                  height={(distanceBetweenQueryAndAction - incidentActionsHeight)}
+                  itemCount={rows.length}
+                  itemSize={60}
+                  width={totalColumnsWidth + scrollBarSize}
+                >
+                  {RenderRow}
+                </FixedSizeList>
+              </tbody>
+            </table>
+          </BTable>
+        </div>
+      </div>
+    );
+  }
 };
 
 const mapStateToProps = (state) => ({
