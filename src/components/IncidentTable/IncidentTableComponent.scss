@@ -1,5 +1,12 @@
 @import 'assets/styles/pagerduty.scss';
 
+/* Querying Incidents */
+.querying-incidents {
+  position: relative;
+  left: 10px;
+  top: 5px;
+}
+
 /* Empty Incidents */
 .empty-incidents {
   height: 500px;
