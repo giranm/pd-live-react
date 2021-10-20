@@ -1,12 +1,16 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-loop-func */
 import PDOAuth from 'util/pdoauth';
 import { api } from '@pagerduty/pdjs';
 import axios from 'axios';
 import Bottleneck from 'bottleneck';
 
 import { PD_OAUTH_CLIENT_ID } from 'util/constants';
+import { compareCreatedAt } from 'util/helpers';
 
-// TODO: Figure out how to get this from redux store via sessionStorage
+/*
+  PDJS Wrapper
+*/
 export const getPdAccessToken = () => {
   const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
@@ -18,7 +22,7 @@ export const getPdAccessToken = () => {
 export const pd = api({ token: getPdAccessToken(), tokenType: 'bearer' });
 
 /*
-  Export Throttled Version of Axios Requests
+  Throttled version of Axios requests for direct API calls
 */
 
 export const pdAxiosRequest = async (method, endpoint, params = {}, data = {}) => axios({
@@ -45,3 +49,67 @@ const limiter = new Bottleneck({
 });
 
 export const throttledPdAxiosRequest = limiter.wrap(pdAxiosRequest);
+
+/*
+  Optimized parallel fetch for paginated endpoints
+*/
+
+const endpointIdentifier = (endpoint) => {
+  if (endpoint.match(/users\/P.*\/sessions/)) {
+    return 'user_sessions';
+  }
+  return endpoint.split('/').pop();
+};
+
+export const pdParallelFetch = async (endpoint, params, progressCallback) => {
+  let requestParams = {
+    limit: 100,
+    total: true,
+    offset: 0,
+  };
+
+  if (params) requestParams = { ...requestParams, ...params };
+
+  let reversedSortOrder = false;
+  if (endpoint.indexOf('log_entries') > -1) reversedSortOrder = true;
+
+  const firstPage = (await pdAxiosRequest('GET', endpoint, requestParams)).data;
+  let fetchedData = [...firstPage[endpointIdentifier(endpoint)]];
+  requestParams.offset += requestParams.limit;
+
+  const promises = [];
+  let outerOffset = 0;
+  let more = true;
+  while (more && outerOffset + requestParams.offset < firstPage.total) {
+    while (more
+      && (outerOffset + requestParams.offset < firstPage.total) && (requestParams.offset < 10000)) {
+      const promise = pdAxiosRequest('GET', endpoint, requestParams)
+        .then(({ data }) => {
+          fetchedData = [...fetchedData, ...data[endpointIdentifier(endpoint)]];
+          if (data.more === false) {
+            more = false;
+          }
+          if (progressCallback) {
+            progressCallback(firstPage.total, fetchedData.length);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      promises.push(promise);
+      requestParams.offset += requestParams.limit;
+    }
+    await Promise.all(promises);
+    fetchedData.sort(
+      (a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)),
+    );
+    requestParams[reversedSortOrder ? 'until' : 'since']
+      = fetchedData[fetchedData.length - 1].created_at;
+    outerOffset = fetchedData.length;
+    requestParams.offset = 0;
+  }
+  fetchedData.sort(
+    (a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)),
+  );
+  return fetchedData;
+};

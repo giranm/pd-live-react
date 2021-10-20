@@ -1,5 +1,7 @@
 /* eslint-disable no-sequences */
 /* eslint-disable no-return-assign */
+import moment from 'moment';
+
 export const pushToArray = (arr, obj, key) => {
   const index = arr.findIndex((e) => e[key] === obj[key]);
   if (index === -1) {
@@ -62,3 +64,6 @@ export const getInitials = (fullName) => {
   }, '');
   return initials;
 };
+
+// Compare created at date objects
+export const compareCreatedAt = (a, b) => moment(a.created_at).diff(moment(b.created_at));

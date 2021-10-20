@@ -1,15 +1,26 @@
 /* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest, takeEvery, all,
+  put,
+  call,
+  select,
+  takeLatest,
+  takeEvery,
+  all,
 } from 'redux-saga/effects';
 
 import Fuse from 'fuse.js';
 
-import { pd, throttledPdAxiosRequest } from 'util/pd-api-wrapper';
-import { pdParallelFetch } from 'util/pd-fetch-alt';
+import {
+  pd,
+  throttledPdAxiosRequest,
+  pdParallelFetch,
+} from 'util/pd-api-wrapper';
 
+import {
+  filterIncidentsByField,
+  filterIncidentsByFieldOfList,
+} from 'util/incidents';
 import { pushToArray } from 'util/helpers';
-import { filterIncidentsByField, filterIncidentsByFieldOfList } from 'util/incidents';
 import { fuseOptions } from 'util/fuse-config';
 
 import { selectQuerySettings } from 'redux/query_settings/selectors';
