@@ -13,6 +13,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] Add Responders to Incident
 - [x] Update Priority of Incident
 - [x] Custom snooze duration for Incident
+- [ ] Merge Incidents
 - [x] Run Action (including Custom Incident Actions, Webhooks, and Response Plays)
 - [x] Implement `react-table` (e.g. multisort, resizeable columns, selectable rows, etc)
 - [x] Global Search against incident data
