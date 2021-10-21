@@ -235,6 +235,9 @@ export function* updateIncidentsList(action) {
       }),
     );
 
+    // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
+    updatedIncidentsList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
     // Remove any unintentional duplicate incidents (i.e. new incident triggered)
     const updatedIncidentsIds = updatedIncidentsList.map((o) => o.id);
     const uniqueUpdatedIncidentsList = updatedIncidentsList.filter(
