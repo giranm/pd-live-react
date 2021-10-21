@@ -1,18 +1,29 @@
 /* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest, takeEvery, all,
+  put,
+  call,
+  select,
+  takeLatest,
+  takeEvery,
+  all,
 } from 'redux-saga/effects';
 
 import Fuse from 'fuse.js';
 
-import { selectQuerySettings } from 'redux/query_settings/selectors';
+import {
+  pd,
+  throttledPdAxiosRequest,
+  pdParallelFetch,
+} from 'util/pd-api-wrapper';
 
+import {
+  filterIncidentsByField,
+  filterIncidentsByFieldOfList,
+} from 'util/incidents';
 import { pushToArray } from 'util/helpers';
-import { filterIncidentsByField, filterIncidentsByFieldOfList } from 'util/incidents';
-import { INCIDENTS_PAGINATION_LIMIT } from 'util/constants';
 import { fuseOptions } from 'util/fuse-config';
 
-import { pd } from 'util/pd-api-wrapper';
+import { selectQuerySettings } from 'redux/query_settings/selectors';
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -20,6 +31,9 @@ import {
   FETCH_INCIDENT_NOTES_REQUESTED,
   FETCH_INCIDENT_NOTES_COMPLETED,
   FETCH_INCIDENT_NOTES_ERROR,
+  FETCH_ALL_INCIDENT_NOTES_REQUESTED,
+  FETCH_ALL_INCIDENT_NOTES_COMPLETED,
+  FETCH_ALL_INCIDENT_NOTES_ERROR,
   UPDATE_INCIDENTS_LIST,
   UPDATE_INCIDENTS_LIST_COMPLETED,
   UPDATE_INCIDENTS_LIST_ERROR,
@@ -61,7 +75,6 @@ export function* getIncidents(action) {
     //  Build params from query settings and call pd lib
     const {
       sinceDate,
-      untilDate,
       incidentStatus,
       incidentUrgency,
       teamIds,
@@ -72,21 +85,18 @@ export function* getIncidents(action) {
     const params = {
       since: sinceDate.toISOString(),
       until: new Date().toISOString(),
-      'include[]': ['first_trigger_log_entries', 'external_references'],
-      // https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTU4-pagination#pagination-response-fields
-      limit: INCIDENTS_PAGINATION_LIMIT,
+      include: ['first_trigger_log_entries', 'external_references'],
     };
 
-    if (incidentStatus) params['statuses[]'] = incidentStatus;
+    if (incidentStatus) params.statuses = incidentStatus;
 
-    if (incidentUrgency) params['urgencies[]'] = incidentUrgency;
+    if (incidentUrgency) params.urgencies = incidentUrgency;
 
-    if (teamIds.length) params['team_ids[]'] = teamIds;
+    if (teamIds.length) params.team_ids = teamIds;
 
-    if (serviceIds.length) params['service_ids[]'] = serviceIds;
+    if (serviceIds.length) params.service_ids = serviceIds;
 
-    const response = yield call(pd.all, 'incidents', { data: { ...params } });
-    const incidents = response.resource;
+    const incidents = yield pdParallelFetch('incidents', params);
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
@@ -94,11 +104,7 @@ export function* getIncidents(action) {
     });
 
     // Get notes for each incident (implictly updates store)
-    yield all(
-      incidents
-        .map((incident) => incident.id)
-        .map((incidentId) => put({ type: FETCH_INCIDENT_NOTES_REQUESTED, incidentId })),
-    );
+    yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 
     // Filter incident list on priority (can't do this from API)
     yield put({
@@ -139,6 +145,37 @@ export function* getIncidentNotes(action) {
     });
   } catch (e) {
     yield put({ type: FETCH_INCIDENT_NOTES_ERROR, message: e.message });
+  }
+}
+
+export function* getAllIncidentNotesAsync() {
+  yield takeEvery(FETCH_ALL_INCIDENT_NOTES_REQUESTED, getAllIncidentNotes);
+}
+
+export function* getAllIncidentNotes() {
+  try {
+    // Build list of promises to call PD endpoint
+    const { incidents } = yield select(selectIncidents);
+    const requests = incidents.map(
+      ({ id }) => throttledPdAxiosRequest('GET', `incidents/${id}/notes`),
+    );
+    const results = yield Promise.all(requests);
+
+    // Grab matching incident and apply note update
+    const updatedIncidentsList = incidents.map((incident, idx) => {
+      const tempIncident = { ...incident };
+      tempIncident.notes = results[idx].data.notes;
+      return tempIncident;
+    });
+
+    yield put({
+      type: FETCH_ALL_INCIDENT_NOTES_COMPLETED,
+      incidents: updatedIncidentsList,
+    });
+
+    // Update store with incident having notes data
+  } catch (e) {
+    yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
   }
 }
 
@@ -197,6 +234,9 @@ export function* updateIncidentsList(action) {
         if (removeItem.incident) return removeItem.incident.id === existingIncident.id;
       }),
     );
+
+    // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
+    updatedIncidentsList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     // Remove any unintentional duplicate incidents (i.e. new incident triggered)
     const updatedIncidentsIds = updatedIncidentsList.map((o) => o.id);

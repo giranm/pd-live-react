@@ -301,8 +301,10 @@ export const availableIncidentTableColumns = [
     accessor: (incident) => {
       if (incident.notes && incident.notes.length > 0) {
         return incident.notes[0].content;
+      } if (incident.notes && incident.notes.length === 0) {
+        return '--';
       }
-      return '--';
+      return 'Fetching notes ...';
     },
     Header: 'Latest Note',
     sortable: true,

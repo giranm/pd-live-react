@@ -33,7 +33,8 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] Minor display bugs (incident resolution and creation duplication)
 - [ ] Selected incidents which disappear post-action keeps state (e.g. enablePostActions remains true)
 - [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
-- [ ] Slow query performance for large number of incidents (due to 100 results limit on API)
+- [x] Slow query performance for large number of incidents (due to 100 results limit on API)
+- [x] 429 (rate throttling) issues when requests notes for each incident (from large incident query above)
 - [x] Empty Incident component rendered before table (for non-empty incidents list)
 
 ## Local Development
