@@ -14,7 +14,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] Update Priority of Incident
 - [x] Custom snooze duration for Incident
 - [x] Run Action (including Custom Incident Actions, Webhooks, and Response Plays)
-- [x] Review appropriate React table (with resizeable columns)
+- [x] Implement `react-table` (e.g. multisort, resizeable columns, selectable rows, etc)
 - [x] Global Search against incident data
 - [x] Formatting of cells (e.g. locale date format, status, etc)
 - [x] Add loading modal when fetching data from `/incidents` endpoint
@@ -31,11 +31,11 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 ##### Bugs (Known)
 
 - [x] Minor display bugs (incident resolution and creation duplication)
-- [ ] Selected incidents which disappear post-action keeps state (e.g. enablePostActions remains true)
-- [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
 - [x] Slow query performance for large number of incidents (due to 100 results limit on API)
 - [x] 429 (rate throttling) issues when requests notes for each incident (from large incident query above)
 - [x] Empty Incident component rendered before table (for non-empty incidents list)
+- [ ] Selected incidents which disappear post-action keeps state (e.g. enablePostActions remains true)
+- [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
 
 ## Local Development
 

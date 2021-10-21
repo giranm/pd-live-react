@@ -117,6 +117,8 @@ const IncidentTableComponent = ({
       autoResetSortBy: false,
       autoResetFilters: false,
       autoResetRowState: false,
+      // Enable multisort without specific event handler (i.e. shift+click)
+      isMultiSortEvent: () => true,
     },
     // Plugins
     useSortBy,
