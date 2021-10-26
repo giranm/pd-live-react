@@ -32,6 +32,13 @@ export const TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED =
 export const TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED =
   'TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED';
 
+export const MERGE_REQUESTED = 'MERGE_REQUESTED';
+export const MERGE_COMPLETED = 'MERGE_COMPLETED';
+export const MERGE_ERROR = 'MERGE_ERROR';
+
+export const TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED = 'TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED';
+export const TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED = 'TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED';
+
 export const RESOLVE_REQUESTED = 'RESOLVE_REQUESTED';
 export const RESOLVE_COMPLETED = 'RESOLVE_COMPLETED';
 export const RESOLVE_ERROR = 'RESOLVE_ERROR';
@@ -100,6 +107,17 @@ export const snooze = (incidents, duration, displayModal = true) => ({
 
 export const toggleDisplayCustomSnoozeModal = () => ({
   type: TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED,
+});
+
+export const merge = (targetIncident, incidents, displayModal = true) => ({
+  type: MERGE_REQUESTED,
+  targetIncident,
+  incidents,
+  displayModal,
+});
+
+export const toggleDisplayMergeModal = () => ({
+  type: TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED,
 });
 
 export const resolve = (incidents, displayModal = true) => ({

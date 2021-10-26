@@ -14,7 +14,8 @@ import 'moment/min/locales.min';
 
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
 import QuerySettingsComponent from 'components/QuerySettings/QuerySettingsComponent';
-import IncidentTableSettingsComponent from 'components/IncidentTable/IncidentTableSettingsComponent';
+import IncidentTableSettingsComponent
+  from 'components/IncidentTable/IncidentTableSettingsComponent';
 import IncidentTableComponent from 'components/IncidentTable/IncidentTableComponent';
 import IncidentActionsComponent from 'components/IncidentActions/IncidentActionsComponent';
 import ActionAlertsModalComponent from 'components/ActionAlertsModal/ActionAlertsModalComponent';
@@ -22,6 +23,7 @@ import CustomSnoozeModalComponent from 'components/CustomSnoozeModal/CustomSnooz
 import AddNoteModalComponent from 'components/AddNoteModal/AddNoteModalComponent';
 import ReassignModalComponent from 'components/ReassignModal/ReassignModalComponent';
 import AddResponderModalComponent from 'components/AddResponderModal/AddResponderModalComponent';
+import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
 
 import { getIncidentsAsync } from 'redux/incidents/actions';
 import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from 'redux/log_entries/actions';
@@ -110,6 +112,7 @@ const App = ({
         <AddNoteModalComponent />
         <ReassignModalComponent />
         <AddResponderModalComponent />
+        <MergeModalComponent />
       </Container>
     </div>
   );

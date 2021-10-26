@@ -28,6 +28,7 @@ import {
   faExclamation,
   faEdit,
   faPlay,
+  faLayerGroup,
 } from '@fortawesome/free-solid-svg-icons';
 
 import './IncidentActionsComponent.scss';
@@ -39,6 +40,7 @@ import {
   toggleDisplayAddResponderModal,
   snooze,
   toggleDisplayCustomSnoozeModal,
+  toggleDisplayMergeModal,
   resolve,
   updatePriority,
   toggleDisplayAddNoteModal,
@@ -77,6 +79,7 @@ const IncidentActionsComponent = ({
   toggleDisplayAddResponderModal,
   snooze,
   toggleDisplayCustomSnoozeModal,
+  toggleDisplayMergeModal,
   resolve,
   updatePriority,
   toggleDisplayAddNoteModal,
@@ -86,6 +89,7 @@ const IncidentActionsComponent = ({
 }) => {
   const { fetchingIncidents, filteredIncidentsByQuery } = incidents;
   const { selectedCount, selectedRows } = incidentTableSettings;
+  const resolvedIncidents = filterIncidentsByField(selectedRows, 'status', [RESOLVED]);
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
     ACKNOWLEDGED,
@@ -97,6 +101,11 @@ const IncidentActionsComponent = ({
   const enableActions = !(unresolvedIncidents.length > 0);
   const enablePostActions = !(selectedCount > 0);
   const enablePostSingularAction = selectedCount !== 1;
+  const enableMergeAction = !(
+    !enableActions &&
+    selectedCount > 1 &&
+    resolvedIncidents.length === 0
+  );
   const enableEscalationAction = !(
     selectedCount === 1 &&
     highUrgencyIncidents.length &&
@@ -315,6 +324,17 @@ const IncidentActionsComponent = ({
             </DropdownButton>
             <Button
               className="action-button"
+              variant={enableMergeAction ? 'outline-secondary' : 'light'}
+              onClick={() => toggleDisplayMergeModal()}
+              disabled={enableMergeAction}
+            >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faLayerGroup} />
+              </div>
+              Merge
+            </Button>
+            <Button
+              className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               disabled={enableActions}
               onClick={() => resolve(selectedRows)}
@@ -477,12 +497,19 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModal()),
   snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
   toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
+  toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModal()),
   resolve: (incidents) => dispatch(resolve(incidents)),
   updatePriority: (incidents, priorityId) => dispatch(updatePriority(incidents, priorityId)),
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
-  runCustomIncidentAction: (incidents, webhook) => dispatch(runCustomIncidentAction(incidents, webhook)),
-  runResponsePlayAsync: (incidents, responsePlay) => dispatch(runResponsePlayAsync(incidents, responsePlay)),
-  syncWithExternalSystem: (incidents, webhook) => dispatch(syncWithExternalSystem(incidents, webhook)),
+  runCustomIncidentAction: (incidents, webhook) => dispatch(
+    runCustomIncidentAction(incidents, webhook),
+  ),
+  runResponsePlayAsync: (incidents, responsePlay) => dispatch(
+    runResponsePlayAsync(incidents, responsePlay),
+  ),
+  syncWithExternalSystem: (incidents, webhook) => dispatch(
+    syncWithExternalSystem(incidents, webhook),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentActionsComponent);

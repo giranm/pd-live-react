@@ -54,6 +54,11 @@ import {
   SNOOZE_ERROR,
   TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED,
   TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED,
+  MERGE_REQUESTED,
+  MERGE_COMPLETED,
+  MERGE_ERROR,
+  TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED,
   RESOLVE_REQUESTED,
   RESOLVE_COMPLETED,
   RESOLVE_ERROR,
@@ -360,6 +365,69 @@ export function* toggleDisplayCustomSnoozeModalImpl() {
   yield put({
     type: TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED,
     displayCustomSnoozeModal: !displayCustomSnoozeModal,
+  });
+}
+
+export function* mergeAsync() {
+  yield takeLatest(MERGE_REQUESTED, merge);
+}
+
+export function* merge(action) {
+  try {
+    const { targetIncident, incidents, displayModal } = action;
+    const incidentsToBeMerged = filterIncidentsByField(incidents, 'status', [
+      TRIGGERED,
+      ACKNOWLEDGED,
+    ]);
+
+    // Build request manually given PUT
+    const data = {
+      source_incidents: incidentsToBeMerged.map((incident) => ({
+        id: incident.id,
+        type: 'incident_reference',
+      })),
+    };
+
+    const response = yield call(pd, {
+      method: 'put',
+      endpoint: `incidents/${targetIncident.id}/merge`,
+      data,
+    });
+
+    if (response.ok) {
+      yield put({
+        type: MERGE_COMPLETED,
+        mergedIncident: response.resource,
+      });
+      yield toggleDisplayMergeModalImpl();
+      if (displayModal) {
+        const actionAlertsModalType = 'success';
+        const actionAlertsModalMessage = `Incident(s) ${incidentsToBeMerged
+          .map((i) => i.incident_number)
+          .join(', ')} and their alerts have been merged onto incident
+          ${targetIncident.incident_number}`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      }
+    } else {
+      handleSingleAPIErrorResponse(response);
+    }
+  } catch (e) {
+    handleSagaError(MERGE_ERROR, e);
+  }
+}
+
+export function* toggleDisplayMergeModal() {
+  yield takeLatest(
+    TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED,
+    toggleDisplayMergeModalImpl,
+  );
+}
+
+export function* toggleDisplayMergeModalImpl() {
+  const { displayMergeModal } = yield select(selectIncidentActions);
+  yield put({
+    type: TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED,
+    displayMergeModal: !displayMergeModal,
   });
 }
 
