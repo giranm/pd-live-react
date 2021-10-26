@@ -22,6 +22,11 @@ import {
   SNOOZE_ERROR,
   TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_REQUESTED,
   TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED,
+  MERGE_REQUESTED,
+  MERGE_COMPLETED,
+  MERGE_ERROR,
+  TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED,
   RESOLVE_REQUESTED,
   RESOLVE_COMPLETED,
   RESOLVE_ERROR,
@@ -141,6 +146,29 @@ const incidentActions = produce(
         draft.status = TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED;
         break;
 
+      case MERGE_REQUESTED:
+        draft.status = MERGE_REQUESTED;
+        break;
+
+      case MERGE_COMPLETED:
+        draft.mergedIncident = action.mergedIncident;
+        draft.status = MERGE_COMPLETED;
+        break;
+
+      case MERGE_ERROR:
+        draft.status = MERGE_ERROR;
+        draft.error = action.message;
+        break;
+
+      case TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED:
+        draft.status = TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED;
+        break;
+
+      case TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED:
+        draft.displayMergeModal = action.displayMergeModal;
+        draft.status = TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED;
+        break;
+
       case RESOLVE_REQUESTED:
         draft.status = RESOLVE_REQUESTED;
         break;
@@ -229,6 +257,7 @@ const incidentActions = produce(
     escalatedIncidents: [],
     reassignedIncidents: [],
     snoozedIncidents: [],
+    mergedIncident: {},
     resolvedIncidents: [],
     updatedIncidentResponderRequests: [],
     updatedIncidentNotes: [],
@@ -239,6 +268,7 @@ const incidentActions = produce(
     displayAddResponderModal: false,
     displayCustomSnoozeModal: false,
     displayAddNoteModal: false,
+    displayMergeModal: false,
     status: null,
     fetchingData: false,
     error: null,
