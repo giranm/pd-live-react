@@ -374,7 +374,7 @@ export function* mergeAsync() {
 
 export function* merge(action) {
   try {
-    const { targetIncidentId, incidents, displayModal } = action;
+    const { targetIncident, incidents, displayModal } = action;
     const incidentsToBeMerged = filterIncidentsByField(incidents, 'status', [
       TRIGGERED,
       ACKNOWLEDGED,
@@ -390,7 +390,7 @@ export function* merge(action) {
 
     const response = yield call(pd, {
       method: 'put',
-      endpoint: `incidents/${targetIncidentId}/merge`,
+      endpoint: `incidents/${targetIncident.id}/merge`,
       data,
     });
 
@@ -399,11 +399,13 @@ export function* merge(action) {
         type: MERGE_COMPLETED,
         mergedIncident: response.resource,
       });
+      yield toggleDisplayMergeModalImpl();
       if (displayModal) {
         const actionAlertsModalType = 'success';
         const actionAlertsModalMessage = `Incident(s) ${incidentsToBeMerged
           .map((i) => i.incident_number)
-          .join(', ')} and their alerts have been merged.`;
+          .join(', ')} and their alerts have been merged onto incident
+          ${targetIncident.incident_number}`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
