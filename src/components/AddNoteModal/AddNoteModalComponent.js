@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { Modal, Form, Button } from 'react-bootstrap';
@@ -16,7 +16,10 @@ const AddNoteModalComponent = ({
   const { displayAddNoteModal } = incidentActions;
   const { selectedRows } = incidentTableSettings;
 
-  const [note, setNote] = useState(null);
+  const [note, setNote] = useState('');
+  useEffect(() => {
+    setNote('');
+  }, [displayAddNoteModal]);
 
   return (
     <div className="add-note-modal-ctr">
@@ -40,7 +43,7 @@ const AddNoteModalComponent = ({
           <Button
             variant="primary"
             onClick={() => addNote(selectedRows, note)}
-            disabled={note === null}
+            disabled={note === ''}
           >
             Add Note
           </Button>
