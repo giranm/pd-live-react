@@ -269,7 +269,7 @@ const incidentActions = produce(
     displayCustomSnoozeModal: false,
     displayAddNoteModal: false,
     displayMergeModal: false,
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },
