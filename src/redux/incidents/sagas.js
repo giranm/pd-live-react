@@ -197,12 +197,23 @@ export function* updateIncidentsList(action) {
     } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
-    // Add new incidents to list (need to re-query to get external_references)
+    // Add new incidents to list (need to re-query to get external_references + notes)
     const addListRequests = addList.map((addItem) => {
       if (addItem.incident) return getIncidentByIdRequest(addItem.incident.id);
     });
     const addListResponses = yield all(addListRequests);
-    addListResponses.map((response) => updatedIncidentsList.push(response.data.incident));
+    const addListNoteRequests = addList.map((addItem) => {
+      if (addItem.incident) return call(pd.get, `incidents/${addItem.incident.id}/notes`);
+    });
+    const addListNoteResponses = yield all(addListNoteRequests);
+
+    // Synthetically create notes object and add to new incident
+    addListResponses.map((response, idx) => {
+      const { notes } = addListNoteResponses[idx].response.data;
+      const newIncident = { ...response.data.incident };
+      newIncident.notes = notes;
+      updatedIncidentsList.push(newIncident);
+    });
 
     // Update existing incidents within list
     if (incidents.length && updateList.length) {
