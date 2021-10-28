@@ -1,0 +1,28 @@
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+
+export const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: [
+    'actionAlertsModalData',
+    'incidents',
+    'logEntries',
+    'querySettings',
+    'incidentTableSettings',
+    'incidentActions',
+    'services',
+    'teams',
+    'priorities',
+    'users',
+    'escalationPolicies',
+    'extensions',
+    'responsePlays',
+    'persistance',
+  ],
+};
+
+export const querySettingsPersistConfig = {
+  key: 'querySettings',
+  storage,
+  blacklist: ['sinceDate', 'untilDate'],
+};

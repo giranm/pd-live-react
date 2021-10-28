@@ -1,4 +1,6 @@
-import { all, put } from 'redux-saga/effects';
+import { all, put, take } from 'redux-saga/effects';
+
+import { REHYDRATE } from 'redux-persist/lib/constants';
 
 import {
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,
@@ -75,6 +77,7 @@ import { getPrioritiesAsync } from './priorities/sagas';
 import { getEscalationPoliciesAsync } from './escalation_policies/sagas';
 
 export default function* rootSaga() {
+  yield take(REHYDRATE); // Wait for rehydrate to prevent sagas from running with empty store
   yield all([
     // Query Settings
     toggleDisplayQuerySettings(),
