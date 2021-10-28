@@ -38,6 +38,8 @@ import {
   TRIGGERED, ACKNOWLEDGED, RESOLVED, HIGH, LOW,
 } from 'util/incidents';
 
+import { getObjectsFromList } from 'util/helpers';
+
 const animatedComponents = makeAnimated();
 
 const customStyles = {
@@ -61,7 +63,13 @@ const QuerySettingsComponent = ({
   updateQuerySettingsServices,
 }) => {
   const {
-    displayQuerySettings, sinceDate, incidentStatus, incidentUrgency, incidentPriority,
+    displayQuerySettings,
+    sinceDate,
+    incidentStatus,
+    incidentUrgency,
+    incidentPriority,
+    teamIds,
+    serviceIds,
   } =
     querySettings;
   const eventKey = displayQuerySettings ? '0' : '1';
@@ -82,6 +90,12 @@ const QuerySettingsComponent = ({
     value: priority.id,
     color: priority.color,
   }));
+
+  // Get "stored" option values
+  const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
+  const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
+
+  // FIXME: incidentPriority seems to reset values on reload?
 
   return (
     <div className="query-settings-ctr" id="query-settings-ctr">
@@ -189,6 +203,7 @@ const QuerySettingsComponent = ({
                     components={animatedComponents}
                     isMulti
                     options={selectListTeams}
+                    value={storedSelectTeams}
                   />
                 </Form.Group>
               </Col>
@@ -204,6 +219,7 @@ const QuerySettingsComponent = ({
                     components={animatedComponents}
                     isMulti
                     options={selectListServices}
+                    value={storedSelectServices}
                   />
                 </Form.Group>
               </Col>
@@ -224,9 +240,15 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
-  updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(updateQuerySettingsIncidentStatus(incidentStatus)),
-  updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(updateQuerySettingsIncidentUrgency(incidentUrgency)),
-  updateQuerySettingsIncidentPriority: (incidentPriority) => dispatch(updateQuerySettingsIncidentPriority(incidentPriority)),
+  updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(
+    updateQuerySettingsIncidentStatus(incidentStatus),
+  ),
+  updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(
+    updateQuerySettingsIncidentUrgency(incidentUrgency),
+  ),
+  updateQuerySettingsIncidentPriority: (incidentPriority) => dispatch(
+    updateQuerySettingsIncidentPriority(incidentPriority),
+  ),
   updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeams(teamIds)),
   updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServices(serviceIds)),
 });
