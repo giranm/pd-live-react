@@ -1,6 +1,5 @@
 import produce from 'immer';
 
-import { getIncidentTableColumns } from 'util/incident-table-columns';
 import {
   TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED,
   TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
@@ -54,7 +53,7 @@ const incidentTableSettings = produce(
         break;
 
       case UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED:
-        draft.incidentTableColumns = action.incidentTableColumns;
+        draft.incidentTableColumnsNames = action.incidentTableColumnsNames;
         draft.status = UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED;
         break;
 
@@ -74,7 +73,7 @@ const incidentTableSettings = produce(
     }
   },
   {
-    incidentTableColumns: getIncidentTableColumns(defaultColumnNames),
+    incidentTableColumnsNames: defaultColumnNames,
     displayIncidentTableSettings: false,
     allSelected: false,
     selectedCount: 0,

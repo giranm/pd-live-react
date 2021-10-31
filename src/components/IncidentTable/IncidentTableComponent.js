@@ -27,6 +27,8 @@ import {
 
 import { selectIncidentTableRows } from 'redux/incident_table/actions';
 
+import { getIncidentTableColumns } from 'util/incident-table-columns';
+
 import CheckboxComponent from './subcomponents/CheckboxComponent';
 import EmptyIncidentsComponent from './subcomponents/EmptyIncidentsComponent';
 
@@ -65,7 +67,7 @@ const IncidentTableComponent = ({
   incidentActions,
   incidents,
 }) => {
-  const { incidentTableColumns } = incidentTableSettings;
+  const { incidentTableColumnsNames } = incidentTableSettings;
   const { status } = incidentActions;
   const { filteredIncidentsByQuery, fetchingIncidents } = incidents;
 
@@ -77,6 +79,10 @@ const IncidentTableComponent = ({
       maxWidth: 1000,
     }),
     [],
+  );
+
+  const memoizedColumns = useMemo(
+    () => getIncidentTableColumns(incidentTableColumnsNames), [incidentTableColumnsNames],
   );
 
   // TODO: Verify if this is the cause of resolved incidents staying in the view
@@ -109,7 +115,7 @@ const IncidentTableComponent = ({
     totalColumnsWidth,
   } = useTable(
     {
-      columns: incidentTableColumns,
+      columns: memoizedColumns,
       data: filteredIncidentsByQuery, // Potential issue with Memoization hook?
       defaultColumn,
       // Prevent re-render when redux store updates

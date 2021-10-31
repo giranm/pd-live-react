@@ -22,9 +22,9 @@ export const saveIncidentTableSettings = (updatedIncidentTableColumns) => ({
   updatedIncidentTableColumns,
 });
 
-export const updateIncidentTableColumns = (incidentTableColumns) => ({
+export const updateIncidentTableColumns = (incidentTableColumnsNames) => ({
   type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
-  incidentTableColumns,
+  incidentTableColumnsNames,
 });
 
 export const selectIncidentTableRows = (allSelected, selectedCount, selectedRows) => ({

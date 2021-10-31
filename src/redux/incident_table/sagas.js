@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import { put, select, takeLatest } from 'redux-saga/effects';
 
-import { getIncidentTableColumns } from 'util/incident-table-columns';
 import {
   TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED,
   TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
@@ -39,10 +38,9 @@ export function* saveIncidentTableSettingsImpl(action) {
 
     // Update incident table columns
     const updatedIncidentTableColumnNames = updatedIncidentTableColumns.map((col) => col.value);
-    const incidentTableColumns = getIncidentTableColumns(updatedIncidentTableColumnNames);
     yield put({
       type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
-      incidentTableColumns,
+      incidentTableColumnsNames: updatedIncidentTableColumnNames,
     });
 
     // TODO: Other table settings can be dispatched here...
@@ -64,10 +62,10 @@ export function* updateIncidentTableColumns() {
 }
 
 export function* updateIncidentTableColumnsImpl(action) {
-  const { incidentTableColumns } = action;
+  const { incidentTableColumnsNames } = action;
   yield put({
     type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
-    incidentTableColumns,
+    incidentTableColumnsNames,
   });
 }
 
