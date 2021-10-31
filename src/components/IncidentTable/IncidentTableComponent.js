@@ -79,6 +79,7 @@ const IncidentTableComponent = ({
     [],
   );
 
+  // TODO: Verify if this is the cause of resolved incidents staying in the view
   const memoizedFilteredIncidentsByQuery = useMemo(
     () => filteredIncidentsByQuery, [filteredIncidentsByQuery],
   );
@@ -109,7 +110,7 @@ const IncidentTableComponent = ({
   } = useTable(
     {
       columns: incidentTableColumns,
-      data: memoizedFilteredIncidentsByQuery,
+      data: filteredIncidentsByQuery, // Potential issue with Memoization hook?
       defaultColumn,
       // Prevent re-render when redux store updates
       autoResetPage: false,

@@ -38,6 +38,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] "Fetching notes" displayed when new incidents are added to the table (i.e. notes have not been fetched)
 - [ ] Selected incidents which disappear post-action keeps state (e.g. enablePostActions remains true)
 - [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
+- [ ] Resolved incidents still appear in the table after a period (most likely memoization of react-table)
 
 ## Local Development
 
