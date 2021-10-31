@@ -41,6 +41,7 @@ import {
   toggleIncidentTableSettings,
   saveIncidentTableSettings,
   updateIncidentTableColumns,
+  updateIncidentTableState,
   selectIncidentTableRows,
 } from './incident_table/sagas';
 
@@ -110,6 +111,7 @@ export default function* rootSaga() {
     toggleIncidentTableSettings(),
     saveIncidentTableSettings(),
     updateIncidentTableColumns(),
+    updateIncidentTableState(),
     selectIncidentTableRows(),
 
     // Incident Actions

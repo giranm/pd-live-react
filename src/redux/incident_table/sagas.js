@@ -9,6 +9,8 @@ import {
   SAVE_INCIDENT_TABLE_SETTINGS_ERROR,
   UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
+  UPDATE_INCIDENT_TABLE_STATE_REQUESTED,
+  UPDATE_INCIDENT_TABLE_STATE_COMPLETED,
   SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
   SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
 } from './actions';
@@ -66,6 +68,18 @@ export function* updateIncidentTableColumnsImpl(action) {
   yield put({
     type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
     incidentTableColumnsNames,
+  });
+}
+
+export function* updateIncidentTableState() {
+  yield takeLatest(UPDATE_INCIDENT_TABLE_STATE_REQUESTED, updateIncidentTableStateImpl);
+}
+
+export function* updateIncidentTableStateImpl(action) {
+  const { incidentTableState } = action;
+  yield put({
+    type: UPDATE_INCIDENT_TABLE_STATE_COMPLETED,
+    incidentTableState,
   });
 }
 

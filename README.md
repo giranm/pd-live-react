@@ -21,6 +21,9 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [x] Add loading modal when fetching data from `/incidents` endpoint
 - [x] Infinite scrolling using `react-window`
 - [ ] Store query/settings using session data
+  - [x] Global Search
+  - [ ] Query Settings: Priority (other settings persisted)
+  - [ ] Table Settings: Column order, sorting, and widths
 
 ##### Code
 
@@ -39,6 +42,8 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [ ] Selected incidents which disappear post-action keeps state (e.g. enablePostActions remains true)
 - [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
 - [ ] Resolved incidents still appear in the table after a period (most likely memoization of react-table)
+- [ ] Updating column order reverts to width defined under `src/util/incident-table-column.js`
+- [ ] `react-select` within query settings does not render existing selections when not in view (needs re-rendering via hook)
 
 ## Local Development
 

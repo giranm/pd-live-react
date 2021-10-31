@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-nested-ternary */
 import {
   useEffect,
@@ -6,6 +7,7 @@ import {
   useState,
 } from 'react';
 import { connect } from 'react-redux';
+import { useDebouncedCallback } from 'use-debounce';
 
 import mezr from 'mezr';
 import { FixedSizeList } from 'react-window';
@@ -25,7 +27,7 @@ import {
   useResizeColumns,
 } from 'react-table';
 
-import { selectIncidentTableRows } from 'redux/incident_table/actions';
+import { selectIncidentTableRows, updateIncidentTableState } from 'redux/incident_table/actions';
 
 import { getIncidentTableColumns } from 'util/incident-table-columns';
 
@@ -63,11 +65,12 @@ const Delayed = ({ children, waitBeforeShow = 500 }) => {
 
 const IncidentTableComponent = ({
   selectIncidentTableRows,
+  updateIncidentTableState,
   incidentTableSettings,
   incidentActions,
   incidents,
 }) => {
-  const { incidentTableColumnsNames } = incidentTableSettings;
+  const { incidentTableState, incidentTableColumnsNames } = incidentTableSettings;
   const { status } = incidentActions;
   const { filteredIncidentsByQuery, fetchingIncidents } = incidents;
 
@@ -82,7 +85,25 @@ const IncidentTableComponent = ({
   );
 
   const memoizedColumns = useMemo(
-    () => getIncidentTableColumns(incidentTableColumnsNames), [incidentTableColumnsNames],
+    () => {
+      // Merge current columns state with any modifications to order etc
+      const columns = getIncidentTableColumns(incidentTableColumnsNames);
+      const columnWidths = incidentTableState.columnResizing
+        ? incidentTableState.columnResizing.columnWidths
+        : null;
+      const tempColumns = columns.map((col) => {
+        const tempCol = { ...col };
+        if (columnWidths && tempCol.accessor in columnWidths) {
+          tempCol.width = columnWidths[tempCol.accessor];
+        }
+        return tempCol;
+      });
+      return tempColumns;
+    },
+    [
+      incidentTableColumnsNames,
+      // incidentTableState.columnResizing.columnWidths, // FIXME: This seems to reset state
+    ],
   );
 
   // TODO: Verify if this is the cause of resolved incidents staying in the view
@@ -101,6 +122,14 @@ const IncidentTableComponent = ({
   const distanceBetweenQueryAndAction = incidentActionsEl
     ? mezr.distance([querySettingsEl, 'border'], [incidentActionsEl, 'border'])
     : 0;
+
+  // Debouncing for table state
+  const debouncedUpdateIncidentTableState = useDebouncedCallback(
+    (state) => {
+      updateIncidentTableState(state);
+    },
+    1000,
+  );
 
   // Create instance of react-table with options and plugins
   const {
@@ -128,6 +157,10 @@ const IncidentTableComponent = ({
       autoResetRowState: false,
       // Enable multisort without specific event handler (i.e. shift+click)
       isMultiSortEvent: () => true,
+      // Set initial state from store
+      initialState: incidentTableState,
+      // Handle updates to table
+      stateReducer: (newState) => debouncedUpdateIncidentTableState(newState),
     },
     // Plugins
     useSortBy,
@@ -288,6 +321,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   selectIncidentTableRows: (allSelected, selectedCount, selectedRows) => {
     dispatch(selectIncidentTableRows(allSelected, selectedCount, selectedRows));
+  },
+  updateIncidentTableState: (incidentTableState) => {
+    dispatch(updateIncidentTableState(incidentTableState));
   },
 });
 
