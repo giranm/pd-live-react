@@ -42,12 +42,17 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 
 ## Local Development
 
-1. `git clone` repo to desired destination and `cd` into directory.
+1. Install [NodeJS v11.10.1](https://nodejs.org/tr/blog/release/v11.10.1/) (or switch using [`asdf install`](https://github.com/asdf-vm/asdf))
 
-2. _(Optional unless you are not serving at http://localhost:3000)_
+2. Install `craco` via `npm install @craco/craco --save --global`  
+   (NB - you may need to reload terminal session to use the alias)
+
+3. `git clone` repo to desired destination and `cd` into directory.
+
+4. _(Optional unless you are not serving at http://localhost:3000)_
 
    - Go into PD developer mode, create a new app, add OAuth 2.0 and add a URL to the base of wherever you are serving the app
    - Update `PD_OAUTH_CLIENT_ID` within `src/util/constants.js`, which is required for `PDOAuth.login()`
 
-3. Install dependencies with `npm install` and run application locally using `npm start`  
-   (e.g. served under http://localhost:3000/)
+5. Install dependencies with `npm install` and run application locally using `npm start`  
+   (e.g. navigate to http://localhost:3000/ to use the app; be sure to remove pd-live-react suffix)
