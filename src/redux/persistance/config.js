@@ -11,7 +11,6 @@ export const persistConfig = {
     'incidentActions',
     'services',
     'teams',
-    'priorities',
     'users',
     'escalationPolicies',
     'extensions',

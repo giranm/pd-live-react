@@ -70,8 +70,7 @@ const QuerySettingsComponent = ({
     incidentPriority,
     teamIds,
     serviceIds,
-  } =
-    querySettings;
+  } = querySettings;
   const eventKey = displayQuerySettings ? '0' : '1';
 
   // Generate lists/data from store
@@ -94,8 +93,6 @@ const QuerySettingsComponent = ({
   // Get "stored" option values
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
-
-  // FIXME: incidentPriority seems to reset values on reload?
 
   return (
     <div className="query-settings-ctr" id="query-settings-ctr">
