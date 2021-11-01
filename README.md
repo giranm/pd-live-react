@@ -43,6 +43,7 @@ It has been bootstrapped using [create-react-app](https://github.com/facebook/cr
 - [ ] External system sync (post-action) button (e.g. disabled correctly, but enabled on incident reselect due to incident store not refreshed)
 - [ ] Resolved incidents still appear in the table after a period (most likely memoization of react-table)
 - [x] Updating column order reverts to width defined under `src/util/incident-table-column.js`
+- [ ] Updating columns may occasionally reset back to `minWidth` 
 - [x] `state.querySettings.incidentPriority` resets on render, thereby losing persisted data
 - [ ] `react-select` within query settings does not render existing selections when not in view (needs re-rendering via hook)
 
