@@ -36,6 +36,11 @@ const GlobalSearchComponent = ({ searchQuery, updateSearchQuery }) => {
               htmlSize={40}
               onChange={(e) => debounced(e.target.value)}
               defaultValue={searchQuery}
+              style={searchQuery ? {
+                backgroundColor: '#ffdc00',
+                color: '#1155e6',
+                fontWeight: 600,
+              } : {}}
             />
           </InputGroup>
         </Col>
