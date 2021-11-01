@@ -100,10 +100,7 @@ const IncidentTableComponent = ({
       });
       return tempColumns;
     },
-    [
-      incidentTableColumnsNames,
-      // incidentTableState.columnResizing.columnWidths, // FIXME: This seems to reset state
-    ],
+    [incidentTableColumnsNames],
   );
 
   // TODO: Verify if this is the cause of resolved incidents staying in the view
@@ -125,8 +122,11 @@ const IncidentTableComponent = ({
 
   // Debouncing for table state
   const debouncedUpdateIncidentTableState = useDebouncedCallback(
-    (state) => {
-      updateIncidentTableState(state);
+    (state, action) => {
+      // Only update store with sorted and column resizing state
+      if (action.type === 'toggleSortBy' || action.type === 'columnDoneResizing') {
+        updateIncidentTableState(state);
+      }
     },
     1000,
   );
@@ -160,7 +160,7 @@ const IncidentTableComponent = ({
       // Set initial state from store
       initialState: incidentTableState,
       // Handle updates to table
-      stateReducer: (newState) => debouncedUpdateIncidentTableState(newState),
+      stateReducer: (newState, action) => debouncedUpdateIncidentTableState(newState, action),
     },
     // Plugins
     useSortBy,
