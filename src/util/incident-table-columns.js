@@ -300,6 +300,37 @@ export const availableIncidentTableColumns = [
     // width: 200,
     // maxWidth: 500,
   },
+  {
+    accessor: (incident) => (incident.external_references
+      ? incident.external_references.map((ext) => ext.external_id).join(', ')
+      : 'N/A'),
+    Header: 'External References',
+    sortable: true,
+    minWidth: 200,
+    Cell: ({ row }) => {
+      // eslint-disable-next-line camelcase
+      const { external_references } = row.original.external_references
+        ? row.original
+        : [];
+      if (external_references.length > 0) {
+        return (
+          <div>
+            {external_references.map((ext, idx, { length }) => (
+              <a
+                idx={ext.id}
+                href={ext.external_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {`${ext.summary} (${ext.external_id})`}{length - 1 === idx ? null : ', '}
+              </a>
+            ))}
+          </div>
+        );
+      }
+      return '--';
+    },
+  },
 ];
 
 // Helper function to retrieve columns definitions from list of names
