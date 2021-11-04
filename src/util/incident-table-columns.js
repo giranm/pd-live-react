@@ -1,6 +1,10 @@
 import moment from 'moment';
 
-import { Badge } from 'react-bootstrap';
+import {
+  Badge,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -13,6 +17,8 @@ import {
 
 import PersonInitialsComponent
   from 'components/IncidentTable/subcomponents/PersonInitialsComponents';
+
+import StatusComponent from 'components/IncidentTable/subcomponents/StatusComponent';
 
 import { DATE_FORMAT } from 'util/constants';
 import {
@@ -74,33 +80,10 @@ export const availableIncidentTableColumns = [
     accessor: 'status',
     Header: 'Status',
     sortable: true,
-    minWidth: 160,
+    minWidth: 100,
     // width: 160,
     // maxWidth: 160,
-    Cell: ({ row }) => {
-      const { status } = row.original;
-      let elem;
-      if (status === TRIGGERED) {
-        elem = (
-          <Badge className="status-badge" variant="danger">
-            <FontAwesomeIcon icon={faExclamationTriangle} /> Triggered
-          </Badge>
-        );
-      } else if (status === ACKNOWLEDGED) {
-        elem = (
-          <Badge className="status-badge" variant="warning">
-            <FontAwesomeIcon icon={faShieldAlt} /> Acknowledged
-          </Badge>
-        );
-      } else if (status === RESOLVED) {
-        elem = (
-          <Badge className="status-badge" variant="success">
-            <FontAwesomeIcon icon={faCheckCircle} /> Resolved
-          </Badge>
-        );
-      }
-      return elem;
-    },
+    Cell: ({ row }) => <StatusComponent status={row.original.status} />,
   },
   {
     accessor: 'incident_key',
