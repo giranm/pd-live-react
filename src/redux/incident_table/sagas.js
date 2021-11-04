@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import { put, select, takeLatest } from 'redux-saga/effects';
 
-import { getIncidentTableColumns } from 'util/incident-table-columns';
 import {
   TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED,
   TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
@@ -10,6 +9,8 @@ import {
   SAVE_INCIDENT_TABLE_SETTINGS_ERROR,
   UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
   UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
+  UPDATE_INCIDENT_TABLE_STATE_REQUESTED,
+  UPDATE_INCIDENT_TABLE_STATE_COMPLETED,
   SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
   SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
 } from './actions';
@@ -39,10 +40,9 @@ export function* saveIncidentTableSettingsImpl(action) {
 
     // Update incident table columns
     const updatedIncidentTableColumnNames = updatedIncidentTableColumns.map((col) => col.value);
-    const incidentTableColumns = getIncidentTableColumns(updatedIncidentTableColumnNames);
     yield put({
       type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
-      incidentTableColumns,
+      incidentTableColumnsNames: updatedIncidentTableColumnNames,
     });
 
     // TODO: Other table settings can be dispatched here...
@@ -64,10 +64,22 @@ export function* updateIncidentTableColumns() {
 }
 
 export function* updateIncidentTableColumnsImpl(action) {
-  const { incidentTableColumns } = action;
+  const { incidentTableColumnsNames } = action;
   yield put({
     type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
-    incidentTableColumns,
+    incidentTableColumnsNames,
+  });
+}
+
+export function* updateIncidentTableState() {
+  yield takeLatest(UPDATE_INCIDENT_TABLE_STATE_REQUESTED, updateIncidentTableStateImpl);
+}
+
+export function* updateIncidentTableStateImpl(action) {
+  const { incidentTableState } = action;
+  yield put({
+    type: UPDATE_INCIDENT_TABLE_STATE_COMPLETED,
+    incidentTableState,
   });
 }
 

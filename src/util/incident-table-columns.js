@@ -33,7 +33,7 @@ export const availableIncidentTableColumns = [
     Header: '#',
     sortable: true,
     minWidth: 80,
-    width: 80,
+    // width: 80,
     Cell: ({ row }) => (
       <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.incident_number}
@@ -45,7 +45,7 @@ export const availableIncidentTableColumns = [
     Header: 'Title',
     sortable: true,
     minWidth: 400,
-    width: 800,
+    // width: 800,
     Cell: ({ row }) => (
       <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.title}
@@ -57,14 +57,14 @@ export const availableIncidentTableColumns = [
     Header: 'Description',
     sortable: true,
     minWidth: 400,
-    width: 800,
+    // width: 800,
   },
   {
     accessor: 'created_at',
     Header: 'Created At',
     sortable: true,
     minWidth: 180,
-    width: 180,
+    // width: 180,
     Cell: ({ row }) => {
       const formattedDate = moment(row.original.created_at).format(DATE_FORMAT);
       return formattedDate;
@@ -75,8 +75,8 @@ export const availableIncidentTableColumns = [
     Header: 'Status',
     sortable: true,
     minWidth: 160,
-    width: 160,
-    maxWidth: 160,
+    // width: 160,
+    // maxWidth: 160,
     Cell: ({ row }) => {
       const { status } = row.original;
       let elem;
@@ -107,14 +107,14 @@ export const availableIncidentTableColumns = [
     Header: 'Incident Key',
     sortable: true,
     minWidth: 300,
-    width: 300,
+    // width: 300,
   },
   {
     accessor: 'service.summary',
     Header: 'Service',
     sortable: true,
     minWidth: 300,
-    width: 300,
+    // width: 300,
     Cell: ({ row }) => (
       <a href={row.original.service.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.service.summary}
@@ -128,7 +128,7 @@ export const availableIncidentTableColumns = [
     Header: 'Assignees',
     sortable: true,
     minWidth: 160,
-    width: 160,
+    // width: 160,
     Cell: ({ row }) => {
       const { assignments } = row.original.assignments
         ? row.original
@@ -144,7 +144,7 @@ export const availableIncidentTableColumns = [
     Header: 'Last Status Change At',
     sortable: true,
     minWidth: 220,
-    width: 220,
+    // width: 220,
     Cell: ({ row }) => {
       const formattedDate = moment(row.original.last_status_change_at).format(DATE_FORMAT);
       return formattedDate;
@@ -155,14 +155,14 @@ export const availableIncidentTableColumns = [
     Header: 'Num Alerts',
     sortable: true,
     minWidth: 130,
-    width: 130,
+    // width: 130,
   },
   {
     accessor: 'escalation_policy.summary',
     Header: 'Escalation Policy',
     sortable: true,
     minWidth: 200,
-    width: 200,
+    // width: 200,
     Cell: ({ row }) => (
       <a href={row.original.escalation_policy.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.escalation_policy.summary}
@@ -176,7 +176,7 @@ export const availableIncidentTableColumns = [
     Header: 'Teams',
     sortable: true,
     minWidth: 200,
-    width: 200,
+    // width: 200,
     Cell: ({ row }) => {
       const { teams } = row.original.teams
         ? row.original
@@ -207,7 +207,7 @@ export const availableIncidentTableColumns = [
     Header: 'Acknowledgments',
     sortable: true,
     minWidth: 250,
-    width: 250,
+    // width: 250,
     Cell: ({ row }) => {
       const { acknowledgements } = row.original.acknowledgements
         ? row.original
@@ -223,7 +223,7 @@ export const availableIncidentTableColumns = [
     Header: 'Last Status Change By',
     sortable: true,
     minWidth: 250,
-    width: 250,
+    // width: 250,
     Cell: ({ row }) => (
       <a
         href={row.original.last_status_change_by.html_url}
@@ -254,7 +254,7 @@ export const availableIncidentTableColumns = [
     Header: 'Priority',
     sortable: true,
     minWidth: 90,
-    width: 90,
+    // width: 90,
     sortFunction: (row1, row2) => null, // TBD - this needs to be custom implemented
   },
   // TODO: incidents_responders, responder_requests, subscriber_requests
@@ -263,7 +263,7 @@ export const availableIncidentTableColumns = [
     Header: 'Urgency',
     sortable: true,
     minWidth: 120,
-    width: 120,
+    // width: 120,
     Cell: ({ row }) => {
       const { urgency } = row.original;
       let elem;
@@ -288,14 +288,14 @@ export const availableIncidentTableColumns = [
     Header: 'Incident ID',
     sortable: true,
     minWidth: 160,
-    width: 160,
+    // width: 160,
   },
   {
     accessor: 'summary',
     Header: 'Summary',
     sortable: true,
     minWidth: 400,
-    width: 800,
+    // width: 800,
   },
   {
     accessor: (incident) => {
@@ -309,8 +309,8 @@ export const availableIncidentTableColumns = [
     Header: 'Latest Note',
     sortable: true,
     minWidth: 200,
-    width: 200,
-    maxWidth: 500,
+    // width: 200,
+    // maxWidth: 500,
   },
 ];
 

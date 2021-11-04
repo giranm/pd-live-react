@@ -14,7 +14,7 @@ import './GlobalSearchComponent.scss';
 
 import { updateSearchQuery } from 'redux/query_settings/actions';
 
-const GlobalSearchComponent = ({ updateSearchQuery }) => {
+const GlobalSearchComponent = ({ searchQuery, updateSearchQuery }) => {
   const debounced = useDebouncedCallback(
     (value) => {
       updateSearchQuery(value);
@@ -35,6 +35,12 @@ const GlobalSearchComponent = ({ updateSearchQuery }) => {
               placeholder="Search"
               htmlSize={40}
               onChange={(e) => debounced(e.target.value)}
+              defaultValue={searchQuery}
+              style={searchQuery ? {
+                backgroundColor: '#ffdc00',
+                color: '#1155e6',
+                fontWeight: 600,
+              } : {}}
             />
           </InputGroup>
         </Col>
@@ -43,8 +49,12 @@ const GlobalSearchComponent = ({ updateSearchQuery }) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  searchQuery: state.querySettings.searchQuery,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   updateSearchQuery: (searchQuery) => dispatch(updateSearchQuery(searchQuery)),
 });
 
-export default connect(null, mapDispatchToProps)(GlobalSearchComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(GlobalSearchComponent);

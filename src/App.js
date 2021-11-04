@@ -42,6 +42,7 @@ import 'App.scss';
 moment.locale(getLanguage());
 
 const App = ({
+  state,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
@@ -69,11 +70,12 @@ const App = ({
 
   // Initial load of objects from API
   useEffect(() => {
+    // Handle incidentPriority resetting bug
+    if (!state.priorities.priorities.length) getPrioritiesAsync();
     getUsersAsync();
     getCurrentUserAsync();
     getServicesAsync();
     getTeamsAsync();
-    getPrioritiesAsync();
     getEscalationPoliciesAsync();
     getExtensionsAsync();
     getResponsePlaysAsync();
@@ -118,6 +120,8 @@ const App = ({
   );
 };
 
+const mapStateToProps = (state) => ({ state });
+
 const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
@@ -132,4 +136,4 @@ const mapDispatchToProps = (dispatch) => ({
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
