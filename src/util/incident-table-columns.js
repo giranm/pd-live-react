@@ -255,7 +255,12 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 90,
     // width: 90,
-    sortFunction: (row1, row2) => null, // TBD - this needs to be custom implemented
+    sortType: (row1, row2) => {
+      const row1Rank = row1.original.priority ? row1.original.priority.order : 0;
+      const row2Rank = row2.original.priority ? row2.original.priority.order : 0;
+      const order = row1Rank > row2Rank ? 1 : -1;
+      return order;
+    },
   },
   // TODO: incidents_responders, responder_requests, subscriber_requests
   {
