@@ -21,6 +21,11 @@ body {
   border-color: $pd-brand-secondary-light;
 }
 
+.btn-outline-secondary:not(:disabled):not(.disabled).active {
+  border-bottom: 3px $pd-success solid !important;
+  background-color: unset !important;
+}
+
 .btn-outline-dark {
   color: $pd-brand-gray-dark;
   background-color: $pd-white;
