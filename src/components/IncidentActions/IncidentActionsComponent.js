@@ -177,25 +177,29 @@ const IncidentActionsComponent = ({
 
   // Identify extensions (ext systems) that have already been sync'd with on the selected incident
   // NB - need intermediate variables to stop race condition of empty array
-  const externalSystems = selectedIncident
-    ? externalSystemsTemp.map((serviceExtension) => {
-      const tempServiceExtension = { ...serviceExtension };
-      let result;
-      result = selectedIncident.external_references
-        ? selectedIncident.external_references.find(
-          ({ webhook }) => webhook.id === serviceExtension.id,
-        )
-        : null;
-      if (result) {
-        tempServiceExtension.synced = true;
-        tempServiceExtension.extension_label
+  const [externalSystems, setExternalSystems] = useState([]);
+  useEffect(() => {
+    const tempExternalSystems = selectedIncident
+      ? externalSystemsTemp.map((serviceExtension) => {
+        const tempServiceExtension = { ...serviceExtension };
+        let result;
+        result = selectedIncident.external_references
+          ? selectedIncident.external_references.find(
+            ({ webhook }) => webhook.id === serviceExtension.id,
+          )
+          : null;
+        if (result) {
+          tempServiceExtension.synced = true;
+          tempServiceExtension.extension_label
           = `Synced with ${result.webhook.summary} (${result.external_id})`;
-      } else {
-        tempServiceExtension.synced = false;
-      }
-      return tempServiceExtension;
-    })
-    : [];
+        } else {
+          tempServiceExtension.synced = false;
+        }
+        return tempServiceExtension;
+      })
+      : [];
+    setExternalSystems(tempExternalSystems);
+  }, [displayRunActions, selectedIncident]);
 
   return (
     <div>
