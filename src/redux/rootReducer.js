@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { persistReducer } from 'redux-persist';
-import { querySettingsPersistConfig } from './persistance/config';
+import { querySettingsPersistConfig } from './persistence/config';
 
 import actionAlertsModalData from './action_alerts/reducers';
 import incidents from './incidents/reducers';
@@ -16,7 +16,7 @@ import users from './users/reducers';
 import escalationPolicies from './escalation_policies/reducers';
 import extensions from './extensions/reducers';
 import responsePlays from './response_plays/reducers';
-import persistance from './persistance/reducers';
+import persistence from './persistence/reducers';
 
 export default combineReducers({
   actionAlertsModalData,
@@ -32,5 +32,5 @@ export default combineReducers({
   escalationPolicies,
   extensions,
   responsePlays,
-  persistance,
+  persistence,
 });

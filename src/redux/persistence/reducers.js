@@ -2,7 +2,7 @@ import produce from 'immer';
 
 import { REHYDRATE } from 'redux-persist/lib/constants';
 
-const persistance = produce(
+const persistence = produce(
   (draft, action) => {
     switch (action.type) {
       case REHYDRATE:
@@ -17,4 +17,4 @@ const persistance = produce(
   },
 );
 
-export default persistance;
+export default persistence;
