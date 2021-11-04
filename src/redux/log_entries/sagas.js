@@ -59,7 +59,9 @@ export function* updateRecentLogEntries(action) {
 
     logEntries.forEach((logEntry) => {
       // Skip duplicate log entry
-      if (recentLogEntriesLocal.filter((x) => x.id === logEntry.id).length > 0) return;
+      if (recentLogEntriesLocal.filter((x) => x.id === logEntry.id).length > 0) {
+        return;
+      }
 
       // Push new log entry to array with details
       const logEntryDate = new Date(logEntry.created_at);
@@ -122,16 +124,11 @@ export function* cleanRecentLogEntriesAsync() {
   yield takeLatest(CLEAN_RECENT_LOG_ENTRIES, cleanRecentLogEntries);
 }
 
-export function* cleanRecentLogEntries(action) {
+export function* cleanRecentLogEntries() {
   try {
-    // Sort recent log entries by descending date and reduce this down to the last 100 items
-    const { recentLogEntries } = yield select(selectLogEntries);
-    const cleanedRecentLogEntries = [...recentLogEntries];
-    cleanedRecentLogEntries.sort((a, b) => b.date - a.date).slice(0, 100);
-
     yield put({
       type: CLEAN_RECENT_LOG_ENTRIES_COMPLETED,
-      recentLogEntries: cleanedRecentLogEntries,
+      recentLogEntries: [],
     });
   } catch (e) {
     yield put({ type: CLEAN_RECENT_LOG_ENTRIES_ERROR, message: e.message });
