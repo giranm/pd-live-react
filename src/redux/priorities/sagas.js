@@ -30,7 +30,7 @@ export function* getPriorities() {
 
     // Compare existing priorities and determine if store needs to be updated.
     const { priorities } = yield select(selectPriorities);
-    if (!_.isEqual(priorities, priorities)) {
+    if (!_.isEqual(priorities, tempPriorities)) {
       yield put({
         type: FETCH_PRIORITIES_COMPLETED,
         priorities: tempPriorities,
