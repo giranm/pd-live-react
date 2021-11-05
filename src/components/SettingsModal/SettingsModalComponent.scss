@@ -1,4 +1,14 @@
+/* Bootstrap */
+.modal-90w {
+  width: 90% !important;
+  max-width: none !important;
+}
+
 /* React Dual List Overrides */
 .rdl-control-label {
   font-size: 16pt;
+}
+
+.rdl-control-container {
+  min-height: 300px !important;
 }

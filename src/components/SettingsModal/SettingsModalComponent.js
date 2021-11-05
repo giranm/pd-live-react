@@ -49,7 +49,7 @@ const SettingsModalComponent = ({
     <div className="settings-ctr">
       <Modal
         backdrop="static"
-        size="lg"
+        dialogClassName="modal-90w"
         show={displaySettingsModal}
         onHide={toggleSettingsModal}
       >
@@ -71,12 +71,12 @@ const SettingsModalComponent = ({
                 selected={selectedColumns}
                 onChange={(cols) => setSelectedColumns(cols)}
               />
+              <br />
+              <Button variant="primary" onClick={() => saveIncidentTable(selectedColumns)}>
+                Update Columns
+              </Button>
             </Tab>
           </Tabs>
-          <br />
-          <Button variant="primary" onClick={() => saveIncidentTable(selectedColumns)}>
-            Update Columns
-          </Button>
         </Modal.Body>
       </Modal>
     </div>
