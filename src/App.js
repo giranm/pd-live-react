@@ -41,7 +41,6 @@ import 'App.scss';
 moment.locale(getLanguage());
 
 const App = ({
-  state,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
@@ -69,8 +68,6 @@ const App = ({
 
   // Initial load of objects from API
   useEffect(() => {
-    // Handle incidentPriority resetting bug
-    if (!state.priorities.priorities.length) getPrioritiesAsync();
     getUsersAsync();
     getCurrentUserAsync();
     getServicesAsync();
@@ -78,6 +75,7 @@ const App = ({
     getEscalationPoliciesAsync();
     getExtensionsAsync();
     getResponsePlaysAsync();
+    getPrioritiesAsync();
     getIncidentsAsync();
   }, []);
 
