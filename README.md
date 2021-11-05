@@ -2,29 +2,53 @@
 
 This repository hosts the source code for PagerDuty Live, a single page application which enables organisations to manage their PagerDuty incidents in real-time through a unified console view.
 
+> Application URL: https://giranm.github.io/pd-live-react/
+
 Further details on roadmap functionality, bugs, etc can be viewed on the [wiki](https://github.com/giranm/pd-live-react/wiki).  
 For any issues, please raise a [GitHub issue](https://github.com/giranm/pd-live-react/issues/new) which can be tracked accordingly.
 
 <kbd>
-<img width="1623" alt="Screenshot 2021-11-04 at 14 46 53" src="https://user-images.githubusercontent.com/20474443/140336293-32b06e7b-c375-4783-aac1-062b08bfe39a.png">
+<img width="1625" alt="Screenshot 2021-11-05 at 18 35 16" src="https://user-images.githubusercontent.com/20474443/140561598-d771ea60-157c-4fc6-aaa7-af31765f955f.png">
 </kbd>
 
 ## Local Development
 
 1. Install [NodeJS v11.10.1](https://nodejs.org/tr/blog/release/v11.10.1/) (or switch using [`asdf install`](https://github.com/asdf-vm/asdf))
 
-2. Install `craco` via `npm install @craco/craco --save --global`  
+2. Install `craco` via `$ npm install @craco/craco --save --global`  
    (NB - you may need to reload terminal session to use the alias)
 
-3. `git clone` repo to desired destination and `cd` into directory.
+3. `$ git clone` repo to desired destination and `$ cd pd-live-react` into directory.
 
-4. _(Optional unless you are not serving at http://localhost:3000)_
-
-   - Go into PD developer mode, create a new app, add OAuth 2.0 and add a URL to the base of wherever you are serving the app
-   - Update `clientIdRemoteHost` within `src/config/constants.js`, which is required for `PDOAuth.login()`
-
-5. Install dependencies with `npm install` and run application locally using `npm start`  
+4. Install dependencies with `$ npm install` and run application locally using `$ npm start`  
    (e.g. app will be available under http://localhost:3000/ - be sure to remove pd-live-react suffix)
+
+## Deployment (GitHub Pages)
+
+These steps assume you have forked the repo to a new GitHub repo and wish to deploy using [GitHub Pages](https://github.com/gitname/react-gh-pages).
+
+1. Modify `homepage` within `package.json` accordingly (e.g. https://[GIT_USERNAME].github.io/pd-live-react/)
+
+2. PagerDuty Configuration
+
+   - Within PagerDuty developer mode, [register a new app](https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTY5-register-an-app)
+   - [Add OAuth 2.0 workflow](<(https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTcz-o-auth-2-0-functionality#add-oauth-20-functionality-to-your-app)>) to the app, and update the URL to the base of the app to the same in step #1.
+
+3. Update `clientIdRemoteHost` with the PagerDuty Client ID under `src/config/constants.js`.  
+   (Don't forget to add and commit changes!)
+
+4. (_Optional_) Create `gh-pages` branch for tracking
+
+   - `$ git checkout -b gh-pages`
+   - `$ git branch --set-upstream gh-pages origin/gh-pages`
+   - `$ git push`
+   - `$ git checkout -`
+
+5. Install `gh-pages` module via `$ npm install gh-pages --save-dev --global`
+
+6. Deploy application to GitHub Pages via `$ npm run deploy`
+
+7. Application will be accessible under the homepage specified in step #1.
 
 ## Licence
 
