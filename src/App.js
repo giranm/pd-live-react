@@ -7,7 +7,7 @@ import {
   PD_OAUTH_CLIENT_ID,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
-} from 'util/constants';
+} from 'config/constants';
 
 import moment from 'moment';
 import 'moment/min/locales.min';

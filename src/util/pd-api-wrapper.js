@@ -5,7 +5,7 @@ import { api } from '@pagerduty/pdjs';
 import axios from 'axios';
 import Bottleneck from 'bottleneck';
 
-import { PD_OAUTH_CLIENT_ID } from 'util/constants';
+import { PD_OAUTH_CLIENT_ID } from 'config/constants';
 import { compareCreatedAt } from 'util/helpers';
 
 /*

@@ -2,15 +2,10 @@ import moment from 'moment';
 
 import {
   Badge,
-  OverlayTrigger,
-  Tooltip,
 } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faExclamationTriangle,
-  faShieldAlt,
-  faCheckCircle,
   faChevronUp,
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
@@ -20,17 +15,14 @@ import PersonInitialsComponent
 
 import StatusComponent from 'components/IncidentTable/subcomponents/StatusComponent';
 
-import { DATE_FORMAT } from 'util/constants';
+import { DATE_FORMAT } from 'config/constants';
 import {
-  TRIGGERED,
-  ACKNOWLEDGED,
-  RESOLVED,
   HIGH,
   LOW,
 } from 'util/incidents';
 import {
   getObjectsFromList,
-} from './helpers';
+} from 'util/helpers';
 
 // Define all possible columns for incidents under PagerDuty's API
 export const availableIncidentTableColumns = [

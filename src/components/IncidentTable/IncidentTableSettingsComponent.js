@@ -21,7 +21,7 @@ import {
 import {
   availableIncidentTableColumns,
   getIncidentTableColumns,
-} from 'util/incident-table-columns';
+} from 'config/incident-table-columns';
 
 const columnMapper = (column) => ({
   label: column.Header,

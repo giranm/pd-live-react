@@ -4,7 +4,7 @@ import {
 
 import { UPDATE_INCIDENTS_LIST } from 'redux/incidents/actions';
 
-import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from 'util/log_entries';
+import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from 'util/log-entries';
 import { pd } from 'util/pd-api-wrapper';
 import {
   FETCH_LOG_ENTRIES_REQUESTED,

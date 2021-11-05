@@ -21,7 +21,7 @@ import {
   filterIncidentsByFieldOfList,
 } from 'util/incidents';
 import { pushToArray } from 'util/helpers';
-import { fuseOptions } from 'util/fuse-config';
+import { fuseOptions } from 'config/fuse-config';
 
 import { selectQuerySettings } from 'redux/query_settings/selectors';
 import {

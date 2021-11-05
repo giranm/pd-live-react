@@ -29,7 +29,7 @@ import {
 
 import { selectIncidentTableRows, updateIncidentTableState } from 'redux/incident_table/actions';
 
-import { getIncidentTableColumns } from 'util/incident-table-columns';
+import { getIncidentTableColumns } from 'config/incident-table-columns';
 
 import CheckboxComponent from './subcomponents/CheckboxComponent';
 import EmptyIncidentsComponent from './subcomponents/EmptyIncidentsComponent';
