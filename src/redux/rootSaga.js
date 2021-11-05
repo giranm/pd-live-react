@@ -38,8 +38,7 @@ import {
 } from './log_entries/sagas';
 
 import {
-  toggleIncidentTableSettings,
-  saveIncidentTableSettings,
+  saveIncidentTable,
   updateIncidentTableColumns,
   updateIncidentTableState,
   selectIncidentTableRows,
@@ -76,6 +75,7 @@ import { getServicesAsync } from './services/sagas';
 import { getTeamsAsync } from './teams/sagas';
 import { getPrioritiesAsync } from './priorities/sagas';
 import { getEscalationPoliciesAsync } from './escalation_policies/sagas';
+import { toggleSettingsModal } from './settings/sagas';
 
 export default function* rootSaga() {
   yield take(REHYDRATE); // Wait for rehydrate to prevent sagas from running with empty store
@@ -108,8 +108,7 @@ export default function* rootSaga() {
     cleanRecentLogEntriesAsync(),
 
     // Incident Table
-    toggleIncidentTableSettings(),
-    saveIncidentTableSettings(),
+    saveIncidentTable(),
     updateIncidentTableColumns(),
     updateIncidentTableState(),
     selectIncidentTableRows(),
@@ -159,6 +158,9 @@ export default function* rootSaga() {
     // Response Plays
     getResponsePlaysAsync(),
     runResponsePlayAsync(),
+
+    // Settings
+    toggleSettingsModal(),
   ]);
 }
 

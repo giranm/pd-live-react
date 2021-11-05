@@ -7,7 +7,7 @@ import actionAlertsModalData from './action_alerts/reducers';
 import incidents from './incidents/reducers';
 import logEntries from './log_entries/reducers';
 import querySettings from './query_settings/reducers';
-import incidentTableSettings from './incident_table/reducers';
+import incidentTable from './incident_table/reducers';
 import incidentActions from './incident_actions/reducers';
 import services from './services/reducers';
 import teams from './teams/reducers';
@@ -17,13 +17,14 @@ import escalationPolicies from './escalation_policies/reducers';
 import extensions from './extensions/reducers';
 import responsePlays from './response_plays/reducers';
 import persistence from './persistence/reducers';
+import settings from './settings/reducers';
 
 export default combineReducers({
   actionAlertsModalData,
   incidents,
   logEntries,
   querySettings: persistReducer(querySettingsPersistConfig, querySettings),
-  incidentTableSettings,
+  incidentTable,
   incidentActions,
   services,
   teams,
@@ -33,4 +34,5 @@ export default combineReducers({
   extensions,
   responsePlays,
   persistence,
+  settings,
 });

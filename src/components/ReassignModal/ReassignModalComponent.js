@@ -13,14 +13,14 @@ const animatedComponents = makeAnimated();
 
 const ReassignModalComponent = ({
   incidentActions,
-  incidentTableSettings,
+  incidentTable,
   escalationPolicies,
   users,
   toggleDisplayReassignModal,
   reassign,
 }) => {
   const { displayReassignModal } = incidentActions;
-  const { selectedRows } = incidentTableSettings;
+  const { selectedRows } = incidentTable;
 
   const [assignment, setAssignment] = useState(null);
 
@@ -93,7 +93,7 @@ const ReassignModalComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,
-  incidentTableSettings: state.incidentTableSettings,
+  incidentTable: state.incidentTable,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   users: state.users.users,
 });

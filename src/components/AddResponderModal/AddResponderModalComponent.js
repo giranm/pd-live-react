@@ -13,14 +13,14 @@ const animatedComponents = makeAnimated();
 
 const AddResponderModalComponent = ({
   incidentActions,
-  incidentTableSettings,
+  incidentTable,
   escalationPolicies,
   users,
   toggleDisplayAddResponderModal,
   addResponder,
 }) => {
   const { displayAddResponderModal } = incidentActions;
-  const { selectedRows } = incidentTableSettings;
+  const { selectedRows } = incidentTable;
 
   const messageMaxChars = 110;
 
@@ -115,14 +115,16 @@ const AddResponderModalComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,
-  incidentTableSettings: state.incidentTableSettings,
+  incidentTable: state.incidentTable,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   users: state.users.users,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModal()),
-  addResponder: (incidents, responderRequestTargets, message) => dispatch(addResponder(incidents, responderRequestTargets, message)),
+  addResponder: (incidents, responderRequestTargets, message) => dispatch(
+    addResponder(incidents, responderRequestTargets, message),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddResponderModalComponent);

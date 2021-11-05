@@ -14,8 +14,7 @@ import 'moment/min/locales.min';
 
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
 import QuerySettingsComponent from 'components/QuerySettings/QuerySettingsComponent';
-import IncidentTableSettingsComponent
-  from 'components/IncidentTable/IncidentTableSettingsComponent';
+import SettingsModalComponent from 'components/SettingsModal/SettingsModalComponent';
 import IncidentTableComponent from 'components/IncidentTable/IncidentTableComponent';
 import IncidentActionsComponent from 'components/IncidentActions/IncidentActionsComponent';
 import ActionAlertsModalComponent from 'components/ActionAlertsModal/ActionAlertsModalComponent';
@@ -107,7 +106,7 @@ const App = ({
       <Container fluid>
         <QuerySettingsComponent />
         <IncidentTableComponent />
-        <IncidentTableSettingsComponent />
+        <SettingsModalComponent />
         <IncidentActionsComponent />
         <ActionAlertsModalComponent />
         <CustomSnoozeModalComponent />

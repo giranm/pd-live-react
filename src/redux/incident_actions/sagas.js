@@ -15,7 +15,7 @@ import { SELECT_INCIDENT_TABLE_ROWS_REQUESTED } from 'redux/incident_table/actio
 import { getIncidentByIdRequest, updateIncidentsList } from 'redux/incidents/sagas';
 
 import { selectPriorities } from 'redux/priorities/selectors';
-import { selectIncidentTableSettings } from 'redux/incident_table/selectors';
+import { selectIncidentTable } from 'redux/incident_table/selectors';
 
 import {
   TRIGGERED,
@@ -635,7 +635,7 @@ export function* syncWithExternalSystemAsync() {
 export function* syncWithExternalSystem(action) {
   try {
     const { incidents: selectedIncidents, webhook, displayModal } = action;
-    const { allSelected, selectedCount } = yield select(selectIncidentTableSettings);
+    const { allSelected, selectedCount } = yield select(selectIncidentTable);
 
     // Build individual requests as the endpoint supports singular PUT
     const externalSystemSyncRequests = selectedIncidents.map((incident) => {

@@ -9,12 +9,12 @@ import './AddNoteModalComponent.scss';
 
 const AddNoteModalComponent = ({
   incidentActions,
-  incidentTableSettings,
+  incidentTable,
   toggleDisplayAddNoteModal,
   addNote,
 }) => {
   const { displayAddNoteModal } = incidentActions;
-  const { selectedRows } = incidentTableSettings;
+  const { selectedRows } = incidentTable;
 
   const [note, setNote] = useState('');
   useEffect(() => {
@@ -58,7 +58,7 @@ const AddNoteModalComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,
-  incidentTableSettings: state.incidentTableSettings,
+  incidentTable: state.incidentTable,
 });
 
 const mapDispatchToProps = (dispatch) => ({

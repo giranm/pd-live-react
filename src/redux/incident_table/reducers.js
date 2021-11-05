@@ -1,8 +1,6 @@
 import produce from 'immer';
 
 import {
-  TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED,
-  TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
   SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED,
   SAVE_INCIDENT_TABLE_SETTINGS_COMPLETED,
   SAVE_INCIDENT_TABLE_SETTINGS_ERROR,
@@ -25,18 +23,9 @@ const defaultColumnNames = [
   'Latest Note',
 ];
 
-const incidentTableSettings = produce(
+const incidentTable = produce(
   (draft, action) => {
     switch (action.type) {
-      case TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED:
-        draft.status = TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED;
-        break;
-
-      case TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED:
-        draft.displayIncidentTableSettings = action.displayIncidentTableSettings;
-        draft.status = TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED;
-        break;
-
       case SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED:
         draft.status = SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED;
         break;
@@ -86,7 +75,6 @@ const incidentTableSettings = produce(
   {
     incidentTableState: {},
     incidentTableColumnsNames: defaultColumnNames,
-    displayIncidentTableSettings: false,
     allSelected: false,
     selectedCount: 0,
     selectedRows: [],
@@ -96,4 +84,4 @@ const incidentTableSettings = produce(
   },
 );
 
-export default incidentTableSettings;
+export default incidentTable;

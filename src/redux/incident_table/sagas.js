@@ -2,8 +2,6 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
 
 import {
-  TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED,
-  TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
   SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED,
   SAVE_INCIDENT_TABLE_SETTINGS_COMPLETED,
   SAVE_INCIDENT_TABLE_SETTINGS_ERROR,
@@ -15,25 +13,13 @@ import {
   SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
 } from './actions';
 
-import { selectIncidentTableSettings } from './selectors';
+import { selectIncidentTable } from './selectors';
 
-export function* toggleIncidentTableSettings() {
-  yield takeLatest(TOGGLE_INCIDENT_TABLE_SETTINGS_REQUESTED, toggleIncidentTableSettingsImpl);
+export function* saveIncidentTable() {
+  yield takeLatest(SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED, saveIncidentTableImpl);
 }
 
-export function* toggleIncidentTableSettingsImpl() {
-  const { displayIncidentTableSettings } = yield select(selectIncidentTableSettings);
-  yield put({
-    type: TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
-    displayIncidentTableSettings: !displayIncidentTableSettings,
-  });
-}
-
-export function* saveIncidentTableSettings() {
-  yield takeLatest(SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED, saveIncidentTableSettingsImpl);
-}
-
-export function* saveIncidentTableSettingsImpl(action) {
+export function* saveIncidentTableImpl(action) {
   // Attempt saving each setting down by dispatching the relevant actions
   try {
     const { updatedIncidentTableColumns } = action;
@@ -49,10 +35,6 @@ export function* saveIncidentTableSettingsImpl(action) {
 
     // Indicate that changes were saved and close down settings modal.
     yield put({ type: SAVE_INCIDENT_TABLE_SETTINGS_COMPLETED });
-    yield put({
-      type: TOGGLE_INCIDENT_TABLE_SETTINGS_COMPLETED,
-      displayIncidentTableSettings: false,
-    });
   } catch (e) {
     console.log(e);
     yield put({ type: SAVE_INCIDENT_TABLE_SETTINGS_ERROR, message: e.message });

@@ -21,12 +21,12 @@ const animatedComponents = makeAnimated();
 const MergeModalComponent = ({
   incidents,
   incidentActions,
-  incidentTableSettings,
+  incidentTable,
   toggleDisplayMergeModal,
   merge,
 }) => {
   const { displayMergeModal } = incidentActions;
-  const { selectedRows } = incidentTableSettings;
+  const { selectedRows } = incidentTable;
   const openIncidents = filterIncidentsByField(incidents, 'status', [
     TRIGGERED,
     ACKNOWLEDGED,
@@ -112,7 +112,7 @@ const MergeModalComponent = ({
 const mapStateToProps = (state) => ({
   incidents: state.incidents.incidents,
   incidentActions: state.incidentActions,
-  incidentTableSettings: state.incidentTableSettings,
+  incidentTable: state.incidentTable,
 });
 
 const mapDispatchToProps = (dispatch) => ({

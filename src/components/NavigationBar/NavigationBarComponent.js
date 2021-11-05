@@ -9,12 +9,12 @@ import './NavigationBarComponent.scss';
 
 import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent';
 
-import { toggleIncidentTableSettings } from 'redux/incident_table/actions';
+import { toggleSettingsModal } from 'redux/settings/actions';
 import { toggleDisplayQuerySettings } from 'redux/query_settings/actions';
 
 const NavigationBarComponent = ({
   displayQuerySettings,
-  toggleIncidentTableSettings,
+  toggleSettingsModal,
   toggleDisplayQuerySettings,
 }) => (
   <div className="navbar-ctr">
@@ -52,7 +52,7 @@ const NavigationBarComponent = ({
             >
               <NavDropdown.Item
                 className="ml-auto"
-                onClick={() => toggleIncidentTableSettings()}
+                onClick={() => toggleSettingsModal()}
               >
                 Settings
               </NavDropdown.Item>
@@ -73,7 +73,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleIncidentTableSettings: () => dispatch(toggleIncidentTableSettings()),
+  toggleSettingsModal: () => dispatch(toggleSettingsModal()),
   toggleDisplayQuerySettings: () => dispatch(toggleDisplayQuerySettings()),
 });
 

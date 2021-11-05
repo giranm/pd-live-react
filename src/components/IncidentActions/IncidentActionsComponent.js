@@ -66,7 +66,7 @@ import { getObjectsFromListbyKey } from 'util/helpers';
 const animatedComponents = makeAnimated();
 
 const IncidentActionsComponent = ({
-  incidentTableSettings,
+  incidentTable,
   incidentActions,
   incidents,
   priorities,
@@ -88,7 +88,7 @@ const IncidentActionsComponent = ({
   syncWithExternalSystem,
 }) => {
   const { fetchingIncidents, filteredIncidentsByQuery } = incidents;
-  const { selectedCount, selectedRows } = incidentTableSettings;
+  const { selectedCount, selectedRows } = incidentTable;
   const resolvedIncidents = filterIncidentsByField(selectedRows, 'status', [RESOLVED]);
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
@@ -485,7 +485,7 @@ const IncidentActionsComponent = ({
 };
 
 const mapStateToProps = (state) => ({
-  incidentTableSettings: state.incidentTableSettings,
+  incidentTable: state.incidentTable,
   incidentActions: state.incidentActions,
   incidents: state.incidents,
   priorities: state.priorities.priorities,

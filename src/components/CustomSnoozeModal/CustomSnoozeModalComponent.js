@@ -18,7 +18,7 @@ const CustomSnoozeModalComponent = ({
   toggleDisplayCustomSnoozeModal,
   snooze,
   incidentActions,
-  incidentTableSettings,
+  incidentTable,
 }) => {
   const { displayCustomSnoozeModal } = incidentActions;
 
@@ -36,7 +36,7 @@ const CustomSnoozeModalComponent = ({
   const tomorrowDurationFormatted = moment(tomorrowDuration).format('H[ hour(s)] m[ minute(s)]');
 
   // Only unresolved incidents can be snoozed
-  const { selectedRows } = incidentTableSettings;
+  const { selectedRows } = incidentTable;
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
     ACKNOWLEDGED,
@@ -133,7 +133,7 @@ const CustomSnoozeModalComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,
-  incidentTableSettings: state.incidentTableSettings,
+  incidentTable: state.incidentTable,
 });
 
 const mapDispatchToProps = (dispatch) => ({

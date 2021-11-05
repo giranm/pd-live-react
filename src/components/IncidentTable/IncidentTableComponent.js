@@ -66,11 +66,11 @@ const Delayed = ({ children, waitBeforeShow = 500 }) => {
 const IncidentTableComponent = ({
   selectIncidentTableRows,
   updateIncidentTableState,
-  incidentTableSettings,
+  incidentTable,
   incidentActions,
   incidents,
 }) => {
-  const { incidentTableState, incidentTableColumnsNames } = incidentTableSettings;
+  const { incidentTableState, incidentTableColumnsNames } = incidentTable;
   const { status } = incidentActions;
   const { filteredIncidentsByQuery, fetchingIncidents } = incidents;
 
@@ -313,7 +313,7 @@ const IncidentTableComponent = ({
 };
 
 const mapStateToProps = (state) => ({
-  incidentTableSettings: state.incidentTableSettings,
+  incidentTable: state.incidentTable,
   incidentActions: state.incidentActions,
   incidents: state.incidents,
 });
