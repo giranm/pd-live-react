@@ -6,7 +6,7 @@ This repository hosts the source code for PagerDuty Live, an open-source, single
 
 ## :warning: Disclaimer 
 
-**This project is not officially supported by PagerDuty and therefore no issues can reported to or resolved by PagerDuty Support.
+**This project is not officially supported by PagerDuty and therefore no issues can be reported to or resolved by PagerDuty Support.
 This is an open-source project designed to be used in a safe/test environment before users can leverage on their primary domains.**
 
 - Further details on roadmap functionality, bugs, etc can be viewed on the [wiki](https://github.com/giranm/pd-live-react/wiki).
