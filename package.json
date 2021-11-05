@@ -1,6 +1,6 @@
 {
   "name": "pd-live-react",
-  "homepage": "https://giranm.github.io/pd-live-react/",
+  "homepage": "https://giranm.github.io/pd-live-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -48,7 +48,9 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
-    "format": "npx prettier-eslint --write \"{,!(node_modules)/**/}*.{js,jsx}\""
+    "format": "npx prettier-eslint --write \"{,!(node_modules)/**/}*.{js,jsx}\"",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -77,6 +79,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "gh-pages": "^3.2.3",
     "prettier": "^2.4.1",
     "resolve-url-loader": "^4.0.0"
   }
