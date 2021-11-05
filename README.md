@@ -1,11 +1,18 @@
 # PagerDuty Live
 
-This repository hosts the source code for PagerDuty Live, a single page application which enables organisations to manage their PagerDuty incidents in real-time through a unified console view.
+This repository hosts the source code for PagerDuty Live, an open-source, single page application which enables organisations to manage their PagerDuty incidents in real-time through a unified console view.
 
 > Application URL: https://giranm.github.io/pd-live-react/
 
-Further details on roadmap functionality, bugs, etc can be viewed on the [wiki](https://github.com/giranm/pd-live-react/wiki).  
-For any issues, please raise a [GitHub issue](https://github.com/giranm/pd-live-react/issues/new) which can be tracked accordingly.
+## :warning: Disclaimer 
+
+**This project is not officially supported by PagerDuty and therefore no issues can reported to or resolved by PagerDuty Support.
+This is an open-source project designed to be used in a safe/test environment before users can leverage on their primary domains.**
+
+- Further details on roadmap functionality, bugs, etc can be viewed on the [wiki](https://github.com/giranm/pd-live-react/wiki).
+- For any issues, please raise a [GitHub issue](https://github.com/giranm/pd-live-react/issues/new) which can be tracked accordingly.
+
+## Screenshot
 
 <kbd>
 <img width="1625" alt="Screenshot 2021-11-05 at 18 35 16" src="https://user-images.githubusercontent.com/20474443/140561598-d771ea60-157c-4fc6-aaa7-af31765f955f.png">
