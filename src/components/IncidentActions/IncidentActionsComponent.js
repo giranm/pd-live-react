@@ -257,7 +257,6 @@ const IncidentActionsComponent = ({
                 </>
               )}
               disabled={enableEscalationAction}
-              show={displayEscalate}
               onClick={() => toggleEscalate(!displayEscalate)}
             >
               {selectedEscalationRules.map((escalation_rule, idx) => {
@@ -311,7 +310,6 @@ const IncidentActionsComponent = ({
                 </>
               )}
               disabled={enableActions}
-              show={displaySnooze}
               onClick={() => toggleSnooze(!displaySnooze)}
             >
               {Object.keys(SNOOZE_TIMES).map((duration) => (
@@ -364,7 +362,6 @@ const IncidentActionsComponent = ({
                 </>
               )}
               disabled={enableActions}
-              show={displayPriority}
               onClick={() => togglePriority(!displayPriority)}
             >
               {priorities.map((priority) => (
@@ -412,7 +409,6 @@ const IncidentActionsComponent = ({
               align="end"
               id="run-action"
               disabled={enablePostSingularAction}
-              show={displayRunActions}
               onClick={(e) => {
                 if (e.target.id === 'run-action') toggleRunActions(!displayRunActions);
               }}
