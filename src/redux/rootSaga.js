@@ -75,7 +75,8 @@ import { getServicesAsync } from './services/sagas';
 import { getTeamsAsync } from './teams/sagas';
 import { getPrioritiesAsync } from './priorities/sagas';
 import { getEscalationPoliciesAsync } from './escalation_policies/sagas';
-import { toggleSettingsModal } from './settings/sagas';
+
+import { toggleSettingsModal, clearLocalCache } from './settings/sagas';
 
 export default function* rootSaga() {
   yield take(REHYDRATE); // Wait for rehydrate to prevent sagas from running with empty store
@@ -161,6 +162,7 @@ export default function* rootSaga() {
 
     // Settings
     toggleSettingsModal(),
+    clearLocalCache(),
   ]);
 }
 

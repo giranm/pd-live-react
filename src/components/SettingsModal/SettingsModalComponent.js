@@ -14,7 +14,10 @@ import {
   saveIncidentTable,
 } from 'redux/incident_table/actions';
 
-import { toggleSettingsModal } from 'redux/settings/actions';
+import {
+  toggleSettingsModal,
+  clearLocalCache,
+} from 'redux/settings/actions';
 
 import {
   availableIncidentTableColumns,
@@ -34,6 +37,7 @@ const SettingsModalComponent = ({
   incidentTable,
   toggleSettingsModal,
   saveIncidentTable,
+  clearLocalCache,
 }) => {
   const { displaySettingsModal } = settings;
   const { incidentTableColumnsNames } = incidentTable;
@@ -76,6 +80,19 @@ const SettingsModalComponent = ({
                 Update Columns
               </Button>
             </Tab>
+            <Tab eventKey="local-cache" title="Local Cache">
+              <br />
+              <Button
+                variant="warning"
+                onClick={() => {
+                  clearLocalCache();
+                  toggleSettingsModal();
+                  window.location.reload();
+                }}
+              >
+                Clear Local Cache
+              </Button>
+            </Tab>
           </Tabs>
         </Modal.Body>
       </Modal>
@@ -93,6 +110,7 @@ const mapDispatchToProps = (dispatch) => ({
   saveIncidentTable: (updatedIncidentTableColumns) => dispatch(
     saveIncidentTable(updatedIncidentTableColumns),
   ),
+  clearLocalCache: () => dispatch(clearLocalCache()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsModalComponent);
