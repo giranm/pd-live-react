@@ -57,7 +57,7 @@ These steps assume you have forked the repo to a new GitHub repo and wish to dep
 
 7. Application will be accessible under the homepage specified in step #1.
 
-## Licence
+## License
 
 MIT License
 
