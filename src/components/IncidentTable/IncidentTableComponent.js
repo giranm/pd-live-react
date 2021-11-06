@@ -79,7 +79,7 @@ const IncidentTableComponent = ({
     () => ({
       minWidth: 30,
       width: 150,
-      maxWidth: 1000,
+      maxWidth: 1600,
     }),
     [],
   );
