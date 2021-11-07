@@ -4,7 +4,7 @@ This repository hosts the source code for PagerDuty Live, an open-source, single
 
 > Application URL: https://giranm.github.io/pd-live-react/
 
-## :warning: Disclaimer 
+## :warning: Disclaimer
 
 **This project is not officially supported by PagerDuty and therefore no issues can be reported to or resolved by PagerDuty Support.
 This is an open-source project designed to be used in a safe/test environment before users can leverage on their primary domains.**
@@ -20,7 +20,7 @@ This is an open-source project designed to be used in a safe/test environment be
 
 ## Local Development
 
-1. Install [NodeJS v11.10.1](https://nodejs.org/tr/blog/release/v11.10.1/) (or switch using [`asdf install`](https://github.com/asdf-vm/asdf))
+1. Install [NodeJS v16.13](https://nodejs.org/tr/blog/release/v16.13.0/) (or switch using [`asdf install`](https://github.com/asdf-vm/asdf))
 
 2. Install `craco` via `$ npm install @craco/craco --save --global`  
    (NB - you may need to reload terminal session to use the alias)
