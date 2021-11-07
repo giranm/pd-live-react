@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import moment from 'moment';
 
 import {
@@ -300,10 +301,10 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 200,
     Cell: ({ row }) => {
-      // eslint-disable-next-line camelcase
-      const { external_references } = row.original.external_references
-        ? row.original
-        : [];
+      let external_references = [];
+      if (row.original && row.original.external_references) {
+        external_references = row.original.external_references;
+      }
       if (external_references.length > 0) {
         return (
           <div>
