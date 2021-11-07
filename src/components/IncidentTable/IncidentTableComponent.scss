@@ -130,6 +130,7 @@
   background-color: white;
   color: $pd-dark;
   font-weight: 700;
+  border-right: 1px $pd-brand-background-3 solid;
 }
 
 .th-sorted {
@@ -137,6 +138,7 @@
   background-color: white;
   color: $pd-primary;
   font-weight: 1000;
+  border-right: 1px $pd-brand-background-3 solid;
 }
 
 .resizer {

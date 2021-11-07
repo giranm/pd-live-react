@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable consistent-return */
 /* eslint-disable no-nested-ternary */
 import {
@@ -287,6 +289,10 @@ const IncidentTableComponent = ({
                         <div
                           {...column.getResizerProps()}
                           className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
                         />
                         )}
                       </th>
