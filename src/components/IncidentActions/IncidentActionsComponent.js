@@ -111,6 +111,7 @@ const IncidentActionsComponent = ({
     highUrgencyIncidents.length &&
     selectedIncident.status !== RESOLVED
   );
+  const enablePriorityAction = !(selectedCount >= 1);
 
   // Create internal variables and state for escalate
   const selectedEscalationPolicyId = selectedIncident ? selectedRows[0].escalation_policy.id : null;
@@ -351,7 +352,7 @@ const IncidentActionsComponent = ({
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'light'}
+              variant={enablePriorityAction ? 'outline-secondary' : 'light'}
               drop="up"
               title={(
                 <>
@@ -361,7 +362,7 @@ const IncidentActionsComponent = ({
                   Update Priority
                 </>
               )}
-              disabled={enableActions}
+              disabled={enablePriorityAction}
               onClick={() => togglePriority(!displayPriority)}
             >
               {priorities.map((priority) => (
