@@ -65,7 +65,11 @@ import {
 
 import { toggleActionAlertsModal, updateActionAlertsModal } from './action_alerts/sagas';
 
-import { getUsersAsync, getCurrentUserAsync } from './users/sagas';
+import {
+  userAcceptDisclaimer,
+  getUsersAsync,
+  getCurrentUserAsync,
+} from './users/sagas';
 
 import { getExtensionsAsync, mapServicesToExtensions } from './extensions/sagas';
 
@@ -137,6 +141,7 @@ export default function* rootSaga() {
     updateActionAlertsModal(),
 
     // Users
+    userAcceptDisclaimer(),
     getUsersAsync(),
     getCurrentUserAsync(),
 

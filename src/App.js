@@ -12,6 +12,7 @@ import {
 import moment from 'moment';
 import 'moment/min/locales.min';
 
+import DisclaimerModalComponent from 'components/DisclaimerModal/DisclaimerModalComponent';
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
 import QuerySettingsComponent from 'components/QuerySettings/QuerySettingsComponent';
 import SettingsModalComponent from 'components/SettingsModal/SettingsModalComponent';
@@ -41,6 +42,7 @@ import 'App.scss';
 moment.locale(getLanguage());
 
 const App = ({
+  state,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
@@ -97,6 +99,15 @@ const App = ({
     }, LOG_ENTRIES_CLEARING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(clearingInterval);
   }, []);
+
+  // Display disclaimer modal
+  if (!state.users.userAcceptedDisclaimer) {
+    return (
+      <div className="App">
+        <DisclaimerModalComponent />
+      </div>
+    );
+  }
 
   return (
     <div className="App">

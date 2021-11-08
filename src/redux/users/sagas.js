@@ -7,6 +7,9 @@ import { pd } from 'util/pd-api-wrapper';
 import { convertListToMapById } from 'util/helpers';
 
 import {
+  USER_ACCEPT_DISCLAIMER_REQUESTED,
+  USER_ACCEPT_DISCLAIMER_COMPLETED,
+  USER_ACCEPT_DISCLAIMER_ERROR,
   GET_USERS_REQUESTED,
   GET_USERS_COMPLETED,
   GET_USERS_ERROR,
@@ -16,6 +19,22 @@ import {
 } from './actions';
 
 import { selectUsers } from './selectors';
+
+export function* userAcceptDisclaimer() {
+  yield takeLatest(USER_ACCEPT_DISCLAIMER_REQUESTED, userAcceptDisclaimerImpl);
+}
+
+export function* userAcceptDisclaimerImpl() {
+  try {
+    const { userAcceptedDisclaimer } = yield select(selectUsers);
+    yield put({
+      type: USER_ACCEPT_DISCLAIMER_COMPLETED,
+      userAcceptedDisclaimer: !userAcceptedDisclaimer,
+    });
+  } catch (e) {
+    yield put({ type: USER_ACCEPT_DISCLAIMER_ERROR, message: e.message });
+  }
+}
 
 export function* getUsersAsync() {
   yield takeLatest(GET_USERS_REQUESTED, getUsers);

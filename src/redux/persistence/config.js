@@ -24,3 +24,9 @@ export const querySettingsPersistConfig = {
   storage,
   blacklist: ['sinceDate', 'untilDate'],
 };
+
+export const userPersistConfig = {
+  key: 'users',
+  storage,
+  blacklist: ['users', 'usersMap', 'currentUser'],
+};
