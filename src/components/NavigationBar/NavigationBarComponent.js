@@ -11,11 +11,13 @@ import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent
 
 import { toggleSettingsModal } from 'redux/settings/actions';
 import { toggleDisplayQuerySettings } from 'redux/query_settings/actions';
+import { userAcceptDisclaimer } from 'redux/users/actions';
 
 const NavigationBarComponent = ({
   displayQuerySettings,
   toggleSettingsModal,
   toggleDisplayQuerySettings,
+  userAcceptDisclaimer,
 }) => (
   <div className="navbar-ctr">
     <Navbar bg="light" variant="light">
@@ -57,7 +59,15 @@ const NavigationBarComponent = ({
                 Settings
               </NavDropdown.Item>
               <NavDropdown.Item
-                onClick={() => PDOAuth.logout()}
+                href="https://www.termsfeed.com/live/68d1a0f2-9e68-47d0-9623-68afe0c31f6d"
+              >
+                View Disclaimer
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => {
+                  PDOAuth.logout();
+                  userAcceptDisclaimer();
+                }}
               >
                 Log Out
               </NavDropdown.Item>
@@ -75,6 +85,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   toggleSettingsModal: () => dispatch(toggleSettingsModal()),
   toggleDisplayQuerySettings: () => dispatch(toggleDisplayQuerySettings()),
+  userAcceptDisclaimer: () => dispatch(userAcceptDisclaimer()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationBarComponent);
