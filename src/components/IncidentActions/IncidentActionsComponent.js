@@ -410,6 +410,7 @@ const IncidentActionsComponent = ({
               align="end"
               id="run-action"
               disabled={enablePostSingularAction}
+              show={displayRunActions}
               onClick={(e) => {
                 if (e.target.id === 'run-action') toggleRunActions(!displayRunActions);
               }}
