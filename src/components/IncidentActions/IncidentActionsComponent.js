@@ -421,6 +421,7 @@ const IncidentActionsComponent = ({
                   <Dropdown.Item>
                     <Select
                       className="response-play-dropdown"
+                      menuPlacement="top"
                       components={animatedComponents}
                       options={selectListResponsePlays}
                       onChange={(selectedResponsePlay) => {
