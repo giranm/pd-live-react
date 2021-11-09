@@ -5,6 +5,7 @@ import { Container } from 'react-bootstrap';
 import PDOAuth from 'util/pdoauth';
 import {
   PD_OAUTH_CLIENT_ID,
+  PD_OAUTH_CLIENT_SECRET,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
 } from 'config/constants';
@@ -55,14 +56,6 @@ const App = ({
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
-  // Verify OAuth Session
-  useEffect(() => {
-    const token = sessionStorage.getItem('pd_access_token');
-    if (!token) {
-      PDOAuth.login(PD_OAUTH_CLIENT_ID);
-    }
-  }, []);
-
   const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
     return null;

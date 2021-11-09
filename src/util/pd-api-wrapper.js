@@ -5,7 +5,7 @@ import { api } from '@pagerduty/pdjs';
 import axios from 'axios';
 import Bottleneck from 'bottleneck';
 
-import { PD_OAUTH_CLIENT_ID } from 'config/constants';
+import { PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET } from 'config/constants';
 import { compareCreatedAt } from 'util/helpers';
 
 /*
@@ -14,7 +14,7 @@ import { compareCreatedAt } from 'util/helpers';
 export const getPdAccessToken = () => {
   const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
-    PDOAuth.login(PD_OAUTH_CLIENT_ID);
+    PDOAuth.login(PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET);
   }
   return token;
 };

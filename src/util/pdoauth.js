@@ -41,8 +41,8 @@
 // See the examples at https://github.com/martindstone/PDOAuth for more details!
 //
 export default class PDOAuth {
-  static gen128x8bitNonce() {
-    const array = new Uint8Array(128); // ( generate 1024bits 8*128
+  static gen64x8bitNonce() {
+    const array = new Uint8Array(64);
     window.crypto.getRandomValues(array);
     return array;
   }
@@ -101,18 +101,19 @@ export default class PDOAuth {
 
   static createCodeVerifier() {
     // generate code verifier
-    const generatedCode = this.gen128x8bitNonce();
+    const generatedCode = this.gen64x8bitNonce();
     // base64 encode code_verifier
     return this.base64Unicode(generatedCode.buffer);
   }
 
-  static async getAuthURL(clientID, redirectURL, codeVerifier) {
+  static async getAuthURL(clientID, clientSecret, redirectURL, codeVerifier) {
     const challengeBuffer = await this.digestVerifier(codeVerifier);
     // base64 encode the challenge
     const challenge = this.base64Unicode(challengeBuffer);
     // build authUrl
     const authUrl = 'https://app.pagerduty.com/oauth/authorize?' +
       `client_id=${clientID}&` +
+      `client_secret=${clientSecret}&` +
       `redirect_uri=${redirectURL}&` +
       'response_type=code&' +
       `code_challenge=${encodeURI(challenge)}&` +
@@ -121,7 +122,7 @@ export default class PDOAuth {
     return authUrl;
   }
 
-  static async exchangeCodeForToken(clientID, redirectURL, codeVerifier, code) {
+  static async exchangeCodeForToken(clientID, clientSecret, redirectURL, codeVerifier, code) {
     // eslint-disable-next-line no-unused-vars
     function postData(url, _data) {
       return fetch(url, {
@@ -135,6 +136,7 @@ export default class PDOAuth {
       `code=${code}&` +
       `redirect_uri=${redirectURL}&` +
       `client_id=${clientID}&` +
+      `client_secret=${clientSecret}&` +
       `code_verifier=${codeVerifier}`;
     const data = await postData(requestTokenUrl, {});
     if (data.access_token) {
@@ -143,7 +145,7 @@ export default class PDOAuth {
     console.log('Error in response from PD:', data);
   }
 
-  static writeLoginPage(clientID, redirectURL) {
+  static writeLoginPage(clientID, clientSecret, redirectURL) {
     const { title } = document;
     document.write(
       `
@@ -163,12 +165,12 @@ export default class PDOAuth {
     const codeVerifier = PDOAuth.createCodeVerifier();
     sessionStorage.setItem('code_verifier', codeVerifier);
 
-    PDOAuth.getAuthURL(clientID, redirectURL, codeVerifier).then((url) => {
+    PDOAuth.getAuthURL(clientID, clientSecret, redirectURL, codeVerifier).then((url) => {
       document.getElementById('pd-login-button').href = url;
     });
   }
 
-  static login(clientID, redirectURL_param) {
+  static login(clientID, clientSecret, redirectURL_param) {
     if (sessionStorage.getItem('pd_access_token')) {
       return;
     }
@@ -183,17 +185,17 @@ export default class PDOAuth {
     const code = urlParams.get('code');
     const codeVerifier = sessionStorage.getItem('code_verifier');
     if (code && codeVerifier) {
-      PDOAuth.exchangeCodeForToken(clientID, redirectURL, codeVerifier, code).then((token) => {
+      PDOAuth.exchangeCodeForToken(clientID, clientSecret, redirectURL, codeVerifier, code).then((token) => {
         if (token) {
           sessionStorage.setItem('pd_access_token', token);
           sessionStorage.removeItem('code_verifier');
           location.assign(redirectURL);
         } else {
-          PDOAuth.writeLoginPage(clientID, redirectURL);
+          PDOAuth.writeLoginPage(clientID, clientSecret, redirectURL);
         }
       });
     } else {
-      PDOAuth.writeLoginPage(clientID, redirectURL);
+      PDOAuth.writeLoginPage(clientID, clientSecret, redirectURL);
     }
   }
 
