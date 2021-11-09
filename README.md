@@ -42,7 +42,7 @@ These steps assume you have forked the repo to a new GitHub repo and wish to dep
    - Within PagerDuty developer mode, [register a new app](https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTY5-register-an-app)
    - [Add OAuth 2.0 workflow](<(https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTcz-o-auth-2-0-functionality#add-oauth-20-functionality-to-your-app)>) to the app, and update the URL to the base of the app to the same in step #1.
 
-3. Update `clientIdRemoteHost` with the PagerDuty Client ID under `src/config/constants.js`.  
+3. Update your PagerDuty Client ID and Secret under `src/config/constants.js` (consider external API call)  
    (Don't forget to add and commit changes!)
 
 4. (_Optional_) Create `gh-pages` branch for tracking
