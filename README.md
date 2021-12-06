@@ -19,7 +19,17 @@ This is an open-source project designed to be used in a safe/test environment be
 <img width="1625" alt="Screenshot 2021-11-05 at 18 35 16" src="https://user-images.githubusercontent.com/20474443/140561598-d771ea60-157c-4fc6-aaa7-af31765f955f.png">
 </kbd>
 
-## Local Development
+## Development
+
+#### (Optional) Register PagerDuty App
+
+If you wish to maintain + deploy your own version of PagerDuty Live, we recommend registering a new OAuth app as follows:
+
+- Within PagerDuty developer mode, [register a new app](https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTY5-register-an-app)
+- [Add OAuth 2.0 workflow](<(https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTcz-o-auth-2-0-functionality#add-oauth-20-functionality-to-your-app)>) to the app and update the URL to the app entrypoint  
+  (see GitHub deployment steps below as an example)
+
+#### Local Development
 
 1. Install [NodeJS v16.13](https://nodejs.org/tr/blog/release/v16.13.0/) (or switch using [`asdf install`](https://github.com/asdf-vm/asdf))
 
@@ -28,19 +38,23 @@ This is an open-source project designed to be used in a safe/test environment be
 
 3. `$ git clone` repo to desired destination and `$ cd pd-live-react` into directory.
 
-4. Install dependencies with `$ npm install` and run application locally using `$ npm start`  
-   (e.g. app will be available under http://localhost:3000/ - be sure to remove pd-live-react suffix)
+4. (_Optional_) Create `.env` file in project root with overriding configuration if required (see example below)
 
-## Deployment (GitHub Pages)
+   ```properties
+   REACT_APP_PD_OAUTH_CLIENT_ID=<CLIENT_ID_HERE>
+   REACT_APP_PD_OAUTH_CLIENT_SECRET=<CLIENT_SECRET_HERE>
+   ```
+
+5. Install dependencies with `$ npm install` and run application locally using `$ npm start`  
+   The app will be available under http://localhost:3000/pd-live-react
+
+#### Deployment (GitHub Pages)
 
 These steps assume you have forked the repo to a new GitHub repo and wish to deploy using [GitHub Pages](https://github.com/gitname/react-gh-pages).
 
 1. Modify `homepage` within `package.json` accordingly (e.g. https://[GIT_USERNAME].github.io/pd-live-react/)
 
 2. PagerDuty Configuration
-
-   - Within PagerDuty developer mode, [register a new app](https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTY5-register-an-app)
-   - [Add OAuth 2.0 workflow](<(https://developer.pagerduty.com/docs/ZG9jOjExMDI5NTcz-o-auth-2-0-functionality#add-oauth-20-functionality-to-your-app)>) to the app, and update the URL to the base of the app to the same in step #1.
 
 3. Update your PagerDuty Client ID and Secret under `src/config/constants.js` (consider external API call)  
    (Don't forget to add and commit changes!)
