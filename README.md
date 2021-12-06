@@ -54,23 +54,21 @@ These steps assume you have forked the repo to a new GitHub repo and wish to dep
 
 1. Modify `homepage` within `package.json` accordingly (e.g. https://[GIT_USERNAME].github.io/pd-live-react/)
 
-2. PagerDuty Configuration
-
-3. Update your PagerDuty Client ID and Secret under `src/config/constants.js` (consider external API call)  
+2. Update your PagerDuty Client ID and Secret under `src/config/constants.js` (consider external API call)  
    (Don't forget to add and commit changes!)
 
-4. (_Optional_) Create `gh-pages` branch for tracking
+3. (_Optional_) Create `gh-pages` branch for tracking
 
    - `$ git checkout -b gh-pages`
    - `$ git branch --set-upstream gh-pages origin/gh-pages`
    - `$ git push`
    - `$ git checkout -`
 
-5. Install `gh-pages` module via `$ npm install gh-pages --save-dev --global`
+4. Install `gh-pages` module via `$ npm install gh-pages --save-dev --global`
 
-6. Deploy application to GitHub Pages via `$ npm run deploy`
+5. Deploy application to GitHub Pages via `$ npm run deploy`
 
-7. Application will be accessible under the homepage specified in step #1.
+6. Application will be accessible under the homepage specified in step #1.
 
 ## License
 
