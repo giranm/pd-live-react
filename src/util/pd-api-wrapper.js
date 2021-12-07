@@ -5,21 +5,42 @@ import { api } from '@pagerduty/pdjs';
 import axios from 'axios';
 import Bottleneck from 'bottleneck';
 
-import { PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET } from 'config/constants';
+import { PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET, PD_USER_TOKEN } from 'config/constants';
 import { compareCreatedAt } from 'util/helpers';
 
 /*
   PDJS Wrapper
 */
-export const getPdAccessToken = () => {
-  const token = sessionStorage.getItem('pd_access_token');
+export const getPdAccessTokenObject = () => {
+  // Check if user token is loaded from env, else assume OAuth workflow
+  let token;
+  let tokenType;
+
+  if (PD_USER_TOKEN) {
+    token = PD_USER_TOKEN;
+  } else {
+    token = sessionStorage.getItem('pd_access_token');
+    tokenType = 'bearer';
+  }
+
+  // Begin OAuth workflow if env token not present
   if (!token) {
     PDOAuth.login(PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET);
   }
-  return token;
+
+  // Return object neeed for PD API helpers
+  if (tokenType === 'bearer') {
+    return {
+      token,
+      tokenType,
+    };
+  }
+  return {
+    token,
+  };
 };
 
-export const pd = api({ token: getPdAccessToken(), tokenType: 'bearer' });
+export const pd = api(getPdAccessTokenObject());
 
 /*
   Throttled version of Axios requests for direct API calls
@@ -29,7 +50,13 @@ export const pdAxiosRequest = async (method, endpoint, params = {}, data = {}) =
   method,
   url: `https://api.pagerduty.com/${endpoint}`,
   headers: {
-    Authorization: `Bearer ${getPdAccessToken()}`,
+    Authorization: (() => {
+      const tokenObj = getPdAccessTokenObject();
+      if (tokenObj.tokenType === 'bearer') {
+        return `Bearer ${tokenObj.token}`;
+      }
+      return `Token token=${tokenObj.token}`;
+    })(),
     Accept: 'application/vnd.pagerduty+json;version=2',
     'content-type': 'application/json; charset=utf-8',
   },

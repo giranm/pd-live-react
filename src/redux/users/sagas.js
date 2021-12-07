@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest,
+  put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
 import { PD_SUBDOMAIN_ALLOW_LIST } from 'config/constants';
@@ -32,34 +32,24 @@ export function* userAuthorizeImpl() {
   try {
     // Dispatch action to get current user
     yield put({ type: GET_CURRENT_USER_REQUESTED });
+    yield take([GET_CURRENT_USER_COMPLETED]);
 
     // Extract allowed subdomains by comma seperated list and check against current user login
     const { currentUser } = yield select(selectUsers);
-    const currentSubdomain = currentUser
-      ? currentUser.html_url.split('.')[0].split('https://')[1]
-      : 'N/A';
+    const currentSubdomain = currentUser.html_url.split('.')[0].split('https://')[1];
     const allowedSubdomains = PD_SUBDOMAIN_ALLOW_LIST.split(',');
-
-    console.log('currentSubdomain', currentSubdomain);
-    console.log('allowedSubdomains', allowedSubdomains);
+    let userAuthorized;
 
     if (allowedSubdomains.includes('*') || allowedSubdomains.includes(currentSubdomain)) {
-      // Allow current user from any or allowed subdomain to use app
-      console.log('allowing user');
-      yield put({
-        type: USER_AUTHORIZE_COMPLETED,
-        userAuthorized: true,
-      });
+      userAuthorized = true;
     } else {
-      // Block current user from using app (as subdomain doesn't match)
-      console.log('blocking user');
-      yield put({
-        type: USER_AUTHORIZE_COMPLETED,
-        userAuthorized: false,
-      });
+      userAuthorized = false;
     }
+    yield put({
+      type: USER_AUTHORIZE_COMPLETED,
+      userAuthorized,
+    });
   } catch (e) {
-    console.log('error', e);
     yield put({ type: USER_AUTHORIZE_ERROR, message: e.message });
   }
 }

@@ -1,17 +1,7 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'react-bootstrap';
-
-import PDOAuth from 'util/pdoauth';
-import {
-  PD_OAUTH_CLIENT_ID,
-  PD_OAUTH_CLIENT_SECRET,
-  LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
-  LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
-} from 'config/constants';
-
 import moment from 'moment';
-import 'moment/min/locales.min';
 
 import UnauthorizedModalComponent from 'components/UnauthorizedModal/UnauthorizedModalComponent';
 import DisclaimerModalComponent from 'components/DisclaimerModal/DisclaimerModalComponent';
@@ -38,8 +28,15 @@ import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 
 import { getLanguage } from 'util/helpers';
+import { getPdAccessTokenObject } from 'util/pd-api-wrapper';
+
+import {
+  LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
+  LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
+} from 'config/constants';
 
 import 'App.scss';
+import 'moment/min/locales.min';
 
 moment.locale(getLanguage());
 
@@ -57,57 +54,56 @@ const App = ({
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
-  // Verify OAuth Session
+  // Verify auth token via env or OAuth
   useEffect(() => {
-    const token = sessionStorage.getItem('pd_access_token');
-    if (!token) {
-      PDOAuth.login(PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET);
-    }
+    const { token } = getPdAccessTokenObject();
   }, []);
-
-  const token = sessionStorage.getItem('pd_access_token');
+  const { token } = getPdAccessTokenObject();
   if (!token) {
     return null;
   }
 
   // Initial load of objects from API
+  const { userAuthorized, userAcceptedDisclaimer } = state.users;
   useEffect(() => {
     userAuthorize();
-    getUsersAsync();
-    getServicesAsync();
-    getTeamsAsync();
-    getEscalationPoliciesAsync();
-    getExtensionsAsync();
-    getResponsePlaysAsync();
-    getPrioritiesAsync();
-    getIncidentsAsync();
-  }, []);
+    if (userAuthorized) {
+      getUsersAsync();
+      getServicesAsync();
+      getTeamsAsync();
+      getEscalationPoliciesAsync();
+      getExtensionsAsync();
+      getResponsePlaysAsync();
+      getPrioritiesAsync();
+      getIncidentsAsync();
+    }
+  }, [userAuthorized]);
 
   // Setup log entry polling.
   useEffect(() => {
     const pollingInterval = setInterval(() => {
-      const lastPolledDate = moment()
-        .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
-        .toDate();
-      getLogEntriesAsync(lastPolledDate);
+      if (userAuthorized) {
+        const lastPolledDate = moment()
+          .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
+          .toDate();
+        getLogEntriesAsync(lastPolledDate);
+      }
     }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(pollingInterval);
-  }, []);
+  }, [userAuthorized]);
 
   // Setup log entry clearing
   useEffect(() => {
     const clearingInterval = setInterval(() => {
-      cleanRecentLogEntriesAsync();
+      if (userAuthorized) {
+        cleanRecentLogEntriesAsync();
+      }
     }, LOG_ENTRIES_CLEARING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(clearingInterval);
-  }, []);
-
-  console.log('currentUser', state.users.currentUser);
-  console.log('userAuthorized', state.users.userAuthorized);
-  console.log('userAcceptedDisclaimer', state.users.userAcceptedDisclaimer);
+  }, [userAuthorized]);
 
   // Display disclaimer modal
-  if (!state.users.userAcceptedDisclaimer) {
+  if (!userAcceptedDisclaimer) {
     return (
       <div className="App">
         <DisclaimerModalComponent />
@@ -116,7 +112,7 @@ const App = ({
   }
 
   // Display user unauthorised modal (if required)
-  if (!state.users.userAuthorized) {
+  if (!userAuthorized) {
     return (
       <div className="App">
         <UnauthorizedModalComponent />
