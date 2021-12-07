@@ -13,6 +13,7 @@ import {
 import moment from 'moment';
 import 'moment/min/locales.min';
 
+import UnauthorizedModalComponent from 'components/UnauthorizedModal/UnauthorizedModalComponent';
 import DisclaimerModalComponent from 'components/DisclaimerModal/DisclaimerModalComponent';
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
 import QuerySettingsComponent from 'components/QuerySettings/QuerySettingsComponent';
@@ -31,7 +32,7 @@ import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from 'redux/log_entrie
 import { getServicesAsync } from 'redux/services/actions';
 import { getTeamsAsync } from 'redux/teams/actions';
 import { getPrioritiesAsync } from 'redux/priorities/actions';
-import { getUsersAsync, getCurrentUserAsync } from 'redux/users/actions';
+import { userAuthorize, getUsersAsync } from 'redux/users/actions';
 import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
@@ -44,11 +45,11 @@ moment.locale(getLanguage());
 
 const App = ({
   state,
+  userAuthorize,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
   getUsersAsync,
-  getCurrentUserAsync,
   getEscalationPoliciesAsync,
   getExtensionsAsync,
   getResponsePlaysAsync,
@@ -71,8 +72,8 @@ const App = ({
 
   // Initial load of objects from API
   useEffect(() => {
+    userAuthorize();
     getUsersAsync();
-    getCurrentUserAsync();
     getServicesAsync();
     getTeamsAsync();
     getEscalationPoliciesAsync();
@@ -101,11 +102,24 @@ const App = ({
     return () => clearInterval(clearingInterval);
   }, []);
 
+  console.log('currentUser', state.users.currentUser);
+  console.log('userAuthorized', state.users.userAuthorized);
+  console.log('userAcceptedDisclaimer', state.users.userAcceptedDisclaimer);
+
   // Display disclaimer modal
   if (!state.users.userAcceptedDisclaimer) {
     return (
       <div className="App">
         <DisclaimerModalComponent />
+      </div>
+    );
+  }
+
+  // Display user unauthorised modal (if required)
+  if (!state.users.userAuthorized) {
+    return (
+      <div className="App">
+        <UnauthorizedModalComponent />
       </div>
     );
   }
@@ -132,11 +146,11 @@ const App = ({
 const mapStateToProps = (state) => ({ state });
 
 const mapDispatchToProps = (dispatch) => ({
+  userAuthorize: () => dispatch(userAuthorize()),
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),
   getUsersAsync: () => dispatch(getUsersAsync()),
-  getCurrentUserAsync: () => dispatch(getCurrentUserAsync()),
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsync()),
   getExtensionsAsync: () => dispatch(getExtensionsAsync()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsync()),

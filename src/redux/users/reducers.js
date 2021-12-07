@@ -1,6 +1,9 @@
 import produce from 'immer';
 
 import {
+  USER_AUTHORIZE_REQUESTED,
+  USER_AUTHORIZE_COMPLETED,
+  USER_AUTHORIZE_ERROR,
   USER_ACCEPT_DISCLAIMER_REQUESTED,
   USER_ACCEPT_DISCLAIMER_COMPLETED,
   USER_ACCEPT_DISCLAIMER_ERROR,
@@ -15,6 +18,20 @@ import {
 const users = produce(
   (draft, action) => {
     switch (action.type) {
+      case USER_AUTHORIZE_REQUESTED:
+        draft.status = USER_AUTHORIZE_REQUESTED;
+        break;
+
+      case USER_AUTHORIZE_COMPLETED:
+        draft.userAuthorized = action.userAuthorized;
+        draft.status = USER_AUTHORIZE_COMPLETED;
+        break;
+
+      case USER_AUTHORIZE_ERROR:
+        draft.status = USER_AUTHORIZE_ERROR;
+        draft.error = action.message;
+        break;
+
       case USER_ACCEPT_DISCLAIMER_REQUESTED:
         draft.status = USER_ACCEPT_DISCLAIMER_REQUESTED;
         break;
@@ -66,6 +83,7 @@ const users = produce(
     users: [],
     usersMap: {},
     currentUser: null,
+    userAuthorized: false,
     userAcceptedDisclaimer: false,
     status: null,
     fetchingData: false,
