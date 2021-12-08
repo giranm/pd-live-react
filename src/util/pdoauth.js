@@ -145,6 +145,14 @@ export default class PDOAuth {
     console.log('Error in response from PD:', data);
   }
 
+  static async checkElement(selector) {
+    while (document.querySelector(selector) === null) {
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+    return document.querySelector(selector);
+  }
+
   static writeLoginPage(clientID, clientSecret, redirectURL) {
     const { title } = document;
     document.write(
@@ -166,7 +174,9 @@ export default class PDOAuth {
     sessionStorage.setItem('code_verifier', codeVerifier);
 
     PDOAuth.getAuthURL(clientID, clientSecret, redirectURL, codeVerifier).then((url) => {
-      document.getElementById('pd-login-button').href = url;
+      PDOAuth.checkElement('#pd-login-button').then((selector) => {
+        selector.href = url;
+      });
     });
   }
 
