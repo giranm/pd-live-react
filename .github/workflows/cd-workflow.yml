@@ -1,0 +1,30 @@
+name: PagerDuty Live Continuous Deployment Pipeline (Develop)
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_PD_SUBDOMAIN_ALLOW_LIST: *
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set-up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.13.0'
+      - run: npm install
+      - run: npm run build
+      # Omitting test from pipeline until they are in place
+      # - run: npm test
+      - name: Deploy
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          target_branch: gh-pages
+          build_dir: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
