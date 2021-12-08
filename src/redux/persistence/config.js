@@ -28,5 +28,5 @@ export const querySettingsPersistConfig = {
 export const userPersistConfig = {
   key: 'users',
   storage,
-  blacklist: ['users', 'usersMap', 'currentUser', 'userAuthorized'],
+  blacklist: ['users', 'usersMap', 'currentUser'],
 };

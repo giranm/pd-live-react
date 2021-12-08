@@ -67,6 +67,7 @@ import { toggleActionAlertsModal, updateActionAlertsModal } from './action_alert
 
 import {
   userAuthorize,
+  userUnauthorize,
   userAcceptDisclaimer,
   getUsersAsync,
   getCurrentUserAsync,
@@ -143,6 +144,7 @@ export default function* rootSaga() {
 
     // Users
     userAuthorize(),
+    userUnauthorize(),
     userAcceptDisclaimer(),
     getUsersAsync(),
     getCurrentUserAsync(),

@@ -4,6 +4,9 @@ import {
   USER_AUTHORIZE_REQUESTED,
   USER_AUTHORIZE_COMPLETED,
   USER_AUTHORIZE_ERROR,
+  USER_UNAUTHORIZE_REQUESTED,
+  USER_UNAUTHORIZE_COMPLETED,
+  USER_UNAUTHORIZE_ERROR,
   USER_ACCEPT_DISCLAIMER_REQUESTED,
   USER_ACCEPT_DISCLAIMER_COMPLETED,
   USER_ACCEPT_DISCLAIMER_ERROR,
@@ -29,6 +32,20 @@ const users = produce(
 
       case USER_AUTHORIZE_ERROR:
         draft.status = USER_AUTHORIZE_ERROR;
+        draft.error = action.message;
+        break;
+
+      case USER_UNAUTHORIZE_REQUESTED:
+        draft.status = USER_UNAUTHORIZE_REQUESTED;
+        break;
+
+      case USER_UNAUTHORIZE_COMPLETED:
+        draft.userAuthorized = action.userAuthorized;
+        draft.status = USER_UNAUTHORIZE_COMPLETED;
+        break;
+
+      case USER_UNAUTHORIZE_ERROR:
+        draft.status = USER_UNAUTHORIZE_ERROR;
         draft.error = action.message;
         break;
 

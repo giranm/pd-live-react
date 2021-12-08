@@ -11,6 +11,9 @@ import {
   USER_AUTHORIZE_REQUESTED,
   USER_AUTHORIZE_COMPLETED,
   USER_AUTHORIZE_ERROR,
+  USER_UNAUTHORIZE_REQUESTED,
+  USER_UNAUTHORIZE_COMPLETED,
+  USER_UNAUTHORIZE_ERROR,
   USER_ACCEPT_DISCLAIMER_REQUESTED,
   USER_ACCEPT_DISCLAIMER_COMPLETED,
   USER_ACCEPT_DISCLAIMER_ERROR,
@@ -38,19 +41,33 @@ export function* userAuthorizeImpl() {
     const { currentUser } = yield select(selectUsers);
     const currentSubdomain = currentUser.html_url.split('.')[0].split('https://')[1];
     const allowedSubdomains = PD_SUBDOMAIN_ALLOW_LIST.split(',');
-    let userAuthorized;
 
     if (allowedSubdomains.includes('*') || allowedSubdomains.includes(currentSubdomain)) {
-      userAuthorized = true;
+      yield put({
+        type: USER_AUTHORIZE_COMPLETED,
+        userAuthorized: true,
+      });
     } else {
-      userAuthorized = false;
+      yield put({ type: USER_UNAUTHORIZE_REQUESTED });
     }
-    yield put({
-      type: USER_AUTHORIZE_COMPLETED,
-      userAuthorized,
-    });
   } catch (e) {
     yield put({ type: USER_AUTHORIZE_ERROR, message: e.message });
+  }
+}
+
+export function* userUnauthorize() {
+  yield takeLatest(USER_UNAUTHORIZE_REQUESTED, userUnauthorizeImpl);
+}
+
+export function* userUnauthorizeImpl() {
+  // Mark user as unauthorized (either from app perms or logout)
+  try {
+    yield put({
+      type: USER_UNAUTHORIZE_COMPLETED,
+      userAuthorized: false,
+    });
+  } catch (e) {
+    yield put({ type: USER_UNAUTHORIZE_ERROR, message: e.message });
   }
 }
 

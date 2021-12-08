@@ -28,7 +28,6 @@ import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 
 import { getLanguage } from 'util/helpers';
-import { getPdAccessTokenObject } from 'util/pd-api-wrapper';
 
 import {
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
