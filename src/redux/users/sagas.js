@@ -1,12 +1,19 @@
 /* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest,
+  put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
+import { PD_SUBDOMAIN_ALLOW_LIST } from 'config/constants';
 import { pd } from 'util/pd-api-wrapper';
 import { convertListToMapById } from 'util/helpers';
 
 import {
+  USER_AUTHORIZE_REQUESTED,
+  USER_AUTHORIZE_COMPLETED,
+  USER_AUTHORIZE_ERROR,
+  USER_UNAUTHORIZE_REQUESTED,
+  USER_UNAUTHORIZE_COMPLETED,
+  USER_UNAUTHORIZE_ERROR,
   USER_ACCEPT_DISCLAIMER_REQUESTED,
   USER_ACCEPT_DISCLAIMER_COMPLETED,
   USER_ACCEPT_DISCLAIMER_ERROR,
@@ -19,6 +26,50 @@ import {
 } from './actions';
 
 import { selectUsers } from './selectors';
+
+export function* userAuthorize() {
+  yield takeLatest(USER_AUTHORIZE_REQUESTED, userAuthorizeImpl);
+}
+
+export function* userAuthorizeImpl() {
+  try {
+    // Dispatch action to get current user
+    yield put({ type: GET_CURRENT_USER_REQUESTED });
+    yield take([GET_CURRENT_USER_COMPLETED]);
+
+    // Extract allowed subdomains by comma seperated list and check against current user login
+    const { currentUser } = yield select(selectUsers);
+    const currentSubdomain = currentUser.html_url.split('.')[0].split('https://')[1];
+    const allowedSubdomains = PD_SUBDOMAIN_ALLOW_LIST.split(',');
+
+    if (allowedSubdomains.includes('*') || allowedSubdomains.includes(currentSubdomain)) {
+      yield put({
+        type: USER_AUTHORIZE_COMPLETED,
+        userAuthorized: true,
+      });
+    } else {
+      yield put({ type: USER_UNAUTHORIZE_REQUESTED });
+    }
+  } catch (e) {
+    yield put({ type: USER_AUTHORIZE_ERROR, message: e.message });
+  }
+}
+
+export function* userUnauthorize() {
+  yield takeLatest(USER_UNAUTHORIZE_REQUESTED, userUnauthorizeImpl);
+}
+
+export function* userUnauthorizeImpl() {
+  // Mark user as unauthorized (either from app perms or logout)
+  try {
+    yield put({
+      type: USER_UNAUTHORIZE_COMPLETED,
+      userAuthorized: false,
+    });
+  } catch (e) {
+    yield put({ type: USER_UNAUTHORIZE_ERROR, message: e.message });
+  }
+}
 
 export function* userAcceptDisclaimer() {
   yield takeLatest(USER_ACCEPT_DISCLAIMER_REQUESTED, userAcceptDisclaimerImpl);

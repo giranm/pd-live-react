@@ -38,15 +38,20 @@ If you wish to maintain + deploy your own version of PagerDuty Live, we recommen
 
 3. `$ git clone` repo to desired destination and `$ cd pd-live-react` into directory.
 
-4. (_Optional_) Create `.env` file in project root with overriding configuration if required (see example below)
-
-   ```properties
-   REACT_APP_PD_OAUTH_CLIENT_ID=<CLIENT_ID_HERE>
-   REACT_APP_PD_OAUTH_CLIENT_SECRET=<CLIENT_SECRET_HERE>
-   ```
+4. (_Optional_) Create `.env` file in project root with overriding configuration (see section below for details)
 
 5. Install dependencies with `$ npm install` and run application locally using `$ npm start`  
    The app will be available under http://localhost:3000/pd-live-react
+
+#### Environment Overrides
+
+The following _optional_ parameters can be used in a `.env` file to override PagerDuty Live during local serve (`npm start`):  
+| Parameter | Usage |
+| ----------- | ----------- |
+| `REACT_APP_PD_OAUTH_CLIENT_ID` | PagerDuty OAuth App client ID (created upon registering app) |
+| `REACT_APP_PD_OAUTH_CLIENT_SECRET` | PagerDuty OAuth App client secret (created upon registering app) |
+| `REACT_APP_PD_USER_TOKEN` | PagerDuty [Personal API Token](https://support.pagerduty.com/docs/generating-api-keys#generating-a-personal-rest-api-key); this will override OAuth login workflow if set|
+| `REACT_APP_PD_SUBDOMAIN_ALLOW_LIST` | Comma separated list of allowed subdomains (e.g. `acme-prod,acme-dev`) |
 
 #### Deployment (GitHub Pages)
 

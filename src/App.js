@@ -1,18 +1,9 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'react-bootstrap';
-
-import PDOAuth from 'util/pdoauth';
-import {
-  PD_OAUTH_CLIENT_ID,
-  PD_OAUTH_CLIENT_SECRET,
-  LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
-  LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
-} from 'config/constants';
-
 import moment from 'moment';
-import 'moment/min/locales.min';
 
+import UnauthorizedModalComponent from 'components/UnauthorizedModal/UnauthorizedModalComponent';
 import DisclaimerModalComponent from 'components/DisclaimerModal/DisclaimerModalComponent';
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
 import QuerySettingsComponent from 'components/QuerySettings/QuerySettingsComponent';
@@ -31,24 +22,30 @@ import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from 'redux/log_entrie
 import { getServicesAsync } from 'redux/services/actions';
 import { getTeamsAsync } from 'redux/teams/actions';
 import { getPrioritiesAsync } from 'redux/priorities/actions';
-import { getUsersAsync, getCurrentUserAsync } from 'redux/users/actions';
+import { userAuthorize, getUsersAsync } from 'redux/users/actions';
 import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
 
 import { getLanguage } from 'util/helpers';
 
+import {
+  LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
+  LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
+} from 'config/constants';
+
 import 'App.scss';
+import 'moment/min/locales.min';
 
 moment.locale(getLanguage());
 
 const App = ({
   state,
+  userAuthorize,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
   getUsersAsync,
-  getCurrentUserAsync,
   getEscalationPoliciesAsync,
   getExtensionsAsync,
   getResponsePlaysAsync,
@@ -63,42 +60,58 @@ const App = ({
   }
 
   // Initial load of objects from API
+  const { userAuthorized, userAcceptedDisclaimer } = state.users;
   useEffect(() => {
-    getUsersAsync();
-    getCurrentUserAsync();
-    getServicesAsync();
-    getTeamsAsync();
-    getEscalationPoliciesAsync();
-    getExtensionsAsync();
-    getResponsePlaysAsync();
-    getPrioritiesAsync();
-    getIncidentsAsync();
-  }, []);
+    userAuthorize();
+    if (userAuthorized) {
+      getUsersAsync();
+      getServicesAsync();
+      getTeamsAsync();
+      getEscalationPoliciesAsync();
+      getExtensionsAsync();
+      getResponsePlaysAsync();
+      getPrioritiesAsync();
+      getIncidentsAsync();
+    }
+  }, [userAuthorized]);
 
   // Setup log entry polling.
   useEffect(() => {
     const pollingInterval = setInterval(() => {
-      const lastPolledDate = moment()
-        .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
-        .toDate();
-      getLogEntriesAsync(lastPolledDate);
+      if (userAuthorized) {
+        const lastPolledDate = moment()
+          .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
+          .toDate();
+        getLogEntriesAsync(lastPolledDate);
+      }
     }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(pollingInterval);
-  }, []);
+  }, [userAuthorized]);
 
   // Setup log entry clearing
   useEffect(() => {
     const clearingInterval = setInterval(() => {
-      cleanRecentLogEntriesAsync();
+      if (userAuthorized) {
+        cleanRecentLogEntriesAsync();
+      }
     }, LOG_ENTRIES_CLEARING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(clearingInterval);
-  }, []);
+  }, [userAuthorized]);
 
   // Display disclaimer modal
-  if (!state.users.userAcceptedDisclaimer) {
+  if (!userAcceptedDisclaimer) {
     return (
       <div className="App">
         <DisclaimerModalComponent />
+      </div>
+    );
+  }
+
+  // Display user unauthorised modal (if required)
+  if (!userAuthorized) {
+    return (
+      <div className="App">
+        <UnauthorizedModalComponent />
       </div>
     );
   }
@@ -125,11 +138,11 @@ const App = ({
 const mapStateToProps = (state) => ({ state });
 
 const mapDispatchToProps = (dispatch) => ({
+  userAuthorize: () => dispatch(userAuthorize()),
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),
   getUsersAsync: () => dispatch(getUsersAsync()),
-  getCurrentUserAsync: () => dispatch(getCurrentUserAsync()),
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsync()),
   getExtensionsAsync: () => dispatch(getExtensionsAsync()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsync()),
