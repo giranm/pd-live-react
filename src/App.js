@@ -54,11 +54,8 @@ const App = ({
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
-  // Verify auth token via env or OAuth
-  useEffect(() => {
-    const { token } = getPdAccessTokenObject();
-  }, []);
-  const { token } = getPdAccessTokenObject();
+  // Verify if session token is present
+  const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
     return null;
   }
