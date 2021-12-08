@@ -9,6 +9,7 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
     env:
+      CI: false
       REACT_APP_PD_SUBDOMAIN_ALLOW_LIST: '*'
     steps:
       - name: Checkout
