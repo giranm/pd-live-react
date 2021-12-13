@@ -47,6 +47,11 @@ a.dropdown-toggle.nav-link::after {
   right: 20px;
 }
 
+.status-beacon-ctr {
+  position: relative;
+  top: 12px;
+}
+
 .settings-toggle {
   width: 30px;
   fill: $pd-black;

@@ -3,15 +3,17 @@ import {
   Navbar, Nav, NavDropdown, Button,
 } from 'react-bootstrap';
 
-import PDOAuth from 'util/pdoauth';
-
-import './NavigationBarComponent.scss';
-
 import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent';
+
+import PDOAuth from 'util/pdoauth';
 
 import { toggleSettingsModal } from 'redux/settings/actions';
 import { toggleDisplayQuerySettings } from 'redux/query_settings/actions';
 import { userAcceptDisclaimer, userUnauthorize } from 'redux/users/actions';
+
+import StatusBeaconComponent from './StatusBeaconComponent';
+
+import './NavigationBarComponent.scss';
 
 const NavigationBarComponent = ({
   displayQuerySettings,
@@ -44,6 +46,9 @@ const NavigationBarComponent = ({
           </Nav.Item>
           <Nav.Item className="ml-auto">
             <GlobalSearchComponent />
+          </Nav.Item>
+          <Nav.Item className="ml-auto">
+            <StatusBeaconComponent />
           </Nav.Item>
           <Nav.Item className="ml-auto">
             <NavDropdown

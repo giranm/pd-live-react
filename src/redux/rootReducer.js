@@ -18,6 +18,7 @@ import extensions from './extensions/reducers';
 import responsePlays from './response_plays/reducers';
 import persistence from './persistence/reducers';
 import settings from './settings/reducers';
+import connection from './connection/reducers';
 
 export default combineReducers({
   actionAlertsModalData,
@@ -35,4 +36,5 @@ export default combineReducers({
   responsePlays,
   persistence,
   settings,
+  connection,
 });

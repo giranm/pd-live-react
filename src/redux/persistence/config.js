@@ -16,6 +16,7 @@ export const persistConfig = {
     'extensions',
     'responsePlays',
     'persistence',
+    'connection',
   ],
 };
 
