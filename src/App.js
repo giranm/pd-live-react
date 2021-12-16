@@ -26,6 +26,7 @@ import { userAuthorize, getUsersAsync } from 'redux/users/actions';
 import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
+import { checkConnectionStatus } from 'redux/connection/actions';
 
 import { getLanguage } from 'util/helpers';
 
@@ -52,6 +53,7 @@ const App = ({
   getIncidentsAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
+  checkConnectionStatus,
 }) => {
   // Verify if session token is present
   const token = sessionStorage.getItem('pd_access_token');
@@ -72,12 +74,14 @@ const App = ({
       getResponsePlaysAsync();
       getPrioritiesAsync();
       getIncidentsAsync();
+      checkConnectionStatus();
     }
   }, [userAuthorized]);
 
   // Setup log entry polling.
   useEffect(() => {
     const pollingInterval = setInterval(() => {
+      checkConnectionStatus();
       if (userAuthorized) {
         const lastPolledDate = moment()
           .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
@@ -149,6 +153,7 @@ const mapDispatchToProps = (dispatch) => ({
   getIncidentsAsync: () => dispatch(getIncidentsAsync()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),
+  checkConnectionStatus: () => dispatch(checkConnectionStatus()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

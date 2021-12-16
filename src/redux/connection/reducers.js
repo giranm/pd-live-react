@@ -3,6 +3,8 @@ import produce from 'immer';
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
   UPDATE_CONNECTION_STATUS_COMPLETED,
+  CHECK_CONNECTION_STATUS_REQUESTED,
+  CHECK_CONNECTION_STATUS_COMPLETED,
 } from './actions';
 
 const connection = produce(
@@ -18,13 +20,21 @@ const connection = produce(
         draft.connectionStatusMessage = action.connectionStatusMessage;
         break;
 
+      case CHECK_CONNECTION_STATUS_REQUESTED:
+        draft.status = CHECK_CONNECTION_STATUS_REQUESTED;
+        break;
+
+      case CHECK_CONNECTION_STATUS_COMPLETED:
+        draft.status = CHECK_CONNECTION_STATUS_COMPLETED;
+        break;
+
       default:
         break;
     }
   },
   {
-    connectionStatus: 'negative',
-    connectionStatusMessage: 'Not Connected',
+    connectionStatus: 'dormant',
+    connectionStatusMessage: 'Connecting',
     status: '',
   },
 );

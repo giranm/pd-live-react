@@ -4,6 +4,7 @@ import {
 } from 'redux-saga/effects';
 
 import { pd } from 'util/pd-api-wrapper';
+import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_SERVICES_REQUESTED,
   FETCH_SERVICES_COMPLETED,
@@ -24,6 +25,9 @@ export function* getServices(action) {
     if (teamIds.length) params['team_ids[]'] = teamIds;
 
     const response = yield call(pd.all, 'services', { data: { ...params } });
+    if (response.status !== 200) {
+      throw Error('Unable to fetch services');
+    }
 
     yield put({
       type: FETCH_SERVICES_COMPLETED,
@@ -31,5 +35,10 @@ export function* getServices(action) {
     });
   } catch (e) {
     yield put({ type: FETCH_SERVICES_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: e.message,
+    });
   }
 }

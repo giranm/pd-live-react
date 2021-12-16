@@ -84,7 +84,7 @@ import { getEscalationPoliciesAsync } from './escalation_policies/sagas';
 
 import { toggleSettingsModal, clearLocalCache } from './settings/sagas';
 
-import { updateConnectionStatus } from './connection/sagas';
+import { updateConnectionStatus, checkConnectionStatus } from './connection/sagas';
 
 export default function* rootSaga() {
   yield take(REHYDRATE); // Wait for rehydrate to prevent sagas from running with empty store
@@ -177,6 +177,7 @@ export default function* rootSaga() {
 
     // Connection
     updateConnectionStatus(),
+    checkConnectionStatus(),
   ]);
 }
 

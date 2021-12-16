@@ -6,6 +6,8 @@ import { UPDATE_INCIDENTS_LIST } from 'redux/incidents/actions';
 
 import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from 'util/log-entries';
 import { pd } from 'util/pd-api-wrapper';
+
+import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
   FETCH_LOG_ENTRIES_COMPLETED,
@@ -33,6 +35,9 @@ export function* getLogEntries(action) {
       'include[]': ['incidents'],
     };
     const response = yield call(pd.all, 'log_entries', { data: { ...params } });
+    if (response.status !== 200) {
+      throw Error('Unable to fetch log entries');
+    }
     const logEntries = response.resource;
 
     yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
@@ -41,6 +46,11 @@ export function* getLogEntries(action) {
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES });
   } catch (e) {
     yield put({ type: FETCH_LOG_ENTRIES_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: e.message,
+    });
   }
 }
 

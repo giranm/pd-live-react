@@ -24,6 +24,7 @@ import { pushToArray } from 'util/helpers';
 import { fuseOptions } from 'config/fuse-config';
 
 import { selectQuerySettings } from 'redux/query_settings/selectors';
+import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -113,6 +114,11 @@ export function* getIncidents(action) {
     });
   } catch (e) {
     yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to fetch incidents',
+    });
   }
 }
 
@@ -145,6 +151,11 @@ export function* getIncidentNotes(action) {
     });
   } catch (e) {
     yield put({ type: FETCH_INCIDENT_NOTES_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to fetch incident notes',
+    });
   }
 }
 
@@ -176,6 +187,11 @@ export function* getAllIncidentNotes() {
     // Update store with incident having notes data
   } catch (e) {
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to fetch all incident notes',
+    });
   }
 }
 

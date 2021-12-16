@@ -10,6 +10,8 @@ import {
 } from 'redux/rootSaga';
 
 import { pd } from 'util/pd-api-wrapper';
+
+import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_RESPONSE_PLAYS_REQUESTED,
   FETCH_RESPONSE_PLAYS_COMPLETED,
@@ -41,6 +43,11 @@ export function* getResponsePlays() {
     });
   } catch (e) {
     yield put({ type: FETCH_RESPONSE_PLAYS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to fetch response plays',
+    });
   }
 }
 

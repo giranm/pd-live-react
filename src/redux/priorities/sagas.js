@@ -7,6 +7,8 @@ import _ from 'lodash';
 
 import { UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_REQUESTED } from 'redux/query_settings/actions';
 import { pd } from 'util/pd-api-wrapper';
+
+import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_PRIORITIES_REQUESTED,
   FETCH_PRIORITIES_COMPLETED,
@@ -23,6 +25,9 @@ export function* getPriorities() {
   try {
     //  Create params and call pd lib
     const response = yield call(pd.all, 'priorities');
+    if (response.status !== 200) {
+      throw Error('Unable to fetch priorities');
+    }
     const tempPriorities = response.resource;
 
     // Push an artificial priority (e.g. empty one)
@@ -45,5 +50,10 @@ export function* getPriorities() {
     }
   } catch (e) {
     yield put({ type: FETCH_PRIORITIES_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: e.message,
+    });
   }
 }

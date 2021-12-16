@@ -7,6 +7,7 @@ import { PD_SUBDOMAIN_ALLOW_LIST } from 'config/constants';
 import { pd } from 'util/pd-api-wrapper';
 import { convertListToMapById } from 'util/helpers';
 
+import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   USER_AUTHORIZE_REQUESTED,
   USER_AUTHORIZE_COMPLETED,
@@ -94,6 +95,9 @@ export function* getUsersAsync() {
 export function* getUsers() {
   try {
     const response = yield call(pd.all, 'users');
+    if (response.status !== 200) {
+      throw Error('Unable to fetch users');
+    }
     const users = response.resource;
     const usersMap = convertListToMapById(users);
     yield put({
@@ -103,6 +107,11 @@ export function* getUsers() {
     });
   } catch (e) {
     yield put({ type: GET_USERS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: e.message,
+    });
   }
 }
 
@@ -113,11 +122,19 @@ export function* getCurrentUserAsync() {
 export function* getCurrentUser() {
   try {
     const response = yield call(pd.get, 'users/me');
+    if (response.status !== 200) {
+      throw Error('Unable to fetch current user details');
+    }
     yield put({
       type: GET_CURRENT_USER_COMPLETED,
       currentUser: response.data.user,
     });
   } catch (e) {
     yield put({ type: GET_CURRENT_USER_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: e.message,
+    });
   }
 }
