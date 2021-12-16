@@ -34,6 +34,10 @@ export function* getServices(action) {
       services: response.resource,
     });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: FETCH_SERVICES_ERROR, message: e.message });
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,

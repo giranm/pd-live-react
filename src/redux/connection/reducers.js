@@ -5,6 +5,9 @@ import {
   UPDATE_CONNECTION_STATUS_COMPLETED,
   CHECK_CONNECTION_STATUS_REQUESTED,
   CHECK_CONNECTION_STATUS_COMPLETED,
+  CHECK_ABILITIES_REQUESTED,
+  CHECK_ABILITIES_COMPLETED,
+  CHECK_ABILITIES_ERROR,
 } from './actions';
 
 const connection = produce(
@@ -28,6 +31,19 @@ const connection = produce(
         draft.status = CHECK_CONNECTION_STATUS_COMPLETED;
         break;
 
+      case CHECK_ABILITIES_REQUESTED:
+        draft.status = CHECK_ABILITIES_REQUESTED;
+        break;
+
+      case CHECK_ABILITIES_COMPLETED:
+        draft.status = CHECK_ABILITIES_COMPLETED;
+        draft.abilities = action.abilities;
+        break;
+
+      case CHECK_ABILITIES_ERROR:
+        draft.status = CHECK_ABILITIES_ERROR;
+        break;
+
       default:
         break;
     }
@@ -35,6 +51,7 @@ const connection = produce(
   {
     connectionStatus: 'dormant',
     connectionStatusMessage: 'Connecting',
+    abilities: [],
     status: '',
   },
 );

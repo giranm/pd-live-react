@@ -36,17 +36,24 @@ export function* getResponsePlays() {
         filter_for_manual_run: true,
       },
     });
+    if (response.status !== 200) {
+      throw Error('Unable to response plays');
+    }
 
     yield put({
       type: FETCH_RESPONSE_PLAYS_COMPLETED,
       responsePlays: response.resource,
     });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: FETCH_RESPONSE_PLAYS_ERROR, message: e.message });
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,
       connectionStatus: 'neutral',
-      connectionStatusMessage: 'Unable to fetch response plays',
+      connectionStatusMessage: e.message,
     });
   }
 }

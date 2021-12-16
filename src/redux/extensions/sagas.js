@@ -39,6 +39,10 @@ export function* getExtensions() {
     // Perform mapping of services to extensions
     yield put({ type: MAP_SERVICES_TO_EXTENSIONS_REQUESTED });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: FETCH_EXTENSIONS_ERROR, message: e.message });
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,

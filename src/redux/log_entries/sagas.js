@@ -45,6 +45,10 @@ export function* getLogEntries(action) {
     // Call to update recent log entries with this data.
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: FETCH_LOG_ENTRIES_ERROR, message: e.message });
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,

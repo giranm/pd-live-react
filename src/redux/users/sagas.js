@@ -106,6 +106,10 @@ export function* getUsers() {
       usersMap,
     });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: GET_USERS_ERROR, message: e.message });
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,
@@ -130,6 +134,10 @@ export function* getCurrentUser() {
       currentUser: response.data.user,
     });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: GET_CURRENT_USER_ERROR, message: e.message });
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,

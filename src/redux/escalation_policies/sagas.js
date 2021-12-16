@@ -31,6 +31,10 @@ export function* getEscalationPolicies() {
       escalationPolicies,
     });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: FETCH_ESCALATION_POLICIES_ERROR, message: e.message });
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,
