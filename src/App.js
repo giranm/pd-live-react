@@ -26,6 +26,7 @@ import { userAuthorize, getUsersAsync } from 'redux/users/actions';
 import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
 import { getExtensionsAsync } from 'redux/extensions/actions';
 import { getResponsePlaysAsync } from 'redux/response_plays/actions';
+import { checkConnectionStatus, checkAbilities } from 'redux/connection/actions';
 
 import { getLanguage } from 'util/helpers';
 
@@ -42,6 +43,8 @@ moment.locale(getLanguage());
 const App = ({
   state,
   userAuthorize,
+  checkAbilities,
+  checkConnectionStatus,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
@@ -64,6 +67,7 @@ const App = ({
   useEffect(() => {
     userAuthorize();
     if (userAuthorized) {
+      checkAbilities();
       getUsersAsync();
       getServicesAsync();
       getTeamsAsync();
@@ -72,12 +76,15 @@ const App = ({
       getResponsePlaysAsync();
       getPrioritiesAsync();
       getIncidentsAsync();
+      checkConnectionStatus();
     }
   }, [userAuthorized]);
 
   // Setup log entry polling.
   useEffect(() => {
     const pollingInterval = setInterval(() => {
+      checkAbilities();
+      checkConnectionStatus();
       if (userAuthorized) {
         const lastPolledDate = moment()
           .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
@@ -139,6 +146,8 @@ const mapStateToProps = (state) => ({ state });
 
 const mapDispatchToProps = (dispatch) => ({
   userAuthorize: () => dispatch(userAuthorize()),
+  checkAbilities: () => dispatch(checkAbilities()),
+  checkConnectionStatus: () => dispatch(checkConnectionStatus()),
   getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsync()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),

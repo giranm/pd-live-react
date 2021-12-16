@@ -80,7 +80,7 @@ const logEntries = produce(
     addList: [],
     updateList: [],
     removeList: [],
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },

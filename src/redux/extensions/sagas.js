@@ -6,6 +6,8 @@ import {
 import { selectServices } from 'redux/services/selectors';
 import { CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM } from 'util/extensions';
 import { pd } from 'util/pd-api-wrapper';
+
+import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_EXTENSIONS_REQUESTED,
   FETCH_EXTENSIONS_COMPLETED,
@@ -25,6 +27,9 @@ export function* getExtensions() {
   try {
     //  Create params and call pd lib
     const response = yield call(pd.all, 'extensions');
+    if (response.status !== 200) {
+      throw Error('Unable to fetch extensions');
+    }
 
     yield put({
       type: FETCH_EXTENSIONS_COMPLETED,
@@ -34,7 +39,16 @@ export function* getExtensions() {
     // Perform mapping of services to extensions
     yield put({ type: MAP_SERVICES_TO_EXTENSIONS_REQUESTED });
   } catch (e) {
+    // Handle API auth failure
+    if (e.status === 401) {
+      e.message = 'Unauthorized Access';
+    }
     yield put({ type: FETCH_EXTENSIONS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: e.message,
+    });
   }
 }
 
