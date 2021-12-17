@@ -8,7 +8,7 @@ import {
   handleSingleAPIErrorResponse,
   handleMultipleAPIErrorResponses,
   displayActionModal,
-} from 'redux/rootSaga';
+} from 'util/sagas';
 
 import { SELECT_INCIDENT_TABLE_ROWS_REQUESTED } from 'redux/incident_table/actions';
 

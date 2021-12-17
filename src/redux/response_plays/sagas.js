@@ -7,7 +7,7 @@ import {
   handleSagaError,
   handleMultipleAPIErrorResponses,
   displayActionModal,
-} from 'redux/rootSaga';
+} from 'util/sagas';
 
 import { pd } from 'util/pd-api-wrapper';
 

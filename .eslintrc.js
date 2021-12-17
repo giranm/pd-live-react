@@ -39,7 +39,6 @@ module.exports = {
     'no-use-before-define': [ERROR, { functions: false }],
     'consistent-return': WARN,
     'no-plusplus': OFF,
-    'import/no-cycle': WARN,
     'no-nested-ternary': WARN,
   },
   overrides: [
