@@ -184,8 +184,7 @@ const IncidentActionsComponent = ({
     const tempExternalSystems = selectedIncident
       ? externalSystemsTemp.map((serviceExtension) => {
         const tempServiceExtension = { ...serviceExtension };
-        let result;
-        result = selectedIncident.external_references
+        const result = selectedIncident.external_references
           ? selectedIncident.external_references.find(
             ({ webhook }) => webhook.id === serviceExtension.id,
           )

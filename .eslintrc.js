@@ -37,7 +37,6 @@ module.exports = {
     'operator-linebreak': OFF,
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
     'no-use-before-define': WARN,
-    'prefer-const': WARN,
     'import/prefer-default-export': WARN,
     'consistent-return': WARN,
     'no-plusplus': OFF,
