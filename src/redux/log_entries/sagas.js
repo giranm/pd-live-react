@@ -20,7 +20,7 @@ import {
   CLEAN_RECENT_LOG_ENTRIES_ERROR,
 } from './actions';
 
-import { selectLogEntries } from './selectors';
+import selectLogEntries from './selectors';
 
 export function* getLogEntriesAsync() {
   yield takeLatest(FETCH_LOG_ENTRIES_REQUESTED, getLogEntries);

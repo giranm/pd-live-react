@@ -23,7 +23,7 @@ import {
 import { pushToArray } from 'util/helpers';
 import { fuseOptions } from 'config/fuse-config';
 
-import { selectQuerySettings } from 'redux/query_settings/selectors';
+import selectQuerySettings from 'redux/query_settings/selectors';
 import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_INCIDENTS_REQUESTED,
@@ -57,7 +57,7 @@ import {
   FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_QUERY_ERROR,
 } from './actions';
-import { selectIncidents } from './selectors';
+import selectIncidents from './selectors';
 
 export const getIncidentByIdRequest = (incidentId) => call(pd, {
   method: 'get',

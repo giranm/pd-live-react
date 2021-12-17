@@ -15,7 +15,7 @@ import {
   FETCH_PRIORITIES_ERROR,
 } from './actions';
 
-import { selectPriorities } from './selectors';
+import selectPriorities from './selectors';
 
 export function* getPrioritiesAsync() {
   yield takeLatest(FETCH_PRIORITIES_REQUESTED, getPriorities);

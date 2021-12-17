@@ -3,7 +3,7 @@ import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
 
-import { selectServices } from 'redux/services/selectors';
+import selectServices from 'redux/services/selectors';
 import { CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM } from 'util/extensions';
 import { pd } from 'util/pd-api-wrapper';
 
@@ -17,7 +17,7 @@ import {
   MAP_SERVICES_TO_EXTENSIONS_ERROR,
 } from './actions';
 
-import { selectExtensions } from './selectors';
+import selectExtensions from './selectors';
 
 export function* getExtensionsAsync() {
   yield takeLatest(FETCH_EXTENSIONS_REQUESTED, getExtensions);

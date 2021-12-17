@@ -8,7 +8,7 @@ import {
   UPDATE_ACTION_ALERTS_MODAL_COMPLETED,
 } from './actions';
 
-import { selectActionAlertsModalData } from './selectors';
+import selectActionAlertsModalData from './selectors';
 
 export function* toggleActionAlertsModal() {
   yield takeLatest(TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED, toggleActionAlertsModalImpl);

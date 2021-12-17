@@ -26,7 +26,7 @@ import {
   GET_CURRENT_USER_ERROR,
 } from './actions';
 
-import { selectUsers } from './selectors';
+import selectUsers from './selectors';
 
 export function* userAuthorize() {
   yield takeLatest(USER_AUTHORIZE_REQUESTED, userAuthorizeImpl);

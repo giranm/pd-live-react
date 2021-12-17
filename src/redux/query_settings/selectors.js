@@ -1,1 +1,2 @@
-export const selectQuerySettings = (state) => state.querySettings;
+const selectQuerySettings = (state) => state.querySettings;
+export default selectQuerySettings;

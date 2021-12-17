@@ -1,1 +1,2 @@
-export const selectPriorities = (state) => state.priorities;
+const selectPriorities = (state) => state.priorities;
+export default selectPriorities;

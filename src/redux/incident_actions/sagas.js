@@ -14,8 +14,8 @@ import { SELECT_INCIDENT_TABLE_ROWS_REQUESTED } from 'redux/incident_table/actio
 
 import { getIncidentByIdRequest, updateIncidentsList } from 'redux/incidents/sagas';
 
-import { selectPriorities } from 'redux/priorities/selectors';
-import { selectIncidentTable } from 'redux/incident_table/selectors';
+import selectPriorities from 'redux/priorities/selectors';
+import selectIncidentTable from 'redux/incident_table/selectors';
 
 import {
   TRIGGERED,
@@ -29,7 +29,7 @@ import {
 
 import { getObjectsFromList } from 'util/helpers';
 import { pd } from 'util/pd-api-wrapper';
-import { selectIncidentActions } from './selectors';
+import selectIncidentActions from './selectors';
 import {
   ACKNOWLEDGE_REQUESTED,
   ACKNOWLEDGE_COMPLETED,

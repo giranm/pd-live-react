@@ -22,7 +22,7 @@ import {
   UPDATE_SEARCH_QUERY_COMPLETED,
 } from './actions';
 
-import { selectQuerySettings } from './selectors';
+import selectQuerySettings from './selectors';
 
 export function* toggleDisplayQuerySettings() {
   yield takeLatest(TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED, toggleDisplayQuerySettingsImpl);
