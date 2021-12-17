@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable comma-dangle */
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
