@@ -37,7 +37,7 @@ module.exports = {
     'operator-linebreak': OFF,
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
     'no-use-before-define': [ERROR, { functions: false }],
-    'no-plusplus': OFF,
+    'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
     'no-nested-ternary': WARN,
   },
   overrides: [
