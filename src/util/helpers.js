@@ -26,6 +26,7 @@ export const getObjectsFromListbyKey = (searchableList, searchKey, searchValue) 
 };
 
 // Prototype function to get object value from JSON path
+// eslint-disable-next-line func-names
 Object.byString = function (o, s) {
   s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
   s = s.replace(/^\./, ''); // strip a leading dot
