@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 export const TRIGGERED = 'triggered';
 export const ESCALATED = 'escalated';
