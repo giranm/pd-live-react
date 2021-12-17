@@ -108,11 +108,6 @@ const IncidentTableComponent = ({
     [incidentTableColumnsNames],
   );
 
-  // TODO: Verify if this is the cause of resolved incidents staying in the view
-  const memoizedFilteredIncidentsByQuery = useMemo(
-    () => filteredIncidentsByQuery, [filteredIncidentsByQuery],
-  );
-
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
   // Dynamic Table Height

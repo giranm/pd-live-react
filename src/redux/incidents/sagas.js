@@ -71,7 +71,7 @@ export function* getIncidentsAsync() {
   yield takeLatest(FETCH_INCIDENTS_REQUESTED, getIncidents);
 }
 
-export function* getIncidents(action) {
+export function* getIncidents() {
   try {
     //  Build params from query settings and call pd lib
     const {

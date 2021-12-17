@@ -126,7 +126,7 @@ const Wrapper = styled.span`
     z-index: -1;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    ${({ status, colors, speed }) => {
+    ${({ status }) => {
     switch (status) {
       case 'positive':
         return css`

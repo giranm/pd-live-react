@@ -69,7 +69,6 @@ const animatedComponents = makeAnimated();
 
 const IncidentActionsComponent = ({
   incidentTable,
-  incidentActions,
   incidents,
   priorities,
   escalationPolicies,
@@ -487,7 +486,6 @@ const IncidentActionsComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentTable: state.incidentTable,
-  incidentActions: state.incidentActions,
   incidents: state.incidents,
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,

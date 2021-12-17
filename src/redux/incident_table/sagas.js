@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import { put, select, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 
 import {
   SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED,
@@ -12,8 +12,6 @@ import {
   SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
   SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
 } from './actions';
-
-import { selectIncidentTable } from './selectors';
 
 export function* saveIncidentTable() {
   yield takeLatest(SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED, saveIncidentTableImpl);

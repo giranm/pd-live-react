@@ -17,8 +17,6 @@ import {
   CHECK_ABILITIES_ERROR,
 } from './actions';
 
-import { selectConnection } from './selectors';
-
 export function* updateConnectionStatus() {
   yield takeLatest(UPDATE_CONNECTION_STATUS_REQUESTED, updateConnectionStatusImpl);
 }

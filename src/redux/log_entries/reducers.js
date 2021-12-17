@@ -1,5 +1,4 @@
 import produce from 'immer';
-import moment from 'moment';
 
 import {
   FETCH_LOG_ENTRIES_REQUESTED,

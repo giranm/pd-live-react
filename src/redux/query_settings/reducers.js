@@ -2,7 +2,7 @@ import produce from 'immer';
 import moment from 'moment';
 
 import {
-  TRIGGERED, ACKNOWLEDGED, RESOLVED, HIGH, LOW,
+  TRIGGERED, ACKNOWLEDGED, HIGH, LOW,
 } from 'util/incidents';
 import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
