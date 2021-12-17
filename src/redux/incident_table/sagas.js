@@ -34,7 +34,6 @@ export function* saveIncidentTableImpl(action) {
     // Indicate that changes were saved and close down settings modal.
     yield put({ type: SAVE_INCIDENT_TABLE_SETTINGS_COMPLETED });
   } catch (e) {
-    console.log(e);
     yield put({ type: SAVE_INCIDENT_TABLE_SETTINGS_ERROR, message: e.message });
   }
 }

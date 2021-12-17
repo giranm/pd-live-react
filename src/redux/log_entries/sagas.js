@@ -129,7 +129,6 @@ export function* updateRecentLogEntries() {
       removeList,
     });
   } catch (e) {
-    console.log(e);
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES_ERROR, message: e.message });
   }
 }

@@ -121,7 +121,8 @@ export const pdParallelFetch = async (endpoint, params, progressCallback) => {
           }
         })
         .catch((error) => {
-          console.log(error);
+          // eslint-disable-next-line no-console
+          console.error(error);
         });
       promises.push(promise);
       requestParams.offset += requestParams.limit;

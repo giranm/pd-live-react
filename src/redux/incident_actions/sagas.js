@@ -624,7 +624,6 @@ export function* runCustomIncidentAction(action) {
       handleMultipleAPIErrorResponses(responses);
     }
   } catch (e) {
-    console.log(e);
     handleSagaError(RUN_CUSTOM_INCIDENT_ACTION_ERROR, e);
   }
 }
@@ -711,7 +710,6 @@ export function* syncWithExternalSystem(action) {
       handleMultipleAPIErrorResponses(responses);
     }
   } catch (e) {
-    console.log(e);
     handleSagaError(SYNC_WITH_EXTERNAL_SYSTEM_ERROR, e);
   }
 }
