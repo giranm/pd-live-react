@@ -36,7 +36,7 @@ module.exports = {
     'react/jsx-filename-extension': OFF,
     'operator-linebreak': OFF,
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
-    'no-use-before-define': WARN,
+    'no-use-before-define': [ERROR, { functions: false }],
     'import/prefer-default-export': WARN,
     'consistent-return': WARN,
     'no-plusplus': OFF,
