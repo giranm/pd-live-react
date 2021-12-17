@@ -236,7 +236,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDateConnected(sinceDate)),
+  updateQuerySettingsSinceDate: (sinceDate) => dispatch(
+    updateQuerySettingsSinceDateConnected(sinceDate),
+  ),
   updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(
     updateQuerySettingsIncidentStatusConnected(incidentStatus),
   ),
@@ -247,7 +249,9 @@ const mapDispatchToProps = (dispatch) => ({
     updateQuerySettingsIncidentPriorityConnected(incidentPriority),
   ),
   updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeamsConnected(teamIds)),
-  updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServicesConnected(serviceIds)),
+  updateQuerySettingsServices: (serviceIds) => dispatch(
+    updateQuerySettingsServicesConnected(serviceIds),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);

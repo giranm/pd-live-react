@@ -17,10 +17,12 @@ export const SNOOZE_TIMES = {
 };
 
 // Helper function to filter incidents by json path + possible values
-export const filterIncidentsByField = (incidents, jsonPath, possibleValues) => incidents.filter((incident) => {
-  const targetValue = Object.byString(incident, jsonPath);
-  if (possibleValues.includes(targetValue)) return incident;
-});
+export const filterIncidentsByField = (incidents, jsonPath, possibleValues) => incidents.filter(
+  (incident) => {
+    const targetValue = Object.byString(incident, jsonPath);
+    if (possibleValues.includes(targetValue)) return incident;
+  },
+);
 
 // Helper function to filter incidents by json path with multiple entries + possible values
 // NB - this is used to flatten teams, assignments, and acknowledgment lists
@@ -31,7 +33,9 @@ export const filterIncidentsByFieldOfList = (
   possibleValues,
 ) => incidents.filter((incident) => {
   const incidentInnerFieldObjects = Object.byString(incident, jsonPathOuter);
-  const incidentInnerFieldsFlattened = incidentInnerFieldObjects.map((outerObject) => Object.byString(outerObject, jsonPathInner));
+  const incidentInnerFieldsFlattened = incidentInnerFieldObjects.map(
+    (outerObject) => Object.byString(outerObject, jsonPathInner),
+  );
   if (possibleValues.some((value) => incidentInnerFieldsFlattened.includes(value))) return incident;
 });
 

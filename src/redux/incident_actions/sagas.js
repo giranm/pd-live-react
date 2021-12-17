@@ -276,7 +276,8 @@ export function* addResponder(action) {
       yield toggleDisplayAddResponderModalImpl();
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Requested additional response for incident(s) ${selectedIncidents
+        const actionAlertsModalMessage
+        = `Requested additional response for incident(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')}.`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);

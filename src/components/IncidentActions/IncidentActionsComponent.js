@@ -502,7 +502,9 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModalConnected()),
   toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModalConnected()),
   resolve: (incidents) => dispatch(resolveConnected(incidents)),
-  updatePriority: (incidents, priorityId) => dispatch(updatePriorityConnected(incidents, priorityId)),
+  updatePriority: (incidents, priorityId) => dispatch(
+    updatePriorityConnected(incidents, priorityId),
+  ),
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModalConnected()),
   runCustomIncidentAction: (incidents, webhook) => dispatch(
     runCustomIncidentActionConnected(incidents, webhook),
