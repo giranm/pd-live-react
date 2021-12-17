@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 // Original source:
 // https://github.com/Julian1729/react-status-beacon/blob/main/src/components/Beacon.js
 import React from 'react';

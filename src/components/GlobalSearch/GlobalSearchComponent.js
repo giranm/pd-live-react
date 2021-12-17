@@ -12,7 +12,7 @@ import { ReactComponent as SearchGlass } from 'assets/images/search_glass.svg';
 
 import './GlobalSearchComponent.scss';
 
-import { updateSearchQuery } from 'redux/query_settings/actions';
+import { updateSearchQuery as updateSearchQueryConnected } from 'redux/query_settings/actions';
 
 const GlobalSearchComponent = ({ searchQuery, updateSearchQuery }) => {
   const debounced = useDebouncedCallback(
@@ -54,7 +54,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateSearchQuery: (searchQuery) => dispatch(updateSearchQuery(searchQuery)),
+  updateSearchQuery: (searchQuery) => dispatch(updateSearchQueryConnected(searchQuery)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GlobalSearchComponent);

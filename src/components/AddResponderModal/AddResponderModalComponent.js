@@ -5,7 +5,10 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import { toggleDisplayAddResponderModal, addResponder } from 'redux/incident_actions/actions';
+import {
+  toggleDisplayAddResponderModal as toggleDisplayAddResponderModalConnected,
+  addResponder as addResponderConnected,
+} from 'redux/incident_actions/actions';
 
 import './AddResponderModalComponent.scss';
 
@@ -121,9 +124,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModal()),
+  toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModalConnected()),
   addResponder: (incidents, responderRequestTargets, message) => dispatch(
-    addResponder(incidents, responderRequestTargets, message),
+    addResponderConnected(incidents, responderRequestTargets, message),
   ),
 });
 

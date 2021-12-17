@@ -6,7 +6,10 @@ import { Modal, Form, Button } from 'react-bootstrap';
 
 import PDOAuth from 'util/pdoauth';
 
-import { userAcceptDisclaimer, userUnauthorize } from 'redux/users/actions';
+import {
+  userAcceptDisclaimer as userAcceptDisclaimerConnected,
+  userUnauthorize as userUnauthorizeConnected,
+} from 'redux/users/actions';
 
 const DisclaimerModalComponent = ({
   users,
@@ -142,8 +145,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  userAcceptDisclaimer: () => dispatch(userAcceptDisclaimer()),
-  userUnauthorize: () => dispatch(userUnauthorize()),
+  userAcceptDisclaimer: () => dispatch(userAcceptDisclaimerConnected()),
+  userUnauthorize: () => dispatch(userUnauthorizeConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DisclaimerModalComponent);

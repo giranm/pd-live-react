@@ -8,7 +8,10 @@ import {
 
 import DatePicker from 'react-datepicker';
 
-import { toggleDisplayCustomSnoozeModal, snooze } from 'redux/incident_actions/actions';
+import {
+  toggleDisplayCustomSnoozeModal as toggleDisplayCustomSnoozeModalConnected,
+  snooze as snoozeConnected,
+} from 'redux/incident_actions/actions';
 
 import { TRIGGERED, ACKNOWLEDGED, filterIncidentsByField } from 'util/incidents';
 
@@ -137,8 +140,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
-  snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
+  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModalConnected()),
+  snooze: (incidents, duration) => dispatch(snoozeConnected(incidents, duration)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomSnoozeModalComponent);

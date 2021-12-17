@@ -7,9 +7,14 @@ import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent
 
 import PDOAuth from 'util/pdoauth';
 
-import { toggleSettingsModal } from 'redux/settings/actions';
-import { toggleDisplayQuerySettings } from 'redux/query_settings/actions';
-import { userAcceptDisclaimer, userUnauthorize } from 'redux/users/actions';
+import { toggleSettingsModal as toggleSettingsModalConnected } from 'redux/settings/actions';
+import {
+  toggleDisplayQuerySettings as toggleDisplayQuerySettingsConnected,
+} from 'redux/query_settings/actions';
+import {
+  userAcceptDisclaimer as userAcceptDisclaimerConnected,
+  userUnauthorize as userUnauthorizeConnected,
+} from 'redux/users/actions';
 
 import StatusBeaconComponent from './StatusBeaconComponent';
 
@@ -90,10 +95,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleSettingsModal: () => dispatch(toggleSettingsModal()),
-  toggleDisplayQuerySettings: () => dispatch(toggleDisplayQuerySettings()),
-  userAcceptDisclaimer: () => dispatch(userAcceptDisclaimer()),
-  userUnauthorize: () => dispatch(userUnauthorize()),
+  toggleSettingsModal: () => dispatch(toggleSettingsModalConnected()),
+  toggleDisplayQuerySettings: () => dispatch(toggleDisplayQuerySettingsConnected()),
+  userAcceptDisclaimer: () => dispatch(userAcceptDisclaimerConnected()),
+  userUnauthorize: () => dispatch(userUnauthorizeConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationBarComponent);

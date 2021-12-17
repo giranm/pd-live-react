@@ -29,7 +29,10 @@ import {
   useResizeColumns,
 } from 'react-table';
 
-import { selectIncidentTableRows, updateIncidentTableState } from 'redux/incident_table/actions';
+import {
+  selectIncidentTableRows as selectIncidentTableRowsConnected,
+  updateIncidentTableState as updateIncidentTableStateConnected,
+} from 'redux/incident_table/actions';
 
 import { getIncidentTableColumns } from 'config/incident-table-columns';
 
@@ -326,10 +329,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   selectIncidentTableRows: (allSelected, selectedCount, selectedRows) => {
-    dispatch(selectIncidentTableRows(allSelected, selectedCount, selectedRows));
+    dispatch(selectIncidentTableRowsConnected(allSelected, selectedCount, selectedRows));
   },
   updateIncidentTableState: (incidentTableState) => {
-    dispatch(updateIncidentTableState(incidentTableState));
+    dispatch(updateIncidentTableStateConnected(incidentTableState));
   },
 });
 

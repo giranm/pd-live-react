@@ -5,7 +5,10 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import { toggleDisplayReassignModal, reassign } from 'redux/incident_actions/actions';
+import {
+  toggleDisplayReassignModal as toggleDisplayReassignModalConnected,
+  reassign as reassignConnected,
+} from 'redux/incident_actions/actions';
 
 import './ReassignModalComponent.scss';
 
@@ -99,8 +102,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDisplayReassignModal: () => dispatch(toggleDisplayReassignModal()),
-  reassign: (incidents, assignment) => dispatch(reassign(incidents, assignment)),
+  toggleDisplayReassignModal: () => dispatch(toggleDisplayReassignModalConnected()),
+  reassign: (incidents, assignment) => dispatch(reassignConnected(incidents, assignment)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReassignModalComponent);

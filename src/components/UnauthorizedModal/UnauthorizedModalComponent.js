@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 
 import PDOAuth from 'util/pdoauth';
 
-import { userAcceptDisclaimer } from 'redux/users/actions';
+import { userAcceptDisclaimer as userAcceptDisclaimerConnected } from 'redux/users/actions';
 
 const UnauthorizedModalComponent = ({
   users,
@@ -41,7 +41,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  userAcceptDisclaimer: () => dispatch(userAcceptDisclaimer()),
+  userAcceptDisclaimer: () => dispatch(userAcceptDisclaimerConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UnauthorizedModalComponent);

@@ -34,21 +34,23 @@ import {
 import './IncidentActionsComponent.scss';
 
 import {
-  acknowledge,
-  escalate,
-  toggleDisplayReassignModal,
-  toggleDisplayAddResponderModal,
-  snooze,
-  toggleDisplayCustomSnoozeModal,
-  toggleDisplayMergeModal,
-  resolve,
-  updatePriority,
-  toggleDisplayAddNoteModal,
-  runCustomIncidentAction,
-  syncWithExternalSystem,
+  acknowledge as acknowledgeConnected,
+  escalate as escalateConnected,
+  toggleDisplayReassignModal as toggleDisplayReassignModalConnected,
+  toggleDisplayAddResponderModal as toggleDisplayAddResponderModalConnected,
+  snooze as snoozeConnected,
+  toggleDisplayCustomSnoozeModal as toggleDisplayCustomSnoozeModalConnected,
+  toggleDisplayMergeModal as toggleDisplayMergeModalConnected,
+  resolve as resolveConnected,
+  updatePriority as updatePriorityConnected,
+  toggleDisplayAddNoteModal as toggleDisplayAddNoteModalConnected,
+  runCustomIncidentAction as runCustomIncidentActionConnected,
+  syncWithExternalSystem as syncWithExternalSystemConnected,
 } from 'redux/incident_actions/actions';
 
-import { runResponsePlayAsync } from 'redux/response_plays/actions';
+import {
+  runResponsePlayAsync as runResponsePlayAsyncConnected,
+} from 'redux/response_plays/actions';
 
 import {
   TRIGGERED,
@@ -494,24 +496,24 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  acknowledge: (incidents) => dispatch(acknowledge(incidents)),
-  escalate: (incidents, escalationLevel) => dispatch(escalate(incidents, escalationLevel)),
-  toggleDisplayReassignModal: () => dispatch(toggleDisplayReassignModal()),
-  toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModal()),
-  snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
-  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
-  toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModal()),
-  resolve: (incidents) => dispatch(resolve(incidents)),
-  updatePriority: (incidents, priorityId) => dispatch(updatePriority(incidents, priorityId)),
-  toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
+  acknowledge: (incidents) => dispatch(acknowledgeConnected(incidents)),
+  escalate: (incidents, escalationLevel) => dispatch(escalateConnected(incidents, escalationLevel)),
+  toggleDisplayReassignModal: () => dispatch(toggleDisplayReassignModalConnected()),
+  toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModalConnected()),
+  snooze: (incidents, duration) => dispatch(snoozeConnected(incidents, duration)),
+  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModalConnected()),
+  toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModalConnected()),
+  resolve: (incidents) => dispatch(resolveConnected(incidents)),
+  updatePriority: (incidents, priorityId) => dispatch(updatePriorityConnected(incidents, priorityId)),
+  toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModalConnected()),
   runCustomIncidentAction: (incidents, webhook) => dispatch(
-    runCustomIncidentAction(incidents, webhook),
+    runCustomIncidentActionConnected(incidents, webhook),
   ),
   runResponsePlayAsync: (incidents, responsePlay) => dispatch(
-    runResponsePlayAsync(incidents, responsePlay),
+    runResponsePlayAsyncConnected(incidents, responsePlay),
   ),
   syncWithExternalSystem: (incidents, webhook) => dispatch(
-    syncWithExternalSystem(incidents, webhook),
+    syncWithExternalSystemConnected(incidents, webhook),
   ),
 });
 

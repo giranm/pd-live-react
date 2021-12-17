@@ -26,12 +26,12 @@ import {
 import './QuerySettingsComponent.scss';
 
 import {
-  updateQuerySettingsSinceDate,
-  updateQuerySettingsIncidentStatus,
-  updateQuerySettingsIncidentUrgency,
-  updateQuerySettingsIncidentPriority,
-  updateQuerySettingsTeams,
-  updateQuerySettingsServices,
+  updateQuerySettingsSinceDate as updateQuerySettingsSinceDateConnected,
+  updateQuerySettingsIncidentStatus as updateQuerySettingsIncidentStatusConnected,
+  updateQuerySettingsIncidentUrgency as updateQuerySettingsIncidentUrgencyConnected,
+  updateQuerySettingsIncidentPriority as updateQuerySettingsIncidentPriorityConnected,
+  updateQuerySettingsTeams as updateQuerySettingsTeamsConnected,
+  updateQuerySettingsServices as updateQuerySettingsServicesConnected,
 } from 'redux/query_settings/actions';
 
 import {
@@ -194,8 +194,8 @@ const QuerySettingsComponent = ({
                   <Select
                     styles={customStyles}
                     onChange={(selectedTeams) => {
-                      const teamIds = selectedTeams.map((team) => team.value);
-                      updateQuerySettingsTeams(teamIds);
+                      const teamIdsInt = selectedTeams.map((team) => team.value);
+                      updateQuerySettingsTeams(teamIdsInt);
                     }}
                     components={animatedComponents}
                     isMulti
@@ -210,8 +210,8 @@ const QuerySettingsComponent = ({
                   <Select
                     styles={customStyles}
                     onChange={(selectedServices) => {
-                      const serviceIds = selectedServices.map((service) => service.value);
-                      updateQuerySettingsServices(serviceIds);
+                      const serviceIdsInt = selectedServices.map((service) => service.value);
+                      updateQuerySettingsServices(serviceIdsInt);
                     }}
                     components={animatedComponents}
                     isMulti
@@ -236,18 +236,18 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDate(sinceDate)),
+  updateQuerySettingsSinceDate: (sinceDate) => dispatch(updateQuerySettingsSinceDateConnected(sinceDate)),
   updateQuerySettingsIncidentStatus: (incidentStatus) => dispatch(
-    updateQuerySettingsIncidentStatus(incidentStatus),
+    updateQuerySettingsIncidentStatusConnected(incidentStatus),
   ),
   updateQuerySettingsIncidentUrgency: (incidentUrgency) => dispatch(
-    updateQuerySettingsIncidentUrgency(incidentUrgency),
+    updateQuerySettingsIncidentUrgencyConnected(incidentUrgency),
   ),
   updateQuerySettingsIncidentPriority: (incidentPriority) => dispatch(
-    updateQuerySettingsIncidentPriority(incidentPriority),
+    updateQuerySettingsIncidentPriorityConnected(incidentPriority),
   ),
-  updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeams(teamIds)),
-  updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServices(serviceIds)),
+  updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeamsConnected(teamIds)),
+  updateQuerySettingsServices: (serviceIds) => dispatch(updateQuerySettingsServicesConnected(serviceIds)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuerySettingsComponent);

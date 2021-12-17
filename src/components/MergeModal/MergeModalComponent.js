@@ -6,7 +6,10 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import { toggleDisplayMergeModal, merge } from 'redux/incident_actions/actions';
+import {
+  toggleDisplayMergeModal as toggleDisplayMergeModalConnected,
+  merge as mergeConnected,
+} from 'redux/incident_actions/actions';
 
 import {
   TRIGGERED,
@@ -116,8 +119,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModal()),
-  merge: (targetIncident, incidents) => dispatch(merge(targetIncident, incidents)),
+  toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModalConnected()),
+  merge: (targetIncident, incidents) => dispatch(mergeConnected(targetIncident, incidents)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MergeModalComponent);
