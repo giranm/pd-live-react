@@ -9,8 +9,11 @@ import {
 import './ActionAlertsModelComponent.scss';
 
 const ActionAlertsModalComponent = ({ toggleDisplayActionAlertsModal, actionAlertsModalData }) => {
-  const { displayActionAlertsModal, actionAlertsModalType, actionAlertsModalMessage } =
-    actionAlertsModalData;
+  const {
+    displayActionAlertsModal,
+    actionAlertsModalType,
+    actionAlertsModalMessage,
+  } = actionAlertsModalData;
 
   return (
     <div className="action-alerts-modal-ctr">

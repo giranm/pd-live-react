@@ -131,8 +131,8 @@ export const pdParallelFetch = async (endpoint, params, progressCallback) => {
     fetchedData.sort(
       (a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)),
     );
-    requestParams[reversedSortOrder ? 'until' : 'since']
-      = fetchedData[fetchedData.length - 1].created_at;
+    const untilOrSince = reversedSortOrder ? 'until' : 'since';
+    requestParams[untilOrSince] = fetchedData[fetchedData.length - 1].created_at;
     outerOffset = fetchedData.length;
     requestParams.offset = 0;
   }

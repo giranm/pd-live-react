@@ -103,14 +103,14 @@ const IncidentActionsComponent = ({
   const enablePostActions = !(selectedCount > 0);
   const enablePostSingularAction = selectedCount !== 1;
   const enableMergeAction = !(
-    !enableActions &&
-    selectedCount > 1 &&
-    resolvedIncidents.length === 0
+    !enableActions
+    && selectedCount > 1
+    && resolvedIncidents.length === 0
   );
   const enableEscalationAction = !(
-    selectedCount === 1 &&
-    highUrgencyIncidents.length &&
-    selectedIncident.status !== RESOLVED
+    selectedCount === 1
+    && highUrgencyIncidents.length
+    && selectedIncident.status !== RESOLVED
   );
   const enablePriorityAction = !(selectedCount >= 1);
 
@@ -149,33 +149,30 @@ const IncidentActionsComponent = ({
   }, [enablePostSingularAction]);
 
   // Generate selection list for response plays per selected incident
-  const selectListResponsePlays =
-    responsePlays.length > 0
-      ? responsePlays.map((responsePlay) => ({
-        label: responsePlay.summary,
-        value: responsePlay.id,
-        summary: responsePlay.summary,
-        id: responsePlay.id,
-      }))
-      : [];
+  const selectListResponsePlays = responsePlays.length > 0
+    ? responsePlays.map((responsePlay) => ({
+      label: responsePlay.summary,
+      value: responsePlay.id,
+      summary: responsePlay.summary,
+      id: responsePlay.id,
+    }))
+    : [];
 
   // Generate extension types per selected incident's service
   const { serviceExtensionMap } = extensions;
   const serviceExtensions = selectedIncident
     ? serviceExtensionMap[selectedIncident.service.id]
     : [];
-  const customIncidentActions =
-    serviceExtensions
-      ? serviceExtensions.filter(
-        (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
-      )
-      : [];
-  const externalSystemsTemp =
-    serviceExtensions
-      ? serviceExtensions.filter(
-        (serviceExtension) => serviceExtension.extension_type === EXTERNAL_SYSTEM,
-      )
-      : [];
+  const customIncidentActions = serviceExtensions
+    ? serviceExtensions.filter(
+      (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
+    )
+    : [];
+  const externalSystemsTemp = serviceExtensions
+    ? serviceExtensions.filter(
+      (serviceExtension) => serviceExtension.extension_type === EXTERNAL_SYSTEM,
+    )
+    : [];
 
   // Identify extensions (ext systems) that have already been sync'd with on the selected incident
   // NB - need intermediate variables to stop race condition of empty array
@@ -191,8 +188,8 @@ const IncidentActionsComponent = ({
           : null;
         if (result) {
           tempServiceExtension.synced = true;
-          tempServiceExtension.extension_label
-          = `Synced with ${result.webhook.summary} (${result.external_id})`;
+          tempServiceExtension.extension_label = `Synced with
+            ${result.webhook.summary} (${result.external_id})`;
         } else {
           tempServiceExtension.synced = false;
         }

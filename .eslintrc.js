@@ -34,7 +34,6 @@ module.exports = {
     'import/extensions': OFF,
     'react/react-in-jsx-scope': OFF,
     'react/jsx-filename-extension': OFF,
-    'operator-linebreak': OFF,
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
     'no-use-before-define': [ERROR, { functions: false }],
     'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
