@@ -31,7 +31,6 @@ module.exports = {
     'react/prop-types': OFF,
     'react/jsx-one-expression-per-line': OFF,
     'react/jsx-props-no-spreading': OFF,
-    'import/extensions': OFF,
     'react/react-in-jsx-scope': OFF,
     'react/jsx-filename-extension': [ERROR, { extensions: ['.js', '.jsx'] }],
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
