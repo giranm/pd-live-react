@@ -1,1 +1,2 @@
-export const selectResponsePlays = (state) => state.responsePlays;
+const selectResponsePlays = (state) => state.responsePlays;
+export default selectResponsePlays;

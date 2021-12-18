@@ -1,1 +1,2 @@
-export const selectEscalationPolicies = (state) => state.escalationPolicies;
+const selectEscalationPolicies = (state) => state.escalationPolicies;
+export default selectEscalationPolicies;

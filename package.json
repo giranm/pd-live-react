@@ -49,7 +49,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "craco eject",
-    "format": "npx prettier-eslint --write \"{,!(node_modules)/**/}*.{js,jsx}\"",
+    "format": "npx eslint . --ext .js,.jsx,.ts,.tsx --exit-on-fatal-error",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
