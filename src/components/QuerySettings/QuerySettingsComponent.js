@@ -101,7 +101,9 @@ const QuerySettingsComponent = ({
           <Container className="card bg-light query-settings-inner-ctr" fluid>
             <Row>
               <Col xs="auto">
-                Since: <br />
+                Since:
+                {' '}
+                <br />
                 <DatePicker
                   className="date-picker"
                   dateFormat="dd/MM/yyyy"
@@ -111,7 +113,8 @@ const QuerySettingsComponent = ({
                 />
               </Col>
               <Col xs="auto">
-                State:{' '}
+                State:
+                {' '}
                 <Form.Group>
                   <ToggleButtonGroup
                     type="checkbox"
@@ -140,7 +143,8 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col xs="auto">
-                Urgency:{' '}
+                Urgency:
+                {' '}
                 <Form.Group>
                   <ToggleButtonGroup
                     type="checkbox"
@@ -163,7 +167,8 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col xs="auto">
-                Priorities:{' '}
+                Priorities:
+                {' '}
                 <Form.Group>
                   <ToggleButtonGroup
                     type="checkbox"
@@ -189,7 +194,8 @@ const QuerySettingsComponent = ({
             </Row>
             <Row>
               <Col>
-                Team:{' '}
+                Team:
+                {' '}
                 <Form.Group>
                   <Select
                     styles={customStyles}
@@ -205,7 +211,8 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col>
-                Service:{' '}
+                Service:
+                {' '}
                 <Form.Group>
                   <Select
                     styles={customStyles}

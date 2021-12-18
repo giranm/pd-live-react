@@ -29,7 +29,6 @@ module.exports = {
   rules: {
     'max-len': [WARN, { code: 100 }],
     'react/prop-types': OFF,
-    'react/jsx-one-expression-per-line': OFF,
     'react/react-in-jsx-scope': OFF,
     'react/jsx-filename-extension': [ERROR, { extensions: ['.js', '.jsx'] }],
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],

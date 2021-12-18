@@ -34,7 +34,8 @@ const DisclaimerModalComponent = ({
             <h1>Interpretation and Definitions</h1>
 
             <h2>Interpretation</h2>
-            <p>The words of which the initial letter is capitalized have meanings defined under the following conditions.
+            <p>
+              The words of which the initial letter is capitalized have meanings defined under the following conditions.
               The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.
             </p>
 
@@ -42,23 +43,44 @@ const DisclaimerModalComponent = ({
             <p>For the purposes of this Disclaimer:</p>
             <ul>
               <li>
-                <p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Disclaimer) refers to pd-react-live.</p>
+                <p>
+                  <strong>Company</strong>
+                  {' '}
+                  (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Disclaimer) refers to pd-react-live.
+                </p>
               </li>
               <li>
-                <p><strong>Service</strong> refers to the Application.</p>
+                <p>
+                  <strong>Service</strong>
+                  {' '}
+                  refers to the Application.
+                </p>
               </li>
               <li>
-                <p><strong>You</strong> means the individual accessing the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.</p>
+                <p>
+                  <strong>You</strong>
+                  {' '}
+                  means the individual accessing the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.
+                </p>
               </li>
               <li>
-                <p><strong>Application</strong> means the software program provided by the Company downloaded by You on any electronic device named pd-react-live.</p>
+                <p>
+                  <strong>Application</strong>
+                  {' '}
+                  means the software program provided by the Company downloaded by You on any electronic device named pd-react-live.
+                </p>
               </li>
             </ul>
 
             <h1>Disclaimer</h1>
             <p>The information contained on the Service is for general information purposes only.</p>
             <p>The Company assumes no responsibility for errors or omissions in the contents of the Service.</p>
-            <p>In no event shall the Company be liable for any special, direct, indirect, consequential, or incidental damages or any damages whatsoever, whether in an action of contract, negligence or other tort, arising out of or in connection with the use of the Service or the contents of the Service. The Company reserves the right to make additions, deletions, or modifications to the contents on the Service at any time without prior notice. This Disclaimer has been created with the help of the <a href="https://www.termsfeed.com/disclaimer-generator/" target="_blank" rel="noreferrer">Disclaimer Generator</a>.</p>
+            <p>
+              In no event shall the Company be liable for any special, direct, indirect, consequential, or incidental damages or any damages whatsoever, whether in an action of contract, negligence or other tort, arising out of or in connection with the use of the Service or the contents of the Service. The Company reserves the right to make additions, deletions, or modifications to the contents on the Service at any time without prior notice. This Disclaimer has been created with the help of the
+              {' '}
+              <a href="https://www.termsfeed.com/disclaimer-generator/" target="_blank" rel="noreferrer">Disclaimer Generator</a>
+              .
+            </p>
             <p>The Company does not warrant that the Service is free of viruses or other harmful components.</p>
 
             <h1>External Links Disclaimer</h1>
@@ -104,7 +126,11 @@ const DisclaimerModalComponent = ({
             <h1>Contact Us</h1>
             <p>If you have any questions about this Disclaimer & License, You can contact Us:</p>
             <ul>
-              <li>By visiting this page on our website: <a href="https://github.com/giranm/pd-live-react" rel="external nofollow noopener noreferrer" target="_blank">https://github.com/giranm/pd-live-react</a></li>
+              <li>
+                By visiting this page on our website:
+                {' '}
+                <a href="https://github.com/giranm/pd-live-react" rel="external nofollow noopener noreferrer" target="_blank">https://github.com/giranm/pd-live-react</a>
+              </li>
             </ul>
           </Form>
         </Modal.Body>
