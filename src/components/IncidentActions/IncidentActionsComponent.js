@@ -34,21 +34,23 @@ import {
 import './IncidentActionsComponent.scss';
 
 import {
-  acknowledge,
-  escalate,
-  toggleDisplayReassignModal,
-  toggleDisplayAddResponderModal,
-  snooze,
-  toggleDisplayCustomSnoozeModal,
-  toggleDisplayMergeModal,
-  resolve,
-  updatePriority,
-  toggleDisplayAddNoteModal,
-  runCustomIncidentAction,
-  syncWithExternalSystem,
+  acknowledge as acknowledgeConnected,
+  escalate as escalateConnected,
+  toggleDisplayReassignModal as toggleDisplayReassignModalConnected,
+  toggleDisplayAddResponderModal as toggleDisplayAddResponderModalConnected,
+  snooze as snoozeConnected,
+  toggleDisplayCustomSnoozeModal as toggleDisplayCustomSnoozeModalConnected,
+  toggleDisplayMergeModal as toggleDisplayMergeModalConnected,
+  resolve as resolveConnected,
+  updatePriority as updatePriorityConnected,
+  toggleDisplayAddNoteModal as toggleDisplayAddNoteModalConnected,
+  runCustomIncidentAction as runCustomIncidentActionConnected,
+  syncWithExternalSystem as syncWithExternalSystemConnected,
 } from 'redux/incident_actions/actions';
 
-import { runResponsePlayAsync } from 'redux/response_plays/actions';
+import {
+  runResponsePlayAsync as runResponsePlayAsyncConnected,
+} from 'redux/response_plays/actions';
 
 import {
   TRIGGERED,
@@ -67,7 +69,6 @@ const animatedComponents = makeAnimated();
 
 const IncidentActionsComponent = ({
   incidentTable,
-  incidentActions,
   incidents,
   priorities,
   escalationPolicies,
@@ -102,14 +103,14 @@ const IncidentActionsComponent = ({
   const enablePostActions = !(selectedCount > 0);
   const enablePostSingularAction = selectedCount !== 1;
   const enableMergeAction = !(
-    !enableActions &&
-    selectedCount > 1 &&
-    resolvedIncidents.length === 0
+    !enableActions
+    && selectedCount > 1
+    && resolvedIncidents.length === 0
   );
   const enableEscalationAction = !(
-    selectedCount === 1 &&
-    highUrgencyIncidents.length &&
-    selectedIncident.status !== RESOLVED
+    selectedCount === 1
+    && highUrgencyIncidents.length
+    && selectedIncident.status !== RESOLVED
   );
   const enablePriorityAction = !(selectedCount >= 1);
 
@@ -148,33 +149,30 @@ const IncidentActionsComponent = ({
   }, [enablePostSingularAction]);
 
   // Generate selection list for response plays per selected incident
-  const selectListResponsePlays =
-    responsePlays.length > 0
-      ? responsePlays.map((responsePlay) => ({
-        label: responsePlay.summary,
-        value: responsePlay.id,
-        summary: responsePlay.summary,
-        id: responsePlay.id,
-      }))
-      : [];
+  const selectListResponsePlays = responsePlays.length > 0
+    ? responsePlays.map((responsePlay) => ({
+      label: responsePlay.summary,
+      value: responsePlay.id,
+      summary: responsePlay.summary,
+      id: responsePlay.id,
+    }))
+    : [];
 
   // Generate extension types per selected incident's service
   const { serviceExtensionMap } = extensions;
   const serviceExtensions = selectedIncident
     ? serviceExtensionMap[selectedIncident.service.id]
     : [];
-  const customIncidentActions =
-    serviceExtensions
-      ? serviceExtensions.filter(
-        (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
-      )
-      : [];
-  const externalSystemsTemp =
-    serviceExtensions
-      ? serviceExtensions.filter(
-        (serviceExtension) => serviceExtension.extension_type === EXTERNAL_SYSTEM,
-      )
-      : [];
+  const customIncidentActions = serviceExtensions
+    ? serviceExtensions.filter(
+      (serviceExtension) => serviceExtension.extension_type === CUSTOM_INCIDENT_ACTION,
+    )
+    : [];
+  const externalSystemsTemp = serviceExtensions
+    ? serviceExtensions.filter(
+      (serviceExtension) => serviceExtension.extension_type === EXTERNAL_SYSTEM,
+    )
+    : [];
 
   // Identify extensions (ext systems) that have already been sync'd with on the selected incident
   // NB - need intermediate variables to stop race condition of empty array
@@ -183,16 +181,15 @@ const IncidentActionsComponent = ({
     const tempExternalSystems = selectedIncident
       ? externalSystemsTemp.map((serviceExtension) => {
         const tempServiceExtension = { ...serviceExtension };
-        let result;
-        result = selectedIncident.external_references
+        const result = selectedIncident.external_references
           ? selectedIncident.external_references.find(
             ({ webhook }) => webhook.id === serviceExtension.id,
           )
           : null;
         if (result) {
           tempServiceExtension.synced = true;
-          tempServiceExtension.extension_label
-          = `Synced with ${result.webhook.summary} (${result.external_id})`;
+          tempServiceExtension.extension_label = `Synced with
+            ${result.webhook.summary} (${result.external_id})`;
         } else {
           tempServiceExtension.synced = false;
         }
@@ -485,7 +482,6 @@ const IncidentActionsComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentTable: state.incidentTable,
-  incidentActions: state.incidentActions,
   incidents: state.incidents,
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
@@ -494,24 +490,26 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  acknowledge: (incidents) => dispatch(acknowledge(incidents)),
-  escalate: (incidents, escalationLevel) => dispatch(escalate(incidents, escalationLevel)),
-  toggleDisplayReassignModal: () => dispatch(toggleDisplayReassignModal()),
-  toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModal()),
-  snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
-  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
-  toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModal()),
-  resolve: (incidents) => dispatch(resolve(incidents)),
-  updatePriority: (incidents, priorityId) => dispatch(updatePriority(incidents, priorityId)),
-  toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
+  acknowledge: (incidents) => dispatch(acknowledgeConnected(incidents)),
+  escalate: (incidents, escalationLevel) => dispatch(escalateConnected(incidents, escalationLevel)),
+  toggleDisplayReassignModal: () => dispatch(toggleDisplayReassignModalConnected()),
+  toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModalConnected()),
+  snooze: (incidents, duration) => dispatch(snoozeConnected(incidents, duration)),
+  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModalConnected()),
+  toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModalConnected()),
+  resolve: (incidents) => dispatch(resolveConnected(incidents)),
+  updatePriority: (incidents, priorityId) => dispatch(
+    updatePriorityConnected(incidents, priorityId),
+  ),
+  toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModalConnected()),
   runCustomIncidentAction: (incidents, webhook) => dispatch(
-    runCustomIncidentAction(incidents, webhook),
+    runCustomIncidentActionConnected(incidents, webhook),
   ),
   runResponsePlayAsync: (incidents, responsePlay) => dispatch(
-    runResponsePlayAsync(incidents, responsePlay),
+    runResponsePlayAsyncConnected(incidents, responsePlay),
   ),
   syncWithExternalSystem: (incidents, webhook) => dispatch(
-    syncWithExternalSystem(incidents, webhook),
+    syncWithExternalSystemConnected(incidents, webhook),
   ),
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable consistent-return */
@@ -29,7 +30,10 @@ import {
   useResizeColumns,
 } from 'react-table';
 
-import { selectIncidentTableRows, updateIncidentTableState } from 'redux/incident_table/actions';
+import {
+  selectIncidentTableRows as selectIncidentTableRowsConnected,
+  updateIncidentTableState as updateIncidentTableStateConnected,
+} from 'redux/incident_table/actions';
 
 import { getIncidentTableColumns } from 'config/incident-table-columns';
 
@@ -103,11 +107,6 @@ const IncidentTableComponent = ({
       return tempColumns;
     },
     [incidentTableColumnsNames],
-  );
-
-  // TODO: Verify if this is the cause of resolved incidents staying in the view
-  const memoizedFilteredIncidentsByQuery = useMemo(
-    () => filteredIncidentsByQuery, [filteredIncidentsByQuery],
   );
 
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
@@ -326,10 +325,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   selectIncidentTableRows: (allSelected, selectedCount, selectedRows) => {
-    dispatch(selectIncidentTableRows(allSelected, selectedCount, selectedRows));
+    dispatch(selectIncidentTableRowsConnected(allSelected, selectedCount, selectedRows));
   },
   updateIncidentTableState: (incidentTableState) => {
-    dispatch(updateIncidentTableState(incidentTableState));
+    dispatch(updateIncidentTableStateConnected(incidentTableState));
   },
 });
 

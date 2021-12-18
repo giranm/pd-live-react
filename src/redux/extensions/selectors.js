@@ -1,1 +1,2 @@
-export const selectExtensions = (state) => state.extensions;
+const selectExtensions = (state) => state.extensions;
+export default selectExtensions;

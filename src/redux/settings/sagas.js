@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import { put, select, takeLatest } from 'redux-saga/effects';
 
 import { PURGE } from 'redux-persist';
@@ -10,7 +9,7 @@ import {
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
 
-import { selectSettings } from './selectors';
+import selectSettings from './selectors';
 
 export function* toggleSettingsModal() {
   yield takeLatest(TOGGLE_SETTINGS_REQUESTED, toggleSettingsModalImpl);

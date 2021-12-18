@@ -2,13 +2,18 @@ import { connect } from 'react-redux';
 
 import { Modal, Alert } from 'react-bootstrap';
 
-import { toggleDisplayActionAlertsModal } from 'redux/action_alerts/actions';
+import {
+  toggleDisplayActionAlertsModal as toggleDisplayActionAlertsModalConnected,
+} from 'redux/action_alerts/actions';
 
 import './ActionAlertsModelComponent.scss';
 
 const ActionAlertsModalComponent = ({ toggleDisplayActionAlertsModal, actionAlertsModalData }) => {
-  const { displayActionAlertsModal, actionAlertsModalType, actionAlertsModalMessage } =
-    actionAlertsModalData;
+  const {
+    displayActionAlertsModal,
+    actionAlertsModalType,
+    actionAlertsModalMessage,
+  } = actionAlertsModalData;
 
   return (
     <div className="action-alerts-modal-ctr">
@@ -26,7 +31,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDisplayActionAlertsModal: () => dispatch(toggleDisplayActionAlertsModal()),
+  toggleDisplayActionAlertsModal: () => dispatch(toggleDisplayActionAlertsModalConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionAlertsModalComponent);

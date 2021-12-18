@@ -1,1 +1,2 @@
-export const selectTeams = (state) => state.teams;
+const selectTeams = (state) => state.teams;
+export default selectTeams;

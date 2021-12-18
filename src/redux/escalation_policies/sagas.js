@@ -1,6 +1,5 @@
-/* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest,
+  put, call, takeLatest,
 } from 'redux-saga/effects';
 
 import { pd } from 'util/pd-api-wrapper';
@@ -10,8 +9,6 @@ import {
   FETCH_ESCALATION_POLICIES_COMPLETED,
   FETCH_ESCALATION_POLICIES_ERROR,
 } from './actions';
-
-import { selectEscalationPolicies } from './selectors';
 
 export function* getEscalationPoliciesAsync() {
   yield takeLatest(FETCH_ESCALATION_POLICIES_REQUESTED, getEscalationPolicies);

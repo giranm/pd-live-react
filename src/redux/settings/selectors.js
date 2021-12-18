@@ -1,1 +1,2 @@
-export const selectSettings = (state) => state.settings;
+const selectSettings = (state) => state.settings;
+export default selectSettings;

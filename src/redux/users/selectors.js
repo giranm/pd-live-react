@@ -1,1 +1,2 @@
-export const selectUsers = (state) => state.users;
+const selectUsers = (state) => state.users;
+export default selectUsers;

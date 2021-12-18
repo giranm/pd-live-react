@@ -1,13 +1,10 @@
-/* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest,
+  put, call, takeLatest,
 } from 'redux-saga/effects';
 
 import { pd } from 'util/pd-api-wrapper';
 import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import { FETCH_TEAMS_REQUESTED, FETCH_TEAMS_COMPLETED, FETCH_TEAMS_ERROR } from './actions';
-
-import { selectTeams } from './selectors';
 
 export function* getTeamsAsync() {
   yield takeLatest(FETCH_TEAMS_REQUESTED, getTeams);

@@ -11,12 +11,12 @@ import {
 import DualListBox from 'react-dual-listbox';
 
 import {
-  saveIncidentTable,
+  saveIncidentTable as saveIncidentTableConnected,
 } from 'redux/incident_table/actions';
 
 import {
-  toggleSettingsModal,
-  clearLocalCache,
+  toggleSettingsModal as toggleSettingsModalConnected,
+  clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
 
 import {
@@ -106,11 +106,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleSettingsModal: () => dispatch(toggleSettingsModal()),
+  toggleSettingsModal: () => dispatch(toggleSettingsModalConnected()),
   saveIncidentTable: (updatedIncidentTableColumns) => dispatch(
-    saveIncidentTable(updatedIncidentTableColumns),
+    saveIncidentTableConnected(updatedIncidentTableColumns),
   ),
-  clearLocalCache: () => dispatch(clearLocalCache()),
+  clearLocalCache: () => dispatch(clearLocalCacheConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsModalComponent);

@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import {
   put, call, select, takeLatest, all,
 } from 'redux-saga/effects';
@@ -8,14 +7,14 @@ import {
   handleSingleAPIErrorResponse,
   handleMultipleAPIErrorResponses,
   displayActionModal,
-} from 'redux/rootSaga';
+} from 'util/sagas';
 
 import { SELECT_INCIDENT_TABLE_ROWS_REQUESTED } from 'redux/incident_table/actions';
 
 import { getIncidentByIdRequest, updateIncidentsList } from 'redux/incidents/sagas';
 
-import { selectPriorities } from 'redux/priorities/selectors';
-import { selectIncidentTable } from 'redux/incident_table/selectors';
+import selectPriorities from 'redux/priorities/selectors';
+import selectIncidentTable from 'redux/incident_table/selectors';
 
 import {
   TRIGGERED,
@@ -29,7 +28,7 @@ import {
 
 import { getObjectsFromList } from 'util/helpers';
 import { pd } from 'util/pd-api-wrapper';
-import { selectIncidentActions } from './selectors';
+import selectIncidentActions from './selectors';
 import {
   ACKNOWLEDGE_REQUESTED,
   ACKNOWLEDGE_COMPLETED,
@@ -276,9 +275,8 @@ export function* addResponder(action) {
       yield toggleDisplayAddResponderModalImpl();
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Requested additional response for incident(s) ${selectedIncidents
-          .map((i) => i.incident_number)
-          .join(', ')}.`;
+        const actionAlertsModalMessage = `Requested additional response for 
+        incident(s) ${selectedIncidents.map((i) => i.incident_number).join(', ')}.`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -623,7 +621,6 @@ export function* runCustomIncidentAction(action) {
       handleMultipleAPIErrorResponses(responses);
     }
   } catch (e) {
-    console.log(e);
     handleSagaError(RUN_CUSTOM_INCIDENT_ACTION_ERROR, e);
   }
 }
@@ -710,7 +707,6 @@ export function* syncWithExternalSystem(action) {
       handleMultipleAPIErrorResponses(responses);
     }
   } catch (e) {
-    console.log(e);
     handleSagaError(SYNC_WITH_EXTERNAL_SYSTEM_ERROR, e);
   }
 }

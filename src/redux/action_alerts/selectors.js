@@ -1,1 +1,2 @@
-export const selectActionAlertsModalData = (state) => state.actionAlertsModalData;
+const selectActionAlertsModalData = (state) => state.actionAlertsModalData;
+export default selectActionAlertsModalData;

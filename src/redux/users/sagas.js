@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import {
   put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
@@ -26,7 +25,7 @@ import {
   GET_CURRENT_USER_ERROR,
 } from './actions';
 
-import { selectUsers } from './selectors';
+import selectUsers from './selectors';
 
 export function* userAuthorize() {
   yield takeLatest(USER_AUTHORIZE_REQUESTED, userAuthorizeImpl);

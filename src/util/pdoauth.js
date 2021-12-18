@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable comma-dangle */
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
@@ -59,17 +60,17 @@ export default class PDOAuth {
     // |*|  https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
     // |*|  Author: madmurphy
     const uint6ToB64 = function (nUint6) {
-      return nUint6 < 26 ?
-        nUint6 + 65 :
-        nUint6 < 52 ?
-          nUint6 + 71 :
-          nUint6 < 62 ?
-            nUint6 - 4 :
-            nUint6 === 62 ?
-              43 :
-              nUint6 === 63 ?
-                47 :
-                65;
+      return nUint6 < 26
+        ? nUint6 + 65
+        : nUint6 < 52
+          ? nUint6 + 71
+          : nUint6 < 62
+            ? nUint6 - 4
+            : nUint6 === 62
+              ? 43
+              : nUint6 === 63
+                ? 47
+                : 65;
     };
     const base64EncArr = function (aBytes) {
       const eqLen = (3 - (aBytes.length % 3)) % 3;
@@ -87,9 +88,9 @@ export default class PDOAuth {
           nUint24 = 0;
         }
       }
-      return eqLen === 0 ?
-        sB64Enc :
-        sB64Enc.substring(0, sB64Enc.length - eqLen) + (eqLen === 1 ? '=' : '==');
+      return eqLen === 0
+        ? sB64Enc
+        : sB64Enc.substring(0, sB64Enc.length - eqLen) + (eqLen === 1 ? '=' : '==');
     };
     let encodedArr = base64EncArr(new Uint8Array(buffer));
     // manually finishing up the url encoding fo the encodedArr
@@ -111,13 +112,13 @@ export default class PDOAuth {
     // base64 encode the challenge
     const challenge = this.base64Unicode(challengeBuffer);
     // build authUrl
-    const authUrl = 'https://app.pagerduty.com/oauth/authorize?' +
-      `client_id=${clientID}&` +
-      `client_secret=${clientSecret}&` +
-      `redirect_uri=${redirectURL}&` +
-      'response_type=code&' +
-      `code_challenge=${encodeURI(challenge)}&` +
-      'code_challenge_method=S256';
+    const authUrl = 'https://app.pagerduty.com/oauth/authorize?'
+      + `client_id=${clientID}&`
+      + `client_secret=${clientSecret}&`
+      + `redirect_uri=${redirectURL}&`
+      + 'response_type=code&'
+      + `code_challenge=${encodeURI(challenge)}&`
+      + 'code_challenge_method=S256';
 
     return authUrl;
   }
@@ -131,13 +132,13 @@ export default class PDOAuth {
         .then((response) => response.json());
     }
 
-    const requestTokenUrl = 'https://app.pagerduty.com/oauth/token?' +
-      'grant_type=authorization_code&' +
-      `code=${code}&` +
-      `redirect_uri=${redirectURL}&` +
-      `client_id=${clientID}&` +
-      `client_secret=${clientSecret}&` +
-      `code_verifier=${codeVerifier}`;
+    const requestTokenUrl = 'https://app.pagerduty.com/oauth/token?'
+      + 'grant_type=authorization_code&'
+      + `code=${code}&`
+      + `redirect_uri=${redirectURL}&`
+      + `client_id=${clientID}&`
+      + `client_secret=${clientSecret}&`
+      + `code_verifier=${codeVerifier}`;
     const data = await postData(requestTokenUrl, {});
     if (data.access_token) {
       return data.access_token;

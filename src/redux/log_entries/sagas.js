@@ -20,7 +20,7 @@ import {
   CLEAN_RECENT_LOG_ENTRIES_ERROR,
 } from './actions';
 
-import { selectLogEntries } from './selectors';
+import selectLogEntries from './selectors';
 
 export function* getLogEntriesAsync() {
   yield takeLatest(FETCH_LOG_ENTRIES_REQUESTED, getLogEntries);
@@ -62,7 +62,7 @@ export function* updateRecentLogEntriesAsync() {
   yield takeLatest(UPDATE_RECENT_LOG_ENTRIES, updateRecentLogEntries);
 }
 
-export function* updateRecentLogEntries(action) {
+export function* updateRecentLogEntries() {
   try {
     // Grab log entries from store and determine what is recent based on last polling
     const { logEntries, recentLogEntries } = yield select(selectLogEntries);
@@ -129,7 +129,6 @@ export function* updateRecentLogEntries(action) {
       removeList,
     });
   } catch (e) {
-    console.log(e);
     yield put({ type: UPDATE_RECENT_LOG_ENTRIES_ERROR, message: e.message });
   }
 }

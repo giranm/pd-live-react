@@ -1,1 +1,2 @@
-export const selectLogEntries = (state) => state.logEntries;
+const selectLogEntries = (state) => state.logEntries;
+export default selectLogEntries;

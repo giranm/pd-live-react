@@ -1,1 +1,2 @@
-export const selectConnection = (state) => state.connection;
+const selectConnection = (state) => state.connection;
+export default selectConnection;

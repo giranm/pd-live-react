@@ -1,6 +1,5 @@
-/* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest,
+  put, call, takeLatest,
 } from 'redux-saga/effects';
 
 import { pd } from 'util/pd-api-wrapper';
@@ -10,8 +9,6 @@ import {
   FETCH_SERVICES_COMPLETED,
   FETCH_SERVICES_ERROR,
 } from './actions';
-
-import { selectServices } from './selectors';
 
 export function* getServicesAsync() {
   yield takeLatest(FETCH_SERVICES_REQUESTED, getServices);

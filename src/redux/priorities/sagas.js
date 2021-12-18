@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
@@ -15,7 +14,7 @@ import {
   FETCH_PRIORITIES_ERROR,
 } from './actions';
 
-import { selectPriorities } from './selectors';
+import selectPriorities from './selectors';
 
 export function* getPrioritiesAsync() {
   yield takeLatest(FETCH_PRIORITIES_REQUESTED, getPriorities);

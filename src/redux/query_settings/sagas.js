@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import { put, select, takeLatest } from 'redux-saga/effects';
 
 import { FETCH_INCIDENTS_REQUESTED, FILTER_INCIDENTS_LIST_BY_QUERY } from 'redux/incidents/actions';
@@ -22,7 +21,7 @@ import {
   UPDATE_SEARCH_QUERY_COMPLETED,
 } from './actions';
 
-import { selectQuerySettings } from './selectors';
+import selectQuerySettings from './selectors';
 
 export function* toggleDisplayQuerySettings() {
   yield takeLatest(TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED, toggleDisplayQuerySettingsImpl);

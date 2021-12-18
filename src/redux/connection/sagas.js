@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import {
   put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
@@ -16,8 +15,6 @@ import {
   CHECK_ABILITIES_COMPLETED,
   CHECK_ABILITIES_ERROR,
 } from './actions';
-
-import { selectConnection } from './selectors';
 
 export function* updateConnectionStatus() {
   yield takeLatest(UPDATE_CONNECTION_STATUS_REQUESTED, updateConnectionStatusImpl);

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import {
   put,
@@ -21,9 +22,9 @@ import {
   filterIncidentsByFieldOfList,
 } from 'util/incidents';
 import { pushToArray } from 'util/helpers';
-import { fuseOptions } from 'config/fuse-config';
+import fuseOptions from 'config/fuse-config';
 
-import { selectQuerySettings } from 'redux/query_settings/selectors';
+import selectQuerySettings from 'redux/query_settings/selectors';
 import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
 import {
   FETCH_INCIDENTS_REQUESTED,
@@ -57,7 +58,7 @@ import {
   FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_QUERY_ERROR,
 } from './actions';
-import { selectIncidents } from './selectors';
+import selectIncidents from './selectors';
 
 export const getIncidentByIdRequest = (incidentId) => call(pd, {
   method: 'get',
@@ -71,7 +72,7 @@ export function* getIncidentsAsync() {
   yield takeLatest(FETCH_INCIDENTS_REQUESTED, getIncidents);
 }
 
-export function* getIncidents(action) {
+export function* getIncidents() {
   try {
     //  Build params from query settings and call pd lib
     const {
@@ -242,12 +243,14 @@ export function* updateIncidentsList(action) {
       });
     }
 
-    // Handle cases where new updates come in against an empty incident list or filtered out incidents
+    // Handle where new updates come in against an empty incident list or filtered out incidents
     if (updateList.length) {
       updateList.map((updateItem) => {
         if (updateItem.incident) {
           // Check if item is matched against updatedIncidentsList (skip)
-          if (updatedIncidentsList.find((incident) => incident.id === updateItem.incident.id)) return;
+          if (updatedIncidentsList.find(
+            (incident) => incident.id === updateItem.incident.id,
+          )) return;
 
           // Update incident list (push if we haven't updated already)
           pushToArray(updatedIncidentsList, updateItem.incident, 'id');
@@ -412,7 +415,9 @@ export function* filterIncidentsByTeamImpl(action) {
     let filteredIncidentsByTeamList;
 
     // Typically there is no filtered view by teams, so if empty, show all teams.
-    // FIXME: If a team filter is enabled, we see the incident coming in, however removing the filter then doesn't display incidents (e.g. re-request API)
+    /* FIXME: If a team filter is enabled, we see the incident coming in.
+      However removing the filter then doesn't display incidents (e.g. re-request API)
+    */
     if (teamIds.length) {
       filteredIncidentsByTeamList = filterIncidentsByFieldOfList(incidents, 'teams', 'id', teamIds);
     } else {
@@ -444,7 +449,9 @@ export function* filterIncidentsByServiceImpl(action) {
     let filteredIncidentsByServiceList;
 
     // Typically there is no filtered view by services, so if empty, show all services.
-    // FIXME: A similar bug happens (e.g. teams filter) when removing services - could be something with log_entries
+    /* FIXME: A similar bug happens (e.g. teams filter) when removing services.
+      Could be something with log_entries
+    */
     if (serviceIds.length) {
       // console.log("Pre filter incidents", incidents)
       filteredIncidentsByServiceList = filterIncidentsByField(incidents, 'service.id', serviceIds);

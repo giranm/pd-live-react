@@ -17,16 +17,29 @@ import ReassignModalComponent from 'components/ReassignModal/ReassignModalCompon
 import AddResponderModalComponent from 'components/AddResponderModal/AddResponderModalComponent';
 import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
 
-import { getIncidentsAsync } from 'redux/incidents/actions';
-import { getLogEntriesAsync, cleanRecentLogEntriesAsync } from 'redux/log_entries/actions';
-import { getServicesAsync } from 'redux/services/actions';
-import { getTeamsAsync } from 'redux/teams/actions';
-import { getPrioritiesAsync } from 'redux/priorities/actions';
-import { userAuthorize, getUsersAsync } from 'redux/users/actions';
-import { getEscalationPoliciesAsync } from 'redux/escalation_policies/actions';
-import { getExtensionsAsync } from 'redux/extensions/actions';
-import { getResponsePlaysAsync } from 'redux/response_plays/actions';
-import { checkConnectionStatus, checkAbilities } from 'redux/connection/actions';
+import { getIncidentsAsync as getIncidentsAsyncConnected } from 'redux/incidents/actions';
+import {
+  getLogEntriesAsync as getLogEntriesAsyncConnected,
+  cleanRecentLogEntriesAsync as cleanRecentLogEntriesAsyncConnected,
+} from 'redux/log_entries/actions';
+import { getServicesAsync as getServicesAsyncConnected } from 'redux/services/actions';
+import { getTeamsAsync as getTeamsAsyncConnected } from 'redux/teams/actions';
+import { getPrioritiesAsync as getPrioritiesAsyncConnected } from 'redux/priorities/actions';
+import {
+  userAuthorize as userAuthorizeConnected,
+  getUsersAsync as getUsersAsyncConnected,
+} from 'redux/users/actions';
+import {
+  getEscalationPoliciesAsync as getEscalationPoliciesAsyncConnected,
+} from 'redux/escalation_policies/actions';
+import { getExtensionsAsync as getExtensionsAsyncConnected } from 'redux/extensions/actions';
+import {
+  getResponsePlaysAsync as getResponsePlaysAsyncConnected,
+} from 'redux/response_plays/actions';
+import {
+  checkConnectionStatus as checkConnectionStatusConnected,
+  checkAbilities as checkAbilitiesConnected,
+} from 'redux/connection/actions';
 
 import { getLanguage } from 'util/helpers';
 
@@ -145,19 +158,19 @@ const App = ({
 const mapStateToProps = (state) => ({ state });
 
 const mapDispatchToProps = (dispatch) => ({
-  userAuthorize: () => dispatch(userAuthorize()),
-  checkAbilities: () => dispatch(checkAbilities()),
-  checkConnectionStatus: () => dispatch(checkConnectionStatus()),
-  getServicesAsync: (teamIds) => dispatch(getServicesAsync(teamIds)),
-  getTeamsAsync: () => dispatch(getTeamsAsync()),
-  getPrioritiesAsync: () => dispatch(getPrioritiesAsync()),
-  getUsersAsync: () => dispatch(getUsersAsync()),
-  getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsync()),
-  getExtensionsAsync: () => dispatch(getExtensionsAsync()),
-  getResponsePlaysAsync: () => dispatch(getResponsePlaysAsync()),
-  getIncidentsAsync: () => dispatch(getIncidentsAsync()),
-  getLogEntriesAsync: (since) => dispatch(getLogEntriesAsync(since)),
-  cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsync()),
+  userAuthorize: () => dispatch(userAuthorizeConnected()),
+  checkAbilities: () => dispatch(checkAbilitiesConnected()),
+  checkConnectionStatus: () => dispatch(checkConnectionStatusConnected()),
+  getServicesAsync: (teamIds) => dispatch(getServicesAsyncConnected(teamIds)),
+  getTeamsAsync: () => dispatch(getTeamsAsyncConnected()),
+  getPrioritiesAsync: () => dispatch(getPrioritiesAsyncConnected()),
+  getUsersAsync: () => dispatch(getUsersAsyncConnected()),
+  getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsyncConnected()),
+  getExtensionsAsync: () => dispatch(getExtensionsAsyncConnected()),
+  getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
+  getIncidentsAsync: () => dispatch(getIncidentsAsyncConnected()),
+  getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),
+  cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsyncConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

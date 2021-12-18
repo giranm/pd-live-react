@@ -8,7 +8,10 @@ import {
 
 import DatePicker from 'react-datepicker';
 
-import { toggleDisplayCustomSnoozeModal, snooze } from 'redux/incident_actions/actions';
+import {
+  toggleDisplayCustomSnoozeModal as toggleDisplayCustomSnoozeModalConnected,
+  snooze as snoozeConnected,
+} from 'redux/incident_actions/actions';
 
 import { TRIGGERED, ACKNOWLEDGED, filterIncidentsByField } from 'util/incidents';
 
@@ -41,17 +44,15 @@ const CustomSnoozeModalComponent = ({
     TRIGGERED,
     ACKNOWLEDGED,
   ]);
-  const modalTitle =
-    unresolvedIncidents.length === 1
-      ? `Snooze Incident #${unresolvedIncidents[0].incident_number}`
-      : `Snooze ${unresolvedIncidents.length} incidents`;
+  const modalTitle = unresolvedIncidents.length === 1
+    ? `Snooze Incident #${unresolvedIncidents[0].incident_number}`
+    : `Snooze ${unresolvedIncidents.length} incidents`;
 
   // Internal state to find active radio button
   const [activeButtonId, setActiveButton] = useState('snooze-hours');
-  const duration =
-    activeButtonId === 'snooze-hours'
-      ? parseInt(snoozeDuration / 1000, 10)
-      : parseInt(tomorrowDuration / 1000, 10);
+  const duration = activeButtonId === 'snooze-hours'
+    ? parseInt(snoozeDuration / 1000, 10)
+    : parseInt(tomorrowDuration / 1000, 10);
   const modalAction = `${modalTitle} for ${
     activeButtonId === 'snooze-hours' ? snoozeDurationFormatted : tomorrowDurationFormatted
   }`;
@@ -137,8 +138,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModal()),
-  snooze: (incidents, duration) => dispatch(snooze(incidents, duration)),
+  toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModalConnected()),
+  snooze: (incidents, duration) => dispatch(snoozeConnected(incidents, duration)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomSnoozeModalComponent);

@@ -1,13 +1,12 @@
-/* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest, all,
+  put, call, takeLatest, all,
 } from 'redux-saga/effects';
 
 import {
   handleSagaError,
   handleMultipleAPIErrorResponses,
   displayActionModal,
-} from 'redux/rootSaga';
+} from 'util/sagas';
 
 import { pd } from 'util/pd-api-wrapper';
 
@@ -20,8 +19,6 @@ import {
   RUN_RESPONSE_PLAY_COMPLETED,
   RUN_RESPONSE_PLAY_ERROR,
 } from './actions';
-
-import { selectResponsePlays } from './selectors';
 
 export function* getResponsePlaysAsync() {
   yield takeLatest(FETCH_RESPONSE_PLAYS_REQUESTED, getResponsePlays);

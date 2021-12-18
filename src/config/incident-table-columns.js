@@ -167,7 +167,8 @@ export const availableIncidentTableColumns = [
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {team.summary}{length - 1 === idx ? null : ', '}
+                {team.summary}
+                {length - 1 === idx ? null : ', '}
               </a>
             ))}
           </div>
@@ -251,13 +252,17 @@ export const availableIncidentTableColumns = [
       if (urgency === HIGH) {
         elem = (
           <Badge className="urgency-badge" variant="primary">
-            <FontAwesomeIcon icon={faChevronUp} /> High
+            <FontAwesomeIcon icon={faChevronUp} />
+            {' '}
+            High
           </Badge>
         );
       } else if (urgency === LOW) {
         elem = (
           <Badge className="urgency-badge" variant="secondary">
-            <FontAwesomeIcon icon={faChevronDown} /> Low
+            <FontAwesomeIcon icon={faChevronDown} />
+            {' '}
+            Low
           </Badge>
         );
       }
@@ -315,7 +320,8 @@ export const availableIncidentTableColumns = [
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {`${ext.summary} (${ext.external_id})`}{length - 1 === idx ? null : ', '}
+                {`${ext.summary} (${ext.external_id})`}
+                {length - 1 === idx ? null : ', '}
               </a>
             ))}
           </div>

@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 
 import { Modal, Form, Button } from 'react-bootstrap';
 
-import { toggleDisplayAddNoteModal, addNote } from 'redux/incident_actions/actions';
+import {
+  toggleDisplayAddNoteModal as toggleDisplayAddNoteModalConnected,
+  addNote as addNoteConnected,
+} from 'redux/incident_actions/actions';
 
 import './AddNoteModalComponent.scss';
 
@@ -62,8 +65,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModal()),
-  addNote: (incidents, note) => dispatch(addNote(incidents, note)),
+  toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModalConnected()),
+  addNote: (incidents, note) => dispatch(addNoteConnected(incidents, note)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNoteModalComponent);
