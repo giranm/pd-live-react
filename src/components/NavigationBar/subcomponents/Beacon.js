@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-shadow */
 // Original source:
 // https://github.com/Julian1729/react-status-beacon/blob/main/src/components/Beacon.js
