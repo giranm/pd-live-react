@@ -28,7 +28,7 @@ module.exports = {
   ],
   rules: {
     'max-len': [WARN, { code: 100 }],
-    'react/prop-types': OFF,
+    'react/prop-types': OFF, // To be done in another refactor
     'react/react-in-jsx-scope': OFF,
     'react/jsx-filename-extension': [ERROR, { extensions: ['.js', '.jsx'] }],
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
