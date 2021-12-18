@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import {
   put, call, takeLatest,
 } from 'redux-saga/effects';

@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 // Hosts App Constants
 export const env = { ...process.env, ...window.env };
 

@@ -1,10 +1,9 @@
-/* eslint-disable import/prefer-default-export */
 // Configuration for Fuse.js (Fuzzy Search)
 
 import { availableIncidentTableColumns } from './incident-table-columns';
 
 // Docs: https://fusejs.io/api/options.html
-export const fuseOptions = {
+const fuseOptions = {
   threshold: 1,
   distance: 100,
   useExtendedSearch: true,
@@ -34,3 +33,5 @@ export const fuseOptions = {
     return key;
   }),
 };
+
+export default fuseOptions;

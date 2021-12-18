@@ -22,7 +22,7 @@ import {
   filterIncidentsByFieldOfList,
 } from 'util/incidents';
 import { pushToArray } from 'util/helpers';
-import { fuseOptions } from 'config/fuse-config';
+import fuseOptions from 'config/fuse-config';
 
 import selectQuerySettings from 'redux/query_settings/selectors';
 import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
