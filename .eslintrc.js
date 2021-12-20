@@ -13,6 +13,7 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'airbnb',
+    'plugin:cypress/recommended',
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -25,6 +26,7 @@ module.exports = {
   plugins: [
     'react',
     'prettier',
+    'cypress',
   ],
   rules: {
     'max-len': [WARN, { code: 100 }],
@@ -34,6 +36,7 @@ module.exports = {
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
     'no-use-before-define': [ERROR, { functions: false }],
     'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
+    'jest/expect-expect': OFF,
   },
   overrides: [
     {

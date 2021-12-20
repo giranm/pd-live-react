@@ -11,8 +11,8 @@ import {
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
-import PersonInitialsComponent
-  from 'components/IncidentTable/subcomponents/PersonInitialsComponents';
+// eslint-disable-next-line max-len
+import PersonInitialsComponent from 'components/IncidentTable/subcomponents/PersonInitialsComponents';
 
 import StatusComponent from 'components/IncidentTable/subcomponents/StatusComponent';
 
