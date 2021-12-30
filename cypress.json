@@ -1,8 +1,11 @@
 {
+  "baseUrl": "http://localhost:3000/pd-live-react",
+  "video": false,
+  "viewportWidth": 1920,
+  "viewportHeight": 1080,
+  "testFiles": "**/*.spec.{js,ts,jsx,tsx}",
   "component": {
     "testFiles": "**/*.spec.{js,ts,jsx,tsx}",
     "componentFolder": "src"
-  },
-  "viewportWidth": 1920,
-  "viewportHeight": 1080
+  }
 }
