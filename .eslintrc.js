@@ -1,4 +1,4 @@
-const { OFF, WARN, ERROR } = {
+const { OFF, ERROR } = {
   OFF: 0,
   WARN: 1,
   ERROR: 2,
@@ -27,7 +27,7 @@ module.exports = {
     'prettier',
   ],
   rules: {
-    'max-len': [WARN, { code: 100 }],
+    // 'max-len': [WARN, { code: 100 }], // Disabled so Prettier can enforce this
     'react/prop-types': OFF, // To be done in another refactor
     'react/react-in-jsx-scope': OFF,
     'react/jsx-filename-extension': [ERROR, { extensions: ['.js', '.jsx'] }],
