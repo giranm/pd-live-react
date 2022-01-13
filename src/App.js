@@ -40,6 +40,7 @@ import {
   checkConnectionStatus as checkConnectionStatusConnected,
   checkAbilities as checkAbilitiesConnected,
 } from 'redux/connection/actions';
+import { startMonitoring as startMonitoringConnected } from 'redux/monitoring/actions';
 
 import { getLanguage } from 'util/helpers';
 
@@ -55,6 +56,7 @@ moment.locale(getLanguage());
 
 const App = ({
   state,
+  startMonitoring,
   userAuthorize,
   checkAbilities,
   checkConnectionStatus,
@@ -75,11 +77,12 @@ const App = ({
     return null;
   }
 
-  // Initial load of objects from API
+  // Begin monitoring and load core objects from API
   const { userAuthorized, userAcceptedDisclaimer } = state.users;
   useEffect(() => {
     userAuthorize();
     if (userAuthorized) {
+      startMonitoring();
       checkAbilities();
       getUsersAsync();
       getServicesAsync();
@@ -158,6 +161,7 @@ const App = ({
 const mapStateToProps = (state) => ({ state });
 
 const mapDispatchToProps = (dispatch) => ({
+  startMonitoring: () => dispatch(startMonitoringConnected()),
   userAuthorize: () => dispatch(userAuthorizeConnected()),
   checkAbilities: () => dispatch(checkAbilitiesConnected()),
   checkConnectionStatus: () => dispatch(checkConnectionStatusConnected()),
