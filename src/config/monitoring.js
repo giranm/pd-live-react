@@ -30,9 +30,9 @@ class RealUserMonitoring {
     });
   }
 
-  static setContext() {
+  static setSubdomain(pdSubdomain) {
     datadogRum.setRumGlobalContext({
-      env: PD_ENV,
+      pdSubdomain,
     });
   }
 
@@ -42,6 +42,14 @@ class RealUserMonitoring {
       email: currentUser.email,
       name: currentUser.name,
     });
+  }
+
+  static trackAction(actionName, actionData) {
+    datadogRum.addAction(actionName, actionData);
+  }
+
+  static trackError(errorName, errorData) {
+    datadogRum.addError(errorName, errorData);
   }
 
   static start() {

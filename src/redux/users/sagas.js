@@ -56,6 +56,7 @@ export function* userAuthorizeImpl() {
       yield put({
         type: USER_AUTHORIZE_COMPLETED,
         userAuthorized: true,
+        subdomain: currentSubdomain,
       });
     } else {
       yield put({ type: USER_UNAUTHORIZE_REQUESTED });

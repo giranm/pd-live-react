@@ -27,6 +27,7 @@ const users = produce(
 
       case USER_AUTHORIZE_COMPLETED:
         draft.userAuthorized = action.userAuthorized;
+        draft.subdomain = action.subdomain;
         draft.status = USER_AUTHORIZE_COMPLETED;
         break;
 
@@ -102,6 +103,7 @@ const users = produce(
     currentUser: null,
     userAuthorized: false,
     userAcceptedDisclaimer: false,
+    subdomain: '',
     status: null,
     fetchingData: false,
     error: null,

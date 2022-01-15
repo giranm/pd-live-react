@@ -28,12 +28,12 @@ export function* startMonitoringImpl() {
     // Wait for current user to be logged in
     yield take([GET_CURRENT_USER_COMPLETED]);
     const {
-      currentUser,
+      currentUser, subdomain,
     } = yield select(selectUsers);
 
     // Initialise RUM
     RealUserMonitoring.init();
-    RealUserMonitoring.setContext();
+    RealUserMonitoring.setSubdomain(subdomain);
     RealUserMonitoring.setUser(currentUser);
     RealUserMonitoring.start();
 
