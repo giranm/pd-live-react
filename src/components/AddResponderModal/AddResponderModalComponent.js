@@ -1,7 +1,13 @@
-import { useState } from 'react';
-import { connect } from 'react-redux';
+import {
+  useState,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
 
-import { Modal, Form, Button } from 'react-bootstrap';
+import {
+  Modal, Form, Button,
+} from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
@@ -22,8 +28,12 @@ const AddResponderModalComponent = ({
   toggleDisplayAddResponderModal,
   addResponder,
 }) => {
-  const { displayAddResponderModal } = incidentActions;
-  const { selectedRows } = incidentTable;
+  const {
+    displayAddResponderModal,
+  } = incidentActions;
+  const {
+    selectedRows,
+  } = incidentTable;
 
   const messageMaxChars = 110;
 
@@ -125,9 +135,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModalConnected()),
-  addResponder: (incidents, responderRequestTargets, message) => dispatch(
-    addResponderConnected(incidents, responderRequestTargets, message),
-  ),
+  addResponder: (incidents, responderRequestTargets, message) => {
+    dispatch(addResponderConnected(incidents, responderRequestTargets, message));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddResponderModalComponent);

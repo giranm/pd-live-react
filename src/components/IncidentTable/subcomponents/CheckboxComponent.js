@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import {
-  useEffect,
-  forwardRef,
-  useRef,
+  useEffect, forwardRef, useRef,
 } from 'react';
 
-const CheckboxComponent = forwardRef(({ indeterminate, ...rest }, ref) => {
+const CheckboxComponent = forwardRef(({
+  indeterminate, ...rest
+}, ref) => {
   const defaultRef = useRef();
   const resolvedRef = ref || defaultRef;
 

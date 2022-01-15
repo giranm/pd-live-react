@@ -1,31 +1,27 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import {
-  put,
-  call,
-  select,
-  takeLatest,
-  takeEvery,
-  all,
+  put, call, select, takeLatest, takeEvery, all,
 } from 'redux-saga/effects';
 
 import Fuse from 'fuse.js';
 
 import {
-  pd,
-  throttledPdAxiosRequest,
-  pdParallelFetch,
+  pd, throttledPdAxiosRequest, pdParallelFetch,
 } from 'util/pd-api-wrapper';
 
 import {
-  filterIncidentsByField,
-  filterIncidentsByFieldOfList,
+  filterIncidentsByField, filterIncidentsByFieldOfList,
 } from 'util/incidents';
-import { pushToArray } from 'util/helpers';
+import {
+  pushToArray,
+} from 'util/helpers';
 import fuseOptions from 'config/fuse-config';
 
 import selectQuerySettings from 'redux/query_settings/selectors';
-import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -76,12 +72,7 @@ export function* getIncidents() {
   try {
     //  Build params from query settings and call pd lib
     const {
-      sinceDate,
-      incidentStatus,
-      incidentUrgency,
-      teamIds,
-      serviceIds,
-      incidentPriority,
+      sinceDate, incidentStatus, incidentUrgency, teamIds, serviceIds, incidentPriority,
     } = yield select(selectQuerySettings);
 
     const params = {
@@ -130,12 +121,18 @@ export function* getIncidentNotesAsync() {
 export function* getIncidentNotes(action) {
   try {
     // Call PD API to grab note for given Incident ID
-    const { incidentId } = action;
+    const {
+      incidentId,
+    } = action;
     const response = yield call(pd.get, `incidents/${incidentId}/notes`);
-    const { notes } = response.data;
+    const {
+      notes,
+    } = response.data;
 
     // Grab matching incident and apply note update
-    const { incidents } = yield select(selectIncidents);
+    const {
+      incidents,
+    } = yield select(selectIncidents);
     const updatedIncidentsList = incidents.map((incident) => {
       if (incident.id === incidentId) {
         const tempIncident = { ...incident };
@@ -167,10 +164,12 @@ export function* getAllIncidentNotesAsync() {
 export function* getAllIncidentNotes() {
   try {
     // Build list of promises to call PD endpoint
-    const { incidents } = yield select(selectIncidents);
-    const requests = incidents.map(
-      ({ id }) => throttledPdAxiosRequest('GET', `incidents/${id}/notes`),
-    );
+    const {
+      incidents,
+    } = yield select(selectIncidents);
+    const requests = incidents.map(({
+      id,
+    }) => throttledPdAxiosRequest('GET', `incidents/${id}/notes`));
     const results = yield Promise.all(requests);
 
     // Grab matching incident and apply note update
@@ -202,15 +201,14 @@ export function* updateIncidentsListAsync() {
 
 export function* updateIncidentsList(action) {
   try {
-    const { addList, updateList, removeList } = action;
-    const { incidents } = yield select(selectIncidents);
     const {
-      incidentPriority,
-      incidentStatus,
-      incidentUrgency,
-      teamIds,
-      serviceIds,
-      searchQuery,
+      addList, updateList, removeList,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
+    const {
+      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
     } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
@@ -226,7 +224,9 @@ export function* updateIncidentsList(action) {
 
     // Synthetically create notes object and add to new incident
     addListResponses.map((response, idx) => {
-      const { notes } = addListNoteResponses[idx].response.data;
+      const {
+        notes,
+      } = addListNoteResponses[idx].response.data;
       const newIncident = { ...response.data.incident };
       newIncident.notes = notes;
       updatedIncidentsList.push(newIncident);
@@ -248,9 +248,8 @@ export function* updateIncidentsList(action) {
       updateList.map((updateItem) => {
         if (updateItem.incident) {
           // Check if item is matched against updatedIncidentsList (skip)
-          if (updatedIncidentsList.find(
-            (incident) => incident.id === updateItem.incident.id,
-          )) return;
+          // eslint-disable-next-line max-len
+          if (updatedIncidentsList.find((incident) => incident.id === updateItem.incident.id)) return;
 
           // Update incident list (push if we haven't updated already)
           pushToArray(updatedIncidentsList, updateItem.incident, 'id');
@@ -271,7 +270,9 @@ export function* updateIncidentsList(action) {
     // Remove any unintentional duplicate incidents (i.e. new incident triggered)
     const updatedIncidentsIds = updatedIncidentsList.map((o) => o.id);
     const uniqueUpdatedIncidentsList = updatedIncidentsList.filter(
-      ({ id }, index) => !updatedIncidentsIds.includes(id, index + 1),
+      ({
+        id,
+      }, index) => !updatedIncidentsIds.includes(id, index + 1),
     );
 
     // Update store with updated list of incidents
@@ -331,8 +332,12 @@ export function* filterIncidentsByPriority() {
 export function* filterIncidentsByPriorityImpl(action) {
   // Filter current incident list by priority
   try {
-    const { incidentPriority } = action;
-    const { incidents } = yield select(selectIncidents);
+    const {
+      incidentPriority,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
     const filteredIncidentsByPriorityList = incidents.filter((incident) => {
       // Incident priority is not always defined - need to check this
       if (incident.priority && incidentPriority.includes(incident.priority.id)) return incident;
@@ -358,8 +363,12 @@ export function* filterIncidentsByStatus() {
 export function* filterIncidentsByStatusImpl(action) {
   // Filter current incident list by status
   try {
-    const { incidentStatus } = action;
-    const { incidents } = yield select(selectIncidents);
+    const {
+      incidentStatus,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
     const filteredIncidentsByStatusList = filterIncidentsByField(
       incidents,
       'status',
@@ -384,8 +393,12 @@ export function* filterIncidentsByUrgency() {
 export function* filterIncidentsByUrgencyImpl(action) {
   // Filter current incident list by urgency
   try {
-    const { incidentUrgency } = action;
-    const { incidents } = yield select(selectIncidents);
+    const {
+      incidentUrgency,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
     const filteredIncidentsByUrgencyList = filterIncidentsByField(
       incidents,
       'urgency',
@@ -410,8 +423,12 @@ export function* filterIncidentsByTeam() {
 export function* filterIncidentsByTeamImpl(action) {
   // Filter current incident list by team - assume no team set means show everything
   try {
-    const { teamIds } = action;
-    const { incidents } = yield select(selectIncidents);
+    const {
+      teamIds,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
     let filteredIncidentsByTeamList;
 
     // Typically there is no filtered view by teams, so if empty, show all teams.
@@ -444,8 +461,12 @@ export function* filterIncidentsByService() {
 export function* filterIncidentsByServiceImpl(action) {
   // Filter current incident list by service
   try {
-    const { serviceIds } = action;
-    const { incidents } = yield select(selectIncidents);
+    const {
+      serviceIds,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
     let filteredIncidentsByServiceList;
 
     // Typically there is no filtered view by services, so if empty, show all services.
@@ -480,15 +501,17 @@ export function* filterIncidentsByQuery() {
 export function* filterIncidentsByQueryImpl(action) {
   // Filter current incident list by query (aka Global Search)
   try {
-    const { searchQuery } = action;
-    const { incidents } = yield select(selectIncidents);
+    const {
+      searchQuery,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
     let filteredIncidentsByQuery;
 
     if (searchQuery !== '') {
       const fuse = new Fuse(incidents, fuseOptions);
-      filteredIncidentsByQuery = fuse
-        .search(searchQuery)
-        .map((res) => res.item);
+      filteredIncidentsByQuery = fuse.search(searchQuery).map((res) => res.item);
     } else {
       filteredIncidentsByQuery = [...incidents];
     }

@@ -1,6 +1,10 @@
-import { all, take } from 'redux-saga/effects';
+import {
+  all, take,
+} from 'redux-saga/effects';
 
-import { REHYDRATE } from 'redux-persist/lib/constants';
+import {
+  REHYDRATE,
+} from 'redux-persist/lib/constants';
 
 import {
   toggleDisplayQuerySettings,
@@ -58,7 +62,9 @@ import {
   syncWithExternalSystemAsync,
 } from './incident_actions/sagas';
 
-import { toggleActionAlertsModal, updateActionAlertsModal } from './action_alerts/sagas';
+import {
+  toggleActionAlertsModal, updateActionAlertsModal,
+} from './action_alerts/sagas';
 
 import {
   userAuthorize,
@@ -68,18 +74,34 @@ import {
   getCurrentUserAsync,
 } from './users/sagas';
 
-import { getExtensionsAsync, mapServicesToExtensions } from './extensions/sagas';
+import {
+  getExtensionsAsync, mapServicesToExtensions,
+} from './extensions/sagas';
 
-import { getResponsePlaysAsync, runResponsePlayAsync } from './response_plays/sagas';
+import {
+  getResponsePlaysAsync, runResponsePlayAsync,
+} from './response_plays/sagas';
 
-import { getServicesAsync } from './services/sagas';
-import { getTeamsAsync } from './teams/sagas';
-import { getPrioritiesAsync } from './priorities/sagas';
-import { getEscalationPoliciesAsync } from './escalation_policies/sagas';
+import {
+  getServicesAsync,
+} from './services/sagas';
+import {
+  getTeamsAsync,
+} from './teams/sagas';
+import {
+  getPrioritiesAsync,
+} from './priorities/sagas';
+import {
+  getEscalationPoliciesAsync,
+} from './escalation_policies/sagas';
 
-import { toggleSettingsModal, clearLocalCache } from './settings/sagas';
+import {
+  toggleSettingsModal, clearLocalCache,
+} from './settings/sagas';
 
-import { updateConnectionStatus, checkConnectionStatus, checkAbilities } from './connection/sagas';
+import {
+  updateConnectionStatus, checkConnectionStatus, checkAbilities,
+} from './connection/sagas';
 
 export default function* rootSaga() {
   yield take(REHYDRATE); // Wait for rehydrate to prevent sagas from running with empty store

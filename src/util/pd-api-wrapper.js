@@ -1,12 +1,18 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-loop-func */
 import PDOAuth from 'util/pdoauth';
-import { api } from '@pagerduty/pdjs';
+import {
+  api,
+} from '@pagerduty/pdjs';
 import axios from 'axios';
 import Bottleneck from 'bottleneck';
 
-import { PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET, PD_USER_TOKEN } from 'config/constants';
-import { compareCreatedAt } from 'util/helpers';
+import {
+  PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET, PD_USER_TOKEN,
+} from 'config/constants';
+import {
+  compareCreatedAt,
+} from 'util/helpers';
 
 /*
   PDJS Wrapper
@@ -108,10 +114,15 @@ export const pdParallelFetch = async (endpoint, params, progressCallback) => {
   let outerOffset = 0;
   let more = true;
   while (more && outerOffset + requestParams.offset < firstPage.total) {
-    while (more
-      && (outerOffset + requestParams.offset < firstPage.total) && (requestParams.offset < 10000)) {
+    while (
+      more
+      && outerOffset + requestParams.offset < firstPage.total
+      && requestParams.offset < 10000
+    ) {
       const promise = pdAxiosRequest('GET', endpoint, requestParams)
-        .then(({ data }) => {
+        .then(({
+          data,
+        }) => {
           fetchedData = [...fetchedData, ...data[endpointIdentifier(endpoint)]];
           if (data.more === false) {
             more = false;
@@ -128,16 +139,13 @@ export const pdParallelFetch = async (endpoint, params, progressCallback) => {
       requestParams.offset += requestParams.limit;
     }
     await Promise.all(promises);
-    fetchedData.sort(
-      (a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)),
-    );
+    // eslint-disable-next-line max-len
+    fetchedData.sort((a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)));
     const untilOrSince = reversedSortOrder ? 'until' : 'since';
     requestParams[untilOrSince] = fetchedData[fetchedData.length - 1].created_at;
     outerOffset = fetchedData.length;
     requestParams.offset = 0;
   }
-  fetchedData.sort(
-    (a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)),
-  );
+  fetchedData.sort((a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)));
   return fetchedData;
 };

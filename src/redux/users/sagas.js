@@ -2,11 +2,19 @@ import {
   put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
-import { PD_SUBDOMAIN_ALLOW_LIST } from 'config/constants';
-import { pd } from 'util/pd-api-wrapper';
-import { convertListToMapById } from 'util/helpers';
+import {
+  PD_SUBDOMAIN_ALLOW_LIST,
+} from 'config/constants';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
+import {
+  convertListToMapById,
+} from 'util/helpers';
 
-import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
 import {
   USER_AUTHORIZE_REQUESTED,
   USER_AUTHORIZE_COMPLETED,
@@ -38,7 +46,9 @@ export function* userAuthorizeImpl() {
     yield take([GET_CURRENT_USER_COMPLETED]);
 
     // Extract allowed subdomains by comma seperated list and check against current user login
-    const { currentUser } = yield select(selectUsers);
+    const {
+      currentUser,
+    } = yield select(selectUsers);
     const currentSubdomain = currentUser.html_url.split('.')[0].split('https://')[1];
     const allowedSubdomains = PD_SUBDOMAIN_ALLOW_LIST.split(',');
 
@@ -77,7 +87,9 @@ export function* userAcceptDisclaimer() {
 
 export function* userAcceptDisclaimerImpl() {
   try {
-    const { userAcceptedDisclaimer } = yield select(selectUsers);
+    const {
+      userAcceptedDisclaimer,
+    } = yield select(selectUsers);
     yield put({
       type: USER_ACCEPT_DISCLAIMER_COMPLETED,
       userAcceptedDisclaimer: !userAcceptedDisclaimer,

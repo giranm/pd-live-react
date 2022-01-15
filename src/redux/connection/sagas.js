@@ -2,9 +2,13 @@ import {
   put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
-import { pd } from 'util/pd-api-wrapper';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
 
-import { FETCH_LOG_ENTRIES_COMPLETED, FETCH_LOG_ENTRIES_ERROR } from 'redux/log_entries/actions';
+import {
+  FETCH_LOG_ENTRIES_COMPLETED, FETCH_LOG_ENTRIES_ERROR,
+} from 'redux/log_entries/actions';
 
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
@@ -21,7 +25,9 @@ export function* updateConnectionStatus() {
 }
 
 export function* updateConnectionStatusImpl(action) {
-  const { connectionStatus, connectionStatusMessage } = action;
+  const {
+    connectionStatus, connectionStatusMessage,
+  } = action;
   yield put({
     type: UPDATE_CONNECTION_STATUS_COMPLETED,
     connectionStatus,
@@ -41,7 +47,8 @@ export function* checkConnectionStatusImpl() {
   // Check entire store for fulfilled statuses
   const store = yield select();
   let validConnection = false;
-  if (store.incidents.status.includes('COMPLETED')
+  if (
+    store.incidents.status.includes('COMPLETED')
     && store.logEntries.status.includes('COMPLETED')
     && store.services.status.includes('COMPLETED')
     && store.teams.status.includes('COMPLETED')
@@ -49,7 +56,8 @@ export function* checkConnectionStatusImpl() {
     && store.escalationPolicies.status.includes('COMPLETED')
     && store.extensions.status.includes('COMPLETED')
     && store.responsePlays.status.includes('COMPLETED')
-    && store.connection.status.includes('COMPLETED')) {
+    && store.connection.status.includes('COMPLETED')
+  ) {
     // Ignoring priorities as this is persisted to localcache
     validConnection = true;
   }
@@ -78,7 +86,9 @@ export function* checkAbilities() {
 export function* checkAbilitiesAsync() {
   try {
     const response = yield call(pd.get, 'abilities');
-    const { status } = response;
+    const {
+      status,
+    } = response;
     if (status !== 200) {
       throw Error('Unable to fetch account abilities');
     }

@@ -2,12 +2,20 @@ import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
 
-import { UPDATE_INCIDENTS_LIST } from 'redux/incidents/actions';
+import {
+  UPDATE_INCIDENTS_LIST,
+} from 'redux/incidents/actions';
 
-import { RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY } from 'util/log-entries';
-import { pd } from 'util/pd-api-wrapper';
+import {
+  RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY,
+} from 'util/log-entries';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
 
-import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
   FETCH_LOG_ENTRIES_COMPLETED,
@@ -29,7 +37,9 @@ export function* getLogEntriesAsync() {
 export function* getLogEntries(action) {
   try {
     //  Create params and call pd lib
-    const { since } = action;
+    const {
+      since,
+    } = action;
     const params = {
       since: since.toISOString().replace(/\.[\d]{3}/, ''),
       'include[]': ['incidents'],
@@ -65,7 +75,9 @@ export function* updateRecentLogEntriesAsync() {
 export function* updateRecentLogEntries() {
   try {
     // Grab log entries from store and determine what is recent based on last polling
-    const { logEntries, recentLogEntries } = yield select(selectLogEntries);
+    const {
+      logEntries, recentLogEntries,
+    } = yield select(selectLogEntries);
     const recentLogEntriesLocal = [...recentLogEntries];
     const addSet = new Set();
     const removeSet = new Set();

@@ -1,6 +1,8 @@
 import produce from 'immer';
 
-import { FETCH_TEAMS_REQUESTED, FETCH_TEAMS_COMPLETED, FETCH_TEAMS_ERROR } from './actions';
+import {
+  FETCH_TEAMS_REQUESTED, FETCH_TEAMS_COMPLETED, FETCH_TEAMS_ERROR,
+} from './actions';
 
 const teams = produce(
   (draft, action) => {

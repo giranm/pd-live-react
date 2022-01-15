@@ -1,4 +1,6 @@
-import { connect } from 'react-redux';
+import {
+  connect,
+} from 'react-redux';
 import {
   Navbar, Nav, NavDropdown, Button,
 } from 'react-bootstrap';
@@ -7,7 +9,9 @@ import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent
 
 import PDOAuth from 'util/pdoauth';
 
-import { toggleSettingsModal as toggleSettingsModalConnected } from 'redux/settings/actions';
+import {
+  toggleSettingsModal as toggleSettingsModalConnected,
+} from 'redux/settings/actions';
 import {
   toggleDisplayQuerySettings as toggleDisplayQuerySettingsConnected,
 } from 'redux/query_settings/actions';
@@ -34,9 +38,7 @@ const NavigationBarComponent = ({
           PagerDuty
         </div>
       </Navbar.Brand>
-      <Navbar.Brand className="font-weight-bold">
-        Live Incidents Console
-      </Navbar.Brand>
+      <Navbar.Brand className="font-weight-bold">Live Incidents Console</Navbar.Brand>
       <Navbar.Collapse className="justify-content-end">
         <Nav>
           <Nav.Item className="ml-auto">
@@ -58,22 +60,18 @@ const NavigationBarComponent = ({
           <Nav.Item className="ml-auto">
             <NavDropdown
               className="settings-panel-dropdown"
-              title={
-                <div className="settings-panel-icon" />
-            }
+              title={<div className="settings-panel-icon" />}
               alignRight
             >
-              <NavDropdown.Item
-                className="ml-auto"
-                onClick={() => toggleSettingsModal()}
-              >
+              <NavDropdown.Item className="ml-auto" onClick={() => toggleSettingsModal()}>
                 Settings
               </NavDropdown.Item>
-              <NavDropdown.Item
-                href="https://www.termsfeed.com/live/68d1a0f2-9e68-47d0-9623-68afe0c31f6d"
-              >
-                View Disclaimer
-              </NavDropdown.Item>
+              {
+                // eslint-disable-next-line max-len
+                <NavDropdown.Item href="https://www.termsfeed.com/live/68d1a0f2-9e68-47d0-9623-68afe0c31f6d">
+                  View Disclaimer
+                </NavDropdown.Item>
+              }
               <NavDropdown.Item
                 onClick={() => {
                   PDOAuth.logout();

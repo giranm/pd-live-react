@@ -1,7 +1,13 @@
-import { useState } from 'react';
-import { connect } from 'react-redux';
+import {
+  useState,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
 
-import { Modal, Form, Button } from 'react-bootstrap';
+import {
+  Modal, Form, Button,
+} from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
@@ -22,8 +28,12 @@ const ReassignModalComponent = ({
   toggleDisplayReassignModal,
   reassign,
 }) => {
-  const { displayReassignModal } = incidentActions;
-  const { selectedRows } = incidentTable;
+  const {
+    displayReassignModal,
+  } = incidentActions;
+  const {
+    selectedRows,
+  } = incidentTable;
 
   const [assignment, setAssignment] = useState(null);
 

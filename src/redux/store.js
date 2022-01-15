@@ -1,8 +1,14 @@
-import { createStore, applyMiddleware } from 'redux';
+import {
+  createStore, applyMiddleware,
+} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import { persistStore, persistReducer } from 'redux-persist';
-import { persistConfig } from './persistence/config';
+import {
+  persistStore, persistReducer,
+} from 'redux-persist';
+import {
+  persistConfig,
+} from './persistence/config';
 
 import rootReducer from './rootReducer';
 import rootSaga from './rootSaga';

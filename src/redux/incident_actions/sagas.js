@@ -9,9 +9,13 @@ import {
   displayActionModal,
 } from 'util/sagas';
 
-import { SELECT_INCIDENT_TABLE_ROWS_REQUESTED } from 'redux/incident_table/actions';
+import {
+  SELECT_INCIDENT_TABLE_ROWS_REQUESTED,
+} from 'redux/incident_table/actions';
 
-import { getIncidentByIdRequest, updateIncidentsList } from 'redux/incidents/sagas';
+import {
+  getIncidentByIdRequest, updateIncidentsList,
+} from 'redux/incidents/sagas';
 
 import selectPriorities from 'redux/priorities/selectors';
 import selectIncidentTable from 'redux/incident_table/selectors';
@@ -26,8 +30,12 @@ import {
   generateIncidentActionModal,
 } from 'util/incidents';
 
-import { getObjectsFromList } from 'util/helpers';
-import { pd } from 'util/pd-api-wrapper';
+import {
+  getObjectsFromList,
+} from 'util/helpers';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
 import selectIncidentActions from './selectors';
 import {
   ACKNOWLEDGE_REQUESTED,
@@ -81,7 +89,9 @@ export function* acknowledgeAsync() {
 
 export function* acknowledge(action) {
   try {
-    const { incidents, displayModal } = action;
+    const {
+      incidents, displayModal,
+    } = action;
     const incidentsToBeAcknowledged = filterIncidentsByField(incidents, 'status', [
       TRIGGERED,
       ACKNOWLEDGED,
@@ -108,7 +118,9 @@ export function* acknowledge(action) {
         acknowledgedIncidents: response.resource,
       });
       if (displayModal) {
-        const { actionAlertsModalType, actionAlertsModalMessage } = generateIncidentActionModal(
+        const {
+          actionAlertsModalType, actionAlertsModalMessage,
+        } = generateIncidentActionModal(
           incidents,
           ACKNOWLEDGED,
         );
@@ -128,7 +140,9 @@ export function* escalateAsync() {
 
 export function* escalate(action) {
   try {
-    const { incidents: selectedIncidents, escalationLevel, displayModal } = action;
+    const {
+      incidents: selectedIncidents, escalationLevel, displayModal,
+    } = action;
 
     // Build request manually given PUT
     const data = {
@@ -171,7 +185,9 @@ export function* reassignAsync() {
 
 export function* reassign(action) {
   try {
-    const { incidents: selectedIncidents, assignment, displayModal } = action;
+    const {
+      incidents: selectedIncidents, assignment, displayModal,
+    } = action;
 
     // Build request manually given PUT
     const data = {
@@ -232,7 +248,9 @@ export function* toggleDisplayReassignModal() {
 }
 
 export function* toggleDisplayReassignModalImpl() {
-  const { displayReassignModal } = yield select(selectIncidentActions);
+  const {
+    displayReassignModal,
+  } = yield select(selectIncidentActions);
   yield put({
     type: TOGGLE_DISPLAY_REASSIGN_MODAL_COMPLETED,
     displayReassignModal: !displayReassignModal,
@@ -295,7 +313,9 @@ export function* toggleDisplayAddResponderModal() {
 }
 
 export function* toggleDisplayAddResponderModalImpl() {
-  const { displayAddResponderModal } = yield select(selectIncidentActions);
+  const {
+    displayAddResponderModal,
+  } = yield select(selectIncidentActions);
   yield put({
     type: TOGGLE_DISPLAY_ADD_RESPONDER_MODAL_COMPLETED,
     displayAddResponderModal: !displayAddResponderModal,
@@ -308,7 +328,9 @@ export function* snoozeAsync() {
 
 export function* snooze(action) {
   try {
-    const { incidents, duration, displayModal } = action;
+    const {
+      incidents, duration, displayModal,
+    } = action;
     const incidentsToBeSnoozed = filterIncidentsByField(incidents, 'status', [
       TRIGGERED,
       ACKNOWLEDGED,
@@ -335,7 +357,9 @@ export function* snooze(action) {
         snoozedIncidents: responses,
       });
       if (displayModal) {
-        const { actionAlertsModalType, actionAlertsModalMessage } = generateIncidentActionModal(
+        const {
+          actionAlertsModalType, actionAlertsModalMessage,
+        } = generateIncidentActionModal(
           incidents,
           SNOOZED,
         );
@@ -357,7 +381,9 @@ export function* toggleDisplayCustomSnoozeModal() {
 }
 
 export function* toggleDisplayCustomSnoozeModalImpl() {
-  const { displayCustomSnoozeModal } = yield select(selectIncidentActions);
+  const {
+    displayCustomSnoozeModal,
+  } = yield select(selectIncidentActions);
   yield put({
     type: TOGGLE_DISPLAY_CUSTOM_SNOOZE_MODAL_COMPLETED,
     displayCustomSnoozeModal: !displayCustomSnoozeModal,
@@ -370,7 +396,9 @@ export function* mergeAsync() {
 
 export function* merge(action) {
   try {
-    const { targetIncident, incidents, displayModal } = action;
+    const {
+      targetIncident, incidents, displayModal,
+    } = action;
     const incidentsToBeMerged = filterIncidentsByField(incidents, 'status', [
       TRIGGERED,
       ACKNOWLEDGED,
@@ -413,14 +441,13 @@ export function* merge(action) {
 }
 
 export function* toggleDisplayMergeModal() {
-  yield takeLatest(
-    TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED,
-    toggleDisplayMergeModalImpl,
-  );
+  yield takeLatest(TOGGLE_DISPLAY_MERGE_MODAL_REQUESTED, toggleDisplayMergeModalImpl);
 }
 
 export function* toggleDisplayMergeModalImpl() {
-  const { displayMergeModal } = yield select(selectIncidentActions);
+  const {
+    displayMergeModal,
+  } = yield select(selectIncidentActions);
   yield put({
     type: TOGGLE_DISPLAY_MERGE_MODAL_COMPLETED,
     displayMergeModal: !displayMergeModal,
@@ -433,7 +460,9 @@ export function* resolveAsync() {
 
 export function* resolve(action) {
   try {
-    const { incidents, displayModal } = action;
+    const {
+      incidents, displayModal,
+    } = action;
     const incidentsToBeResolved = filterIncidentsByField(incidents, 'status', [
       TRIGGERED,
       ACKNOWLEDGED,
@@ -460,7 +489,9 @@ export function* resolve(action) {
         resolvedIncidents: response.resource,
       });
       if (displayModal) {
-        const { actionAlertsModalType, actionAlertsModalMessage } = generateIncidentActionModal(
+        const {
+          actionAlertsModalType, actionAlertsModalMessage,
+        } = generateIncidentActionModal(
           incidents,
           RESOLVED,
         );
@@ -480,8 +511,12 @@ export function* updatePriorityAsync() {
 
 export function* updatePriority(action) {
   try {
-    const { incidents: selectedIncidents, priorityId, displayModal } = action;
-    const { priorities } = yield select(selectPriorities);
+    const {
+      incidents: selectedIncidents, priorityId, displayModal,
+    } = action;
+    const {
+      priorities,
+    } = yield select(selectPriorities);
     const priorityName = priorities.filter((p) => p.id === priorityId)[0].name;
 
     // Build priority data object - handle unset priority
@@ -535,7 +570,9 @@ export function* addNoteAsync() {
 
 export function* addNote(action) {
   try {
-    const { incidents: selectedIncidents, note, displayModal } = action;
+    const {
+      incidents: selectedIncidents, note, displayModal,
+    } = action;
 
     // Build individual requests as the endpoint supports singular POST
     const addNoteRequests = selectedIncidents.map((incident) => call(pd, {
@@ -572,7 +609,9 @@ export function* toggleDisplayAddNoteModal() {
 }
 
 export function* toggleDisplayAddNoteModalImpl() {
-  const { displayAddNoteModal } = yield select(selectIncidentActions);
+  const {
+    displayAddNoteModal,
+  } = yield select(selectIncidentActions);
   yield put({
     type: TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
     displayAddNoteModal: !displayAddNoteModal,
@@ -585,7 +624,9 @@ export function* runCustomIncidentActionAsync() {
 
 export function* runCustomIncidentAction(action) {
   try {
-    const { incidents: selectedIncidents, webhook, displayModal } = action;
+    const {
+      incidents: selectedIncidents, webhook, displayModal,
+    } = action;
 
     // Build individual requests as the endpoint supports singular POST
     const customIncidentActionRequests = selectedIncidents.map((incident) => call(pd, {
@@ -631,8 +672,12 @@ export function* syncWithExternalSystemAsync() {
 
 export function* syncWithExternalSystem(action) {
   try {
-    const { incidents: selectedIncidents, webhook, displayModal } = action;
-    const { allSelected, selectedCount } = yield select(selectIncidentTable);
+    const {
+      incidents: selectedIncidents, webhook, displayModal,
+    } = action;
+    const {
+      allSelected, selectedCount,
+    } = yield select(selectIncidentTable);
 
     // Build individual requests as the endpoint supports singular PUT
     const externalSystemSyncRequests = selectedIncidents.map((incident) => {
@@ -663,9 +708,8 @@ export function* syncWithExternalSystem(action) {
     const responses = yield all(externalSystemSyncRequests);
     if (responses.every((response) => response.ok)) {
       // Re-request incident data as external_reference is not available under ILE
-      const updatedIncidentRequests = selectedIncidents.map(
-        (incident) => getIncidentByIdRequest(incident.id),
-      );
+      // eslint-disable-next-line max-len
+      const updatedIncidentRequests = selectedIncidents.map((incident) => getIncidentByIdRequest(incident.id));
       const updatedIncidentResponses = yield all(updatedIncidentRequests);
       const updatedIncidents = updatedIncidentResponses.map((response) => response.data.incident);
 
