@@ -1,7 +1,13 @@
-import { combineReducers } from 'redux';
+import {
+  combineReducers,
+} from 'redux';
 
-import { persistReducer } from 'redux-persist';
-import { querySettingsPersistConfig, userPersistConfig } from './persistence/config';
+import {
+  persistReducer,
+} from 'redux-persist';
+import {
+  querySettingsPersistConfig, userPersistConfig,
+} from './persistence/config';
 
 import actionAlertsModalData from './action_alerts/reducers';
 import incidents from './incidents/reducers';

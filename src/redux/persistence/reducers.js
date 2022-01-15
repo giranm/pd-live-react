@@ -1,6 +1,8 @@
 import produce from 'immer';
 
-import { PURGE, REHYDRATE } from 'redux-persist';
+import {
+  PURGE, REHYDRATE,
+} from 'redux-persist';
 
 const persistence = produce(
   (draft, action) => {

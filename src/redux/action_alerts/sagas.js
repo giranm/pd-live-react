@@ -1,4 +1,6 @@
-import { put, select, takeLatest } from 'redux-saga/effects';
+import {
+  put, select, takeLatest,
+} from 'redux-saga/effects';
 
 import {
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,
@@ -14,7 +16,9 @@ export function* toggleActionAlertsModal() {
 }
 
 export function* toggleActionAlertsModalImpl() {
-  const { displayActionAlertsModal } = yield select(selectActionAlertsModalData);
+  const {
+    displayActionAlertsModal,
+  } = yield select(selectActionAlertsModalData);
   yield put({
     type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_COMPLETED,
     displayActionAlertsModal: !displayActionAlertsModal,
@@ -26,7 +30,9 @@ export function* updateActionAlertsModal() {
 }
 
 export function* updateActionAlertsModalImpl(action) {
-  const { actionAlertsModalType, actionAlertsModalMessage } = action;
+  const {
+    actionAlertsModalType, actionAlertsModalMessage,
+  } = action;
   yield put({
     type: UPDATE_ACTION_ALERTS_MODAL_COMPLETED,
     actionAlertsModalType,

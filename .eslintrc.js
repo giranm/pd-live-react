@@ -10,26 +10,20 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-    'plugin:cypress/recommended',
-  ],
+  extends: ['plugin:react/recommended', 'airbnb', 'plugin:cypress/recommended'],
   parser: 'babel-eslint',
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
+    ecmaFeatures: { jsx: true },
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    'prettier',
-    'cypress',
-  ],
+  plugins: ['react', 'prettier', 'cypress'],
   rules: {
-    'max-len': [WARN, { code: 100 }],
+    'max-len': [WARN, { code: 100, ignorePattern: '^import\\W.*', ignoreTrailingComments: true }],
+    'object-curly-newline': [
+      WARN,
+      { ObjectPattern: { multiline: true, minProperties: 1 }, ImportDeclaration: 'always' },
+    ],
     'react/prop-types': OFF, // To be done in another refactor
     'react/react-in-jsx-scope': OFF,
     'react/jsx-filename-extension': [ERROR, { extensions: ['.js', '.jsx'] }],
@@ -41,9 +35,7 @@ module.exports = {
   overrides: [
     {
       files: ['src/scripts/**', 'jest.config.js'],
-      env: {
-        node: true,
-      },
+      env: { node: true },
     },
     {
       files: ['**.test.**', '**.spec.**'],

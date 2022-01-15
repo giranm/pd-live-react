@@ -3,14 +3,16 @@ import {
 } from 'redux-saga/effects';
 
 import {
-  handleSagaError,
-  handleMultipleAPIErrorResponses,
-  displayActionModal,
+  handleSagaError, handleMultipleAPIErrorResponses, displayActionModal,
 } from 'util/sagas';
 
-import { pd } from 'util/pd-api-wrapper';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
 
-import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
 import {
   FETCH_RESPONSE_PLAYS_REQUESTED,
   FETCH_RESPONSE_PLAYS_COMPLETED,
@@ -61,7 +63,9 @@ export function* runResponsePlayAsync() {
 
 export function* runResponsePlay(action) {
   try {
-    const { incidents: selectedIncidents, responsePlay, displayModal } = action;
+    const {
+      incidents: selectedIncidents, responsePlay, displayModal,
+    } = action;
 
     // Build individual requests as the endpoint supports singular POST
     const responsePlayRequests = selectedIncidents.map((incident) => call(pd, {

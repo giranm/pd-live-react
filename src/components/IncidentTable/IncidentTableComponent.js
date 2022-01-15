@@ -4,30 +4,27 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-nested-ternary */
 import {
-  useEffect,
-  useMemo,
-  useCallback,
-  useState,
+  useEffect, useMemo, useCallback, useState,
 } from 'react';
-import { connect } from 'react-redux';
-import { useDebouncedCallback } from 'use-debounce';
+import {
+  connect,
+} from 'react-redux';
+import {
+  useDebouncedCallback,
+} from 'use-debounce';
 
 import mezr from 'mezr';
-import { FixedSizeList } from 'react-window';
+import {
+  FixedSizeList,
+} from 'react-window';
 
 import {
-  Container,
-  Row,
-  Spinner,
+  Container, Row, Spinner,
 } from 'react-bootstrap';
 import BTable from 'react-bootstrap/Table';
 
 import {
-  useTable,
-  useSortBy,
-  useRowSelect,
-  useBlockLayout,
-  useResizeColumns,
+  useTable, useSortBy, useRowSelect, useBlockLayout, useResizeColumns,
 } from 'react-table';
 
 import {
@@ -35,7 +32,9 @@ import {
   updateIncidentTableState as updateIncidentTableStateConnected,
 } from 'redux/incident_table/actions';
 
-import { getIncidentTableColumns } from 'config/incident-table-columns';
+import {
+  getIncidentTableColumns,
+} from 'config/incident-table-columns';
 
 import CheckboxComponent from './subcomponents/CheckboxComponent';
 import EmptyIncidentsComponent from './subcomponents/EmptyIncidentsComponent';
@@ -56,7 +55,9 @@ const scrollbarWidth = () => {
 };
 
 // Ref: https://stackoverflow.com/a/61390352/6480733
-const Delayed = ({ children, waitBeforeShow = 500 }) => {
+const Delayed = ({
+  children, waitBeforeShow = 500,
+}) => {
   const [isShown, setIsShown] = useState(false);
 
   useEffect(() => {
@@ -76,9 +77,15 @@ const IncidentTableComponent = ({
   incidentActions,
   incidents,
 }) => {
-  const { incidentTableState, incidentTableColumnsNames } = incidentTable;
-  const { status } = incidentActions;
-  const { filteredIncidentsByQuery, fetchingIncidents } = incidents;
+  const {
+    incidentTableState, incidentTableColumnsNames,
+  } = incidentTable;
+  const {
+    status,
+  } = incidentActions;
+  const {
+    filteredIncidentsByQuery, fetchingIncidents,
+  } = incidents;
 
   // React Table Config
   const defaultColumn = useMemo(
@@ -90,51 +97,45 @@ const IncidentTableComponent = ({
     [],
   );
 
-  const memoizedColumns = useMemo(
-    () => {
-      // Merge current columns state with any modifications to order etc
-      const columns = getIncidentTableColumns(incidentTableColumnsNames);
-      const columnWidths = incidentTableState.columnResizing
-        ? incidentTableState.columnResizing.columnWidths
-        : null;
-      const tempColumns = columns.map((col) => {
-        const tempCol = { ...col };
-        if (columnWidths && tempCol.accessor in columnWidths) {
-          tempCol.width = columnWidths[tempCol.accessor];
-        }
-        return tempCol;
-      });
-      return tempColumns;
-    },
-    [incidentTableColumnsNames],
-  );
+  const memoizedColumns = useMemo(() => {
+    // Merge current columns state with any modifications to order etc
+    const columns = getIncidentTableColumns(incidentTableColumnsNames);
+    const columnWidths = incidentTableState.columnResizing
+      ? incidentTableState.columnResizing.columnWidths
+      : null;
+    const tempColumns = columns.map((col) => {
+      const tempCol = { ...col };
+      if (columnWidths && tempCol.accessor in columnWidths) {
+        tempCol.width = columnWidths[tempCol.accessor];
+      }
+      return tempCol;
+    });
+    return tempColumns;
+  }, [incidentTableColumnsNames]);
 
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
   // Dynamic Table Height
   const querySettingsEl = document.getElementById('query-settings-ctr');
   const incidentActionsEl = document.getElementById('incident-actions-ctr');
-  const incidentActionsHeight = incidentActionsEl
-    ? mezr.height(incidentActionsEl) + 50
-    : 0;
+  const incidentActionsHeight = incidentActionsEl ? mezr.height(incidentActionsEl) + 50 : 0;
   const distanceBetweenQueryAndAction = incidentActionsEl
     ? mezr.distance([querySettingsEl, 'border'], [incidentActionsEl, 'border'])
     : 0;
 
   // Debouncing for table state
-  const debouncedUpdateIncidentTableState = useDebouncedCallback(
-    (state, action) => {
-      // Only update store with sorted and column resizing state
-      if (action.type === 'toggleSortBy' || action.type === 'columnDoneResizing') {
-        updateIncidentTableState(state);
-      }
-    },
-    1000,
-  );
+  const debouncedUpdateIncidentTableState = useDebouncedCallback((state, action) => {
+    // Only update store with sorted and column resizing state
+    if (action.type === 'toggleSortBy' || action.type === 'columnDoneResizing') {
+      updateIncidentTableState(state);
+    }
+  }, 1000);
 
   // Create instance of react-table with options and plugins
   const {
-    state: { selectedRowIds },
+    state: {
+      selectedRowIds,
+    },
     getTableProps,
     getTableBodyProps,
     headerGroups,
@@ -177,12 +178,16 @@ const IncidentTableComponent = ({
           minWidth: 35,
           width: 35,
           maxWidth: 35,
-          Header: ({ getToggleAllRowsSelectedProps }) => (
+          Header: ({
+            getToggleAllRowsSelectedProps,
+          }) => (
             <div>
               <CheckboxComponent {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
-          Cell: ({ row }) => (
+          Cell: ({
+            row,
+          }) => (
             <div>
               <CheckboxComponent {...row.getToggleRowSelectedProps()} />
             </div>
@@ -195,7 +200,9 @@ const IncidentTableComponent = ({
 
   // Custom component required for virtualized rows
   const RenderRow = useCallback(
-    ({ index, style }) => {
+    ({
+      index, style,
+    }) => {
       const row = rows[index];
       prepareRow(row);
       return (
@@ -220,7 +227,7 @@ const IncidentTableComponent = ({
   useEffect(() => {
     const selectedRows = selectedFlatRows.map((row) => row.original);
     selectIncidentTableRows(true, selectedRows.length, selectedRows);
-    return () => { };
+    return () => {};
   }, [selectedFlatRows]);
 
   // Handle deselecting rows after incident action has completed
@@ -245,8 +252,7 @@ const IncidentTableComponent = ({
   }
 
   // TODO: Find a better way to prevent Empty Incidents from being shown during render
-  if (!fetchingIncidents
-    && filteredIncidentsByQuery.length === 0) {
+  if (!fetchingIncidents && filteredIncidentsByQuery.length === 0) {
     return (
       <Delayed waitBeforeShow={4000}>
         <EmptyIncidentsComponent />
@@ -254,19 +260,11 @@ const IncidentTableComponent = ({
     );
   }
 
-  if (!fetchingIncidents
-    && filteredIncidentsByQuery.length > 0) {
+  if (!fetchingIncidents && filteredIncidentsByQuery.length > 0) {
     return (
       <div className="incident-table-ctr">
-        <div
-          className="incident-table"
-        >
-          <BTable
-            responsive="sm"
-            hover
-            size="sm"
-            {...getTableProps()}
-          >
+        <div className="incident-table">
+          <BTable responsive="sm" hover size="sm" {...getTableProps()}>
             <table className="table">
               <thead className="thead">
                 {headerGroups.map((headerGroup) => (
@@ -277,22 +275,16 @@ const IncidentTableComponent = ({
                         {...column.getHeaderProps(column.getSortByToggleProps())}
                       >
                         {column.render('Header')}
-                        <span>
-                          {column.isSorted
-                            ? column.isSortedDesc
-                              ? ' ▼'
-                              : ' ▲'
-                            : ''}
-                        </span>
+                        <span>{column.isSorted ? (column.isSortedDesc ? ' ▼' : ' ▲') : ''}</span>
                         {column.canResize && (
-                        <div
-                          {...column.getResizerProps()}
-                          className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}
-                        />
+                          <div
+                            {...column.getResizerProps()}
+                            className={`resizer ${column.isResizing ? 'isResizing' : ''}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          />
                         )}
                       </th>
                     ))}
@@ -301,7 +293,7 @@ const IncidentTableComponent = ({
               </thead>
               <tbody {...getTableBodyProps()} className="tbody">
                 <FixedSizeList
-                  height={(distanceBetweenQueryAndAction - incidentActionsHeight)}
+                  height={distanceBetweenQueryAndAction - incidentActionsHeight}
                   itemCount={rows.length}
                   itemSize={60}
                   width={totalColumnsWidth + scrollBarSize}

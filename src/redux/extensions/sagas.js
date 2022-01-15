@@ -4,10 +4,16 @@ import {
 } from 'redux-saga/effects';
 
 import selectServices from 'redux/services/selectors';
-import { CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM } from 'util/extensions';
-import { pd } from 'util/pd-api-wrapper';
+import {
+  CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM,
+} from 'util/extensions';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
 
-import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
 import {
   FETCH_EXTENSIONS_REQUESTED,
   FETCH_EXTENSIONS_COMPLETED,
@@ -58,8 +64,12 @@ export function* mapServicesToExtensions() {
 
 export function* mapServicesToExtensionsImpl() {
   try {
-    const { services } = yield select(selectServices);
-    const { extensions } = yield select(selectExtensions);
+    const {
+      services,
+    } = yield select(selectServices);
+    const {
+      extensions,
+    } = yield select(selectExtensions);
 
     // Build map of service ids against extensions
     const serviceExtensionMap = {};

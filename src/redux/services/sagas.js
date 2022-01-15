@@ -2,8 +2,12 @@ import {
   put, call, takeLatest,
 } from 'redux-saga/effects';
 
-import { pd } from 'util/pd-api-wrapper';
-import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
 import {
   FETCH_SERVICES_REQUESTED,
   FETCH_SERVICES_COMPLETED,
@@ -17,7 +21,9 @@ export function* getServicesAsync() {
 export function* getServices(action) {
   try {
     //  Create params and call pd lib
-    const { teamIds } = action;
+    const {
+      teamIds,
+    } = action;
     const params = {};
     if (teamIds.length) params['team_ids[]'] = teamIds;
 

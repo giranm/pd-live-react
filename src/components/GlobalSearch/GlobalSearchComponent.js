@@ -1,26 +1,30 @@
-import { connect } from 'react-redux';
-import { useDebouncedCallback } from 'use-debounce';
+import {
+  connect,
+} from 'react-redux';
+import {
+  useDebouncedCallback,
+} from 'use-debounce';
 
 import {
-  Row,
-  Col,
-  Form,
-  InputGroup,
+  Row, Col, Form, InputGroup,
 } from 'react-bootstrap';
 
-import { ReactComponent as SearchGlass } from 'assets/images/search_glass.svg';
+import {
+  ReactComponent as SearchGlass,
+} from 'assets/images/search_glass.svg';
 
 import './GlobalSearchComponent.scss';
 
-import { updateSearchQuery as updateSearchQueryConnected } from 'redux/query_settings/actions';
+import {
+  updateSearchQuery as updateSearchQueryConnected,
+} from 'redux/query_settings/actions';
 
-const GlobalSearchComponent = ({ searchQuery, updateSearchQuery }) => {
-  const debounced = useDebouncedCallback(
-    (value) => {
-      updateSearchQuery(value);
-    },
-    500,
-  );
+const GlobalSearchComponent = ({
+  searchQuery, updateSearchQuery,
+}) => {
+  const debounced = useDebouncedCallback((value) => {
+    updateSearchQuery(value);
+  }, 500);
   return (
     <div className="global-search-ctr">
       <Row>
@@ -36,11 +40,15 @@ const GlobalSearchComponent = ({ searchQuery, updateSearchQuery }) => {
               htmlSize={40}
               onChange={(e) => debounced(e.target.value)}
               defaultValue={searchQuery}
-              style={searchQuery ? {
-                backgroundColor: '#ffdc00',
-                color: '#1155e6',
-                fontWeight: 600,
-              } : {}}
+              style={
+                searchQuery
+                  ? {
+                    backgroundColor: '#ffdc00',
+                    color: '#1155e6',
+                    fontWeight: 600,
+                  }
+                  : {}
+              }
             />
           </InputGroup>
         </Col>

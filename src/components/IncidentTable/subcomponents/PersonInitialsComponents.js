@@ -1,29 +1,34 @@
-import { connect } from 'react-redux';
+import {
+  connect,
+} from 'react-redux';
 
 import {
-  OverlayTrigger,
-  Tooltip,
+  OverlayTrigger, Tooltip,
 } from 'react-bootstrap';
 
 import {
   getInitials,
 } from 'util/helpers';
 
-const PersonInitialsComponent = ({ users, displayedUsers }) => {
-  const { usersMap } = users;
+const PersonInitialsComponent = ({
+  users, displayedUsers,
+}) => {
+  const {
+    usersMap,
+  } = users;
   const displayedUsersByInitials = displayedUsers.length > 0
-    ? displayedUsers.map(
-      ({ user }) => {
-        const color = usersMap[user.id].color.replace('-', '');
-        return {
-          summary: user.summary,
-          initials: getInitials(user.summary),
-          id: user.id,
-          html_url: user.html_url,
-          color: CSS.supports('color', color) ? color : 'black',
-        };
-      },
-    )
+    ? displayedUsers.map(({
+      user,
+    }) => {
+      const color = usersMap[user.id].color.replace('-', '');
+      return {
+        summary: user.summary,
+        initials: getInitials(user.summary),
+        id: user.id,
+        html_url: user.html_url,
+        color: CSS.supports('color', color) ? color : 'black',
+      };
+    })
     : [];
 
   if (displayedUsersByInitials.length > 0) {
@@ -33,11 +38,7 @@ const PersonInitialsComponent = ({ users, displayedUsers }) => {
           <OverlayTrigger
             key={user.id}
             placement="top"
-            overlay={(
-              <Tooltip id={`tooltip-${user.id}`}>
-                {user.summary}
-              </Tooltip>
-              )}
+            overlay={<Tooltip id={`tooltip-${user.id}`}>{user.summary}</Tooltip>}
           >
             <div
               idx={user.id}
@@ -62,9 +63,7 @@ const PersonInitialsComponent = ({ users, displayedUsers }) => {
     );
   }
 
-  return (
-    <div />
-  );
+  return <div />;
 };
 
 const mapStateToProps = (state) => ({

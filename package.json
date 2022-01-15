@@ -28,7 +28,6 @@
     "mezr": "^0.6.2",
     "moment": "^2.29.1",
     "node-sass": "^6.0.1",
-    "prettier-eslint-cli": "^5.0.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.4",
     "react-datepicker": "^4.2.1",
@@ -54,7 +53,8 @@
     "test:jest": "npx jest",
     "test:cypress": "npx cypress run",
     "eject": "craco eject",
-    "format": "npx eslint . --ext .js,.jsx,.ts,.tsx --exit-on-fatal-error",
+    "lint": "npx eslint src --ext .js,.jsx,.ts,.tsx --exit-on-fatal-error",
+    "format": "npx prettier-eslint --write \"src/**/*.js\"",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
@@ -99,7 +99,9 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "gh-pages": "^3.2.3",
     "jest": "^26.6.0",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.1",
+    "prettier-eslint": "^10.1.0",
+    "prettier-eslint-cli": "^5.0.1",
     "redux-saga-test-plan": "^4.0.4",
     "resolve-url-loader": "^4.0.0"
   }
