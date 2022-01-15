@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import {
+  useState, useEffect,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
 
-import { Modal, Form, Button } from 'react-bootstrap';
+import {
+  Modal, Form, Button,
+} from 'react-bootstrap';
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -12,9 +18,7 @@ import {
 } from 'redux/incident_actions/actions';
 
 import {
-  TRIGGERED,
-  ACKNOWLEDGED,
-  filterIncidentsByField,
+  TRIGGERED, ACKNOWLEDGED, filterIncidentsByField,
 } from 'util/incidents';
 
 import './MergeModalComponent.scss';
@@ -28,12 +32,13 @@ const MergeModalComponent = ({
   toggleDisplayMergeModal,
   merge,
 }) => {
-  const { displayMergeModal } = incidentActions;
-  const { selectedRows } = incidentTable;
-  const openIncidents = filterIncidentsByField(incidents, 'status', [
-    TRIGGERED,
-    ACKNOWLEDGED,
-  ]);
+  const {
+    displayMergeModal,
+  } = incidentActions;
+  const {
+    selectedRows,
+  } = incidentTable;
+  const openIncidents = filterIncidentsByField(incidents, 'status', [TRIGGERED, ACKNOWLEDGED]);
 
   const [targetIncident, setTargetIncident] = useState(null);
   useEffect(() => {

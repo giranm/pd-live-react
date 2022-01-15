@@ -1,4 +1,6 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import {
+  put, takeLatest,
+} from 'redux-saga/effects';
 
 import {
   SAVE_INCIDENT_TABLE_SETTINGS_REQUESTED,
@@ -19,7 +21,9 @@ export function* saveIncidentTable() {
 export function* saveIncidentTableImpl(action) {
   // Attempt saving each setting down by dispatching the relevant actions
   try {
-    const { updatedIncidentTableColumns } = action;
+    const {
+      updatedIncidentTableColumns,
+    } = action;
 
     // Update incident table columns
     const updatedIncidentTableColumnNames = updatedIncidentTableColumns.map((col) => col.value);
@@ -42,7 +46,9 @@ export function* updateIncidentTableColumns() {
 }
 
 export function* updateIncidentTableColumnsImpl(action) {
-  const { incidentTableColumnsNames } = action;
+  const {
+    incidentTableColumnsNames,
+  } = action;
   yield put({
     type: UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED,
     incidentTableColumnsNames,
@@ -54,7 +60,9 @@ export function* updateIncidentTableState() {
 }
 
 export function* updateIncidentTableStateImpl(action) {
-  const { incidentTableState } = action;
+  const {
+    incidentTableState,
+  } = action;
   yield put({
     type: UPDATE_INCIDENT_TABLE_STATE_COMPLETED,
     incidentTableState,
@@ -66,7 +74,9 @@ export function* selectIncidentTableRows() {
 }
 
 export function* selectIncidentTableRowsImpl(action) {
-  const { allSelected, selectedCount, selectedRows } = action;
+  const {
+    allSelected, selectedCount, selectedRows,
+  } = action;
   yield put({
     type: SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
     allSelected,

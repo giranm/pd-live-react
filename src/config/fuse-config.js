@@ -1,6 +1,8 @@
 // Configuration for Fuse.js (Fuzzy Search)
 
-import { availableIncidentTableColumns } from './incident-table-columns';
+import {
+  availableIncidentTableColumns,
+} from './incident-table-columns';
 
 // Docs: https://fusejs.io/api/options.html
 const fuseOptions = {

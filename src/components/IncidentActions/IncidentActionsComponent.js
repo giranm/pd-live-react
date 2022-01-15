@@ -1,7 +1,11 @@
 /* eslint-disable camelcase */
 
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import {
+  useState, useEffect,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
 
 import {
   Container,
@@ -17,7 +21,9 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  FontAwesomeIcon,
+} from '@fortawesome/react-fontawesome';
 import {
   faShieldAlt,
   faLevelUpAlt,
@@ -61,9 +67,13 @@ import {
   HIGH,
 } from 'util/incidents';
 
-import { CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM } from 'util/extensions';
+import {
+  CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM,
+} from 'util/extensions';
 
-import { getObjectsFromListbyKey } from 'util/helpers';
+import {
+  getObjectsFromListbyKey,
+} from 'util/helpers';
 
 const animatedComponents = makeAnimated();
 
@@ -88,8 +98,12 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
-  const { fetchingIncidents, filteredIncidentsByQuery } = incidents;
-  const { selectedCount, selectedRows } = incidentTable;
+  const {
+    fetchingIncidents, filteredIncidentsByQuery,
+  } = incidents;
+  const {
+    selectedCount, selectedRows,
+  } = incidentTable;
   const resolvedIncidents = filterIncidentsByField(selectedRows, 'status', [RESOLVED]);
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
@@ -159,7 +173,9 @@ const IncidentActionsComponent = ({
     : [];
 
   // Generate extension types per selected incident's service
-  const { serviceExtensionMap } = extensions;
+  const {
+    serviceExtensionMap,
+  } = extensions;
   const serviceExtensions = selectedIncident
     ? serviceExtensionMap[selectedIncident.service.id]
     : [];
@@ -183,7 +199,9 @@ const IncidentActionsComponent = ({
         const tempServiceExtension = { ...serviceExtension };
         const result = selectedIncident.external_references
           ? selectedIncident.external_references.find(
-            ({ webhook }) => webhook.id === serviceExtension.id,
+            ({
+              webhook,
+            }) => webhook.id === serviceExtension.id,
           )
           : null;
         if (result) {
@@ -208,9 +226,7 @@ const IncidentActionsComponent = ({
               {fetchingIncidents ? (
                 <>
                   <Spinner animation="border" variant="success" />
-                  <p className="selected-incidents">
-                    Querying
-                  </p>
+                  <p className="selected-incidents">Querying</p>
                 </>
               ) : (
                 <>
@@ -222,9 +238,7 @@ const IncidentActionsComponent = ({
                       {`${selectedCount}/${filteredIncidentsByQuery.length}`}
                     </Badge>
                   </h4>
-                  <p className="selected-incidents">
-                    Selected
-                  </p>
+                  <p className="selected-incidents">Selected</p>
                 </>
               )}
             </div>
@@ -474,7 +488,6 @@ const IncidentActionsComponent = ({
             </DropdownButton>
           </Col>
         </Row>
-
       </Container>
     </div>
   );
@@ -498,19 +511,19 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDisplayCustomSnoozeModal: () => dispatch(toggleDisplayCustomSnoozeModalConnected()),
   toggleDisplayMergeModal: () => dispatch(toggleDisplayMergeModalConnected()),
   resolve: (incidents) => dispatch(resolveConnected(incidents)),
-  updatePriority: (incidents, priorityId) => dispatch(
-    updatePriorityConnected(incidents, priorityId),
-  ),
+  updatePriority: (incidents, priorityId) => {
+    dispatch(updatePriorityConnected(incidents, priorityId));
+  },
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModalConnected()),
-  runCustomIncidentAction: (incidents, webhook) => dispatch(
-    runCustomIncidentActionConnected(incidents, webhook),
-  ),
-  runResponsePlayAsync: (incidents, responsePlay) => dispatch(
-    runResponsePlayAsyncConnected(incidents, responsePlay),
-  ),
-  syncWithExternalSystem: (incidents, webhook) => dispatch(
-    syncWithExternalSystemConnected(incidents, webhook),
-  ),
+  runCustomIncidentAction: (incidents, webhook) => {
+    dispatch(runCustomIncidentActionConnected(incidents, webhook));
+  },
+  runResponsePlayAsync: (incidents, responsePlay) => {
+    dispatch(runResponsePlayAsyncConnected(incidents, responsePlay));
+  },
+  syncWithExternalSystem: (incidents, webhook) => {
+    dispatch(syncWithExternalSystemConnected(incidents, webhook));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IncidentActionsComponent);

@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import {
+  useState, useEffect,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
 
-import { Modal, Form, Button } from 'react-bootstrap';
+import {
+  Modal, Form, Button,
+} from 'react-bootstrap';
 
 import {
   toggleDisplayAddNoteModal as toggleDisplayAddNoteModalConnected,
@@ -16,8 +22,12 @@ const AddNoteModalComponent = ({
   toggleDisplayAddNoteModal,
   addNote,
 }) => {
-  const { displayAddNoteModal } = incidentActions;
-  const { selectedRows } = incidentTable;
+  const {
+    displayAddNoteModal,
+  } = incidentActions;
+  const {
+    selectedRows,
+  } = incidentTable;
 
   const [note, setNote] = useState('');
   useEffect(() => {

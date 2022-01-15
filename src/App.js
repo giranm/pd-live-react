@@ -1,6 +1,12 @@
-import { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Container } from 'react-bootstrap';
+import {
+  useEffect,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
+import {
+  Container,
+} from 'react-bootstrap';
 import moment from 'moment';
 
 import UnauthorizedModalComponent from 'components/UnauthorizedModal/UnauthorizedModalComponent';
@@ -17,14 +23,22 @@ import ReassignModalComponent from 'components/ReassignModal/ReassignModalCompon
 import AddResponderModalComponent from 'components/AddResponderModal/AddResponderModalComponent';
 import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
 
-import { getIncidentsAsync as getIncidentsAsyncConnected } from 'redux/incidents/actions';
+import {
+  getIncidentsAsync as getIncidentsAsyncConnected,
+} from 'redux/incidents/actions';
 import {
   getLogEntriesAsync as getLogEntriesAsyncConnected,
   cleanRecentLogEntriesAsync as cleanRecentLogEntriesAsyncConnected,
 } from 'redux/log_entries/actions';
-import { getServicesAsync as getServicesAsyncConnected } from 'redux/services/actions';
-import { getTeamsAsync as getTeamsAsyncConnected } from 'redux/teams/actions';
-import { getPrioritiesAsync as getPrioritiesAsyncConnected } from 'redux/priorities/actions';
+import {
+  getServicesAsync as getServicesAsyncConnected,
+} from 'redux/services/actions';
+import {
+  getTeamsAsync as getTeamsAsyncConnected,
+} from 'redux/teams/actions';
+import {
+  getPrioritiesAsync as getPrioritiesAsyncConnected,
+} from 'redux/priorities/actions';
 import {
   userAuthorize as userAuthorizeConnected,
   getUsersAsync as getUsersAsyncConnected,
@@ -32,7 +46,9 @@ import {
 import {
   getEscalationPoliciesAsync as getEscalationPoliciesAsyncConnected,
 } from 'redux/escalation_policies/actions';
-import { getExtensionsAsync as getExtensionsAsyncConnected } from 'redux/extensions/actions';
+import {
+  getExtensionsAsync as getExtensionsAsyncConnected,
+} from 'redux/extensions/actions';
 import {
   getResponsePlaysAsync as getResponsePlaysAsyncConnected,
 } from 'redux/response_plays/actions';
@@ -40,9 +56,13 @@ import {
   checkConnectionStatus as checkConnectionStatusConnected,
   checkAbilities as checkAbilitiesConnected,
 } from 'redux/connection/actions';
-import { startMonitoring as startMonitoringConnected } from 'redux/monitoring/actions';
+import {
+  startMonitoring as startMonitoringConnected,
+} from 'redux/monitoring/actions';
 
-import { getLanguage } from 'util/helpers';
+import {
+  getLanguage,
+} from 'util/helpers';
 
 import {
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
@@ -78,7 +98,9 @@ const App = ({
   }
 
   // Begin monitoring and load core objects from API
-  const { userAuthorized, userAcceptedDisclaimer } = state.users;
+  const {
+    userAuthorized, userAcceptedDisclaimer,
+  } = state.users;
   useEffect(() => {
     userAuthorize();
     if (userAuthorized) {

@@ -1,6 +1,10 @@
-import { connect } from 'react-redux';
+import {
+  connect,
+} from 'react-redux';
 
-import { Modal, Alert } from 'react-bootstrap';
+import {
+  Modal, Alert,
+} from 'react-bootstrap';
 
 import {
   toggleDisplayActionAlertsModal as toggleDisplayActionAlertsModalConnected,
@@ -8,11 +12,11 @@ import {
 
 import './ActionAlertsModelComponent.scss';
 
-const ActionAlertsModalComponent = ({ toggleDisplayActionAlertsModal, actionAlertsModalData }) => {
+const ActionAlertsModalComponent = ({
+  toggleDisplayActionAlertsModal, actionAlertsModalData,
+}) => {
   const {
-    displayActionAlertsModal,
-    actionAlertsModalType,
-    actionAlertsModalMessage,
+    displayActionAlertsModal, actionAlertsModalType, actionAlertsModalMessage,
   } = actionAlertsModalData;
 
   return (

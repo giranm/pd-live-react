@@ -2,8 +2,12 @@ import {
   put, call, takeLatest,
 } from 'redux-saga/effects';
 
-import { pd } from 'util/pd-api-wrapper';
-import { UPDATE_CONNECTION_STATUS_REQUESTED } from 'redux/connection/actions';
+import {
+  pd,
+} from 'util/pd-api-wrapper';
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
 import {
   FETCH_ESCALATION_POLICIES_REQUESTED,
   FETCH_ESCALATION_POLICIES_COMPLETED,
