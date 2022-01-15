@@ -1,5 +1,9 @@
-import { useState } from 'react';
-import { connect } from 'react-redux';
+import {
+  useState,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
 import moment from 'moment';
 
 import {
@@ -13,7 +17,9 @@ import {
   snooze as snoozeConnected,
 } from 'redux/incident_actions/actions';
 
-import { TRIGGERED, ACKNOWLEDGED, filterIncidentsByField } from 'util/incidents';
+import {
+  TRIGGERED, ACKNOWLEDGED, filterIncidentsByField,
+} from 'util/incidents';
 
 import './CustomSnoozeModalComponent.scss';
 
@@ -23,7 +29,9 @@ const CustomSnoozeModalComponent = ({
   incidentActions,
   incidentTable,
 }) => {
-  const { displayCustomSnoozeModal } = incidentActions;
+  const {
+    displayCustomSnoozeModal,
+  } = incidentActions;
 
   // Internal state for snooze in hours
   const defaultSnoozeTimeHours = 1;
@@ -39,7 +47,9 @@ const CustomSnoozeModalComponent = ({
   const tomorrowDurationFormatted = moment(tomorrowDuration).format('H[ hour(s)] m[ minute(s)]');
 
   // Only unresolved incidents can be snoozed
-  const { selectedRows } = incidentTable;
+  const {
+    selectedRows,
+  } = incidentTable;
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
     ACKNOWLEDGED,

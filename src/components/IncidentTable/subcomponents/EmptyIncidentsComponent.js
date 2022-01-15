@@ -1,5 +1,9 @@
-import { Badge } from 'react-bootstrap';
-import { ReactComponent as EmptyIncidents } from 'assets/images/empty_incidents.svg';
+import {
+  Badge,
+} from 'react-bootstrap';
+import {
+  ReactComponent as EmptyIncidents,
+} from 'assets/images/empty_incidents.svg';
 
 const EmptyIncidentsComponent = () => (
   <div className="empty-incidents">

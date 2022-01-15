@@ -82,9 +82,14 @@ export default class PDOAuth {
         /*
         if (nIdx > 0 && (nIdx * 4 / 3) % 76 === 0) { sB64Enc += "\r\n"; }
         */
-        nUint24 |= aBytes[nIdx] << (16 >>> nMod3 & 24);
+        nUint24 |= aBytes[nIdx] << ((16 >>> nMod3) & 24);
         if (nMod3 === 2 || aBytes.length - nIdx === 1) {
-          sB64Enc += String.fromCharCode(uint6ToB64(nUint24 >>> 18 & 63), uint6ToB64(nUint24 >>> 12 & 63), uint6ToB64(nUint24 >>> 6 & 63), uint6ToB64(nUint24 & 63));
+          sB64Enc += String.fromCharCode(
+            uint6ToB64((nUint24 >>> 18) & 63),
+            uint6ToB64((nUint24 >>> 12) & 63),
+            uint6ToB64((nUint24 >>> 6) & 63),
+            uint6ToB64(nUint24 & 63),
+          );
           nUint24 = 0;
         }
       }
@@ -94,9 +99,7 @@ export default class PDOAuth {
     };
     let encodedArr = base64EncArr(new Uint8Array(buffer));
     // manually finishing up the url encoding fo the encodedArr
-    encodedArr = encodedArr.replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
+    encodedArr = encodedArr.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     return encodedArr;
   }
 
@@ -128,8 +131,7 @@ export default class PDOAuth {
     function postData(url, _data) {
       return fetch(url, {
         method: 'POST',
-      })
-        .then((response) => response.json());
+      }).then((response) => response.json());
     }
 
     const requestTokenUrl = 'https://app.pagerduty.com/oauth/token?'
@@ -155,7 +157,9 @@ export default class PDOAuth {
   }
 
   static writeLoginPage(clientID, clientSecret, redirectURL) {
-    const { title } = document;
+    const {
+      title
+    } = document;
     document.write(
       `
             <title>${title}</title>
@@ -169,7 +173,7 @@ export default class PDOAuth {
                     Authorize PagerDuty
                 </a>
             </div>
-    `
+    `,
     );
     const codeVerifier = PDOAuth.createCodeVerifier();
     sessionStorage.setItem('code_verifier', codeVerifier);
@@ -196,15 +200,17 @@ export default class PDOAuth {
     const code = urlParams.get('code');
     const codeVerifier = sessionStorage.getItem('code_verifier');
     if (code && codeVerifier) {
-      PDOAuth.exchangeCodeForToken(clientID, clientSecret, redirectURL, codeVerifier, code).then((token) => {
-        if (token) {
-          sessionStorage.setItem('pd_access_token', token);
-          sessionStorage.removeItem('code_verifier');
-          location.assign(redirectURL);
-        } else {
-          PDOAuth.writeLoginPage(clientID, clientSecret, redirectURL);
-        }
-      });
+      PDOAuth.exchangeCodeForToken(clientID, clientSecret, redirectURL, codeVerifier, code).then(
+        (token) => {
+          if (token) {
+            sessionStorage.setItem('pd_access_token', token);
+            sessionStorage.removeItem('code_verifier');
+            location.assign(redirectURL);
+          } else {
+            PDOAuth.writeLoginPage(clientID, clientSecret, redirectURL);
+          }
+        },
+      );
     } else {
       PDOAuth.writeLoginPage(clientID, clientSecret, redirectURL);
     }

@@ -1,4 +1,6 @@
-import { put } from 'redux-saga/effects';
+import {
+  put,
+} from 'redux-saga/effects';
 
 import {
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,

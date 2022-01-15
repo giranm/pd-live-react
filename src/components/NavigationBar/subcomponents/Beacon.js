@@ -3,10 +3,16 @@
 // Original source:
 // https://github.com/Julian1729/react-status-beacon/blob/main/src/components/Beacon.js
 import React from 'react';
-import { defaultsDeep } from 'lodash';
-import styled, { css, keyframes } from 'styled-components';
+import {
+  defaultsDeep,
+} from 'lodash';
+import styled, {
+  css, keyframes,
+} from 'styled-components';
 
-const generateAnimation = ({ status, colors, scaleBeacon }) => {
+const generateAnimation = ({
+  status, colors, scaleBeacon,
+}) => {
   let color = null;
   let size = null;
 
@@ -69,7 +75,9 @@ const Wrapper = styled.span`
   position: relative;
   display: inline-block;
   z-index: 1;
-  ${({ size }) => css`
+  ${({
+    size,
+  }) => css`
     height: ${size};
     width: ${size};
   `}
@@ -80,15 +88,19 @@ const Wrapper = styled.span`
     height: 1em;
     width: 1em;
     // default to dormant color
-    ${({ colors }) => css`
-        background-color: ${colors.dormant};
-      `}
+    ${({
+    colors,
+  }) => css`
+      background-color: ${colors.dormant};
+    `}
     display: inline-block;
     border-radius: 100%;
     position: relative;
     height: 100%;
     width: 100%;
-    ${({ status, colors }) => {
+    ${({
+    status, colors,
+  }) => {
     switch (status) {
       case 'positive':
         return css`
@@ -127,22 +139,30 @@ const Wrapper = styled.span`
     z-index: -1;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    ${({ status }) => {
+    ${({
+    status,
+  }) => {
     switch (status) {
       case 'positive':
         return css`
             animation: ${(props) => generateAnimation(props)}
-              ${({ speed }) => mapPropToSpeed(speed)} linear infinite;
+              ${({
+    speed,
+  }) => mapPropToSpeed(speed)} linear infinite;
           `;
       case 'neutral':
         return css`
             animation: ${(props) => generateAnimation(props)}
-              ${({ speed }) => mapPropToSpeed(speed)} linear infinite;
+              ${({
+    speed,
+  }) => mapPropToSpeed(speed)} linear infinite;
           `;
       case 'negative':
         return css`
             animation: ${(props) => generateAnimation(props)}
-              ${({ speed }) => mapPropToSpeed(speed)} linear infinite;
+              ${({
+    speed,
+  }) => mapPropToSpeed(speed)} linear infinite;
           `;
       default:
         return '';

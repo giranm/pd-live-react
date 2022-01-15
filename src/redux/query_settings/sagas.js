@@ -1,7 +1,13 @@
-import { put, select, takeLatest } from 'redux-saga/effects';
+import {
+  put, select, takeLatest,
+} from 'redux-saga/effects';
 
-import { FETCH_INCIDENTS_REQUESTED, FILTER_INCIDENTS_LIST_BY_QUERY } from 'redux/incidents/actions';
-import { FETCH_SERVICES_REQUESTED } from 'redux/services/actions';
+import {
+  FETCH_INCIDENTS_REQUESTED, FILTER_INCIDENTS_LIST_BY_QUERY,
+} from 'redux/incidents/actions';
+import {
+  FETCH_SERVICES_REQUESTED,
+} from 'redux/services/actions';
 import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
   TOGGLE_DISPLAY_QUERY_SETTINGS_COMPLETED,
@@ -28,7 +34,9 @@ export function* toggleDisplayQuerySettings() {
 }
 
 export function* toggleDisplayQuerySettingsImpl() {
-  const { displayQuerySettings } = yield select(selectQuerySettings);
+  const {
+    displayQuerySettings,
+  } = yield select(selectQuerySettings);
   yield put({
     type: TOGGLE_DISPLAY_QUERY_SETTINGS_COMPLETED,
     displayQuerySettings: !displayQuerySettings,
@@ -41,7 +49,9 @@ export function* updateQuerySettingsSinceDate() {
 
 export function* updateQuerySettingsSinceDateImpl(action) {
   // Update since date and re-request incidents list
-  const { sinceDate } = action;
+  const {
+    sinceDate,
+  } = action;
   yield put({ type: UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED, sinceDate });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
 }
@@ -55,7 +65,9 @@ export function* updateQuerySettingsIncidentStatus() {
 
 export function* updateQuerySettingsIncidentStatusImpl(action) {
   // Update incident status and re-request incidents list
-  const { incidentStatus } = action;
+  const {
+    incidentStatus,
+  } = action;
   yield put({
     type: UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
     incidentStatus,
@@ -72,7 +84,9 @@ export function* updateQuerySettingsIncidentUrgency() {
 
 export function* updateQuerySettingsIncidentUrgencyImpl(action) {
   // Update incident urgency and re-request incidents list
-  const { incidentUrgency } = action;
+  const {
+    incidentUrgency,
+  } = action;
   yield put({
     type: UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED,
     incidentUrgency,
@@ -89,7 +103,9 @@ export function* updateQuerySettingsIncidentPriority() {
 
 export function* updateQuerySettingsIncidentPriorityImpl(action) {
   // Update incident priority, re-request incidents list, and then apply priority filtering
-  const { incidentPriority } = action;
+  const {
+    incidentPriority,
+  } = action;
   yield put({
     type: UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
     incidentPriority,
@@ -103,7 +119,9 @@ export function* updateQuerySettingsTeams() {
 
 export function* updateQuerySettingsTeamsImpl(action) {
   // Update team ids, re-request services under those teams, and re-request incidents list
-  const { teamIds } = action;
+  const {
+    teamIds,
+  } = action;
   yield put({ type: FETCH_SERVICES_REQUESTED, teamIds });
   yield put({ type: UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED, teamIds });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
@@ -115,7 +133,9 @@ export function* updateQuerySettingsServices() {
 
 export function* updateQuerySettingsServicesImpl(action) {
   // Update service ids and re-request incidents list
-  const { serviceIds } = action;
+  const {
+    serviceIds,
+  } = action;
   yield put({ type: UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED, serviceIds });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
 }
@@ -126,7 +146,9 @@ export function* updateSearchQuery() {
 
 export function* updateSearchQueryImpl(action) {
   // Update search query and filter incidents
-  const { searchQuery } = action;
+  const {
+    searchQuery,
+  } = action;
   yield put({ type: UPDATE_SEARCH_QUERY_COMPLETED, searchQuery });
   yield put({ type: FILTER_INCIDENTS_LIST_BY_QUERY, searchQuery });
 }

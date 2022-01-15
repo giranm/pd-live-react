@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { connect } from 'react-redux';
+import {
+  useState,
+} from 'react';
+import {
+  connect,
+} from 'react-redux';
 
 import {
-  Modal,
-  Button,
-  Tabs,
-  Tab,
+  Modal, Button, Tabs, Tab,
 } from 'react-bootstrap';
 
 import DualListBox from 'react-dual-listbox';
@@ -39,8 +40,12 @@ const SettingsModalComponent = ({
   saveIncidentTable,
   clearLocalCache,
 }) => {
-  const { displaySettingsModal } = settings;
-  const { incidentTableColumnsNames } = incidentTable;
+  const {
+    displaySettingsModal,
+  } = settings;
+  const {
+    incidentTableColumnsNames,
+  } = incidentTable;
 
   // Create internal state for options
   const transformedIncidentTableColumns = getIncidentTableColumns(incidentTableColumnsNames);
@@ -107,9 +112,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   toggleSettingsModal: () => dispatch(toggleSettingsModalConnected()),
-  saveIncidentTable: (updatedIncidentTableColumns) => dispatch(
-    saveIncidentTableConnected(updatedIncidentTableColumns),
-  ),
+  saveIncidentTable: (updatedIncidentTableColumns) => {
+    dispatch(saveIncidentTableConnected(updatedIncidentTableColumns));
+  },
   clearLocalCache: () => dispatch(clearLocalCacheConnected()),
 });
 

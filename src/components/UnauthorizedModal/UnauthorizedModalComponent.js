@@ -1,16 +1,23 @@
-import { connect } from 'react-redux';
+import {
+  connect,
+} from 'react-redux';
 
-import { Modal } from 'react-bootstrap';
+import {
+  Modal,
+} from 'react-bootstrap';
 
 import PDOAuth from 'util/pdoauth';
 
-import { userAcceptDisclaimer as userAcceptDisclaimerConnected } from 'redux/users/actions';
+import {
+  userAcceptDisclaimer as userAcceptDisclaimerConnected,
+} from 'redux/users/actions';
 
 const UnauthorizedModalComponent = ({
-  users,
-  userAcceptDisclaimer,
+  users, userAcceptDisclaimer,
 }) => {
-  const { userAuthorized } = users;
+  const {
+    userAuthorized,
+  } = users;
 
   return (
     <div className="user-unauthorized-modal-ctr">
@@ -27,8 +34,8 @@ const UnauthorizedModalComponent = ({
         </Modal.Header>
         <Modal.Body>
           <p>
-            User is not permitted to access this instance of PagerDuty Live.
-            Please contact the associated site owner for access.
+            User is not permitted to access this instance of PagerDuty Live. Please contact the
+            associated site owner for access.
           </p>
         </Modal.Body>
       </Modal>

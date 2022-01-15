@@ -5,21 +5,22 @@ import {
   Badge,
 } from 'react-bootstrap';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faChevronUp,
-  faChevronDown,
+  FontAwesomeIcon,
+} from '@fortawesome/react-fontawesome';
+import {
+  faChevronUp, faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
-import PersonInitialsComponent
-  from 'components/IncidentTable/subcomponents/PersonInitialsComponents';
+import PersonInitialsComponent from 'components/IncidentTable/subcomponents/PersonInitialsComponents';
 
 import StatusComponent from 'components/IncidentTable/subcomponents/StatusComponent';
 
-import { DATE_FORMAT } from 'config/constants';
 import {
-  HIGH,
-  LOW,
+  DATE_FORMAT,
+} from 'config/constants';
+import {
+  HIGH, LOW,
 } from 'util/incidents';
 import {
   getObjectsFromList,
@@ -33,7 +34,9 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 80,
     // width: 80,
-    Cell: ({ row }) => (
+    Cell: ({
+      row,
+    }) => (
       <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.incident_number}
       </a>
@@ -45,7 +48,9 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 400,
     // width: 800,
-    Cell: ({ row }) => (
+    Cell: ({
+      row,
+    }) => (
       <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.title}
       </a>
@@ -64,7 +69,9 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 180,
     // width: 180,
-    Cell: ({ row }) => {
+    Cell: ({
+      row,
+    }) => {
       const formattedDate = moment(row.original.created_at).format(DATE_FORMAT);
       return formattedDate;
     },
@@ -76,7 +83,9 @@ export const availableIncidentTableColumns = [
     minWidth: 100,
     // width: 160,
     // maxWidth: 160,
-    Cell: ({ row }) => <StatusComponent status={row.original.status} />,
+    Cell: ({
+      row,
+    }) => <StatusComponent status={row.original.status} />,
   },
   {
     accessor: 'incident_key',
@@ -91,7 +100,9 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 300,
     // width: 300,
-    Cell: ({ row }) => (
+    Cell: ({
+      row,
+    }) => (
       <a href={row.original.service.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.service.summary}
       </a>
@@ -99,18 +110,24 @@ export const availableIncidentTableColumns = [
   },
   {
     accessor: (incident) => (incident.assignments
-      ? incident.assignments.map(({ assignee }) => assignee.summary).join(', ')
+      ? incident.assignments.map(({
+        assignee,
+      }) => assignee.summary).join(', ')
       : 'Unassigned'),
     Header: 'Assignees',
     sortable: true,
     minWidth: 160,
     // width: 160,
-    Cell: ({ row }) => {
-      const { assignments } = row.original.assignments
-        ? row.original
-        : [];
+    Cell: ({
+      row,
+    }) => {
+      const {
+        assignments,
+      } = row.original.assignments ? row.original : [];
       const users = assignments.length > 0
-        ? assignments.map(({ assignee }) => ({ user: { ...assignee } }))
+        ? assignments.map(({
+          assignee,
+        }) => ({ user: { ...assignee } }))
         : [];
       return <PersonInitialsComponent displayedUsers={users} />;
     },
@@ -121,7 +138,9 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 220,
     // width: 220,
-    Cell: ({ row }) => {
+    Cell: ({
+      row,
+    }) => {
       const formattedDate = moment(row.original.last_status_change_at).format(DATE_FORMAT);
       return formattedDate;
     },
@@ -139,34 +158,36 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 200,
     // width: 200,
-    Cell: ({ row }) => (
+    Cell: ({
+      row,
+    }) => (
       <a href={row.original.escalation_policy.html_url} target="_blank" rel="noopener noreferrer">
         {row.original.escalation_policy.summary}
       </a>
     ),
   },
   {
-    accessor: (incident) => (incident.teams
-      ? incident.teams.map((team) => team.summary).join(', ')
-      : 'N/A'),
+    accessor: (incident) => {
+      if (incident.teams) return incident.teams.map((team) => team.summary).join(', ');
+      return 'N/A';
+    },
     Header: 'Teams',
     sortable: true,
     minWidth: 200,
     // width: 200,
-    Cell: ({ row }) => {
-      const { teams } = row.original.teams
-        ? row.original
-        : [];
+    Cell: ({
+      row,
+    }) => {
+      const {
+        teams,
+      } = row.original.teams ? row.original : [];
       if (teams.length > 0) {
         return (
           <div>
-            {teams.map((team, idx, { length }) => (
-              <a
-                idx={team.id}
-                href={team.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+            {teams.map((team, idx, {
+              length,
+            }) => (
+              <a idx={team.id} href={team.html_url} target="_blank" rel="noopener noreferrer">
                 {team.summary}
                 {length - 1 === idx ? null : ', '}
               </a>
@@ -179,18 +200,24 @@ export const availableIncidentTableColumns = [
   },
   {
     accessor: (incident) => (incident.acknowledgements
-      ? incident.acknowledgements.map(({ acknowledger }) => acknowledger.summary).join(', ')
+      ? incident.acknowledgements.map(({
+        acknowledger,
+      }) => acknowledger.summary).join(', ')
       : 'N/A'),
     Header: 'Acknowledgments',
     sortable: true,
     minWidth: 250,
     // width: 250,
-    Cell: ({ row }) => {
-      const { acknowledgements } = row.original.acknowledgements
-        ? row.original
-        : [];
+    Cell: ({
+      row,
+    }) => {
+      const {
+        acknowledgements,
+      } = row.original.acknowledgements ? row.original : [];
       const users = acknowledgements.length > 0
-        ? acknowledgements.map(({ acknowledger }) => ({ user: { ...acknowledger } }))
+        ? acknowledgements.map(({
+          acknowledger,
+        }) => ({ user: { ...acknowledger } }))
         : [];
       return <PersonInitialsComponent displayedUsers={users} />;
     },
@@ -201,7 +228,9 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 250,
     // width: 250,
-    Cell: ({ row }) => (
+    Cell: ({
+      row,
+    }) => (
       <a
         href={row.original.last_status_change_by.html_url}
         target="_blank"
@@ -246,8 +275,12 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 120,
     // width: 120,
-    Cell: ({ row }) => {
-      const { urgency } = row.original;
+    Cell: ({
+      row,
+    }) => {
+      const {
+        urgency,
+      } = row.original;
       let elem;
       if (urgency === HIGH) {
         elem = (
@@ -287,7 +320,8 @@ export const availableIncidentTableColumns = [
     accessor: (incident) => {
       if (incident.notes && incident.notes.length > 0) {
         return incident.notes[0].content;
-      } if (incident.notes && incident.notes.length === 0) {
+      }
+      if (incident.notes && incident.notes.length === 0) {
         return '--';
       }
       return 'Fetching notes ...';
@@ -305,7 +339,9 @@ export const availableIncidentTableColumns = [
     Header: 'External References',
     sortable: true,
     minWidth: 200,
-    Cell: ({ row }) => {
+    Cell: ({
+      row,
+    }) => {
       let external_references = [];
       if (row.original && row.original.external_references) {
         external_references = row.original.external_references;
@@ -313,13 +349,10 @@ export const availableIncidentTableColumns = [
       if (external_references.length > 0) {
         return (
           <div>
-            {external_references.map((ext, idx, { length }) => (
-              <a
-                idx={ext.id}
-                href={ext.external_url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+            {external_references.map((ext, idx, {
+              length,
+            }) => (
+              <a idx={ext.id} href={ext.external_url} target="_blank" rel="noopener noreferrer">
                 {`${ext.summary} (${ext.external_id})`}
                 {length - 1 === idx ? null : ', '}
               </a>
@@ -333,6 +366,5 @@ export const availableIncidentTableColumns = [
 ];
 
 // Helper function to retrieve columns definitions from list of names
-export const getIncidentTableColumns = (columnNames) => getObjectsFromList(
-  availableIncidentTableColumns, columnNames, 'Header',
-);
+// eslint-disable-next-line max-len
+export const getIncidentTableColumns = (columnNames) => getObjectsFromList(availableIncidentTableColumns, columnNames, 'Header');
