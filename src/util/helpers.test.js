@@ -1,4 +1,6 @@
-import { getInitials } from './helpers';
+import {
+  getInitials,
+} from './helpers';
 
 describe('getInitials', () => {
   it('Given a singular name (1 word), it will return 1 initial', () => {
