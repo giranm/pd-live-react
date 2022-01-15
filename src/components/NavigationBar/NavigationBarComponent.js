@@ -19,7 +19,9 @@ import {
   userAcceptDisclaimer as userAcceptDisclaimerConnected,
   userUnauthorize as userUnauthorizeConnected,
 } from 'redux/users/actions';
-import { stopMonitoring as stopMonitoringConnected } from 'redux/monitoring/actions';
+import {
+  stopMonitoring as stopMonitoringConnected,
+} from 'redux/monitoring/actions';
 
 import StatusBeaconComponent from './StatusBeaconComponent';
 
@@ -60,7 +62,7 @@ const NavigationBarComponent = ({
             <StatusBeaconComponent />
           </Nav.Item>
           <Nav.Item className="ml-auto">
-          <NavDropdown
+            <NavDropdown
               className="settings-panel-dropdown"
               title={<div className="settings-panel-icon" />}
               alignRight

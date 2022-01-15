@@ -1,10 +1,14 @@
-import { put, select, take, takeLatest } from 'redux-saga/effects';
+import {
+  put, select, take, takeLatest,
+} from 'redux-saga/effects';
 
 import RealUserMonitoring from 'config/monitoring';
 
 import selectUsers from 'redux/users/selectors';
 
-import { GET_CURRENT_USER_COMPLETED } from 'redux/users/actions';
+import {
+  GET_CURRENT_USER_COMPLETED,
+} from 'redux/users/actions';
 
 import {
   START_MONITORING_REQUESTED,
@@ -23,7 +27,9 @@ export function* startMonitoringImpl() {
   try {
     // Wait for current user to be logged in
     yield take([GET_CURRENT_USER_COMPLETED]);
-    const { currentUser } = yield select(selectUsers);
+    const {
+      currentUser,
+    } = yield select(selectUsers);
 
     // Initialise RUM
     RealUserMonitoring.init();
