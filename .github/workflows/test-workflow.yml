@@ -16,7 +16,9 @@ jobs:
 
   cypress-run:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.13.0-chrome95-ff94
+    container:
+      image: cypress/browsers:node16.13.0-chrome95-ff94
+      options: --user 1001
     steps:
       - uses: actions/checkout@v2
       - name: Cypress run
