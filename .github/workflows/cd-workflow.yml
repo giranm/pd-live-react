@@ -20,8 +20,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '16.13.0'
-      - run: npm install
-      - run: npm run build
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install modules
+        run: yarn install
+      - name: Build application bundle
+        run: yarn build
       # Omitting test from pipeline until they are in place
       # - run: npm test
       - name: Deploy
