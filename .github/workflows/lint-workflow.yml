@@ -7,7 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install Yarn
+        run: npm install -g yarn
       - name: Install modules
-        run: npm install
+        run: yarn install
       - name: Run ESLint
         run: npx eslint src --ext .js,.jsx,.ts,.tsx --exit-on-fatal-error
