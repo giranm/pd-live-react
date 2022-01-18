@@ -33,47 +33,25 @@ If you wish to maintain + deploy your own version of PagerDuty Live, we recommen
 
 1. Install [NodeJS v16.13](https://nodejs.org/tr/blog/release/v16.13.0/) (or switch using [`asdf install`](https://github.com/asdf-vm/asdf))
 
-2. Install `craco` via `$ npm install @craco/craco --save --global`  
+2. Install `craco` via `$ yarn install @craco/craco --save --global`  
    (NB - you may need to reload terminal session to use the alias)
 
 3. `$ git clone` repo to desired destination and `$ cd pd-live-react` into directory.
 
 4. (_Optional_) Create `.env` file in project root with overriding configuration (see section below for details)
 
-5. Install dependencies with `$ npm install` and run application locally using `$ npm start`  
+5. Install dependencies with `$ yarn install` and run application locally using `$ yarn start`  
    The app will be available under http://localhost:3000/pd-live-react
 
 #### Environment Overrides
 
-The following _optional_ parameters can be used in a `.env` file to override PagerDuty Live during local serve (`npm start`):  
+The following _optional_ parameters can be used in a `.env` file to override PagerDuty Live during local serve (`yarn start`):  
 | Parameter | Usage |
 | ----------- | ----------- |
 | `REACT_APP_PD_OAUTH_CLIENT_ID` | PagerDuty OAuth App client ID (created upon registering app) |
 | `REACT_APP_PD_OAUTH_CLIENT_SECRET` | PagerDuty OAuth App client secret (created upon registering app) |
 | `REACT_APP_PD_USER_TOKEN` | PagerDuty [Personal API Token](https://support.pagerduty.com/docs/generating-api-keys#generating-a-personal-rest-api-key); this will override OAuth login workflow if set|
 | `REACT_APP_PD_SUBDOMAIN_ALLOW_LIST` | Comma separated list of allowed subdomains (e.g. `acme-prod,acme-dev`) |
-
-#### Deployment (GitHub Pages)
-
-These steps assume you have forked the repo to a new GitHub repo and wish to deploy using [GitHub Pages](https://github.com/gitname/react-gh-pages).
-
-1. Modify `homepage` within `package.json` accordingly (e.g. https://[GIT_USERNAME].github.io/pd-live-react/)
-
-2. Update your PagerDuty Client ID and Secret under `src/config/constants.js` (consider external API call)  
-   (Don't forget to add and commit changes!)
-
-3. (_Optional_) Create `gh-pages` branch for tracking
-
-   - `$ git checkout -b gh-pages`
-   - `$ git branch --set-upstream gh-pages origin/gh-pages`
-   - `$ git push`
-   - `$ git checkout -`
-
-4. Install `gh-pages` module via `$ npm install gh-pages --save-dev --global`
-
-5. Deploy application to GitHub Pages via `$ npm run deploy`
-
-6. Application will be accessible under the homepage specified in step #1.
 
 ## License
 
