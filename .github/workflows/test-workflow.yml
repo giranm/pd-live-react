@@ -14,18 +14,19 @@ jobs:
       - name: Run Jest Tests
         run: yarn test:jest
 
-  cypress-run:
-    runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node16.13.0-chrome95-ff94
-      options: --user 1001
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          install-command: yarn install
-          start: yarn start
-          wait-on: 'http://localhost:3000/pd-live-react'
-          wait-on-timeout: 120
-          browser: chrome
+  # FIXME: https://github.com/cypress-io/cypress/issues/19531
+  # cypress-run:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: cypress/browsers:node16.13.0-chrome95-ff94
+  #     options: --user 1001
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Cypress run
+  #       uses: cypress-io/github-action@v2
+  #       with:
+  #         install-command: yarn install
+  #         start: yarn start
+  #         wait-on: 'http://localhost:3000/pd-live-react'
+  #         wait-on-timeout: 120
+  #         browser: chrome
