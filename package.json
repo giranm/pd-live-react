@@ -48,8 +48,9 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test:jest": "npx jest",
-    "test:cypress": "npx cypress run",
+    "jest": "npx jest",
+    "cypress:run": "npx cypress run",
+    "cypress:open": "npx cypress open",
     "eject": "craco eject",
     "lint": "npx eslint src --ext .js,.jsx,.ts,.tsx --exit-on-fatal-error",
     "format": "npx prettier-eslint --write \"src/**/*.js\"",
