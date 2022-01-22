@@ -53,6 +53,13 @@ The following _optional_ parameters can be used in a `.env` file to override Pag
 | `REACT_APP_PD_USER_TOKEN` | PagerDuty [Personal API Token](https://support.pagerduty.com/docs/generating-api-keys#generating-a-personal-rest-api-key); this will override OAuth login workflow if set|
 | `REACT_APP_PD_SUBDOMAIN_ALLOW_LIST` | Comma separated list of allowed subdomains (e.g. `acme-prod,acme-dev`) |
 
+## Testing
+
+The following scripts are created to run unit, component, and integration tests:
+
+- `$ yarn jest` (Unit/Component)
+- `$ yarn cypress:ci` (Integration)
+
 ## License
 
 MIT License
