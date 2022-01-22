@@ -189,7 +189,11 @@ const IncidentTableComponent = ({
             row,
           }) => (
             <div>
-              <CheckboxComponent {...row.getToggleRowSelectedProps()} />
+              <CheckboxComponent
+                data-incident-row-idx={row.index}
+                data-incident-id={row.original.id}
+                {...row.getToggleRowSelectedProps()}
+              />
             </div>
           ),
         },
