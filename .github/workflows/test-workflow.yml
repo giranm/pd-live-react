@@ -7,23 +7,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Yarn
-        run: npm install -g yarn
-      - name: Install modules
-        run: yarn install
-      - name: Run Jest Tests
-        run: yarn jest
 
-  # FIXME: https://github.com/cypress-io/cypress/issues/19531
-  # FIXME: https://github.com/cypress-io/cypress-docker-images/issues/149
-  cypress-run:
-    runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node16.13.0-chrome95-ff94
-      options: --user 1001
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install modules
-        run: yarn install
-      - name: Run Cypress Tests
-        run: Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99 && yarn cypress:ci:chrome && pkill Xvfb
+      # use recent version for @cypress/react v5.7.0+
+      - name: Use Node.js v14+
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+          
+      - name: Yarn install
+      # not sure global yarn install is needed
+        run: npm install -g yarn
+      - run: yarn install
+      - run: npx -y browserslist@latest --update-db
+
+      - name: Cypress component tests
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          command: npx cypress run-ct
+
+      - name: Cypress e2e tests
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          build: npm run build
+          start: npx -y serve build/
+          wait-on: 'http://localhost:3000'
+          command: npx cypress run
+
+      - name: Store test videos
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
