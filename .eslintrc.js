@@ -1,6 +1,4 @@
-const {
-  OFF, WARN, ERROR,
-} = {
+const { OFF, WARN, ERROR } = {
   OFF: 0,
   WARN: 1,
   ERROR: 2,
@@ -12,14 +10,14 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb'],
+  extends: ['plugin:react/recommended', 'airbnb', 'plugin:cypress/recommended'],
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: { jsx: true },
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react', 'prettier'],
+  plugins: ['react', 'prettier', 'cypress'],
   rules: {
     'max-len': [WARN, { code: 100, ignorePattern: '^import\\W.*', ignoreTrailingComments: true }],
     'object-curly-newline': [
@@ -32,6 +30,7 @@ module.exports = {
     'no-param-reassign': [ERROR, { props: true, ignorePropertyModificationsFor: ['draft'] }],
     'no-use-before-define': [ERROR, { functions: false }],
     'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
+    'jest/expect-expect': OFF,
   },
   overrides: [
     {

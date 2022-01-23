@@ -1,0 +1,30 @@
+name: Test Framework Suite
+
+on: [pull_request]
+
+jobs:
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install modules
+        run: yarn install
+      - name: Run Jest Tests
+        run: yarn jest
+
+  cypress-run:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_PD_SUBDOMAIN_ALLOW_LIST: '*'
+      REACT_APP_PD_USER_TOKEN: ${{ secrets.PD_INTEGRATION_USER_TOKEN }}
+    container:
+      image: cypress/browsers:node16.13.0-chrome95-ff94
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn install
+      - name: Run Cypress Tests
+        run: Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99 && yarn cypress:ci:chrome && pkill Xvfb

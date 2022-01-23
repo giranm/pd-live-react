@@ -236,6 +236,7 @@ const DisclaimerModalComponent = ({
         <Modal.Footer>
           <Form.Group className="mb-3">
             <Form.Check
+              id="disclaimer-agree-checkbox"
               required
               label="I agree to the disclaimer and license above"
               feedback="You must agree before submitting."
@@ -244,6 +245,7 @@ const DisclaimerModalComponent = ({
             />
           </Form.Group>
           <Button
+            id="disclaimer-accept-button"
             variant="primary"
             onClick={() => userAcceptDisclaimer()}
             disabled={!acceptDisclaimer}
@@ -251,6 +253,7 @@ const DisclaimerModalComponent = ({
             Accept
           </Button>
           <Button
+            id="disclaimer-decline-button"
             variant="danger"
             onClick={() => {
               PDOAuth.logout();
