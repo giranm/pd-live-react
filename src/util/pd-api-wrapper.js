@@ -23,6 +23,7 @@ export const getPdAccessTokenObject = () => {
   let tokenType;
 
   if (PD_USER_TOKEN) {
+    sessionStorage.setItem('pd_access_token', token);
     token = PD_USER_TOKEN;
   } else {
     token = sessionStorage.getItem('pd_access_token');

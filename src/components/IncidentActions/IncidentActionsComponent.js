@@ -245,6 +245,7 @@ const IncidentActionsComponent = ({
           </Col>
           <Col>
             <Button
+              id="incident-action-acknowledge-button"
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => acknowledge(selectedRows)}
