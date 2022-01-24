@@ -11,6 +11,14 @@ import {
 } from 'redux/log_entries/actions';
 
 import {
+  updateConnectionStatusRequested, MISSING_ABILITY_ERROR,
+} from 'util/sagas';
+
+import {
+  PD_REQUIRED_ABILITY,
+} from 'config/constants';
+
+import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
   UPDATE_CONNECTION_STATUS_COMPLETED,
   CHECK_CONNECTION_STATUS_REQUESTED,
@@ -63,18 +71,23 @@ export function* checkConnectionStatusImpl() {
   }
 
   // Update connection status depending on store state
+  const {
+    abilities,
+  } = store.connection;
   if (validConnection) {
-    yield put({
-      type: UPDATE_CONNECTION_STATUS_COMPLETED,
-      connectionStatus: 'positive',
-      connectionStatusMessage: 'Connected',
-    });
+    if (!abilities.includes(PD_REQUIRED_ABILITY)) {
+      yield updateConnectionStatusRequested('negative', MISSING_ABILITY_ERROR);
+    } else {
+      yield put({
+        type: UPDATE_CONNECTION_STATUS_COMPLETED,
+        connectionStatus: 'positive',
+        connectionStatusMessage: 'Connected',
+      });
+    }
+  } else if (!abilities.includes(PD_REQUIRED_ABILITY)) {
+    yield updateConnectionStatusRequested('negative', MISSING_ABILITY_ERROR);
   } else {
-    yield put({
-      type: UPDATE_CONNECTION_STATUS_REQUESTED,
-      connectionStatus: 'neutral',
-      connectionStatusMessage: store.connection.connectionStatusMessage,
-    });
+    yield updateConnectionStatusRequested('neutral', store.connection.connectionStatusMessage);
   }
   yield put({ type: CHECK_CONNECTION_STATUS_COMPLETED });
 }
@@ -85,6 +98,7 @@ export function* checkAbilities() {
 
 export function* checkAbilitiesAsync() {
   try {
+    // Obtain abilities from API
     const response = yield call(pd.get, 'abilities');
     const {
       status,
@@ -94,16 +108,17 @@ export function* checkAbilitiesAsync() {
     }
     const abilities = response.resource;
     yield put({ type: CHECK_ABILITIES_COMPLETED, abilities });
+
+    // Check if required ability is present, else identicate error
+    if (!abilities.includes(PD_REQUIRED_ABILITY)) {
+      yield updateConnectionStatusRequested('negative', MISSING_ABILITY_ERROR);
+    }
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
       e.message = 'Unauthorized Access';
     }
     yield put({ type: CHECK_ABILITIES_ERROR, message: e.message });
-    yield put({
-      type: UPDATE_CONNECTION_STATUS_REQUESTED,
-      connectionStatus: 'neutral',
-      connectionStatusMessage: e.message,
-    });
+    yield updateConnectionStatusRequested('neutral', e.message);
   }
 }
