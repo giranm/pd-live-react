@@ -33,8 +33,7 @@ export function* startMonitoringImpl() {
 
     // Initialise RUM
     RealUserMonitoring.init();
-    RealUserMonitoring.setSubdomain(subdomain);
-    RealUserMonitoring.setUser(currentUser);
+    RealUserMonitoring.setUser(currentUser, subdomain);
     RealUserMonitoring.start();
 
     yield put({

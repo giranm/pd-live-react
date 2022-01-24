@@ -30,17 +30,12 @@ class RealUserMonitoring {
     });
   }
 
-  static setSubdomain(pdSubdomain) {
-    datadogRum.setRumGlobalContext({
-      pdSubdomain,
-    });
-  }
-
-  static setUser(currentUser) {
+  static setUser(currentUser, subdomain) {
     datadogRum.setUser({
       id: currentUser.id,
       email: currentUser.email,
       name: currentUser.name,
+      subdomain,
     });
   }
 
