@@ -103,6 +103,10 @@ import {
   updateConnectionStatus, checkConnectionStatus, checkAbilities,
 } from './connection/sagas';
 
+import {
+  startMonitoring, stopMonitoring,
+} from './monitoring/sagas';
+
 export default function* rootSaga() {
   yield take(REHYDRATE); // Wait for rehydrate to prevent sagas from running with empty store
   yield all([
@@ -196,5 +200,9 @@ export default function* rootSaga() {
     updateConnectionStatus(),
     checkConnectionStatus(),
     checkAbilities(),
+
+    // Monitoring
+    startMonitoring(),
+    stopMonitoring(),
   ]);
 }

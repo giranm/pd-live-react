@@ -19,6 +19,9 @@ import {
   userAcceptDisclaimer as userAcceptDisclaimerConnected,
   userUnauthorize as userUnauthorizeConnected,
 } from 'redux/users/actions';
+import {
+  stopMonitoring as stopMonitoringConnected,
+} from 'redux/monitoring/actions';
 
 import StatusBeaconComponent from './StatusBeaconComponent';
 
@@ -30,6 +33,7 @@ const NavigationBarComponent = ({
   toggleDisplayQuerySettings,
   userAcceptDisclaimer,
   userUnauthorize,
+  stopMonitoring,
 }) => (
   <div className="navbar-ctr">
     <Navbar bg="light" variant="light">
@@ -77,6 +81,7 @@ const NavigationBarComponent = ({
                   PDOAuth.logout();
                   userAcceptDisclaimer();
                   userUnauthorize();
+                  stopMonitoring();
                 }}
               >
                 Log Out
@@ -97,6 +102,7 @@ const mapDispatchToProps = (dispatch) => ({
   toggleDisplayQuerySettings: () => dispatch(toggleDisplayQuerySettingsConnected()),
   userAcceptDisclaimer: () => dispatch(userAcceptDisclaimerConnected()),
   userUnauthorize: () => dispatch(userUnauthorizeConnected()),
+  stopMonitoring: () => dispatch(stopMonitoringConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationBarComponent);

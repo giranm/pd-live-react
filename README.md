@@ -42,15 +42,23 @@ If you wish to maintain + deploy your own version of PagerDuty Live, we recommen
 5. Install dependencies with `$ yarn install` and run application locally using `$ yarn start`  
    The app will be available under http://localhost:3000/pd-live-react
 
-#### Environment Overrides
+## Environment Overrides
 
-The following _optional_ parameters can be used in a `.env` file to override PagerDuty Live during local serve (`yarn start`):  
+The following _optional_ parameters can be used in a `.env` file to override PagerDuty Live during `$ yarn start`:  
 | Parameter | Usage |
 | ----------- | ----------- |
+| `REACT_APP_PD_ENV` | PagerDuty Live Environment Tag; defaults to `localhost-dev` if not set |
+| `REACT_APP_PD_APP_VERSION` | PagerDuty Live Application Version; defaults to `9.9.9` if not set |
 | `REACT_APP_PD_OAUTH_CLIENT_ID` | PagerDuty OAuth App client ID (created upon registering app) |
 | `REACT_APP_PD_OAUTH_CLIENT_SECRET` | PagerDuty OAuth App client secret (created upon registering app) |
 | `REACT_APP_PD_USER_TOKEN` | PagerDuty [Personal API Token](https://support.pagerduty.com/docs/generating-api-keys#generating-a-personal-rest-api-key); this will override OAuth login workflow if set and should be used for integration tests|
 | `REACT_APP_PD_SUBDOMAIN_ALLOW_LIST` | Comma separated list of allowed subdomains (e.g. `acme-prod,acme-dev`) |
+| `REACT_APP_DD_APPLICATION_ID` | Datadog [RUM Application ID](https://docs.datadoghq.com/real_user_monitoring/browser/#setup) |
+| `REACT_APP_DD_CLIENT_TOKEN` | Datadog [RUM Client Token](https://docs.datadoghq.com/account_management/api-app-keys/#client-tokens) |
+| `REACT_APP_DD_SITE` | Datadog [site](https://docs.datadoghq.com/agent/basic_agent_usage/?tab=agentv6v7#datadog-site) (e.g. `datadoghq.com`) |
+| `REACT_APP_DD_SAMPLE_RATE` | Datadog [RUM Sample Rate](https://docs.datadoghq.com/real_user_monitoring/browser/#browser-and-session-replay-sampling-configuration) (e.g. `100`) |
+| `REACT_APP_DD_TRACK_INTERACTIONS` | Datadog [RUM Track Interactions](https://docs.datadoghq.com/real_user_monitoring/browser/tracking_user_actions/?tab=npm) (e.g. `true`) |
+| `REACT_APP_DD_DEFAULT_PRIVACY_LEVEL` | Datadog [RUM Default Privacy Level](https://docs.datadoghq.com/real_user_monitoring/session_replay/privacy_options/?tab=maskuserinput) (e.g. `mask-user-input`) |
 
 ## Testing
 

@@ -1,11 +1,24 @@
 // Hosts App Constants
 export const env = { ...process.env, ...window.env };
 
+// Application Details
+export const PD_APP_NAME = 'pd-live-react';
+export const PD_APP_VERSION = env.REACT_APP_PD_APP_VERSION || '9.9.9'; // TODO: Get this dynamically
+export const PD_ENV = env.REACT_APP_PD_ENV || 'localhost-dev';
+
 // Authentication
 export const PD_OAUTH_CLIENT_ID = env.REACT_APP_PD_OAUTH_CLIENT_ID || null;
 export const PD_OAUTH_CLIENT_SECRET = env.REACT_APP_PD_OAUTH_CLIENT_SECRET || null;
 export const PD_SUBDOMAIN_ALLOW_LIST = env.REACT_APP_PD_SUBDOMAIN_ALLOW_LIST || '*';
 export const PD_USER_TOKEN = env.REACT_APP_PD_USER_TOKEN || null;
+
+// Monitoring
+export const DD_APPLICATION_ID = env.REACT_APP_DD_APPLICATION_ID || null;
+export const DD_CLIENT_TOKEN = env.REACT_APP_DD_CLIENT_TOKEN || null;
+export const DD_SITE = env.REACT_APP_DD_SITE || null;
+export const DD_SAMPLE_RATE = env.REACT_APP_DD_SAMPLE_RATE || null;
+export const DD_TRACK_INTERACTIONS = env.REACT_APP_DD_TRACK_INTERACTIONS || null;
+export const DD_DEFAULT_PRIVACY_LEVEL = env.REACT_APP_DD_DEFAULT_PRIVACY_LEVEL || null;
 
 // REST API
 export const LOG_ENTRIES_POLLING_INTERVAL_SECONDS = 5;
