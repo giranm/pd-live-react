@@ -1,11 +1,12 @@
 import {
-  acceptDisclaimer,
+  acceptDisclaimer, waitForIncidentTable,
 } from '../../support/util/common';
 
 describe('Manage Open Incidents', () => {
   // We use beforeEach as each test will reload/clear the session
   beforeEach(() => {
     acceptDisclaimer();
+    waitForIncidentTable();
   });
   it('Acknowledge first incident', () => {
     cy.visit('/');
