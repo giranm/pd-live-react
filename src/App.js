@@ -25,6 +25,7 @@ import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
 
 import {
   getIncidentsAsync as getIncidentsAsyncConnected,
+  getAllIncidentNotesAsync as getAllIncidentNotesAsyncConnected,
 } from 'redux/incidents/actions';
 import {
   getLogEntriesAsync as getLogEntriesAsyncConnected,
@@ -92,6 +93,7 @@ const App = ({
   getExtensionsAsync,
   getResponsePlaysAsync,
   getIncidentsAsync,
+  getAllIncidentNotesAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
@@ -118,6 +120,7 @@ const App = ({
       getResponsePlaysAsync();
       getPrioritiesAsync();
       getIncidentsAsync();
+      getAllIncidentNotesAsync();
       checkConnectionStatus();
     }
   }, [userAuthorized]);
@@ -202,6 +205,7 @@ const mapDispatchToProps = (dispatch) => ({
   getExtensionsAsync: () => dispatch(getExtensionsAsyncConnected()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
   getIncidentsAsync: () => dispatch(getIncidentsAsyncConnected()),
+  getAllIncidentNotesAsync: () => dispatch(getAllIncidentNotesAsyncConnected()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsyncConnected()),
 });

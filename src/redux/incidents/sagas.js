@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest, takeEvery, all,
+  put, call, select, takeLatest, takeEvery, all, take,
 } from 'redux-saga/effects';
 
 import Fuse from 'fuse.js';
@@ -105,16 +105,13 @@ export function* getIncidents() {
       incidents,
     });
 
-    // Get notes for each incident (implictly updates store)
-    yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
-
     // Filter incident list on priority (can't do this from API)
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_PRIORITY,
       incidentPriority,
     });
 
-    // Filter updated incident list by query; required to prevent empty table on initial load
+    // Filter updated incident list by query; updates memoized data within incidents table
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_QUERY,
       searchQuery,
@@ -178,6 +175,9 @@ export function* getAllIncidentNotesAsync() {
 
 export function* getAllIncidentNotes() {
   try {
+    // Wait until incidents have been fetched before obtaining notes
+    yield take([FETCH_INCIDENTS_COMPLETED, FETCH_INCIDENTS_ERROR]);
+
     // Build list of promises to call PD endpoint
     const {
       incidents,
@@ -194,12 +194,20 @@ export function* getAllIncidentNotes() {
       return tempIncident;
     });
 
+    // Update store with incident having notes data
     yield put({
       type: FETCH_ALL_INCIDENT_NOTES_COMPLETED,
       incidents: updatedIncidentsList,
     });
 
-    // Update store with incident having notes data
+    // Filter updated incident list by query; updates memoized data within incidents table
+    const {
+      searchQuery,
+    } = yield select(selectQuerySettings);
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_QUERY,
+      searchQuery,
+    });
   } catch (e) {
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
     yield put({
