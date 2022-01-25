@@ -1,5 +1,5 @@
 import {
-  getInitials,
+  getInitials, getSubdomainFromUserUrl,
 } from './helpers';
 
 describe('getInitials', () => {
@@ -17,5 +17,18 @@ describe('getInitials', () => {
     const fullName = 'Bob Dave Smith';
     const initials = getInitials(fullName);
     expect(initials).toEqual('BS');
+  });
+});
+
+describe('getSubdomainFromUserUrl', () => {
+  it('Given a valid user html string (US domain), it will return the subdomain ', () => {
+    const htmlURL = 'https://acme-dev.pagerduty.com/users/PABCXYZ';
+    const subdomain = getSubdomainFromUserUrl(htmlURL);
+    expect(subdomain).toEqual('acme-dev');
+  });
+  it('Given a valid user html string (EU domain), it will return the subdomain ', () => {
+    const htmlURL = 'https://acme-dev.eu.pagerduty.com/users/PABCXYZ';
+    const subdomain = getSubdomainFromUserUrl(htmlURL);
+    expect(subdomain).toEqual('acme-dev');
   });
 });
