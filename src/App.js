@@ -2,7 +2,7 @@ import {
   useEffect,
 } from 'react';
 import {
-  connect, useSelector,
+  connect,
 } from 'react-redux';
 import {
   Container,
@@ -59,6 +59,9 @@ import {
 import {
   startMonitoring as startMonitoringConnected,
 } from 'redux/monitoring/actions';
+import {
+  store,
+} from 'redux/store';
 
 import {
   getLanguage,
@@ -120,11 +123,13 @@ const App = ({
   }, [userAuthorized]);
 
   // Setup log entry polling
-  const abilities = useSelector((store) => store.connection.abilities);
   useEffect(() => {
     const pollingInterval = setInterval(() => {
       checkAbilities();
       checkConnectionStatus();
+      const {
+        abilities,
+      } = store.getState().connection;
       if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY)) {
         const lastPolledDate = moment()
           .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')

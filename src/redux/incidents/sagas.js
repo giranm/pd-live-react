@@ -72,7 +72,13 @@ export function* getIncidents() {
   try {
     //  Build params from query settings and call pd lib
     const {
-      sinceDate, incidentStatus, incidentUrgency, teamIds, serviceIds, incidentPriority,
+      sinceDate,
+      incidentStatus,
+      incidentUrgency,
+      teamIds,
+      serviceIds,
+      incidentPriority,
+      searchQuery,
     } = yield select(selectQuerySettings);
 
     const params = {
@@ -91,6 +97,9 @@ export function* getIncidents() {
 
     const incidents = yield pdParallelFetch('incidents', params);
 
+    // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
+    incidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
       incidents,
@@ -103,6 +112,12 @@ export function* getIncidents() {
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_PRIORITY,
       incidentPriority,
+    });
+
+    // Filter updated incident list by query; required to prevent empty table on initial load
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_QUERY,
+      searchQuery,
     });
   } catch (e) {
     yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
