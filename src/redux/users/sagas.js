@@ -9,7 +9,7 @@ import {
   pd,
 } from 'util/pd-api-wrapper';
 import {
-  convertListToMapById,
+  convertListToMapById, getSubdomainFromUserUrl,
 } from 'util/helpers';
 
 import {
@@ -49,7 +49,7 @@ export function* userAuthorizeImpl() {
     const {
       currentUser,
     } = yield select(selectUsers);
-    const currentSubdomain = currentUser.html_url.split('.')[0].split('https://')[1];
+    const currentSubdomain = getSubdomainFromUserUrl(currentUser.html_url);
     const allowedSubdomains = PD_SUBDOMAIN_ALLOW_LIST.split(',');
 
     if (allowedSubdomains.includes('*') || allowedSubdomains.includes(currentSubdomain)) {

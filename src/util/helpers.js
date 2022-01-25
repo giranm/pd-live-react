@@ -68,3 +68,6 @@ export const getInitials = (fullName) => {
 
 // Compare created at date objects
 export const compareCreatedAt = (a, b) => moment(a.created_at).diff(moment(b.created_at));
+
+// Get subdomain from user reference url
+export const getSubdomainFromUserUrl = (htmlUrl) => htmlUrl.split('.')[0].split('https://')[1];
