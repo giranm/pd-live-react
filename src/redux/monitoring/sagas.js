@@ -7,7 +7,7 @@ import RealUserMonitoring from 'config/monitoring';
 import selectUsers from 'redux/users/selectors';
 
 import {
-  GET_CURRENT_USER_COMPLETED,
+  USER_AUTHORIZE_COMPLETED, USER_UNAUTHORIZE_COMPLETED,
 } from 'redux/users/actions';
 
 import {
@@ -25,8 +25,8 @@ export function* startMonitoring() {
 
 export function* startMonitoringImpl() {
   try {
-    // Wait for current user to be logged in
-    yield take([GET_CURRENT_USER_COMPLETED]);
+    // Wait for current user to be authorized
+    yield take([USER_AUTHORIZE_COMPLETED, USER_UNAUTHORIZE_COMPLETED]);
     const {
       currentUser, subdomain,
     } = yield select(selectUsers);
