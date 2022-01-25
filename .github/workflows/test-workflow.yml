@@ -17,8 +17,15 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     env:
+      REACT_APP_PD_ENV: 'github-ci'
       REACT_APP_PD_SUBDOMAIN_ALLOW_LIST: '*'
       REACT_APP_PD_USER_TOKEN: ${{ secrets.PD_INTEGRATION_USER_TOKEN }}
+      REACT_APP_DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
+      REACT_APP_DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
+      REACT_APP_DD_SITE: ${{ secrets.DD_SITE }}
+      REACT_APP_DD_SAMPLE_RATE: ${{ secrets.DD_SAMPLE_RATE }}
+      REACT_APP_DD_TRACK_INTERACTIONS: ${{ secrets.DD_TRACK_INTERACTIONS }}
+      REACT_APP_DD_DEFAULT_PRIVACY_LEVEL: ${{ secrets.DD_DEFAULT_PRIVACY_LEVEL }}
     container:
       image: cypress/browsers:node16.13.0-chrome95-ff94
       options: --user 1001
