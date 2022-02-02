@@ -53,6 +53,7 @@ The following _optional_ parameters can be used in a `.env` file to override Pag
 | `REACT_APP_PD_OAUTH_CLIENT_SECRET` | PagerDuty OAuth App client secret (created upon registering app) |
 | `REACT_APP_PD_USER_TOKEN` | PagerDuty [Personal API Token](https://support.pagerduty.com/docs/generating-api-keys#generating-a-personal-rest-api-key); this will override OAuth login workflow if set and should be used for integration tests|
 | `REACT_APP_PD_SUBDOMAIN_ALLOW_LIST` | Comma separated list of allowed subdomains (e.g. `acme-prod,acme-dev`) |
+| `REACT_APP_PD_REQUIRED_ABILITY` | PagerDuty account-level [ability](https://developer.pagerduty.com/api-reference/b3A6Mjc0ODEwMg-list-abilities) required to use application |
 | `REACT_APP_DD_APPLICATION_ID` | Datadog [RUM Application ID](https://docs.datadoghq.com/real_user_monitoring/browser/#setup) |
 | `REACT_APP_DD_CLIENT_TOKEN` | Datadog [RUM Client Token](https://docs.datadoghq.com/account_management/api-app-keys/#client-tokens) |
 | `REACT_APP_DD_SITE` | Datadog [site](https://docs.datadoghq.com/agent/basic_agent_usage/?tab=agentv6v7#datadog-site) (e.g. `datadoghq.com`) |
