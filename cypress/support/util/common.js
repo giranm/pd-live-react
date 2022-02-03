@@ -1,7 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 
 export const acceptDisclaimer = () => {
-  cy.visit('/');
+  cy.visit('/', {
+    onBeforeLoad: (win) => {
+      win.sessionStorage.clear();
+    },
+  });
   cy.get('.modal-title', { timeout: 30000 }).contains('Disclaimer & License');
   cy.get('#disclaimer-agree-checkbox').click();
   cy.get('#disclaimer-accept-button').click();

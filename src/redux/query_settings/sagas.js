@@ -3,7 +3,9 @@ import {
 } from 'redux-saga/effects';
 
 import {
-  FETCH_INCIDENTS_REQUESTED, FILTER_INCIDENTS_LIST_BY_QUERY,
+  FETCH_INCIDENTS_REQUESTED,
+  FILTER_INCIDENTS_LIST_BY_QUERY,
+  FETCH_ALL_INCIDENT_NOTES_REQUESTED,
 } from 'redux/incidents/actions';
 import {
   FETCH_SERVICES_REQUESTED,
@@ -48,12 +50,13 @@ export function* updateQuerySettingsSinceDate() {
 }
 
 export function* updateQuerySettingsSinceDateImpl(action) {
-  // Update since date and re-request incidents list
+  // Update since date and re-request incidents list + notes
   const {
     sinceDate,
   } = action;
   yield put({ type: UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED, sinceDate });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
+  yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 }
 
 export function* updateQuerySettingsIncidentStatus() {
@@ -64,7 +67,7 @@ export function* updateQuerySettingsIncidentStatus() {
 }
 
 export function* updateQuerySettingsIncidentStatusImpl(action) {
-  // Update incident status and re-request incidents list
+  // Update incident status and re-request incidents list + notes
   const {
     incidentStatus,
   } = action;
@@ -73,6 +76,7 @@ export function* updateQuerySettingsIncidentStatusImpl(action) {
     incidentStatus,
   });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
+  yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 }
 
 export function* updateQuerySettingsIncidentUrgency() {
@@ -83,7 +87,7 @@ export function* updateQuerySettingsIncidentUrgency() {
 }
 
 export function* updateQuerySettingsIncidentUrgencyImpl(action) {
-  // Update incident urgency and re-request incidents list
+  // Update incident urgency and re-request incidents list + notes
   const {
     incidentUrgency,
   } = action;
@@ -92,6 +96,7 @@ export function* updateQuerySettingsIncidentUrgencyImpl(action) {
     incidentUrgency,
   });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
+  yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 }
 
 export function* updateQuerySettingsIncidentPriority() {
@@ -111,6 +116,7 @@ export function* updateQuerySettingsIncidentPriorityImpl(action) {
     incidentPriority,
   });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
+  yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 }
 
 export function* updateQuerySettingsTeams() {
@@ -125,6 +131,7 @@ export function* updateQuerySettingsTeamsImpl(action) {
   yield put({ type: FETCH_SERVICES_REQUESTED, teamIds });
   yield put({ type: UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED, teamIds });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
+  yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 }
 
 export function* updateQuerySettingsServices() {
@@ -132,12 +139,13 @@ export function* updateQuerySettingsServices() {
 }
 
 export function* updateQuerySettingsServicesImpl(action) {
-  // Update service ids and re-request incidents list
+  // Update service ids and re-request incidents list + notes
   const {
     serviceIds,
   } = action;
   yield put({ type: UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED, serviceIds });
   yield put({ type: FETCH_INCIDENTS_REQUESTED });
+  yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
 }
 
 export function* updateSearchQuery() {

@@ -25,6 +25,7 @@ import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
 
 import {
   getIncidentsAsync as getIncidentsAsyncConnected,
+  getAllIncidentNotesAsync as getAllIncidentNotesAsyncConnected,
 } from 'redux/incidents/actions';
 import {
   getLogEntriesAsync as getLogEntriesAsyncConnected,
@@ -59,12 +60,16 @@ import {
 import {
   startMonitoring as startMonitoringConnected,
 } from 'redux/monitoring/actions';
+import {
+  store,
+} from 'redux/store';
 
 import {
   getLanguage,
 } from 'util/helpers';
 
 import {
+  PD_REQUIRED_ABILITY,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
 } from 'config/constants';
@@ -88,6 +93,7 @@ const App = ({
   getExtensionsAsync,
   getResponsePlaysAsync,
   getIncidentsAsync,
+  getAllIncidentNotesAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
@@ -114,16 +120,20 @@ const App = ({
       getResponsePlaysAsync();
       getPrioritiesAsync();
       getIncidentsAsync();
+      getAllIncidentNotesAsync();
       checkConnectionStatus();
     }
   }, [userAuthorized]);
 
-  // Setup log entry polling.
+  // Setup log entry polling
   useEffect(() => {
     const pollingInterval = setInterval(() => {
       checkAbilities();
       checkConnectionStatus();
-      if (userAuthorized) {
+      const {
+        abilities,
+      } = store.getState().connection;
+      if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY)) {
         const lastPolledDate = moment()
           .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
           .toDate();
@@ -195,6 +205,7 @@ const mapDispatchToProps = (dispatch) => ({
   getExtensionsAsync: () => dispatch(getExtensionsAsyncConnected()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
   getIncidentsAsync: () => dispatch(getIncidentsAsyncConnected()),
+  getAllIncidentNotesAsync: () => dispatch(getAllIncidentNotesAsyncConnected()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsyncConnected()),
 });

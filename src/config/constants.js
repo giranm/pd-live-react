@@ -11,6 +11,7 @@ export const PD_OAUTH_CLIENT_ID = env.REACT_APP_PD_OAUTH_CLIENT_ID || null;
 export const PD_OAUTH_CLIENT_SECRET = env.REACT_APP_PD_OAUTH_CLIENT_SECRET || null;
 export const PD_SUBDOMAIN_ALLOW_LIST = env.REACT_APP_PD_SUBDOMAIN_ALLOW_LIST || '*';
 export const PD_USER_TOKEN = env.REACT_APP_PD_USER_TOKEN || null;
+export const PD_REQUIRED_ABILITY = env.REACT_APP_PD_REQUIRED_ABILITY || null;
 
 // Monitoring
 export const DD_APPLICATION_ID = env.REACT_APP_DD_APPLICATION_ID || null;

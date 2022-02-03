@@ -7,6 +7,13 @@ import {
   UPDATE_ACTION_ALERTS_MODAL_REQUESTED,
 } from 'redux/action_alerts/actions';
 
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
+
+// eslint-disable-next-line max-len
+export const MISSING_ABILITY_ERROR = 'Current subdomain does not have the correct ability to use PagerDuty Live';
+
 // Helper function to handle errors while processing saga
 export function* handleSagaError(action, exception) {
   yield displayActionModal('danger', exception.message);
@@ -41,4 +48,13 @@ export function* displayActionModal(actionAlertsModalType, actionAlertsModalMess
     actionAlertsModalMessage,
   });
   yield put({ type: TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED });
+}
+
+// Helper function to update connection status
+export function* updateConnectionStatusRequested(status, statusMessage) {
+  yield put({
+    type: UPDATE_CONNECTION_STATUS_REQUESTED,
+    connectionStatus: status,
+    connectionStatusMessage: statusMessage,
+  });
 }
