@@ -58,3 +58,8 @@ a.dropdown-toggle.nav-link::after {
   position: relative;
   top: 3px;
 }
+
+.version-info {
+  color: $pd-green !important;
+  font-weight: 900 !important;
+}

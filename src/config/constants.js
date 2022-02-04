@@ -3,7 +3,6 @@ export const env = { ...process.env, ...window.env };
 
 // Application Details
 export const PD_APP_NAME = 'pd-live-react';
-export const PD_APP_VERSION = env.REACT_APP_PD_APP_VERSION || '9.9.9'; // TODO: Get this dynamically
 export const PD_ENV = env.REACT_APP_PD_ENV || 'localhost-dev';
 
 // Authentication

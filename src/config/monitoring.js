@@ -5,7 +5,6 @@ import {
 
 import {
   PD_APP_NAME,
-  PD_APP_VERSION,
   PD_ENV,
   DD_APPLICATION_ID,
   DD_CLIENT_TOKEN,
@@ -14,6 +13,8 @@ import {
   DD_TRACK_INTERACTIONS,
   DD_DEFAULT_PRIVACY_LEVEL,
 } from 'config/constants';
+
+import PD_APP_VERSION from 'config/version';
 
 class RealUserMonitoring {
   static init() {

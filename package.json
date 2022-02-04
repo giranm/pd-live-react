@@ -1,7 +1,7 @@
 {
   "name": "pd-live-react",
   "homepage": "https://giranm.github.io/pd-live-react",
-  "version": "0.1.0",
+  "version": "0.0.5-alpha.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.3.0",
@@ -49,7 +49,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "npx genversion src/config/version.js --semi && craco build",
+    "genversion": "npx genversion src/config/version.js --semi",
     "jest": "npx jest",
     "cypress:open": "npx cypress open",
     "cypress:run": "npx cypress run",
@@ -104,6 +105,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "genversion": "^3.0.2",
     "gh-pages": "^3.2.3",
     "html-webpack-plugin": "4",
     "identity-obj-proxy": "^3.0.0",

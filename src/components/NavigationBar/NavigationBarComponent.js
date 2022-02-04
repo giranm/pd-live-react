@@ -9,6 +9,8 @@ import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent
 
 import PDOAuth from 'util/pdoauth';
 
+import PD_APP_VERSION from 'config/version';
+
 import {
   toggleSettingsModal as toggleSettingsModalConnected,
 } from 'redux/settings/actions';
@@ -85,6 +87,10 @@ const NavigationBarComponent = ({
                 }}
               >
                 Log Out
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item className="ml-auto version-info" disabled>
+                {`Version: ${PD_APP_VERSION}`}
               </NavDropdown.Item>
             </NavDropdown>
           </Nav.Item>
