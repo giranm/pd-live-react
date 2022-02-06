@@ -2,6 +2,8 @@ import {
   acceptDisclaimer, waitForIncidentTable,
 } from '../support/util/common';
 
+import packageConfig from '../../package.json';
+
 describe('PagerDuty Live', () => {
   beforeEach(() => {
     acceptDisclaimer();
@@ -31,5 +33,11 @@ describe('PagerDuty Live', () => {
     cy.get('.status-beacon-connection').contains(
       'Current subdomain does not have the correct ability to use PagerDuty Live',
     );
+  });
+
+  it('Renders the correct version from package.json', () => {
+    cy.get('.settings-panel-dropdown').click();
+    cy.get('.version-info').should('be.visible');
+    cy.get('.version-info').contains(`Version: ${packageConfig.version}`);
   });
 });
