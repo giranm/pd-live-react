@@ -48,7 +48,6 @@ The following _optional_ parameters can be used in a `.env` file to override Pag
 | Parameter | Usage |
 | ----------- | ----------- |
 | `REACT_APP_PD_ENV` | PagerDuty Live Environment Tag; defaults to `localhost-dev` if not set |
-| `REACT_APP_PD_APP_VERSION` | PagerDuty Live Application Version; defaults to `9.9.9` if not set |
 | `REACT_APP_PD_OAUTH_CLIENT_ID` | PagerDuty OAuth App client ID (created upon registering app) |
 | `REACT_APP_PD_OAUTH_CLIENT_SECRET` | PagerDuty OAuth App client secret (created upon registering app) |
 | `REACT_APP_PD_USER_TOKEN` | PagerDuty [Personal API Token](https://support.pagerduty.com/docs/generating-api-keys#generating-a-personal-rest-api-key); this will override OAuth login workflow if set and should be used for integration tests|
@@ -71,6 +70,39 @@ The following scripts have been created to run unit, component, and integration 
 Please note that running integration tests will require environment variable `REACT_APP_PD_USER_TOKEN` set.  
 
 The integration tests also assume the PagerDuty account associated with the above user token has been setup with the following [Terraform environment](https://github.com/giranm/pd-live-integration-test-environment).
+
+## Versioning & Release
+To prepare PagerDuty Live for release, the current workflow should be carried out:  
+   1. Checkout to `develop` branch and verify if it's stable - i.e. no test and linting failures.
+   
+   2. Update version information in `package.json` using `npm version` - example commands given below:
+      -  Bumping patch version for alpha release 
+         ```
+         $ npm --no-git-tag-version version prepatch --preid alpha
+         v0.0.1-alpha.0
+         ```
+         
+      -  Bumping minor version for main release 
+         ```
+         $ npm --no-git-tag-version version minor
+         v0.1.0
+         ```
+   
+   3. Prepare the appropriate release branch via `$ git checkout -b release/<VERSION>` (following above [semver](https://semver.org/))
+   
+   4. Update application code version using `$ yarn genversion`
+   
+   5. Stage modified files, commit, and push changes upstream:
+      ```
+      $ git add .
+      $ git commit -m "Publishing release <VERSION>"
+      $ git push --set-upstream origin release/<VERSION>
+      ```
+   
+   6. Raise [pull requests](https://github.com/giranm/pd-live-react/pulls) to merge into both `develop` and `main` branches.
+
+   7. Build static bundle via `$ yarn build` or use appropriate CI/CD workflow.
+
 
 ## License
 
