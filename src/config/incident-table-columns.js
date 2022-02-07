@@ -51,7 +51,12 @@ export const availableIncidentTableColumns = [
     Cell: ({
       row,
     }) => (
-      <a href={row.original.html_url} target="_blank" rel="noopener noreferrer">
+      <a
+        href={row.original.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="td-wrapper"
+      >
         {row.original.title}
       </a>
     ),
@@ -62,6 +67,13 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 400,
     // width: 800,
+    Cell: ({
+      row,
+    }) => (
+      <span className="td-wrapper">
+        {row.original.description}
+      </span>
+    ),
   },
   {
     accessor: 'created_at',
@@ -103,7 +115,12 @@ export const availableIncidentTableColumns = [
     Cell: ({
       row,
     }) => (
-      <a href={row.original.service.html_url} target="_blank" rel="noopener noreferrer">
+      <a
+        href={row.original.service.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="td-wrapper"
+      >
         {row.original.service.summary}
       </a>
     ),
@@ -161,7 +178,12 @@ export const availableIncidentTableColumns = [
     Cell: ({
       row,
     }) => (
-      <a href={row.original.escalation_policy.html_url} target="_blank" rel="noopener noreferrer">
+      <a
+        href={row.original.escalation_policy.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="td-wrapper"
+      >
         {row.original.escalation_policy.summary}
       </a>
     ),
@@ -187,7 +209,13 @@ export const availableIncidentTableColumns = [
             {teams.map((team, idx, {
               length,
             }) => (
-              <a idx={team.id} href={team.html_url} target="_blank" rel="noopener noreferrer">
+              <a
+                idx={team.id}
+                href={team.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="td-wrapper"
+              >
                 {team.summary}
                 {length - 1 === idx ? null : ', '}
               </a>
@@ -235,6 +263,7 @@ export const availableIncidentTableColumns = [
         href={row.original.last_status_change_by.html_url}
         target="_blank"
         rel="noopener noreferrer"
+        className="td-wrapper"
       >
         {row.original.last_status_change_by.summary}
       </a>
@@ -315,22 +344,38 @@ export const availableIncidentTableColumns = [
     sortable: true,
     minWidth: 400,
     // width: 800,
+    Cell: ({
+      row,
+    }) => (
+      <span className="td-wrapper">
+        {row.original.description}
+      </span>
+    ),
   },
   {
     accessor: (incident) => {
+      let content;
       if (incident.notes && incident.notes.length > 0) {
-        return incident.notes[0].content;
+        content = incident.notes[0].content;
+      } else if (incident.notes && incident.notes.length === 0) {
+        content = '--';
+      } else {
+        content = 'Fetching notes ...';
       }
-      if (incident.notes && incident.notes.length === 0) {
-        return '--';
-      }
-      return 'Fetching notes ...';
+      return content;
     },
     Header: 'Latest Note',
     sortable: true,
     minWidth: 200,
     // width: 200,
     // maxWidth: 500,
+    Cell: ({
+      value,
+    }) => (
+      <div className="td-wrapper">
+        {value}
+      </div>
+    ),
   },
   {
     accessor: (incident) => (incident.external_references
@@ -352,7 +397,13 @@ export const availableIncidentTableColumns = [
             {external_references.map((ext, idx, {
               length,
             }) => (
-              <a idx={ext.id} href={ext.external_url} target="_blank" rel="noopener noreferrer">
+              <a
+                idx={ext.id}
+                href={ext.external_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="td-wrapper"
+              >
                 {`${ext.summary} (${ext.external_id})`}
                 {length - 1 === idx ? null : ', '}
               </a>

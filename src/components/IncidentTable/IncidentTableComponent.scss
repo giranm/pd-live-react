@@ -182,3 +182,13 @@
   align-items: center !important;
   display: flex !important;
 }
+
+// https://stackoverflow.com/a/13924997/6480733
+.td-wrapper {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
