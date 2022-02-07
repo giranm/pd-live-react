@@ -217,7 +217,7 @@ const IncidentTableComponent = ({
           className={index % 2 === 0 ? 'tr' : 'tr-odd'}
         >
           {row.cells.map((cell) => (
-            <td {...cell.getCellProps()} className="td">
+            <td {...cell.getCellProps()} className="td" data-incident-header={cell.column.Header}>
               {cell.render('Cell')}
             </td>
           ))}

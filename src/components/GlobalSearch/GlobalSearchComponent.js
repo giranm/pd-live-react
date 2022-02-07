@@ -36,6 +36,7 @@ const GlobalSearchComponent = ({
               </InputGroup.Text>
             </InputGroup.Prepend>
             <Form.Control
+              id="global-search-input"
               placeholder="Search"
               htmlSize={40}
               onChange={(e) => debounced(e.target.value)}
