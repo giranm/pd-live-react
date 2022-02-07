@@ -6,7 +6,7 @@ import {
 
 // Docs: https://fusejs.io/api/options.html
 const fuseOptions = {
-  threshold: 1,
+  threshold: 0.2,
   distance: 100,
   useExtendedSearch: true,
   keys: availableIncidentTableColumns.map((col) => {
