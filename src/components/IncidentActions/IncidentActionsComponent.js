@@ -396,6 +396,7 @@ const IncidentActionsComponent = ({
               ))}
             </DropdownButton>
             <Button
+              id="incident-action-add-note-button"
               className="action-button"
               variant={enablePostActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayAddNoteModal()}

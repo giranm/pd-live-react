@@ -182,7 +182,7 @@ const IncidentTableComponent = ({
             getToggleAllRowsSelectedProps,
           }) => (
             <div>
-              <CheckboxComponent {...getToggleAllRowsSelectedProps()} />
+              <CheckboxComponent id="all-incidents-checkbox" {...getToggleAllRowsSelectedProps()} />
             </div>
           ),
           Cell: ({
@@ -217,7 +217,13 @@ const IncidentTableComponent = ({
           className={index % 2 === 0 ? 'tr' : 'tr-odd'}
         >
           {row.cells.map((cell) => (
-            <td {...cell.getCellProps()} className="td" data-incident-header={cell.column.Header}>
+            <td
+              {...cell.getCellProps()}
+              className="td"
+              data-incident-header={cell.column.Header}
+              data-incident-row-cell-idx={row.index}
+              data-incident-cell-id={row.original.id}
+            >
               {cell.render('Cell')}
             </td>
           ))}

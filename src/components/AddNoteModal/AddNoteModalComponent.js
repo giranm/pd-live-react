@@ -43,6 +43,7 @@ const AddNoteModalComponent = ({
         <Modal.Body>
           <Form>
             <Form.Control
+              id="add-note-textarea"
               as="textarea"
               placeholder="Add note to incident(s) here"
               minLength={1}
@@ -54,6 +55,7 @@ const AddNoteModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
+            id="add-note-button"
             variant="primary"
             onClick={() => addNote(selectedRows, note)}
             disabled={note === ''}
