@@ -53,6 +53,18 @@ export const activateButtonIfDeactive = (domId) => {
   });
 };
 
+export const escalate = (escalationLevel) => {
+  cy.get('#incident-action-escalate-button').click();
+  cy.get(`#escalation-level-${escalationLevel}-button`).click();
+};
+
+export const reassign = (assignment) => {
+  cy.get('#incident-action-reassign-button').click();
+  cy.get('#reassign-select').click();
+  cy.contains('div', assignment).click();
+  cy.get('#reassign-button').click();
+};
+
 export const addNote = (note) => {
   cy.get('#incident-action-add-note-button').click();
   cy.get('#add-note-textarea').type(note);

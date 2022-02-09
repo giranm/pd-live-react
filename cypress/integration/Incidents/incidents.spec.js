@@ -2,6 +2,8 @@ import {
   acceptDisclaimer,
   waitForIncidentTable,
   selectIncident,
+  escalate,
+  reassign,
   addNote,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
@@ -51,9 +53,22 @@ describe('Manage Open Incidents', () => {
     // Assumed environment has 3 levels on escalation policy
     for (let escalationLevel = 1; escalationLevel < 4; escalationLevel++) {
       selectIncident(0);
-      cy.get('#incident-action-escalate-button').click();
-      cy.get(`#escalation-level-${escalationLevel}-button`).click();
+      escalate(escalationLevel);
       checkActionAlertsModalContent(`have been manually escalated to level ${escalationLevel}`);
     }
+  });
+
+  it('Reassign singular incident to User A1', () => {
+    const assignment = 'User A1';
+    selectIncident(0);
+    reassign(assignment);
+    checkActionAlertsModalContent(`have been reassigned to ${assignment}`);
+  });
+
+  it('Reassign singular incident to Team A', () => {
+    const assignment = 'Team A';
+    selectIncident(1);
+    reassign(assignment);
+    checkActionAlertsModalContent(`have been reassigned to ${assignment}`);
   });
 });

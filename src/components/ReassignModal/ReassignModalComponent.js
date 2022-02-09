@@ -69,6 +69,7 @@ const ReassignModalComponent = ({
         <Modal.Body>
           <Form>
             <Select
+              id="reassign-select"
               onChange={(selectedAssignment) => {
                 setAssignment(selectedAssignment);
               }}
@@ -80,6 +81,7 @@ const ReassignModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
+            id="reassign-button"
             variant="primary"
             disabled={assignment === null}
             onClick={() => {

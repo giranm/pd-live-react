@@ -290,6 +290,7 @@ const IncidentActionsComponent = ({
               })}
             </DropdownButton>
             <Button
+              id="incident-action-reassign-button"
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayReassignModal()}
