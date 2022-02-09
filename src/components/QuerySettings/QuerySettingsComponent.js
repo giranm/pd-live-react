@@ -157,13 +157,21 @@ const QuerySettingsComponent = ({
                     value={incidentUrgency}
                     onChange={(val) => updateQuerySettingsIncidentUrgency(val)}
                   >
-                    <ToggleButton variant="outline-secondary" value={HIGH}>
+                    <ToggleButton
+                      id="query-urgency-high-button"
+                      variant="outline-secondary"
+                      value={HIGH}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faChevronUp} />
                       </div>
                       High
                     </ToggleButton>
-                    <ToggleButton variant="outline-secondary" value={LOW}>
+                    <ToggleButton
+                      id="query-urgency-low-button"
+                      variant="outline-secondary"
+                      value={LOW}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faChevronDown} />
                       </div>

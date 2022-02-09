@@ -257,6 +257,7 @@ const IncidentActionsComponent = ({
               Acknowledge
             </Button>
             <DropdownButton
+              id="incident-action-escalate-button"
               as={ButtonGroup}
               className="action-button"
               variant={enableEscalationAction ? 'outline-secondary' : 'light'}
@@ -276,6 +277,7 @@ const IncidentActionsComponent = ({
                 const escalationLevel = selectedEscalationRules.length - idx;
                 return (
                   <Dropdown.Item
+                    id={`escalation-level-${escalationLevel}-button`}
                     key={escalation_rule.id}
                     variant="light"
                     onClick={() => escalate(selectedRows, escalationLevel)}

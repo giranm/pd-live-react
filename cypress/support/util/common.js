@@ -35,6 +35,24 @@ export const checkIncidentCellContent = (incidentHeader, incidentIdx, content) =
     .should('have.text', content);
 };
 
+export const deactivateButtonIfActive = (domId) => {
+  cy.get(`#${domId}`).then(($el) => {
+    const cls = $el.attr('class');
+    if (cls.includes('active')) {
+      cy.wrap($el).click().should('not.have.class', 'active');
+    }
+  });
+};
+
+export const activateButtonIfDeactive = (domId) => {
+  cy.get(`#${domId}`).then(($el) => {
+    const cls = $el.attr('class');
+    if (!cls.includes('active')) {
+      cy.wrap($el).click().should('have.class', 'active');
+    }
+  });
+};
+
 export const addNote = (note) => {
   cy.get('#incident-action-add-note-button').click();
   cy.get('#add-note-textarea').type(note);
