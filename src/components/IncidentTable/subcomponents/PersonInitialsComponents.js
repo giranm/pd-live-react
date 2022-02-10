@@ -20,7 +20,12 @@ const PersonInitialsComponent = ({
     ? displayedUsers.map(({
       user,
     }) => {
-      const color = usersMap[user.id].color.replace('-', '');
+      let color;
+      if (usersMap[user.id]) {
+        color = usersMap[user.id].color.replace('-', '');
+      } else {
+        color = 'black';
+      }
       return {
         summary: user.summary,
         initials: getInitials(user.summary),
