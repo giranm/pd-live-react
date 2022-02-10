@@ -1,8 +1,30 @@
 import {
-  acceptDisclaimer, waitForIncidentTable,
+  acceptDisclaimer, waitForIncidentTable, pd,
 } from '../support/util/common';
 
 import packageConfig from '../../package.json';
+
+describe('Integration User Token', () => {
+  before(() => {
+    expect(Cypress.env('PD_USER_TOKEN')).to.be.a('string');
+    cy.intercept('GET', 'https://api.pagerduty.com/users/me').as('getCurrentUser');
+  });
+
+  it('Valid integration user token present', () => {
+    pd.get('users/me')
+      .then(({
+        data,
+      }) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(data).to.exist;
+      })
+      .catch((err) => {
+        // Terminate Cypress tests if invalid token detected
+        expect(err.status).to.equal(200);
+      });
+    cy.wait('@getCurrentUser', { timeout: 10000 });
+  });
+});
 
 describe('PagerDuty Live', () => {
   beforeEach(() => {

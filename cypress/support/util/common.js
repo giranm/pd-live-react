@@ -1,4 +1,9 @@
 /* eslint-disable import/prefer-default-export */
+import {
+  api,
+} from '@pagerduty/pdjs';
+
+export const pd = api({ token: Cypress.env('PD_USER_TOKEN') });
 
 export const acceptDisclaimer = () => {
   cy.visit('/', {
