@@ -26,12 +26,6 @@ export const waitForIncidentTable = () => {
 
 export const selectIncident = (incidentIdx = 0) => {
   cy.get(`[data-incident-row-idx="${incidentIdx}"]`).click();
-  cy.get(`[data-incident-row-idx="${incidentIdx}"]`).then(($el) => {
-    cy.window().then((win) => {
-      // Store incidentId in sessionStorage as Cypress cannot return values
-      win.sessionStorage.setItem('incidentId', $el.attr('data-incident-id'));
-    });
-  });
 };
 
 export const selectAllIncidents = () => {
