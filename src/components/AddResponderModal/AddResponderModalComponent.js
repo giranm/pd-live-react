@@ -74,6 +74,7 @@ const AddResponderModalComponent = ({
             <Form.Group>
               <Form.Label>Responders</Form.Label>
               <Select
+                id="add-responders-select"
                 onChange={(selectedTargets) => {
                   setResponderRequestTargets(selectedTargets);
                 }}
@@ -86,6 +87,7 @@ const AddResponderModalComponent = ({
             <Form.Group>
               <Form.Label>Message</Form.Label>
               <Form.Control
+                id="add-responders-textarea"
                 as="textarea"
                 placeholder="Provide brief message for additional responders"
                 minLength={1}
@@ -102,6 +104,7 @@ const AddResponderModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
+            id="add-responders-button"
             variant="primary"
             disabled={responderRequestTargets.length === 0}
             onClick={() => {

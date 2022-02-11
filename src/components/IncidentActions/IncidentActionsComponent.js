@@ -302,6 +302,7 @@ const IncidentActionsComponent = ({
               Reassign
             </Button>
             <Button
+              id="incident-action-add-responders-button"
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayAddResponderModal()}
