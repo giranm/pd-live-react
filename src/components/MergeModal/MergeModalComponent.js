@@ -81,6 +81,7 @@ const MergeModalComponent = ({
                 <b>Select an open incident to merge into:</b>
               </Form.Label>
               <Select
+                id="merge-select"
                 onChange={(selectedIncident) => {
                   if (selectedIncident) {
                     setTargetIncident(selectedIncident);
@@ -102,6 +103,7 @@ const MergeModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
+            id="merge-button"
             variant="primary"
             onClick={() => merge(targetIncident, mergedIncidents)}
             disabled={targetIncident === null}

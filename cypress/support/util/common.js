@@ -102,6 +102,13 @@ export const snoozeCustom = (type, option) => {
   cy.get('#snooze-custom-button').click();
 };
 
+export const merge = (targetIncidentIdx) => {
+  cy.get('#incident-action-merge-button').click();
+  cy.get('#merge-select').click();
+  cy.get(`[id*="-option-${targetIncidentIdx}"]`).click();
+  cy.get('#merge-button').click();
+};
+
 export const addNote = (note) => {
   cy.get('#incident-action-add-note-button').click();
   cy.get('#add-note-textarea').type(note);

@@ -7,6 +7,7 @@ import {
   addResponders,
   snooze,
   snoozeCustom,
+  merge,
   addNote,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
@@ -120,5 +121,13 @@ describe('Manage Open Incidents', () => {
     selectIncident(0);
     snoozeCustom(type, option);
     checkActionAlertsModalContent('have been snoozed.');
+  });
+
+  it('Merge two incidents together', () => {
+    const targetIncidentIdx = 0;
+    selectIncident(targetIncidentIdx);
+    selectIncident(targetIncidentIdx + 1);
+    merge(targetIncidentIdx);
+    checkActionAlertsModalContent('and their alerts have been merged onto');
   });
 });

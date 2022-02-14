@@ -349,6 +349,7 @@ const IncidentActionsComponent = ({
               </Dropdown.Item>
             </DropdownButton>
             <Button
+              id="incident-action-merge-button"
               className="action-button"
               variant={enableMergeAction ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayMergeModal()}
