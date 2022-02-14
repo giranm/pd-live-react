@@ -5,6 +5,8 @@ import {
   escalate,
   reassign,
   addResponders,
+  snooze,
+  snoozeCustom,
   addNote,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
@@ -95,5 +97,28 @@ describe('Manage Open Incidents', () => {
     selectIncident(0);
     addResponders(responders, message);
     checkActionAlertsModalContent('Requested additional response for incident(s)');
+  });
+
+  it('Snooze singular incident for specified duration (5 mins)', () => {
+    const duration = '5 mins';
+    selectIncident(0);
+    snooze(duration);
+    checkActionAlertsModalContent('have been snoozed.');
+  });
+
+  it('Snooze singular incident for custom duration (2 hours)', () => {
+    const type = 'hours';
+    const option = 2;
+    selectIncident(0);
+    snoozeCustom(type, option);
+    checkActionAlertsModalContent('have been snoozed.');
+  });
+
+  it('Snooze singular incident for custom duration (tomorrow for 9:00 AM)', () => {
+    const type = 'tomorrow';
+    const option = '9:00 AM';
+    selectIncident(0);
+    snoozeCustom(type, option);
+    checkActionAlertsModalContent('have been snoozed.');
   });
 });

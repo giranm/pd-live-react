@@ -83,6 +83,25 @@ export const addResponders = (responders = [], message = null) => {
   cy.get('#add-responders-button').click();
 };
 
+export const snooze = (duration) => {
+  cy.get('#incident-action-snooze-button').click();
+  cy.get('.dropdown-item').contains(duration).click();
+};
+
+export const snoozeCustom = (type, option) => {
+  cy.get('#incident-action-snooze-button').click();
+  cy.get('#snooze-duration-custom-modal-button').click();
+  if (type === 'hours') {
+    cy.get('#snooze-hours').click();
+    cy.get('#snooze-hours-input').clear().type(option);
+  } else if (type === 'tomorrow') {
+    cy.get('#snooze-tomorrow').click();
+    cy.get('#snooze-tomorrow-datepicker').click();
+    cy.get('.react-datepicker__time-list-item').contains(option).click();
+  }
+  cy.get('#snooze-custom-button').click();
+};
+
 export const addNote = (note) => {
   cy.get('#incident-action-add-note-button').click();
   cy.get('#add-note-textarea').type(note);

@@ -314,6 +314,7 @@ const IncidentActionsComponent = ({
               Add Responders
             </Button>
             <DropdownButton
+              id="incident-action-snooze-button"
               as={ButtonGroup}
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
@@ -331,6 +332,7 @@ const IncidentActionsComponent = ({
             >
               {Object.keys(SNOOZE_TIMES).map((duration) => (
                 <Dropdown.Item
+                  id={`snooze-duration-${duration}-button`}
                   key={duration}
                   variant="light"
                   onClick={() => snooze(selectedRows, duration)}
@@ -339,7 +341,12 @@ const IncidentActionsComponent = ({
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />
-              <Dropdown.Item onClick={() => toggleDisplayCustomSnoozeModal()}>Custom</Dropdown.Item>
+              <Dropdown.Item
+                id="snooze-duration-custom-modal-button"
+                onClick={() => toggleDisplayCustomSnoozeModal()}
+              >
+                Custom
+              </Dropdown.Item>
             </DropdownButton>
             <Button
               className="action-button"
