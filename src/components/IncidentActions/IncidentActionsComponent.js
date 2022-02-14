@@ -375,6 +375,7 @@ const IncidentActionsComponent = ({
           </Col>
           <Col sm={{ span: 3.5 }}>
             <DropdownButton
+              id="incident-action-update-priority-button"
               as={ButtonGroup}
               className="action-button"
               variant={enablePriorityAction ? 'outline-secondary' : 'light'}
@@ -392,6 +393,7 @@ const IncidentActionsComponent = ({
             >
               {priorities.map((priority) => (
                 <Dropdown.Item
+                  id={`update-priority-${priority.name}-button`}
                   key={priority.id}
                   variant="light"
                   onClick={() => updatePriority(selectedRows, priority.id)}

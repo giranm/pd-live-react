@@ -8,6 +8,7 @@ import {
   snooze,
   snoozeCustom,
   merge,
+  updatePriority,
   addNote,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
@@ -135,5 +136,16 @@ describe('Manage Open Incidents', () => {
     selectIncident(0);
     cy.get('#incident-action-resolve-button').click();
     checkActionAlertsModalContent('have been resolved');
+  });
+
+  it('Update priority of singular incident', () => {
+    const incidentIdx = 0;
+    const priorityNames = ['--', 'P5', 'P4', 'P3', 'P2', 'P1'];
+    priorityNames.forEach((priorityName) => {
+      selectIncident(incidentIdx);
+      updatePriority(priorityName);
+      checkActionAlertsModalContent(`have been updated with priority = ${priorityName}`);
+      checkIncidentCellContent('Priority', incidentIdx, priorityName);
+    });
   });
 });

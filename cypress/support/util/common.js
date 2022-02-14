@@ -109,6 +109,11 @@ export const merge = (targetIncidentIdx) => {
   cy.get('#merge-button').click();
 };
 
+export const updatePriority = (priorityName) => {
+  cy.get('#incident-action-update-priority-button').click();
+  cy.get('.dropdown-item').contains(priorityName).click();
+};
+
 export const addNote = (note) => {
   cy.get('#incident-action-add-note-button').click();
   cy.get('#add-note-textarea').type(note);
