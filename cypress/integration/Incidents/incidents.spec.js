@@ -130,4 +130,10 @@ describe('Manage Open Incidents', () => {
     merge(targetIncidentIdx);
     checkActionAlertsModalContent('and their alerts have been merged onto');
   });
+
+  it('Resolve singular incident', () => {
+    selectIncident(0);
+    cy.get('#incident-action-resolve-button').click();
+    checkActionAlertsModalContent('have been resolved');
+  });
 });

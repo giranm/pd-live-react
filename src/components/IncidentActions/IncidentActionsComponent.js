@@ -361,6 +361,7 @@ const IncidentActionsComponent = ({
               Merge
             </Button>
             <Button
+              id="incident-action-resolve-button"
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               disabled={enableActions}
