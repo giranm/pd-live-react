@@ -138,10 +138,10 @@ describe('Manage Open Incidents', () => {
     checkActionAlertsModalContent('have been resolved');
   });
 
-  it('Update priority of singular incident', () => {
-    const incidentIdx = 0;
-    const priorityNames = ['--', 'P5', 'P4', 'P3', 'P2', 'P1'];
-    priorityNames.forEach((priorityName) => {
+  const priorityNames = ['--', 'P5', 'P4', 'P3', 'P2', 'P1'];
+  priorityNames.forEach((priorityName) => {
+    it(`Update priority of singular incident to ${priorityName}`, () => {
+      const incidentIdx = 0;
       selectIncident(incidentIdx);
       updatePriority(priorityName);
       checkActionAlertsModalContent(`have been updated with priority = ${priorityName}`);
