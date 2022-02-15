@@ -146,6 +146,12 @@ export const runExternalSystemSync = (externalSystemName) => {
     });
 };
 
+export const runResponsePlay = (responsePlayName) => {
+  toggleRunAction();
+  cy.get('#response-play-select').click();
+  cy.contains('div', responsePlayName).click();
+};
+
 /*
   PagerDuty API Helpers
 */

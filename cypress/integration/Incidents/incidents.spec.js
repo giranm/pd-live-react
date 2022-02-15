@@ -12,6 +12,7 @@ import {
   addNote,
   runAction,
   runExternalSystemSync,
+  runResponsePlay,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
   deactivateButtonIfActive,
@@ -164,5 +165,12 @@ describe('Manage Open Incidents', () => {
     checkActionAlertsModalContent(
       `Custom Incident Action "${actionName}" triggered for incident(s)`,
     );
+  });
+
+  it('Run response play on singular incident', () => {
+    const responsePlayName = 'Major Incident Response';
+    selectIncident(0);
+    runResponsePlay(responsePlayName);
+    checkActionAlertsModalContent(`Ran "${responsePlayName}" response play for incident(s)`);
   });
 });

@@ -450,6 +450,7 @@ const IncidentActionsComponent = ({
                   <Dropdown.Header>Response Plays</Dropdown.Header>
                   <Dropdown.Item>
                     <Select
+                      id="response-play-select"
                       className="response-play-dropdown"
                       menuPlacement="top"
                       components={animatedComponents}
