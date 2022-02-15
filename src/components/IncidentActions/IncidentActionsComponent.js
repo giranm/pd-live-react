@@ -423,6 +423,7 @@ const IncidentActionsComponent = ({
               Add Note
             </Button>
             <DropdownButton
+              id="incident-action-run-action-button"
               as={ButtonGroup}
               className="action-button"
               variant={enablePostSingularAction ? 'outline-secondary' : 'light'}
@@ -436,11 +437,12 @@ const IncidentActionsComponent = ({
                 </>
               )}
               align="end"
-              id="run-action"
               disabled={enablePostSingularAction}
               show={displayRunActions}
               onClick={(e) => {
-                if (e.target.id === 'run-action') toggleRunActions(!displayRunActions);
+                if (e.target.id === 'incident-action-run-action-button') {
+                  toggleRunActions(!displayRunActions);
+                }
               }}
             >
               {selectListResponsePlays.length > 0 ? (
@@ -468,6 +470,7 @@ const IncidentActionsComponent = ({
                   <Dropdown.Header>Actions</Dropdown.Header>
                   {customIncidentActions.map((customIncidentAction) => (
                     <Dropdown.Item
+                      id={`custom-incident-action-${customIncidentAction.name}-button`}
                       key={customIncidentAction.id}
                       onClick={() => {
                         runCustomIncidentAction(selectedRows, customIncidentAction);
@@ -487,6 +490,7 @@ const IncidentActionsComponent = ({
                   <Dropdown.Header>External Systems</Dropdown.Header>
                   {externalSystems.map((externalSystem) => (
                     <Dropdown.Item
+                      id={`external-system-${externalSystem.extension_label}-button`}
                       key={externalSystem.id}
                       disabled={externalSystem.synced}
                       onClick={() => {

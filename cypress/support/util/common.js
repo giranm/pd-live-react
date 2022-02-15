@@ -120,6 +120,32 @@ export const addNote = (note) => {
   cy.get('#add-note-button').click();
 };
 
+const toggleRunAction = () => {
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(2000); // Unsure why we can't find DOM of action without wait
+  cy.get('#incident-action-run-action-button').click();
+};
+
+export const runAction = (actionName) => {
+  toggleRunAction();
+  cy.get('.dropdown-item').contains(actionName).click();
+};
+
+export const runExternalSystemSync = (externalSystemName) => {
+  toggleRunAction();
+  cy.get('.dropdown-item')
+    .contains(externalSystemName)
+    .then(($el) => {
+      const cls = $el.attr('class');
+      if (!cls.includes('disabled')) {
+        cy.wrap($el).click();
+        checkActionAlertsModalContent(`Synced with "${externalSystemName}" on incident(s)`);
+      } else {
+        expect($el).to.contain('Synced with');
+      }
+    });
+};
+
 /*
   PagerDuty API Helpers
 */

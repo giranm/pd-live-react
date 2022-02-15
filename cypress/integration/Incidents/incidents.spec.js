@@ -10,6 +10,8 @@ import {
   merge,
   updatePriority,
   addNote,
+  runAction,
+  runExternalSystemSync,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
   deactivateButtonIfActive,
@@ -147,5 +149,20 @@ describe('Manage Open Incidents', () => {
       checkActionAlertsModalContent(`have been updated with priority = ${priorityName}`);
       checkIncidentCellContent('Priority', incidentIdx, priorityName);
     });
+  });
+
+  it('Run external system sync on singular incident', () => {
+    const externalSystemName = 'ServiceNow';
+    selectIncident(0);
+    runExternalSystemSync(externalSystemName);
+  });
+
+  it('Run custom incident action on singular incident', () => {
+    const actionName = 'Restart Service';
+    selectIncident(0);
+    runAction(actionName);
+    checkActionAlertsModalContent(
+      `Custom Incident Action "${actionName}" triggered for incident(s)`,
+    );
   });
 });
