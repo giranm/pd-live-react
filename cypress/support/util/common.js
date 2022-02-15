@@ -43,7 +43,17 @@ export const checkIncidentCellContent = (incidentHeader, incidentIdx, content) =
     .should('have.text', content);
 };
 
-export const deactivateButtonIfActive = (domId) => {
+export const checkIncidentCellIcon = (incidentHeader, incidentIdx, icon) => {
+  cy.get(
+    `[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`,
+  ).within(() => {
+    cy.get('svg').then(($el) => {
+      cy.wrap($el).should('have.class', icon);
+    });
+  });
+};
+
+export const deactivateButton = (domId) => {
   cy.get(`#${domId}`).then(($el) => {
     const cls = $el.attr('class');
     if (cls.includes('active')) {
@@ -52,7 +62,7 @@ export const deactivateButtonIfActive = (domId) => {
   });
 };
 
-export const activateButtonIfDeactive = (domId) => {
+export const activateButton = (domId) => {
   cy.get(`#${domId}`).then(($el) => {
     const cls = $el.attr('class');
     if (!cls.includes('active')) {

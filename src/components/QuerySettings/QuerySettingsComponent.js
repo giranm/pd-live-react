@@ -127,19 +127,31 @@ const QuerySettingsComponent = ({
                     value={incidentStatus}
                     onChange={(val) => updateQuerySettingsIncidentStatus(val)}
                   >
-                    <ToggleButton variant="outline-danger" value={TRIGGERED}>
+                    <ToggleButton
+                      id="query-status-triggered-button"
+                      variant="outline-danger"
+                      value={TRIGGERED}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faExclamationTriangle} />
                       </div>
                       Triggered
                     </ToggleButton>
-                    <ToggleButton variant="outline-warning" value={ACKNOWLEDGED}>
+                    <ToggleButton
+                      id="query-status-acknowledged-button"
+                      variant="outline-warning"
+                      value={ACKNOWLEDGED}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faShieldAlt} />
                       </div>
                       Acknowleged
                     </ToggleButton>
-                    <ToggleButton variant="outline-success" value={RESOLVED}>
+                    <ToggleButton
+                      id="query-status-resolved-button"
+                      variant="outline-success"
+                      value={RESOLVED}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faCheckCircle} />
                       </div>

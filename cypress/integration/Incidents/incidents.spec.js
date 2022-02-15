@@ -15,7 +15,7 @@ import {
   runResponsePlay,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
-  deactivateButtonIfActive,
+  deactivateButton,
 } from '../../support/util/common';
 
 describe('Manage Open Incidents', () => {
@@ -55,7 +55,7 @@ describe('Manage Open Incidents', () => {
 
   it('Escalate singular incident to multiple levels', () => {
     // Ensure that only high urgency incidents are visible
-    deactivateButtonIfActive('query-urgency-low-button');
+    deactivateButton('query-urgency-low-button');
     waitForIncidentTable();
 
     // Assumed environment has 3 levels on escalation policy
