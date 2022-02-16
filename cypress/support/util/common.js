@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 /* eslint-disable import/prefer-default-export */
 import {
   api,
@@ -40,12 +41,14 @@ export const checkActionAlertsModalContent = (content) => {
 };
 
 export const checkIncidentCellContent = (incidentHeader, incidentIdx, content) => {
+  cy.wait(2000);
   cy.get(`[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`)
     .should('be.visible')
     .should('have.text', content);
 };
 
 export const checkIncidentCellIcon = (incidentHeader, incidentIdx, icon) => {
+  cy.wait(2000);
   cy.get(
     `[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`,
   ).within(() => {
@@ -133,7 +136,6 @@ export const addNote = (note) => {
 };
 
 const toggleRunAction = () => {
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(2000); // Unsure why we can't find DOM of action without wait
   cy.get('#incident-action-run-action-button').click();
 };
