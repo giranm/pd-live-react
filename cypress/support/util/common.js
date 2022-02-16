@@ -33,6 +33,8 @@ export const selectAllIncidents = () => {
 };
 
 export const checkActionAlertsModalContent = (content) => {
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(2000);
   cy.get('.action-alerts-modal').contains(content, { timeout: 10000 });
   cy.get('.action-alerts-modal').type('{esc}');
 };
