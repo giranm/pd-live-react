@@ -39,7 +39,7 @@ describe('PagerDuty Live', () => {
   it('Application indicates when the required ability is available on the account', () => {
     cy.get('.status-beacon-ctr').trigger('mouseover');
     cy.get('.status-beacon-connection').should('be.visible');
-    cy.get('.status-beacon-connection').contains('Connected', { timeout: 15000 });
+    cy.get('.status-beacon-connection').contains('Connected', { timeout: 30000 });
   });
 
   it('Application indicates when the required ability is missing/disabled on the account', () => {
