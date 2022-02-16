@@ -168,6 +168,28 @@ export const runResponsePlay = (responsePlayName) => {
   cy.contains('div', responsePlayName).click();
 };
 
+export const manageIncidentTableColumns = (desiredState = 'add', columns = []) => {
+  cy.get('.settings-panel-dropdown').click();
+  cy.get('.dropdown-item').contains('Settings').click();
+  cy.get('.nav-item').contains('Incident Table Columns').click();
+
+  columns.forEach((columnName) => {
+    // For some reason we cant select the individual option - have to use input box instead
+    if (desiredState === 'add') {
+      cy.get('[class="rdl-filter"][data-key="available"]').clear().type(columnName);
+      cy.get('[aria-label="Move all right"]').click();
+    } else if (desiredState === 'remove') {
+      cy.get('[class="rdl-filter"][data-key="selected"]').clear().type(columnName);
+      // FIXME: Find out way to properly remove columns using DOM
+      // cy.get(`[data-real-value="${columnName}"]`).dblclick();
+      // cy.get('[aria-label="Move all left"]').click();
+    }
+  });
+
+  cy.get('.btn').contains('Update Columns').click();
+  cy.get('.close').click();
+};
+
 /*
   PagerDuty API Helpers
 */
