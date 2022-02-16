@@ -48,7 +48,7 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
       - name: Run Cypress Tests
-        run: >-
-        Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99 
-        && yarn cypress:ci:chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }} 
-        && pkill Xvfb
+        run: >
+          Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99 
+          && yarn cypress:ci:chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }} 
+          && pkill Xvfb
