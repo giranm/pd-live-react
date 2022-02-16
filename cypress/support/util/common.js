@@ -26,7 +26,10 @@ export const waitForIncidentTable = () => {
 };
 
 export const selectIncident = (incidentIdx = 0) => {
-  cy.get(`[data-incident-row-idx="${incidentIdx}"]`).click();
+  cy.get('.incident-table-fixed-list').scrollTo('top', { easing: 'linear' });
+  const selector = `[data-incident-row-idx="${incidentIdx}"]`;
+  cy.get(selector).invoke('attr', 'data-incident-id').as(`selectedIncidentId_${incidentIdx}`);
+  cy.get(selector).click();
 };
 
 export const selectAllIncidents = () => {
@@ -34,20 +37,19 @@ export const selectAllIncidents = () => {
 };
 
 export const checkActionAlertsModalContent = (content) => {
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(2000);
   cy.get('.action-alerts-modal').contains(content, { timeout: 10000 });
   cy.get('.action-alerts-modal').type('{esc}');
 };
 
-export const checkIncidentCellContent = (incidentHeader, incidentIdx, content) => {
+export const checkIncidentCellContent = (incidentId, incidentHeader, content) => {
   cy.wait(2000);
-  cy.get(`[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`)
+  cy.get(`[data-incident-header="${incidentHeader}"][data-incident-cell-id="${incidentId}"]`)
     .should('be.visible')
     .should('have.text', content);
 };
 
-export const checkIncidentCellIcon = (incidentHeader, incidentIdx, icon) => {
+export const checkIncidentCellIcon = (incidentIdx, incidentHeader, icon) => {
   cy.wait(2000);
   cy.get(
     `[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`,

@@ -34,23 +34,25 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
   it('Add note to singular incident', () => {
     const note = 'All your base are belong to us';
     const incidentIdx = 0;
-
     selectIncident(incidentIdx);
-    addNote(note);
 
-    checkActionAlertsModalContent('have been updated with a note');
-    checkIncidentCellContent('Latest Note', incidentIdx, note);
+    cy.get(`@selectedIncidentId_${incidentIdx}`).then((incidentId) => {
+      addNote(note);
+      checkActionAlertsModalContent('have been updated with a note');
+      checkIncidentCellContent(incidentId, 'Latest Note', note);
+    });
   });
 
   it('Add a very long note to singular incident which overflows', () => {
     const note = 'This note is so long that I gave up writing a novel and decided to quit!';
     const incidentIdx = 1;
-
     selectIncident(incidentIdx);
-    addNote(note);
 
-    checkActionAlertsModalContent('have been updated with a note');
-    checkIncidentCellContent('Latest Note', incidentIdx, note);
+    cy.get(`@selectedIncidentId_${incidentIdx}`).then((incidentId) => {
+      addNote(note);
+      checkActionAlertsModalContent('have been updated with a note');
+      checkIncidentCellContent(incidentId, 'Latest Note', note);
+    });
   });
 
   it('Escalate singular incident to multiple levels', () => {
@@ -146,9 +148,11 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
     it(`Update priority of singular incident to ${priorityName}`, () => {
       const incidentIdx = 0;
       selectIncident(incidentIdx);
-      updatePriority(priorityName);
-      checkActionAlertsModalContent(`have been updated with priority = ${priorityName}`);
-      checkIncidentCellContent('Priority', incidentIdx, priorityName);
+      cy.get(`@selectedIncidentId_${incidentIdx}`).then((incidentId) => {
+        updatePriority(priorityName);
+        checkActionAlertsModalContent(`have been updated with priority = ${priorityName}`);
+        checkIncidentCellContent(incidentId, 'Priority', priorityName);
+      });
     });
   });
 

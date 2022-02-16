@@ -17,7 +17,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     cy.get('.tbody').then(($tbody) => {
       const visibleIncidentCount = $tbody.find('tr').length;
       for (let incidentIdx = 0; incidentIdx < visibleIncidentCount; incidentIdx++) {
-        checkIncidentCellIcon('Status', incidentIdx, icon);
+        checkIncidentCellIcon(incidentIdx, 'Status', icon);
       }
     });
   };

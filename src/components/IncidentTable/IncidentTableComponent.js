@@ -303,6 +303,7 @@ const IncidentTableComponent = ({
               </thead>
               <tbody {...getTableBodyProps()} className="tbody">
                 <FixedSizeList
+                  className="incident-table-fixed-list"
                   height={distanceBetweenQueryAndAction - incidentActionsHeight}
                   itemCount={rows.length}
                   itemSize={60}
