@@ -3,7 +3,7 @@ import {
   acceptDisclaimer, waitForIncidentTable,
 } from '../../support/util/common';
 
-describe('Search Incidents', () => {
+describe('Search Incidents', { failFast: { enabled: false } }, () => {
   beforeEach(() => {
     acceptDisclaimer();
     waitForIncidentTable();

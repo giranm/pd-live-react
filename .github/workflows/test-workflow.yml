@@ -33,6 +33,7 @@ jobs:
       REACT_APP_DD_SAMPLE_RATE: ${{ secrets.DD_SAMPLE_RATE }}
       REACT_APP_DD_TRACK_INTERACTIONS: ${{ secrets.DD_TRACK_INTERACTIONS }}
       REACT_APP_DD_DEFAULT_PRIVACY_LEVEL: ${{ secrets.DD_DEFAULT_PRIVACY_LEVEL }}
+      CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
     container:
       image: cypress/browsers:node16.13.0-chrome95-ff94
       options: --user 1001
@@ -47,4 +48,7 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
       - name: Run Cypress Tests
-        run: Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99 && yarn cypress:ci:chrome && pkill Xvfb
+        run: >-
+        Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99 
+        && yarn cypress:ci:chrome --record --key ${{ secrets.CYPRESS_RECORD_KEY }} 
+        && pkill Xvfb

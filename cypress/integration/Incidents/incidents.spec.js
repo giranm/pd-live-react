@@ -18,7 +18,7 @@ import {
   deactivateButton,
 } from '../../support/util/common';
 
-describe('Manage Open Incidents', () => {
+describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
   // We use beforeEach as each test will reload/clear the session
   beforeEach(() => {
     acceptDisclaimer();

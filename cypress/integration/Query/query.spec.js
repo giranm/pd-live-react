@@ -7,7 +7,7 @@ import {
   checkIncidentCellIcon,
 } from '../../support/util/common';
 
-describe('Query Incidents', () => {
+describe('Query Incidents', { failFast: { enabled: false } }, () => {
   beforeEach(() => {
     acceptDisclaimer();
     waitForIncidentTable();
