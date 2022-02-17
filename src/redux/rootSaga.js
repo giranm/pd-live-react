@@ -58,6 +58,8 @@ import {
   updatePriorityAsync,
   addNoteAsync,
   toggleDisplayAddNoteModal,
+  addStatusUpdateAsync,
+  toggleDisplayAddStatusUpdateModal,
   runCustomIncidentActionAsync,
   syncWithExternalSystemAsync,
 } from './incident_actions/sagas';
@@ -158,6 +160,8 @@ export default function* rootSaga() {
     updatePriorityAsync(),
     addNoteAsync(),
     toggleDisplayAddNoteModal(),
+    addStatusUpdateAsync(),
+    toggleDisplayAddStatusUpdateModal(),
     runCustomIncidentActionAsync(),
     syncWithExternalSystemAsync(),
 

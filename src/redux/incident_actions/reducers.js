@@ -38,6 +38,11 @@ import {
   ADD_NOTE_ERROR,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
+  ADD_STATUS_UPDATE_REQUESTED,
+  ADD_STATUS_UPDATE_COMPLETED,
+  ADD_STATUS_UPDATE_ERROR,
+  TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_COMPLETED,
   RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
   RUN_CUSTOM_INCIDENT_ACTION_COMPLETED,
   RUN_CUSTOM_INCIDENT_ACTION_ERROR,
@@ -220,6 +225,29 @@ const incidentActions = produce(
         draft.status = TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED;
         break;
 
+      case ADD_STATUS_UPDATE_REQUESTED:
+        draft.status = ADD_STATUS_UPDATE_REQUESTED;
+        break;
+
+      case ADD_STATUS_UPDATE_COMPLETED:
+        draft.updatedIncidentStatusUpdates = action.updatedIncidentStatusUpdates;
+        draft.status = ADD_STATUS_UPDATE_COMPLETED;
+        break;
+
+      case ADD_STATUS_UPDATE_ERROR:
+        draft.status = ADD_STATUS_UPDATE_ERROR;
+        draft.error = action.message;
+        break;
+
+      case TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED:
+        draft.status = TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED;
+        break;
+
+      case TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_COMPLETED:
+        draft.displayAddStatusUpdateModal = action.displayAddStatusUpdateModal;
+        draft.status = TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_COMPLETED;
+        break;
+
       case RUN_CUSTOM_INCIDENT_ACTION_REQUESTED:
         draft.status = RUN_CUSTOM_INCIDENT_ACTION_REQUESTED;
         break;
@@ -261,6 +289,7 @@ const incidentActions = produce(
     resolvedIncidents: [],
     updatedIncidentResponderRequests: [],
     updatedIncidentNotes: [],
+    updatedIncidentStatusUpdates: [],
     updatedIncidentPriorities: [],
     customIncidentActionRequests: [],
     externalSystemSyncRequests: [],
@@ -268,6 +297,7 @@ const incidentActions = produce(
     displayAddResponderModal: false,
     displayCustomSnoozeModal: false,
     displayAddNoteModal: false,
+    displayAddStatusUpdateModal: false,
     displayMergeModal: false,
     status: '',
     fetchingData: false,

@@ -75,6 +75,11 @@ import {
   ADD_NOTE_ERROR,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED,
   TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
+  ADD_STATUS_UPDATE_REQUESTED,
+  ADD_STATUS_UPDATE_COMPLETED,
+  ADD_STATUS_UPDATE_ERROR,
+  TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_COMPLETED,
   RUN_CUSTOM_INCIDENT_ACTION_REQUESTED,
   RUN_CUSTOM_INCIDENT_ACTION_COMPLETED,
   RUN_CUSTOM_INCIDENT_ACTION_ERROR,
@@ -615,6 +620,67 @@ export function* toggleDisplayAddNoteModalImpl() {
   yield put({
     type: TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED,
     displayAddNoteModal: !displayAddNoteModal,
+  });
+}
+
+export function* addStatusUpdateAsync() {
+  yield takeLatest(ADD_STATUS_UPDATE_REQUESTED, addStatusUpdate);
+}
+
+export function* addStatusUpdate(action) {
+  try {
+    const {
+      incidents: selectedIncidents, statusUpdate, displayModal,
+    } = action;
+
+    // Build individual requests as the endpoint supports singular POST
+    const addStatusUpdateRequests = selectedIncidents.map((incident) => call(pd, {
+      method: 'post',
+      endpoint: `incidents/${incident.id}/status_updates`,
+      data: {
+        subject: 'PagerDuty Status Update',
+        message: statusUpdate,
+        html_message: statusUpdate,
+      },
+    }));
+
+    // Invoke parallel calls for optimal performance
+    const responses = yield all(addStatusUpdateRequests);
+    if (responses.every((response) => response.ok)) {
+      yield put({
+        type: ADD_STATUS_UPDATE_COMPLETED,
+        updatedIncidentStatusUpdates: responses,
+      });
+      yield toggleDisplayAddStatusUpdateModalImpl();
+      if (displayModal) {
+        const actionAlertsModalType = 'success';
+        const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+          .map((i) => i.incident_number)
+          .join(', ')} have been updated with a status update.`;
+        yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
+      }
+    } else {
+      handleMultipleAPIErrorResponses(responses);
+    }
+  } catch (e) {
+    handleSagaError(ADD_STATUS_UPDATE_ERROR, e);
+  }
+}
+
+export function* toggleDisplayAddStatusUpdateModal() {
+  yield takeLatest(
+    TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED,
+    toggleDisplayAddStatusUpdateModalImpl,
+  );
+}
+
+export function* toggleDisplayAddStatusUpdateModalImpl() {
+  const {
+    displayAddStatusUpdateModal,
+  } = yield select(selectIncidentActions);
+  yield put({
+    type: TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_COMPLETED,
+    displayAddStatusUpdateModal: !displayAddStatusUpdateModal,
   });
 }
 

@@ -33,6 +33,7 @@ import {
   faCheckCircle,
   faExclamation,
   faEdit,
+  faBullhorn,
   faPlay,
   faLayerGroup,
 } from '@fortawesome/free-solid-svg-icons';
@@ -50,6 +51,7 @@ import {
   resolve as resolveConnected,
   updatePriority as updatePriorityConnected,
   toggleDisplayAddNoteModal as toggleDisplayAddNoteModalConnected,
+  toggleDisplayAddStatusUpdateModal as toggleDisplayAddStatusUpdateModalConnected,
   runCustomIncidentAction as runCustomIncidentActionConnected,
   syncWithExternalSystem as syncWithExternalSystemConnected,
 } from 'redux/incident_actions/actions';
@@ -94,6 +96,7 @@ const IncidentActionsComponent = ({
   resolve,
   updatePriority,
   toggleDisplayAddNoteModal,
+  toggleDisplayAddStatusUpdateModal,
   runCustomIncidentAction,
   runResponsePlayAsync,
   syncWithExternalSystem,
@@ -407,6 +410,18 @@ const IncidentActionsComponent = ({
               </div>
               Add Note
             </Button>
+            <Button
+              id="incident-action-add-status-update-button"
+              className="action-button"
+              variant={enablePostActions ? 'outline-secondary' : 'light'}
+              onClick={() => toggleDisplayAddStatusUpdateModal()}
+              disabled={enablePostActions}
+            >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faBullhorn} />
+              </div>
+              Add Status Update
+            </Button>
             <DropdownButton
               as={ButtonGroup}
               className="action-button"
@@ -517,6 +532,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updatePriorityConnected(incidents, priorityId));
   },
   toggleDisplayAddNoteModal: () => dispatch(toggleDisplayAddNoteModalConnected()),
+  toggleDisplayAddStatusUpdateModal: () => dispatch(toggleDisplayAddStatusUpdateModalConnected()),
   runCustomIncidentAction: (incidents, webhook) => {
     dispatch(runCustomIncidentActionConnected(incidents, webhook));
   },

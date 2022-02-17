@@ -51,6 +51,13 @@ export const ADD_NOTE_ERROR = 'ADD_NOTE_ERROR';
 export const TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED = 'TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED';
 export const TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED = 'TOGGLE_DISPLAY_ADD_NOTE_MODAL_COMPLETED';
 
+export const ADD_STATUS_UPDATE_REQUESTED = 'ADD_STATUS_UPDATE_REQUESTED';
+export const ADD_STATUS_UPDATE_COMPLETED = 'ADD_STATUS_UPDATE_COMPLETED';
+export const ADD_STATUS_UPDATE_ERROR = 'ADD_STATUS_UPDATE_ERROR';
+
+export const TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED = 'TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED';
+export const TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_COMPLETED = 'TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_COMPLETED';
+
 export const RUN_CUSTOM_INCIDENT_ACTION_REQUESTED = 'RUN_CUSTOM_INCIDENT_ACTION_REQUESTED';
 export const RUN_CUSTOM_INCIDENT_ACTION_COMPLETED = 'RUN_CUSTOM_INCIDENT_ACTION_COMPLETED';
 export const RUN_CUSTOM_INCIDENT_ACTION_ERROR = 'RUN_CUSTOM_INCIDENT_ACTION_ERROR';
@@ -139,6 +146,17 @@ export const addNote = (incidents, note, displayModal = true) => ({
 
 export const toggleDisplayAddNoteModal = () => ({
   type: TOGGLE_DISPLAY_ADD_NOTE_MODAL_REQUESTED,
+});
+
+export const addStatusUpdate = (incidents, statusUpdate, displayModal = true) => ({
+  type: ADD_STATUS_UPDATE_REQUESTED,
+  incidents,
+  statusUpdate,
+  displayModal,
+});
+
+export const toggleDisplayAddStatusUpdateModal = () => ({
+  type: TOGGLE_DISPLAY_ADD_STATUS_UPDATE_MODAL_REQUESTED,
 });
 
 export const runCustomIncidentAction = (incidents, webhook, displayModal = true) => ({

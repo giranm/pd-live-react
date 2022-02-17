@@ -19,6 +19,7 @@ import IncidentActionsComponent from 'components/IncidentActions/IncidentActions
 import ActionAlertsModalComponent from 'components/ActionAlertsModal/ActionAlertsModalComponent';
 import CustomSnoozeModalComponent from 'components/CustomSnoozeModal/CustomSnoozeModalComponent';
 import AddNoteModalComponent from 'components/AddNoteModal/AddNoteModalComponent';
+import AddStatusUpdateModalComponent from 'components/AddStatusUpdateModal/AddStatusUpdateModalComponent';
 import ReassignModalComponent from 'components/ReassignModal/ReassignModalComponent';
 import AddResponderModalComponent from 'components/AddResponderModal/AddResponderModalComponent';
 import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
@@ -182,6 +183,7 @@ const App = ({
         <ActionAlertsModalComponent />
         <CustomSnoozeModalComponent />
         <AddNoteModalComponent />
+        <AddStatusUpdateModalComponent />
         <ReassignModalComponent />
         <AddResponderModalComponent />
         <MergeModalComponent />
