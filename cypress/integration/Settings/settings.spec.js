@@ -15,16 +15,19 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
     const columns = ['Teams', 'Num Alerts'];
     manageIncidentTableColumns('add', columns);
     columns.forEach((columnName) => {
-      cy.get('.th').contains(columnName).scrollIntoView().should('be.visible');
+      cy.get(`[data-column-name="${columnName}"]`).scrollIntoView().should('be.visible');
     });
   });
 
-  // FIXME: Find out way to properly remove columns using DOM
   it('Remove columns from incident table', () => {
     const columns = ['Service', 'Latest Note'];
     manageIncidentTableColumns('remove', columns);
-    columns.forEach((columnName) => {
-      cy.get('.th').contains(columnName).scrollIntoView().should('not.be.visible');
+
+    // Assert against DOM to see if element has been removed
+    cy.get('body').then((body) => {
+      columns.forEach((columnName) => {
+        expect(body.find(`[data-column-name="${columnName}"]`).length).to.equal(0);
+      });
     });
   });
 });

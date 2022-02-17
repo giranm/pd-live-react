@@ -281,6 +281,7 @@ const IncidentTableComponent = ({
                   <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column) => (
                       <th
+                        data-column-name={column.Header}
                         className={column.isSorted ? 'th-sorted' : 'th'}
                         {...column.getHeaderProps(column.getSortByToggleProps())}
                       >
