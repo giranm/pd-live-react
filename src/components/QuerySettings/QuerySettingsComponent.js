@@ -203,6 +203,7 @@ const QuerySettingsComponent = ({
                   >
                     {selectListPriorities.map((priority) => (
                       <ToggleButton
+                        id={`query-priority-${priority.label}-button`}
                         key={priority.value}
                         variant="outline-secondary"
                         value={priority.value}
@@ -224,6 +225,7 @@ const QuerySettingsComponent = ({
                 {' '}
                 <Form.Group>
                   <Select
+                    id="query-team-select"
                     styles={customStyles}
                     onChange={(selectedTeams) => {
                       const teamIdsInt = selectedTeams.map((team) => team.value);
@@ -241,6 +243,7 @@ const QuerySettingsComponent = ({
                 {' '}
                 <Form.Group>
                   <Select
+                    id="query-service-select"
                     styles={customStyles}
                     onChange={(selectedServices) => {
                       const serviceIdsInt = selectedServices.map((service) => service.value);

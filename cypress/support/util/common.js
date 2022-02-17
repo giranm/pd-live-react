@@ -49,14 +49,37 @@ export const checkIncidentCellContent = (incidentId, incidentHeader, content) =>
     .should('have.text', content);
 };
 
-export const checkIncidentCellIcon = (incidentIdx, incidentHeader, icon) => {
+export const checkIncidentCellContentAllRows = (incidentHeader, content) => {
   cy.wait(2000);
+  cy.get('.tbody').then(($tbody) => {
+    const visibleIncidentCount = $tbody.find('tr').length;
+    for (let incidentIdx = 0; incidentIdx < visibleIncidentCount; incidentIdx++) {
+      cy.get(
+        `[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`,
+      )
+        .should('be.visible')
+        .should('have.text', content);
+    }
+  });
+};
+
+export const checkIncidentCellIcon = (incidentIdx, incidentHeader, icon) => {
   cy.get(
     `[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`,
   ).within(() => {
     cy.get('svg').then(($el) => {
       cy.wrap($el).should('have.class', icon);
     });
+  });
+};
+
+export const checkIncidentCellIconAllRows = (incidentHeader, icon) => {
+  cy.wait(2000);
+  cy.get('.tbody').then(($tbody) => {
+    const visibleIncidentCount = $tbody.find('tr').length;
+    for (let incidentIdx = 0; incidentIdx < visibleIncidentCount; incidentIdx++) {
+      checkIncidentCellIcon(incidentIdx, incidentHeader, icon);
+    }
   });
 };
 
