@@ -638,7 +638,7 @@ export function* addStatusUpdate(action) {
       method: 'post',
       endpoint: `incidents/${incident.id}/status_updates`,
       data: {
-        subject: 'PagerDuty Status Update',
+        // subject: 'PagerDuty Status Update',
         message: statusUpdate,
         html_message: statusUpdate,
       },

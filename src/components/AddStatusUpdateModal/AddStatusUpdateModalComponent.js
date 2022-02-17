@@ -6,14 +6,17 @@ import {
 } from 'react-redux';
 
 import {
-  Modal, Form, Button,
+  Modal, Button,
 } from 'react-bootstrap';
+
+import ReactQuill from 'react-quill';
 
 import {
   toggleDisplayAddStatusUpdateModal as toggleDisplayAddStatusUpdateModalConnected,
   addStatusUpdate as addStatusUpdateConnected,
 } from 'redux/incident_actions/actions';
 
+import 'react-quill/dist/quill.snow.css';
 import './AddStatusUpdateModalComponent.scss';
 
 const AddStatusUpdateModalComponent = ({
@@ -29,6 +32,30 @@ const AddStatusUpdateModalComponent = ({
     selectedRows,
   } = incidentTable;
 
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+      ['link', 'image'],
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ];
+
   const [statusUpdate, setStatusUpdate] = useState('');
   useEffect(() => {
     setStatusUpdate('');
@@ -36,22 +63,22 @@ const AddStatusUpdateModalComponent = ({
 
   return (
     <div className="add-status-update-modal-ctr">
-      <Modal show={displayAddStatusUpdateModal} onHide={toggleDisplayAddStatusUpdateModal}>
+      <Modal
+        show={displayAddStatusUpdateModal}
+        onHide={toggleDisplayAddStatusUpdateModal}
+        size="lg"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Add Status Update</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Control
-              id="add-status-update-textarea"
-              as="textarea"
-              placeholder="Add status update to incident(s) here"
-              minLength={1}
-              onChange={(e) => {
-                setStatusUpdate(e.target.value);
-              }}
-            />
-          </Form>
+          <ReactQuill
+            theme="snow"
+            modules={modules}
+            formats={formats}
+            value={statusUpdate}
+            onChange={setStatusUpdate}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button
