@@ -139,4 +139,36 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
       });
     });
   });
+
+  it('Sort incident column "#" by ascending order', () => {
+    cy.get('[data-column-name="#"]')
+      .click()
+      .then(($el) => {
+        const cls = $el.attr('class');
+        expect(cls).to.equal('th-sorted');
+        cy.wrap($el).contains('# ▲');
+      });
+  });
+
+  it('Sort incident column "#" by descending order', () => {
+    cy.get('[data-column-name="#"]')
+      .dblclick()
+      .then(($el) => {
+        const cls = $el.attr('class');
+        expect(cls).to.equal('th-sorted');
+        cy.wrap($el).contains('# ▼');
+      });
+  });
+
+  it('Clear sort on incident column "#"', () => {
+    cy.get('[data-column-name="#"]')
+      .click()
+      .click()
+      .click()
+      .then(($el) => {
+        const cls = $el.attr('class');
+        expect(cls).to.equal('th');
+        cy.wrap($el).contains('#');
+      });
+  });
 });
