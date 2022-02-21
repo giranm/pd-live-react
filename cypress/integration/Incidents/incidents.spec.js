@@ -55,18 +55,17 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
     });
   });
 
-  it('Escalate singular incident to multiple levels', () => {
-    // Ensure that only high urgency incidents are visible
-    deactivateButton('query-urgency-low-button');
-    waitForIncidentTable();
-
-    // Assumed environment has 3 levels on escalation policy
-    for (let escalationLevel = 1; escalationLevel < 4; escalationLevel++) {
+  // Assumed environment has 3 levels on escalation policy
+  for (let escalationLevel = 1; escalationLevel < 4; escalationLevel++) {
+    it(`Escalate singular incident to level: ${escalationLevel}`, () => {
+      // Ensure that only high urgency incidents are visible
+      deactivateButton('query-urgency-low-button');
+      waitForIncidentTable();
       selectIncident(0);
       escalate(escalationLevel);
       checkActionAlertsModalContent(`have been manually escalated to level ${escalationLevel}`);
-    }
-  });
+    });
+  }
 
   it('Reassign singular incident to User A1', () => {
     const assignment = 'User A1';
