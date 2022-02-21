@@ -2,6 +2,7 @@ import {
   acceptDisclaimer,
   waitForIncidentTable,
   selectIncident,
+  selectAllIncidents,
   escalate,
   reassign,
   addResponders,
@@ -23,6 +24,15 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
   beforeEach(() => {
     acceptDisclaimer();
     waitForIncidentTable();
+  });
+
+  it('Select all incidents', () => {
+    selectAllIncidents();
+    cy.get('.selected-incidents-badge').then(($el) => {
+      const text = $el.text();
+      const incidentNumbers = text.split('/');
+      expect(incidentNumbers[0]).to.equal(incidentNumbers[1]);
+    });
   });
 
   it('Acknowledge singular incident', () => {
