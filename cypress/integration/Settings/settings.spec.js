@@ -30,4 +30,12 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       });
     });
   });
+
+  it('Clear local cache', () => {
+    cy.get('.settings-panel-dropdown').click();
+    cy.get('.dropdown-item').contains('Settings').click();
+    cy.get('.nav-item').contains('Local Cache').click();
+    cy.get('.btn').contains('Clear Local Cache').click();
+    cy.get('.modal-title').contains('Disclaimer & License').should('be.visible');
+  });
 });
