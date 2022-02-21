@@ -22,7 +22,7 @@ export const acceptDisclaimer = () => {
 
 export const waitForIncidentTable = () => {
   // Ref: https://stackoverflow.com/a/60065672/6480733
-  cy.get('.incident-table-ctr', { timeout: 30000 }).should('be.visible');
+  cy.get('.incident-table-ctr', { timeout: 60000 }).should('be.visible');
 };
 
 export const selectIncident = (incidentIdx = 0) => {

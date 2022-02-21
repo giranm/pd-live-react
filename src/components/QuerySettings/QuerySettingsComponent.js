@@ -111,6 +111,7 @@ const QuerySettingsComponent = ({
                 {' '}
                 <br />
                 <DatePicker
+                  id="query-date-input"
                   className="date-picker"
                   dateFormat="dd/MM/yyyy"
                   todayButton="Today"
