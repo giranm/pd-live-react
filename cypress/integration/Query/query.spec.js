@@ -127,16 +127,16 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     checkIncidentCellContentAllRows('Teams', 'Team A');
   });
 
-  // TODO: Find out how to see what the remaining services are for team selection
-  // it('Query on Team A only shows their services', () => {
-  //   cy.get('#query-team-select').click();
-  //   cy.contains('div', 'Team A').click();
-  //   cy.get('body').then((body) => {
-  //     ['Service A1', 'Service A2'].forEach((service) => {
-  //       expect(body.find(`[class*="-option" and contains(text(),"${service}")]`).length).to.equal(
-  //         0,
-  //       );
-  //     });
-  //   });
-  // });
+  it('Query on Team A only allows further querying for associated services', () => {
+    cy.get('#query-team-select').click();
+    cy.contains('div', 'Team A').click();
+    waitForIncidentTable();
+
+    cy.get('#query-service-select').click();
+    cy.get('body').then((body) => {
+      ['Service A1', 'Service A2'].forEach((service) => {
+        expect(body.find(`[class*="-option"]:contains("${service}")`).length).to.equal(1);
+      });
+    });
+  });
 });
