@@ -8,5 +8,6 @@
     "testFiles": "**/*.spec.{js,ts,jsx,tsx}",
     "componentFolder": "src"
   },
-  "defaultCommandTimeout": 15000
+  "defaultCommandTimeout": 15000,
+  "retries": 3
 }
