@@ -107,7 +107,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     });
   });
 
-  const services = ['Service A1', 'Service B2', 'Service C3'];
+  const services = ['Service A1', 'Service B2', 'Service C1'];
   services.forEach((service) => {
     it(`Query for incidents on ${service} only`, () => {
       cy.get('#query-service-select').click();
