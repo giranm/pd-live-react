@@ -48,8 +48,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "npx genversion src/config/version.js --semi && craco build",
+    "start": "npx craco start",
+    "build": "npx genversion src/config/version.js --semi && npx craco build",
     "genversion": "npx genversion src/config/version.js --semi",
     "jest": "npx jest",
     "cypress:open": "npx cypress open",

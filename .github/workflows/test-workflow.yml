@@ -23,6 +23,7 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-modules-
       - name: Install modules
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
@@ -64,6 +65,7 @@ jobs:
             ~/.cache/Cypress
             '**/node_modules
           key: ${{ runner.os }}-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-modules-
       - name: Install modules
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
