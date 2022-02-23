@@ -3,6 +3,15 @@ name: Test Framework Suite
 on: [pull_request, push]
 
 jobs:
+  build-id:
+    runs-on: ubuntu-latest
+    outputs:
+      uuid: ${{ steps.uuid.outputs.value }}
+    steps:
+      - name: 'uuid'
+        id: uuid
+        run: echo "::set-output name=value::$GITHUB_SHA-$(date +"%s")"
+
   jest:
     runs-on: ubuntu-latest
     steps:
@@ -20,41 +29,14 @@ jobs:
       - name: Run Jest Tests
         run: yarn jest
 
-  # cypress-run:
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     REACT_APP_PD_ENV: 'github-ci'
-  #     REACT_APP_PD_SUBDOMAIN_ALLOW_LIST: '*'
-  #     REACT_APP_PD_USER_TOKEN: ${{ secrets.PD_INTEGRATION_USER_TOKEN }}
-  #     REACT_APP_PD_REQUIRED_ABILITY: ${{ secrets.PD_REQUIRED_ABILITY }}
-  #     REACT_APP_DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
-  #     REACT_APP_DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
-  #     REACT_APP_DD_SITE: ${{ secrets.DD_SITE }}
-  #     REACT_APP_DD_SAMPLE_RATE: ${{ secrets.DD_SAMPLE_RATE }}
-  #     REACT_APP_DD_TRACK_INTERACTIONS: ${{ secrets.DD_TRACK_INTERACTIONS }}
-  #     REACT_APP_DD_DEFAULT_PRIVACY_LEVEL: ${{ secrets.DD_DEFAULT_PRIVACY_LEVEL }}
-  #     CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-  #     CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-  #   container:
-  #     image: cypress/browsers:node16.13.0-chrome95-ff94
-  #     options: --user 1001
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/cache@v2
-  #       id: yarn-cache
-  #       with:
-  #         path: |
-  #           ~/.cache/Cypress
-  #           '**/node_modules
-  #         key: ${{ runner.os }}-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
-  #     - name: Install modules
-  #       if: steps.yarn-cache.outputs.cache-hit != 'true'
-  #       run: yarn install
-  #     - name: Run Cypress Tests
-  #       run: Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99 && yarn cypress:ci:chrome && pkill Xvfb ; true
-
-  cypress-run-parallel:
+  cypress-run:
+    needs: build-id
     runs-on: ubuntu-latest
+    container: cypress/browsers:node16.13.0-chrome95-ff94
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4, 5]
     env:
       REACT_APP_PD_ENV: 'github-ci'
       REACT_APP_PD_SUBDOMAIN_ALLOW_LIST: '*'
@@ -69,27 +51,31 @@ jobs:
       CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-    container: cypress/browsers:node16.13.0-chrome95-ff94
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: 'UI Tests - Chrome'
-        uses: cypress-io/github-action@v2
+      - name: Cache Yarn Dependencies
+        uses: actions/cache@v2
+        id: yarn-cache
         with:
-          install: false
-          start: Xvfb -screen 0 1920x1080x24 :99 && export DISPLAY=:99 && yarn start
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
-          browser: chrome
-          record: true
-          parallel: true
-          spec: |
-            cypress/integration/app.spec.js
-            cypress/integration/Incidents/incidents.spec.js
-            cypress/integration/Query/query.spec.js
-            cypress/integration/Search/search.spec.js
-            cypress/integration/Settings/settings.spec.js
+          path: |
+            ~/.cache/Cypress
+            '**/node_modules
+          key: ${{ runner.os }}-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Install modules
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: Run Cypress Tests
+        run: |
+          Xvfb -screen 0 1920x1080x24 :99${{ matrix.containers }} & export DISPLAY=:99${{ matrix.containers }}
+          yarn start &
+          npx wait-on http://localhost:3000 && \
+          npx cypress run \
+          --group "e2e" \
+          --browser chrome \
+          --headless \
+          --parallel \
+          --record \
+          --key ${CYPRESS_RECORD_KEY} \
+          --ci-build-id ${{ needs.build-id.outputs.uuid }} && \
+          pkill Xvfb
