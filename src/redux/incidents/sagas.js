@@ -522,6 +522,12 @@ export function* filterIncidentsByQuery() {
 }
 
 export function* filterIncidentsByQueryImpl(action) {
+  // Handle race condition for filtering by priority (as it's outside of API spec)
+  yield take([
+    FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
+    FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
+  ]);
+
   // Filter current incident list by query (aka Global Search)
   try {
     const {
