@@ -19,6 +19,11 @@ import {
 } from 'config/constants';
 
 import {
+  FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
+} from 'redux/incidents/actions';
+
+import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
   UPDATE_CONNECTION_STATUS_COMPLETED,
   CHECK_CONNECTION_STATUS_REQUESTED,
@@ -51,6 +56,10 @@ export function* checkConnectionStatusImpl() {
   // Wait until these actions have been dispatched before verifying connection status
   yield take([CHECK_ABILITIES_COMPLETED, CHECK_ABILITIES_ERROR]);
   yield take([FETCH_LOG_ENTRIES_COMPLETED, FETCH_LOG_ENTRIES_ERROR]);
+  yield take([
+    FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
+    FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
+  ]);
 
   // Check entire store for fulfilled statuses
   const store = yield select();
