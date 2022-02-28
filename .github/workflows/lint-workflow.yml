@@ -13,7 +13,7 @@ jobs:
         id: yarn-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-modules-
       - name: Install modules
         if: steps.yarn-cache.outputs.cache-hit != 'true'

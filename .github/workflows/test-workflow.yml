@@ -1,6 +1,6 @@
 name: Test Framework Suite
 
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   build-id:
@@ -22,7 +22,7 @@ jobs:
         id: yarn-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-modules-
       - name: Install modules
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -63,8 +63,8 @@ jobs:
         with:
           path: |
             ~/.cache/Cypress
-            '**/node_modules
-          key: ${{ runner.os }}-modules-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+            '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-modules-
       - name: Install modules
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -82,4 +82,4 @@ jobs:
           --record \
           --key ${CYPRESS_RECORD_KEY} \
           --ci-build-id ${{ needs.build-id.outputs.uuid }} && \
-          pkill Xvfb ; true
+          pkill Xvfb
