@@ -26,7 +26,6 @@ export const waitForIncidentTable = () => {
 };
 
 export const selectIncident = (incidentIdx = 0) => {
-  cy.get('.incident-table-fixed-list').scrollTo('top', { easing: 'linear' });
   const selector = `[data-incident-row-idx="${incidentIdx}"]`;
   cy.get(selector).invoke('attr', 'data-incident-id').as(`selectedIncidentId_${incidentIdx}`);
   cy.get(selector).click();
@@ -57,6 +56,7 @@ export const checkIncidentCellContentAllRows = (incidentHeader, content) => {
       cy.get(
         `[data-incident-header="${incidentHeader}"][data-incident-row-cell-idx="${incidentIdx}"]`,
       )
+        .scrollIntoView()
         .should('be.visible')
         .should('have.text', content);
     }
@@ -209,6 +209,8 @@ export const manageIncidentTableColumns = (desiredState = 'add', columns = []) =
   cy.get('.btn').contains('Update Columns').click();
   cy.get('.close').click();
 };
+
+export const priorityNames = ['--', 'P5', 'P4', 'P3', 'P2', 'P1'];
 
 /*
   PagerDuty API Helpers

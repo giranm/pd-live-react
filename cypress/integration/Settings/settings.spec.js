@@ -3,11 +3,26 @@ import {
   acceptDisclaimer,
   waitForIncidentTable,
   manageIncidentTableColumns,
+  activateButton,
+  priorityNames,
 } from '../../support/util/common';
 
 describe('Manage Settings', { failFast: { enabled: false } }, () => {
-  beforeEach(() => {
+  before(() => {
     acceptDisclaimer();
+    priorityNames.forEach((currentPriority) => {
+      activateButton(`query-priority-${currentPriority}-button`);
+    });
+    waitForIncidentTable();
+  });
+
+  beforeEach(() => {
+    if (cy.state('test').currentRetry() > 1) {
+      acceptDisclaimer();
+    }
+    priorityNames.forEach((currentPriority) => {
+      activateButton(`query-priority-${currentPriority}-button`);
+    });
     waitForIncidentTable();
   });
 

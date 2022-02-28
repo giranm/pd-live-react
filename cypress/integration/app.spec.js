@@ -27,9 +27,16 @@ describe('Integration User Token', { failFast: { enabled: false } }, () => {
 });
 
 describe('PagerDuty Live', () => {
-  beforeEach(() => {
+  before(() => {
     acceptDisclaimer();
     waitForIncidentTable();
+  });
+
+  beforeEach(() => {
+    if (cy.state('test').currentRetry() > 1) {
+      acceptDisclaimer();
+      waitForIncidentTable();
+    }
   });
 
   it('Renders the main application page', () => {

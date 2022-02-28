@@ -8,24 +8,42 @@ import {
   checkIncidentCellContentAllRows,
   checkIncidentCellIconAllRows,
   manageIncidentTableColumns,
+  priorityNames,
 } from '../../support/util/common';
 
 describe('Query Incidents', { failFast: { enabled: false } }, () => {
-  beforeEach(() => {
+  before(() => {
     acceptDisclaimer();
+    manageIncidentTableColumns('remove', ['Assignees']);
+    manageIncidentTableColumns('add', ['Urgency', 'Teams']);
+    priorityNames.forEach((currentPriority) => {
+      activateButton(`query-priority-${currentPriority}-button`);
+    });
     waitForIncidentTable();
   });
 
-  it('Query for incidents within T-2 since date', () => {
-    // Limit dataset to resolved incidents on Service A1 that contain text "ab"
+  beforeEach(() => {
+    if (cy.state('test').currentRetry() > 1) {
+      acceptDisclaimer();
+      manageIncidentTableColumns('remove', ['Assignees']);
+      manageIncidentTableColumns('add', ['Urgency', 'Teams']);
+    }
+    priorityNames.forEach((currentPriority) => {
+      activateButton(`query-priority-${currentPriority}-button`);
+    });
+  });
+
+  it('Query for incidents within T-1 since date', () => {
+    // Limit dataset to resolved low-urgency incidents on Service A1 that contain text "ab"
     activateButton('query-status-resolved-button');
+    deactivateButton('query-urgency-low-button');
     cy.get('#query-service-select').click();
     cy.contains('div', 'Service A1').click();
     cy.get('#global-search-input').type('ab');
 
-    // // Update since date to T-2
+    // // Update since date to T-1
     const queryDate = moment()
-      .subtract(2, 'days')
+      .subtract(1, 'days')
       .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     cy.get('#query-date-input').clear().type(queryDate.format('DD/MM/yyyy')).type('{enter}');
     waitForIncidentTable();
@@ -41,6 +59,12 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
         });
       }
     });
+
+    // Reset query for next test
+    cy.get('#global-search-input').clear();
+    cy.get('#query-service-select').click().type('{del}');
+    activateButton('query-urgency-low-button');
+    deactivateButton('query-status-resolved-button');
   });
 
   it('Query for triggered incidents only', () => {
@@ -65,13 +89,17 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     activateButton('query-status-resolved-button');
     waitForIncidentTable();
     checkIncidentCellIconAllRows('Status', 'fa-check-circle');
+
+    // Reset query for next test
+    activateButton('query-status-triggered-button');
+    activateButton('query-status-acknowledged-button');
+    deactivateButton('query-status-resolved-button');
   });
 
   it('Query for high urgency incidents only', () => {
     activateButton('query-urgency-high-button');
     deactivateButton('query-urgency-low-button');
     waitForIncidentTable();
-    manageIncidentTableColumns('add', ['Urgency']);
     checkIncidentCellContentAllRows('Urgency', ' High');
   });
 
@@ -79,15 +107,16 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     deactivateButton('query-urgency-high-button');
     activateButton('query-urgency-low-button');
     waitForIncidentTable();
-    manageIncidentTableColumns('add', ['Urgency']);
     checkIncidentCellContentAllRows('Urgency', ' Low');
+
+    // Reset query for next test
+    activateButton('query-urgency-high-button');
   });
 
-  const priorities = ['P1', 'P2', 'P3', 'P4', 'P5', '--'];
-  priorities.forEach((currentPriority) => {
+  priorityNames.forEach((currentPriority) => {
     it(`Query for priority "${currentPriority}" incidents only`, () => {
       activateButton(`query-priority-${currentPriority}-button`);
-      const excludedPriorities = priorities.filter((priority) => currentPriority !== priority);
+      const excludedPriorities = priorityNames.filter((priority) => currentPriority !== priority);
       excludedPriorities.forEach((excludedPriority) => {
         deactivateButton(`query-priority-${excludedPriority}-button`);
       });
@@ -96,40 +125,40 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     });
   });
 
-  const teams = ['Team A', 'Team B', 'Team C'];
+  const teams = ['Team A', 'Team B'];
   teams.forEach((team) => {
     it(`Query for incidents on ${team} only`, () => {
-      cy.get('#query-team-select').click();
-      cy.contains('div', team).click();
+      cy.get('#query-team-select').click().type(`${team}{enter}`);
       waitForIncidentTable();
-      manageIncidentTableColumns('add', ['Teams']);
       checkIncidentCellContentAllRows('Teams', team);
+      cy.get('#query-team-select').click().type('{del}');
     });
   });
 
-  const services = ['Service A1', 'Service B2', 'Service C1'];
+  const services = ['Service A1', 'Service B2'];
   services.forEach((service) => {
     it(`Query for incidents on ${service} only`, () => {
-      cy.get('#query-service-select').click();
-      cy.contains('div', service).click();
+      cy.get('#query-service-select').click().type(`${service}{enter}`);
       waitForIncidentTable();
       checkIncidentCellContentAllRows('Service', service);
+      cy.get('#query-service-select').click().type('{del}');
     });
   });
 
   it('Query for incidents on Team A and Service A1 only', () => {
-    cy.get('#query-team-select').click();
-    cy.contains('div', 'Team A').click();
-    cy.get('#query-service-select').click();
-    cy.contains('div', 'Service A1').click();
-    manageIncidentTableColumns('add', ['Teams']);
+    cy.get('#query-team-select').click().type('Team A{enter}');
+    cy.get('#query-service-select').click().type('Service A1{enter}');
+
+    waitForIncidentTable();
     checkIncidentCellContentAllRows('Service', 'Service A1');
     checkIncidentCellContentAllRows('Teams', 'Team A');
+
+    cy.get('#query-team-select').click().type('{del}');
+    cy.get('#query-service-select').click().type('{del}');
   });
 
   it('Query on Team A only allows further querying for associated services', () => {
-    cy.get('#query-team-select').click();
-    cy.contains('div', 'Team A').click();
+    cy.get('#query-team-select').click().type('Team A{enter}');
     waitForIncidentTable();
 
     cy.get('#query-service-select').click();
@@ -138,6 +167,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
         expect(body.find(`[class*="-option"]:contains("${service}")`).length).to.equal(1);
       });
     });
+    cy.get('#query-team-select').click().type('{del}');
   });
 
   it('Sort incident column "#" by ascending order', () => {
@@ -152,7 +182,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
 
   it('Sort incident column "#" by descending order', () => {
     cy.get('[data-column-name="#"]')
-      .dblclick()
+      .click()
       .then(($el) => {
         const cls = $el.attr('class');
         expect(cls).to.equal('th-sorted');
@@ -162,8 +192,6 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
 
   it('Clear sort on incident column "#"', () => {
     cy.get('[data-column-name="#"]')
-      .click()
-      .click()
       .click()
       .then(($el) => {
         const cls = $el.attr('class');

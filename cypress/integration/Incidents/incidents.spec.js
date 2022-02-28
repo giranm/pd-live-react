@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import {
   acceptDisclaimer,
   waitForIncidentTable,
@@ -16,13 +17,29 @@ import {
   runResponsePlay,
   checkActionAlertsModalContent,
   checkIncidentCellContent,
+  activateButton,
   deactivateButton,
+  priorityNames,
 } from '../../support/util/common';
 
 describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
+  before(() => {
+    acceptDisclaimer();
+    priorityNames.forEach((currentPriority) => {
+      activateButton(`query-priority-${currentPriority}-button`);
+    });
+    waitForIncidentTable();
+  });
+
   // We use beforeEach as each test will reload/clear the session
   beforeEach(() => {
-    acceptDisclaimer();
+    // Handle failing tests by clearing cache
+    if (cy.state('test').currentRetry() > 1) {
+      acceptDisclaimer();
+    }
+    priorityNames.forEach((currentPriority) => {
+      activateButton(`query-priority-${currentPriority}-button`);
+    });
     waitForIncidentTable();
   });
 
@@ -33,6 +50,8 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
       const incidentNumbers = text.split('/');
       expect(incidentNumbers[0]).to.equal(incidentNumbers[1]);
     });
+    // Unselect all incidents for the next run
+    selectAllIncidents();
   });
 
   it('Acknowledge singular incident', () => {
@@ -78,6 +97,7 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
   }
 
   it('Reassign singular incident to User A1', () => {
+    activateButton('query-urgency-low-button'); // bring back low urgency incidents
     const assignment = 'User A1';
     selectIncident(0);
     reassign(assignment);
@@ -152,7 +172,6 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
     checkActionAlertsModalContent('have been resolved');
   });
 
-  const priorityNames = ['--', 'P5', 'P4', 'P3', 'P2', 'P1'];
   priorityNames.forEach((priorityName, idx) => {
     it(`Update priority of singular incident to ${priorityName}`, () => {
       const incidentIdx = idx;
