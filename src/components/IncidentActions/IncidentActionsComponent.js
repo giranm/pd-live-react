@@ -257,6 +257,7 @@ const IncidentActionsComponent = ({
               Acknowledge
             </Button>
             <DropdownButton
+              id="incident-action-escalate-button"
               as={ButtonGroup}
               className="action-button"
               variant={enableEscalationAction ? 'outline-secondary' : 'light'}
@@ -276,6 +277,7 @@ const IncidentActionsComponent = ({
                 const escalationLevel = selectedEscalationRules.length - idx;
                 return (
                   <Dropdown.Item
+                    id={`escalation-level-${escalationLevel}-button`}
                     key={escalation_rule.id}
                     variant="light"
                     onClick={() => escalate(selectedRows, escalationLevel)}
@@ -288,6 +290,7 @@ const IncidentActionsComponent = ({
               })}
             </DropdownButton>
             <Button
+              id="incident-action-reassign-button"
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayReassignModal()}
@@ -299,6 +302,7 @@ const IncidentActionsComponent = ({
               Reassign
             </Button>
             <Button
+              id="incident-action-add-responders-button"
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayAddResponderModal()}
@@ -310,6 +314,7 @@ const IncidentActionsComponent = ({
               Add Responders
             </Button>
             <DropdownButton
+              id="incident-action-snooze-button"
               as={ButtonGroup}
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
@@ -327,6 +332,7 @@ const IncidentActionsComponent = ({
             >
               {Object.keys(SNOOZE_TIMES).map((duration) => (
                 <Dropdown.Item
+                  id={`snooze-duration-${duration}-button`}
                   key={duration}
                   variant="light"
                   onClick={() => snooze(selectedRows, duration)}
@@ -335,9 +341,15 @@ const IncidentActionsComponent = ({
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />
-              <Dropdown.Item onClick={() => toggleDisplayCustomSnoozeModal()}>Custom</Dropdown.Item>
+              <Dropdown.Item
+                id="snooze-duration-custom-modal-button"
+                onClick={() => toggleDisplayCustomSnoozeModal()}
+              >
+                Custom
+              </Dropdown.Item>
             </DropdownButton>
             <Button
+              id="incident-action-merge-button"
               className="action-button"
               variant={enableMergeAction ? 'outline-secondary' : 'light'}
               onClick={() => toggleDisplayMergeModal()}
@@ -349,6 +361,7 @@ const IncidentActionsComponent = ({
               Merge
             </Button>
             <Button
+              id="incident-action-resolve-button"
               className="action-button"
               variant={enableActions ? 'outline-secondary' : 'light'}
               disabled={enableActions}
@@ -362,6 +375,7 @@ const IncidentActionsComponent = ({
           </Col>
           <Col sm={{ span: 3.5 }}>
             <DropdownButton
+              id="incident-action-update-priority-button"
               as={ButtonGroup}
               className="action-button"
               variant={enablePriorityAction ? 'outline-secondary' : 'light'}
@@ -379,6 +393,7 @@ const IncidentActionsComponent = ({
             >
               {priorities.map((priority) => (
                 <Dropdown.Item
+                  id={`update-priority-${priority.name}-button`}
                   key={priority.id}
                   variant="light"
                   onClick={() => updatePriority(selectedRows, priority.id)}
@@ -408,6 +423,7 @@ const IncidentActionsComponent = ({
               Add Note
             </Button>
             <DropdownButton
+              id="incident-action-run-action-button"
               as={ButtonGroup}
               className="action-button"
               variant={enablePostSingularAction ? 'outline-secondary' : 'light'}
@@ -421,11 +437,12 @@ const IncidentActionsComponent = ({
                 </>
               )}
               align="end"
-              id="run-action"
               disabled={enablePostSingularAction}
               show={displayRunActions}
               onClick={(e) => {
-                if (e.target.id === 'run-action') toggleRunActions(!displayRunActions);
+                if (e.target.id === 'incident-action-run-action-button') {
+                  toggleRunActions(!displayRunActions);
+                }
               }}
             >
               {selectListResponsePlays.length > 0 ? (
@@ -433,6 +450,7 @@ const IncidentActionsComponent = ({
                   <Dropdown.Header>Response Plays</Dropdown.Header>
                   <Dropdown.Item>
                     <Select
+                      id="response-play-select"
                       className="response-play-dropdown"
                       menuPlacement="top"
                       components={animatedComponents}
@@ -453,6 +471,7 @@ const IncidentActionsComponent = ({
                   <Dropdown.Header>Actions</Dropdown.Header>
                   {customIncidentActions.map((customIncidentAction) => (
                     <Dropdown.Item
+                      id={`custom-incident-action-${customIncidentAction.name}-button`}
                       key={customIncidentAction.id}
                       onClick={() => {
                         runCustomIncidentAction(selectedRows, customIncidentAction);
@@ -472,6 +491,7 @@ const IncidentActionsComponent = ({
                   <Dropdown.Header>External Systems</Dropdown.Header>
                   {externalSystems.map((externalSystem) => (
                     <Dropdown.Item
+                      id={`external-system-${externalSystem.extension_label}-button`}
                       key={externalSystem.id}
                       disabled={externalSystem.synced}
                       onClick={() => {

@@ -32,14 +32,11 @@ If you wish to maintain + deploy your own version of PagerDuty Live, we recommen
 
 1. Install [NodeJS v16.13](https://nodejs.org/tr/blog/release/v16.13.0/) via [`asdf install`](https://github.com/asdf-vm/asdf) / [`nvm`](https://github.com/nvm-sh/nvm)
 
-2. Install `craco` via `$ yarn install @craco/craco --save --global`  
-   (NB - you may need to reload terminal session to use the alias)
+2. `$ git clone` repo to desired destination and `$ cd pd-live-react` into directory
 
-3. `$ git clone` repo to desired destination and `$ cd pd-live-react` into directory
+3. Create `.env` file in project root with overriding configuration (see section below for details)
 
-4. Create `.env` file in project root with overriding configuration (see section below for details)
-
-5. Install dependencies with `$ yarn install` and run application locally using `$ yarn start`  
+4. Install dependencies with `$ yarn install` and run application locally using `$ yarn start`  
    The app will be available under http://localhost:3000/pd-live-react
 
 ## Environment Overrides
@@ -65,7 +62,7 @@ The following _optional_ parameters can be used in a `.env` file to override Pag
 The following scripts have been created to run unit, component, and integration tests:
 
 - `$ yarn jest` (Jest Unit/Component)
-- `$ yarn cypress:ci:chrome` (Cypress Integration with headless Chromedriver)
+- `$ yarn cypress:run:local` (Cypress Integration with headless Chromedriver)
 
 Please note that running integration tests will require environment variable `REACT_APP_PD_USER_TOKEN` set.  
 

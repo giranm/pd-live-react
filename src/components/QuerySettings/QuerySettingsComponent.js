@@ -111,6 +111,7 @@ const QuerySettingsComponent = ({
                 {' '}
                 <br />
                 <DatePicker
+                  id="query-date-input"
                   className="date-picker"
                   dateFormat="dd/MM/yyyy"
                   todayButton="Today"
@@ -127,19 +128,31 @@ const QuerySettingsComponent = ({
                     value={incidentStatus}
                     onChange={(val) => updateQuerySettingsIncidentStatus(val)}
                   >
-                    <ToggleButton variant="outline-danger" value={TRIGGERED}>
+                    <ToggleButton
+                      id="query-status-triggered-button"
+                      variant="outline-danger"
+                      value={TRIGGERED}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faExclamationTriangle} />
                       </div>
                       Triggered
                     </ToggleButton>
-                    <ToggleButton variant="outline-warning" value={ACKNOWLEDGED}>
+                    <ToggleButton
+                      id="query-status-acknowledged-button"
+                      variant="outline-warning"
+                      value={ACKNOWLEDGED}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faShieldAlt} />
                       </div>
                       Acknowleged
                     </ToggleButton>
-                    <ToggleButton variant="outline-success" value={RESOLVED}>
+                    <ToggleButton
+                      id="query-status-resolved-button"
+                      variant="outline-success"
+                      value={RESOLVED}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faCheckCircle} />
                       </div>
@@ -157,13 +170,21 @@ const QuerySettingsComponent = ({
                     value={incidentUrgency}
                     onChange={(val) => updateQuerySettingsIncidentUrgency(val)}
                   >
-                    <ToggleButton variant="outline-secondary" value={HIGH}>
+                    <ToggleButton
+                      id="query-urgency-high-button"
+                      variant="outline-secondary"
+                      value={HIGH}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faChevronUp} />
                       </div>
                       High
                     </ToggleButton>
-                    <ToggleButton variant="outline-secondary" value={LOW}>
+                    <ToggleButton
+                      id="query-urgency-low-button"
+                      variant="outline-secondary"
+                      value={LOW}
+                    >
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faChevronDown} />
                       </div>
@@ -183,6 +204,7 @@ const QuerySettingsComponent = ({
                   >
                     {selectListPriorities.map((priority) => (
                       <ToggleButton
+                        id={`query-priority-${priority.label}-button`}
                         key={priority.value}
                         variant="outline-secondary"
                         value={priority.value}
@@ -204,6 +226,7 @@ const QuerySettingsComponent = ({
                 {' '}
                 <Form.Group>
                   <Select
+                    id="query-team-select"
                     styles={customStyles}
                     onChange={(selectedTeams) => {
                       const teamIdsInt = selectedTeams.map((team) => team.value);
@@ -221,6 +244,7 @@ const QuerySettingsComponent = ({
                 {' '}
                 <Form.Group>
                   <Select
+                    id="query-service-select"
                     styles={customStyles}
                     onChange={(selectedServices) => {
                       const serviceIdsInt = selectedServices.map((service) => service.value);

@@ -281,6 +281,7 @@ const IncidentTableComponent = ({
                   <tr {...headerGroup.getHeaderGroupProps()}>
                     {headerGroup.headers.map((column) => (
                       <th
+                        data-column-name={column.Header}
                         className={column.isSorted ? 'th-sorted' : 'th'}
                         {...column.getHeaderProps(column.getSortByToggleProps())}
                       >
@@ -303,6 +304,7 @@ const IncidentTableComponent = ({
               </thead>
               <tbody {...getTableBodyProps()} className="tbody">
                 <FixedSizeList
+                  className="incident-table-fixed-list"
                   height={distanceBetweenQueryAndAction - incidentActionsHeight}
                   itemCount={rows.length}
                   itemSize={60}

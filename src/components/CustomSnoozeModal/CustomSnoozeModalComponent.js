@@ -88,6 +88,7 @@ const CustomSnoozeModalComponent = ({
               </Col>
               <Col>
                 <Form.Control
+                  id="snooze-hours-input"
                   type="number"
                   min={1}
                   max={24}
@@ -109,6 +110,7 @@ const CustomSnoozeModalComponent = ({
               </Col>
               <Col>
                 <DatePicker
+                  id="snooze-tomorrow-datepicker"
                   selected={tomorrowSnoozeDate}
                   onChange={(date) => setTomorrowSnoozeDate(date)}
                   minTime={moment().set({ hours: 0, minutes: 0 }).toDate()}
@@ -125,6 +127,7 @@ const CustomSnoozeModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
+            id="snooze-custom-button"
             variant="primary"
             onClick={() => {
               snooze(selectedRows, duration);
