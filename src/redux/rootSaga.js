@@ -72,6 +72,7 @@ import {
   userAcceptDisclaimer,
   getUsersAsync,
   getCurrentUserAsync,
+  updateUserLocale,
 } from './users/sagas';
 
 import {
@@ -171,6 +172,7 @@ export default function* rootSaga() {
     userAcceptDisclaimer(),
     getUsersAsync(),
     getCurrentUserAsync(),
+    updateUserLocale(),
 
     // Services
     getServicesAsync(),

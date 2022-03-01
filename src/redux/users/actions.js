@@ -19,6 +19,10 @@ export const GET_CURRENT_USER_REQUESTED = 'GET_CURRENT_USER_REQUESTED';
 export const GET_CURRENT_USER_COMPLETED = 'GET_CURRENT_USER_COMPLETED';
 export const GET_CURRENT_USER_ERROR = 'GET_CURRENT_USER_ERROR';
 
+export const UPDATE_USER_LOCALE_REQUESTED = 'UPDATE_USER_LOCALE_REQUESTED';
+export const UPDATE_USER_LOCALE_COMPLETED = 'UPDATE_USER_LOCALE_COMPLETED';
+export const UPDATE_USER_LOCALE_ERROR = 'UPDATE_USER_LOCALE_ERROR';
+
 export const userAuthorize = () => ({
   type: USER_AUTHORIZE_REQUESTED,
 });
@@ -37,4 +41,9 @@ export const getUsersAsync = () => ({
 
 export const getCurrentUserAsync = () => ({
   type: GET_CURRENT_USER_REQUESTED,
+});
+
+export const updateUserLocale = (locale) => ({
+  type: UPDATE_USER_LOCALE_REQUESTED,
+  locale,
 });
