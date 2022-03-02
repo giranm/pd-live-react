@@ -110,6 +110,7 @@ const SettingsModalComponent = ({
               </Form>
               <br />
               <Button
+                id="update-user-profile-button"
                 variant="primary"
                 onClick={() => {
                   updateUserLocale(selectedLocale.value);
@@ -135,6 +136,7 @@ const SettingsModalComponent = ({
               />
               <br />
               <Button
+                id="update-incident-table-columns-button"
                 variant="primary"
                 onClick={() => {
                   saveIncidentTable(selectedColumns);
@@ -148,6 +150,7 @@ const SettingsModalComponent = ({
             <Tab eventKey="local-cache" title="Local Cache">
               <br />
               <Button
+                id="clear-local-cache-button"
                 variant="warning"
                 onClick={() => {
                   clearLocalCache();

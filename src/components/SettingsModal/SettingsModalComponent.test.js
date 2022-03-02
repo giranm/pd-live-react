@@ -2,8 +2,6 @@ import {
   mockStore, componentWrapper,
 } from 'mocks/store.test';
 
-import userEvent from '@testing-library/user-event';
-
 import SettingsModalComponent from './SettingsModalComponent';
 
 describe('SettingsModalComponent', () => {
@@ -33,26 +31,46 @@ describe('SettingsModalComponent', () => {
     const tabSelector = 'a[data-rb-event-key="user-profile"]';
     const tabElement = wrapper.find(tabSelector);
 
+    // FIXME: Determine correct way to click DOM with Jest - this does not update internal state
     tabElement.simulate('click');
     expect(tabElement.prop('aria-selected')).toBeTruthy();
     expect(tabElement.contains('User Profile')).toBeTruthy();
 
     expect(wrapper.find('#user-profile-locale-label').contains('Locale')).toBeTruthy();
-    // console.log(wrapper.find('div[class$="-singleValue"]').length); // TODO: Find out why DOM not detected.
-    // expect(
-    //   wrapper.find('[class*="-singleValue"]').contains('English (United Kingdom)'),
-    // ).toBeTruthy();
+    // NB: [class*="singleValue"] selector doesn't work here - have to workaround this
+    expect(
+      wrapper
+        .findWhere((n) => (typeof n.prop('className') === 'string'
+          ? n.prop('className').includes('singleValue')
+          : false))
+        .contains('English (United Kingdom)'),
+    ).toBeTruthy();
+    expect(
+      wrapper.find('#update-user-profile-button').contains('Update User Profile'),
+    ).toBeTruthy();
   });
 
   it('should display incident table settings', () => {
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="incident-table-columns"]';
     const tabElement = wrapper.find(tabSelector);
-    expect(tabElement.contains('Incident Table Columns')).toBeTruthy();
 
-    // FIXME: Determine correct way to click DOM with Jest
-    // userEvent.click(tabElement);
-    // // tabElement.simulate('click');
-    // expect(tabElement.prop('aria-selected')).toBeTruthy();
+    // FIXME: Determine correct way to click DOM with Jest - this does not update internal state
+    tabElement.simulate('click');
+    expect(tabElement.contains('Incident Table Columns')).toBeTruthy();
+    expect(
+      wrapper.find('#update-incident-table-columns-button').contains('Update Columns'),
+    ).toBeTruthy();
+  });
+
+  it('should display local cache settings', () => {
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="local-cache"]';
+    const tabElement = wrapper.find(tabSelector);
+
+    // FIXME: Determine correct way to click DOM with Jest - this does not update internal state
+    tabElement.simulate('click');
+    expect(tabElement.contains('Local Cache')).toBeTruthy();
+    expect(wrapper.find('#clear-local-cache-button').contains('Clear Local Cache')).toBeTruthy();
   });
 });
