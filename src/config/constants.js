@@ -25,5 +25,5 @@ export const LOG_ENTRIES_POLLING_INTERVAL_SECONDS = 5;
 export const LOG_ENTRIES_CLEARING_INTERVAL_SECONDS = 30;
 export const INCIDENTS_PAGINATION_LIMIT = 100;
 
-// Date formatting
-export const DATE_FORMAT = 'DD-MMM \\at h:mm:ss A';
+// Date formatting (Locale Agnostic)
+export const DATE_FORMAT = 'LL \\at h:mm:ss A';

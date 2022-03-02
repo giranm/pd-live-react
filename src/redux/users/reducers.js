@@ -16,6 +16,9 @@ import {
   GET_CURRENT_USER_REQUESTED,
   GET_CURRENT_USER_COMPLETED,
   GET_CURRENT_USER_ERROR,
+  UPDATE_USER_LOCALE_REQUESTED,
+  UPDATE_USER_LOCALE_COMPLETED,
+  UPDATE_USER_LOCALE_ERROR,
 } from './actions';
 
 const users = produce(
@@ -93,6 +96,20 @@ const users = produce(
         draft.error = action.message;
         break;
 
+      case UPDATE_USER_LOCALE_REQUESTED:
+        draft.status = UPDATE_USER_LOCALE_REQUESTED;
+        break;
+
+      case UPDATE_USER_LOCALE_COMPLETED:
+        draft.currentUserLocale = action.currentUserLocale;
+        draft.status = UPDATE_USER_LOCALE_COMPLETED;
+        break;
+
+      case UPDATE_USER_LOCALE_ERROR:
+        draft.status = UPDATE_USER_LOCALE_ERROR;
+        draft.error = action.message;
+        break;
+
       default:
         break;
     }
@@ -101,6 +118,7 @@ const users = produce(
     users: [],
     usersMap: {},
     currentUser: null,
+    currentUserLocale: 'en-GB',
     userAuthorized: false,
     userAcceptedDisclaimer: false,
     subdomain: '',

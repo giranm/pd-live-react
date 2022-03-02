@@ -46,14 +46,6 @@ Object.byString = function (o, s) {
 // eslint-disable-next-line max-len
 export const convertListToMapById = (list) => list.reduce((obj, item) => ((obj[item.id] = item), obj), {});
 
-// Get Browser Locale
-export const getLanguage = () => navigator.userLanguage
-  || (navigator.languages && navigator.languages.length && navigator.languages[0])
-  || navigator.language
-  || navigator.browserLanguage
-  || navigator.systemLanguage
-  || 'en';
-
 // Generate initials from full name
 export const getInitials = (fullName) => {
   const allNames = fullName.trim().split(' ');

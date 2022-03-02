@@ -65,10 +65,6 @@ import {
 } from 'redux/store';
 
 import {
-  getLanguage,
-} from 'util/helpers';
-
-import {
   PD_REQUIRED_ABILITY,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
@@ -76,8 +72,6 @@ import {
 
 import 'App.scss';
 import 'moment/min/locales.min';
-
-moment.locale(getLanguage());
 
 const App = ({
   state,
@@ -105,7 +99,7 @@ const App = ({
 
   // Begin monitoring and load core objects from API
   const {
-    userAuthorized, userAcceptedDisclaimer,
+    userAuthorized, userAcceptedDisclaimer, currentUserLocale,
   } = state.users;
   useEffect(() => {
     userAuthorize();
@@ -124,6 +118,11 @@ const App = ({
       checkConnectionStatus();
     }
   }, [userAuthorized]);
+
+  // Handle updates to MomentJS locale
+  useEffect(() => {
+    moment.locale(currentUserLocale);
+  }, [currentUserLocale]);
 
   // Setup log entry polling
   useEffect(() => {

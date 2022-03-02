@@ -13,8 +13,9 @@ import {
 } from 'util/helpers';
 
 import {
-  UPDATE_CONNECTION_STATUS_REQUESTED,
-} from 'redux/connection/actions';
+  updateConnectionStatusRequested,
+} from 'util/sagas';
+
 import {
   USER_AUTHORIZE_REQUESTED,
   USER_AUTHORIZE_COMPLETED,
@@ -31,6 +32,9 @@ import {
   GET_CURRENT_USER_REQUESTED,
   GET_CURRENT_USER_COMPLETED,
   GET_CURRENT_USER_ERROR,
+  UPDATE_USER_LOCALE_REQUESTED,
+  UPDATE_USER_LOCALE_COMPLETED,
+  UPDATE_USER_LOCALE_ERROR,
 } from './actions';
 
 import selectUsers from './selectors';
@@ -123,11 +127,7 @@ export function* getUsers() {
       e.message = 'Unauthorized Access';
     }
     yield put({ type: GET_USERS_ERROR, message: e.message });
-    yield put({
-      type: UPDATE_CONNECTION_STATUS_REQUESTED,
-      connectionStatus: 'neutral',
-      connectionStatusMessage: e.message,
-    });
+    yield updateConnectionStatusRequested('neutral', e.message);
   }
 }
 
@@ -151,10 +151,25 @@ export function* getCurrentUser() {
       e.message = 'Unauthorized Access';
     }
     yield put({ type: GET_CURRENT_USER_ERROR, message: e.message });
+    yield updateConnectionStatusRequested('neutral', e.message);
+  }
+}
+
+export function* updateUserLocale() {
+  yield takeLatest(UPDATE_USER_LOCALE_REQUESTED, updateUserLocaleImpl);
+}
+
+export function* updateUserLocaleImpl(action) {
+  try {
+    const {
+      locale,
+    } = action;
     yield put({
-      type: UPDATE_CONNECTION_STATUS_REQUESTED,
-      connectionStatus: 'neutral',
-      connectionStatusMessage: e.message,
+      type: UPDATE_USER_LOCALE_COMPLETED,
+      currentUserLocale: locale,
     });
+  } catch (e) {
+    // TODO: Implement logic for unsupported locale
+    yield put({ type: UPDATE_USER_LOCALE_ERROR, message: e.message });
   }
 }

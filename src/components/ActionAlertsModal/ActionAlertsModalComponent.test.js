@@ -1,20 +1,8 @@
 import {
-  Provider,
-} from 'react-redux';
-import configureStore from 'redux-mock-store';
-import {
-  mount,
-} from 'enzyme';
+  mockStore, componentWrapper,
+} from 'mocks/store.test';
 
 import ActionAlertsModalComponent from './ActionAlertsModalComponent';
-
-const mockStore = configureStore([]);
-
-const componentWrapper = (store) => mount(
-  <Provider store={store}>
-    <ActionAlertsModalComponent />
-  </Provider>,
-);
 
 describe('ActionAlertsModalComponent', () => {
   it('should render success modal with contents="winning"', () => {
@@ -25,7 +13,7 @@ describe('ActionAlertsModalComponent', () => {
         actionAlertsModalMessage: 'winning',
       },
     });
-    const wrapper = componentWrapper(store);
+    const wrapper = componentWrapper(store, ActionAlertsModalComponent);
     expect(wrapper.find('div.action-alerts-modal').hasClass('alert-success')).toBeTruthy();
     expect(wrapper.contains('winning')).toBeTruthy();
   });
@@ -38,7 +26,7 @@ describe('ActionAlertsModalComponent', () => {
         actionAlertsModalMessage: 'failing',
       },
     });
-    const wrapper = componentWrapper(store);
+    const wrapper = componentWrapper(store, ActionAlertsModalComponent);
     expect(wrapper.find('div.action-alerts-modal').hasClass('alert-danger')).toBeTruthy();
     expect(wrapper.contains('failing')).toBeTruthy();
   });

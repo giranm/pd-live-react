@@ -6,19 +6,27 @@ import {
 } from 'react-redux';
 
 import {
-  Modal, Button, Tabs, Tab,
+  Modal, Button, Tabs, Tab, Row, Col, Form,
 } from 'react-bootstrap';
-
+import Select from 'react-select';
 import DualListBox from 'react-dual-listbox';
 
 import {
+  updateActionAlertsModal as updateActionAlertsModalConnected,
+  toggleDisplayActionAlertsModal as toggleDisplayActionAlertsModalConnected,
+} from 'redux/action_alerts/actions';
+import {
+  updateUserLocale as updateUserLocaleConnected,
+} from 'redux/users/actions';
+import {
   saveIncidentTable as saveIncidentTableConnected,
 } from 'redux/incident_table/actions';
-
 import {
   toggleSettingsModal as toggleSettingsModalConnected,
   clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
+
+import locales from 'config/locales';
 
 import {
   availableIncidentTableColumns,
@@ -37,8 +45,12 @@ const SettingsModalComponent = ({
   settings,
   incidentTable,
   toggleSettingsModal,
+  users,
+  updateUserLocale,
   saveIncidentTable,
   clearLocalCache,
+  updateActionAlertsModal,
+  toggleDisplayActionAlertsModal,
 }) => {
   const {
     displaySettingsModal,
@@ -46,8 +58,20 @@ const SettingsModalComponent = ({
   const {
     incidentTableColumnsNames,
   } = incidentTable;
+  const {
+    currentUserLocale,
+  } = users;
 
   // Create internal state for options
+  const selectLocales = Object.keys(locales).map((locale) => ({
+    label: locales[locale],
+    value: locale,
+  }));
+  const [selectedLocale, setSelectedLocale] = useState({
+    label: locales[currentUserLocale],
+    value: currentUserLocale,
+  });
+
   const transformedIncidentTableColumns = getIncidentTableColumns(incidentTableColumnsNames);
   const [selectedColumns, setSelectedColumns] = useState(
     transformedIncidentTableColumns.map(columnMapper),
@@ -66,7 +90,37 @@ const SettingsModalComponent = ({
           <Modal.Title as="h3">Settings</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Tabs defaultActiveKey="incident-table-columns">
+          <Tabs defaultActiveKey="user-profile">
+            <Tab eventKey="user-profile" title="User Profile">
+              <br />
+              <Form>
+                <Form.Group as={Row}>
+                  <Form.Label id="user-profile-locale-label" column sm={2}>
+                    Locale
+                  </Form.Label>
+                  <Col xs={6}>
+                    <Select
+                      id="user-locale-select"
+                      options={selectLocales}
+                      value={selectedLocale}
+                      onChange={(locale) => setSelectedLocale(locale)}
+                    />
+                  </Col>
+                </Form.Group>
+              </Form>
+              <br />
+              <Button
+                id="update-user-profile-button"
+                variant="primary"
+                onClick={() => {
+                  updateUserLocale(selectedLocale.value);
+                  updateActionAlertsModal('success', 'Updated user profile settings');
+                  toggleDisplayActionAlertsModal();
+                }}
+              >
+                Update User Profile
+              </Button>
+            </Tab>
             <Tab eventKey="incident-table-columns" title="Incident Table Columns">
               <br />
               <DualListBox
@@ -81,13 +135,22 @@ const SettingsModalComponent = ({
                 onChange={(cols) => setSelectedColumns(cols)}
               />
               <br />
-              <Button variant="primary" onClick={() => saveIncidentTable(selectedColumns)}>
+              <Button
+                id="update-incident-table-columns-button"
+                variant="primary"
+                onClick={() => {
+                  saveIncidentTable(selectedColumns);
+                  updateActionAlertsModal('success', 'Updated incident table columns');
+                  toggleDisplayActionAlertsModal();
+                }}
+              >
                 Update Columns
               </Button>
             </Tab>
             <Tab eventKey="local-cache" title="Local Cache">
               <br />
               <Button
+                id="clear-local-cache-button"
                 variant="warning"
                 onClick={() => {
                   clearLocalCache();
@@ -108,14 +171,20 @@ const SettingsModalComponent = ({
 const mapStateToProps = (state) => ({
   settings: state.settings,
   incidentTable: state.incidentTable,
+  users: state.users,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   toggleSettingsModal: () => dispatch(toggleSettingsModalConnected()),
+  updateUserLocale: (locale) => dispatch(updateUserLocaleConnected(locale)),
   saveIncidentTable: (updatedIncidentTableColumns) => {
     dispatch(saveIncidentTableConnected(updatedIncidentTableColumns));
   },
   clearLocalCache: () => dispatch(clearLocalCacheConnected()),
+  updateActionAlertsModal: (actionAlertsModalType, actionAlertsModalMessage) => {
+    dispatch(updateActionAlertsModalConnected(actionAlertsModalType, actionAlertsModalMessage));
+  },
+  toggleDisplayActionAlertsModal: () => dispatch(toggleDisplayActionAlertsModalConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsModalComponent);
