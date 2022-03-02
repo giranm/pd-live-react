@@ -14,9 +14,7 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import DatePicker, {
-  setDefaultLocale,
-} from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 
 import {
   FontAwesomeIcon,
@@ -105,9 +103,6 @@ const QuerySettingsComponent = ({
   // Get "stored" option values
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
-
-  // Register Locale for Date Picker
-  setDefaultLocale(currentUserLocale);
 
   return (
     <div className="query-settings-ctr" id="query-settings-ctr">
