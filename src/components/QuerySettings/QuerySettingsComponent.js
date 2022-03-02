@@ -1,6 +1,11 @@
 import {
+  useState,
+} from 'react';
+import {
   connect,
 } from 'react-redux';
+
+import moment from 'moment';
 
 import {
   Row,
@@ -58,6 +63,7 @@ const QuerySettingsComponent = ({
   teams,
   priorities,
   users,
+  settings,
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
   updateQuerySettingsIncidentUrgency,
@@ -67,7 +73,6 @@ const QuerySettingsComponent = ({
 }) => {
   const {
     displayQuerySettings,
-    sinceDate,
     incidentStatus,
     incidentUrgency,
     incidentPriority,
@@ -77,6 +82,9 @@ const QuerySettingsComponent = ({
   const {
     currentUserLocale,
   } = users;
+  const {
+    defaultSinceDateTenor,
+  } = settings;
   const eventKey = displayQuerySettings ? '0' : '1';
 
   // Generate lists/data from store
@@ -100,10 +108,19 @@ const QuerySettingsComponent = ({
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
 
+  // Generate since date based on configured default
+  const today = moment();
+  const [sinceDateNum, sinceDateTenor] = defaultSinceDateTenor
+    ? defaultSinceDateTenor.split(' ')
+    : ['1', 'Day'];
+  const [sinceDate, setSinceDate] = useState(
+    today.subtract(Number(sinceDateNum), sinceDateTenor).toDate(),
+  );
+
   return (
     <div className="query-settings-ctr" id="query-settings-ctr">
       <Accordion defaultActiveKey="0">
-        <Accordion.Collapse eventKey={eventKey}>
+        <Accordion.Collapse id="query-settings-accordion" eventKey={eventKey}>
           <Container className="card bg-light query-settings-inner-ctr" fluid>
             <Row>
               <Col xs="auto">
@@ -117,7 +134,12 @@ const QuerySettingsComponent = ({
                   locale={currentUserLocale}
                   todayButton="Today"
                   selected={sinceDate}
-                  onChange={(date) => updateQuerySettingsSinceDate(date)}
+                  minDate={today.subtract(6, 'Months').toDate()}
+                  maxDate={new Date()}
+                  onChange={(date) => {
+                    setSinceDate(date);
+                    updateQuerySettingsSinceDate(date);
+                  }}
                 />
               </Col>
               <Col xs="auto">
@@ -272,6 +294,7 @@ const mapStateToProps = (state) => ({
   teams: state.teams.teams,
   priorities: state.priorities.priorities,
   users: state.users,
+  settings: state.settings,
 });
 
 const mapDispatchToProps = (dispatch) => ({

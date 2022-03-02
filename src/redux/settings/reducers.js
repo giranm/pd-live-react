@@ -44,7 +44,7 @@ const settings = produce(
   },
   {
     displaySettingsModal: false,
-    defaultSinceDateTenor: '1D',
+    defaultSinceDateTenor: '1 Day',
     status: '',
   },
 );
