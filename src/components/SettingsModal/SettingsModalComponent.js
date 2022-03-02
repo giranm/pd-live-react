@@ -6,7 +6,15 @@ import {
 } from 'react-redux';
 
 import {
-  Modal, Button, Tabs, Tab, Row, Col, Form,
+  Modal,
+  Button,
+  ButtonGroup,
+  ToggleButton,
+  Tabs,
+  Tab,
+  Row,
+  Col,
+  Form,
 } from 'react-bootstrap';
 import Select from 'react-select';
 import DualListBox from 'react-dual-listbox';
@@ -23,6 +31,7 @@ import {
 } from 'redux/incident_table/actions';
 import {
   toggleSettingsModal as toggleSettingsModalConnected,
+  setDefaultSinceDateTenor as setDefaultSinceDateTenorConnected,
   clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
 
@@ -32,6 +41,14 @@ import {
   availableIncidentTableColumns,
   getIncidentTableColumns,
 } from 'config/incident-table-columns';
+
+import {
+  defaultSinceDateTenors,
+} from 'util/settings';
+
+import {
+  reactSelectStyle,
+} from 'util/styles';
 
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
@@ -47,13 +64,14 @@ const SettingsModalComponent = ({
   toggleSettingsModal,
   users,
   updateUserLocale,
+  setDefaultSinceDateTenor,
   saveIncidentTable,
   clearLocalCache,
   updateActionAlertsModal,
   toggleDisplayActionAlertsModal,
 }) => {
   const {
-    displaySettingsModal,
+    displaySettingsModal, defaultSinceDateTenor,
   } = settings;
   const {
     incidentTableColumnsNames,
@@ -71,6 +89,8 @@ const SettingsModalComponent = ({
     label: locales[currentUserLocale],
     value: currentUserLocale,
   });
+
+  const [tempSinceDateTenor, setTempSinceDateTenor] = useState(defaultSinceDateTenor);
 
   const transformedIncidentTableColumns = getIncidentTableColumns(incidentTableColumnsNames);
   const [selectedColumns, setSelectedColumns] = useState(
@@ -101,10 +121,34 @@ const SettingsModalComponent = ({
                   <Col xs={6}>
                     <Select
                       id="user-locale-select"
+                      styles={reactSelectStyle}
                       options={selectLocales}
                       value={selectedLocale}
                       onChange={(locale) => setSelectedLocale(locale)}
                     />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
+                  <Form.Label id="user-profile-default-since-date-tenor-label" column sm={2}>
+                    Default Since Date Lookback
+                  </Form.Label>
+                  <Col xs={6}>
+                    <ButtonGroup toggle>
+                      {defaultSinceDateTenors.map((tenor) => (
+                        <ToggleButton
+                          key={`${tenor}`}
+                          id={`default-since-date-${tenor}-button`}
+                          type="radio"
+                          variant="outline-secondary"
+                          name="radio"
+                          value={tenor}
+                          checked={tempSinceDateTenor === tenor}
+                          onChange={(e) => setTempSinceDateTenor(e.currentTarget.value)}
+                        >
+                          {tenor}
+                        </ToggleButton>
+                      ))}
+                    </ButtonGroup>
                   </Col>
                 </Form.Group>
               </Form>
@@ -114,6 +158,7 @@ const SettingsModalComponent = ({
                 variant="primary"
                 onClick={() => {
                   updateUserLocale(selectedLocale.value);
+                  setDefaultSinceDateTenor(tempSinceDateTenor);
                   updateActionAlertsModal('success', 'Updated user profile settings');
                   toggleDisplayActionAlertsModal();
                 }}
@@ -177,6 +222,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   toggleSettingsModal: () => dispatch(toggleSettingsModalConnected()),
   updateUserLocale: (locale) => dispatch(updateUserLocaleConnected(locale)),
+  setDefaultSinceDateTenor: (defaultSinceDateTenor) => {
+    dispatch(setDefaultSinceDateTenorConnected(defaultSinceDateTenor));
+  },
   saveIncidentTable: (updatedIncidentTableColumns) => {
     dispatch(saveIncidentTableConnected(updatedIncidentTableColumns));
   },

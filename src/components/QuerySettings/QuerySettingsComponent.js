@@ -46,15 +46,11 @@ import {
   getObjectsFromList,
 } from 'util/helpers';
 
-const animatedComponents = makeAnimated();
+import {
+  reactSelectStyle,
+} from 'util/styles';
 
-const customStyles = {
-  // Ensure that dropdowns appear over table header
-  menu: (provided) => ({
-    ...provided,
-    zIndex: 2,
-  }),
-};
+const animatedComponents = makeAnimated();
 
 const QuerySettingsComponent = ({
   querySettings,
@@ -232,7 +228,7 @@ const QuerySettingsComponent = ({
                 <Form.Group>
                   <Select
                     id="query-team-select"
-                    styles={customStyles}
+                    styles={reactSelectStyle}
                     onChange={(selectedTeams) => {
                       const teamIdsInt = selectedTeams.map((team) => team.value);
                       updateQuerySettingsTeams(teamIdsInt);
@@ -250,7 +246,7 @@ const QuerySettingsComponent = ({
                 <Form.Group>
                   <Select
                     id="query-service-select"
-                    styles={customStyles}
+                    styles={reactSelectStyle}
                     onChange={(selectedServices) => {
                       const serviceIdsInt = selectedServices.map((service) => service.value);
                       updateQuerySettingsServices(serviceIdsInt);

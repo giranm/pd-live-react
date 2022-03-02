@@ -3,6 +3,8 @@ import produce from 'immer';
 import {
   TOGGLE_SETTINGS_REQUESTED,
   TOGGLE_SETTINGS_COMPLETED,
+  SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
+  SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -19,6 +21,15 @@ const settings = produce(
         draft.status = TOGGLE_SETTINGS_COMPLETED;
         break;
 
+      case SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED:
+        draft.status = SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED;
+        break;
+
+      case SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED:
+        draft.defaultSinceDateTenor = action.defaultSinceDateTenor;
+        draft.status = SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED;
+        break;
+
       case CLEAR_LOCAL_CACHE_REQUESTED:
         draft.status = CLEAR_LOCAL_CACHE_REQUESTED;
         break;
@@ -33,6 +44,7 @@ const settings = produce(
   },
   {
     displaySettingsModal: false,
+    defaultSinceDateTenor: '1D',
     status: '',
   },
 );
