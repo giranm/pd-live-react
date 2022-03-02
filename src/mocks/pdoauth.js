@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 // Stub for methods used in PD OAuth
 import {
   TextEncoder, TextDecoder,

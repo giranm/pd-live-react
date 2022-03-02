@@ -1,6 +1,7 @@
 import 'mocks/pdoauth';
 
 import {
+  // eslint-disable-next-line no-unused-vars
   select,
 } from 'redux-saga/effects';
 import {
@@ -12,6 +13,7 @@ import {
 } from './actions';
 
 import users from './reducers';
+// eslint-disable-next-line no-unused-vars
 import selectUsers from './selectors';
 import {
   updateUserLocale,
