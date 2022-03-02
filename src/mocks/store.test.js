@@ -13,3 +13,6 @@ export const componentWrapper = (store, Component) => mount(
     <Component />
   </Provider>,
 );
+
+// Ref: https://stackoverflow.com/a/59864054/6480733 - required for test mocking
+test.skip('Helper store specific for testing', () => 1);

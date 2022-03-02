@@ -1,7 +1,10 @@
-/* eslint-disable cypress/no-unnecessary-waiting */
+import moment from 'moment';
+import 'moment/min/locales.min';
+
 import {
   acceptDisclaimer,
   waitForIncidentTable,
+  updateUserLocale,
   manageIncidentTableColumns,
   activateButton,
   priorityNames,
@@ -24,6 +27,16 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       activateButton(`query-priority-${currentPriority}-button`);
     });
     waitForIncidentTable();
+  });
+
+  it('Change user locale to en-US', () => {
+    const localeName = 'English (United States)';
+    const localeCode = 'en-US';
+    moment.locale(localeCode);
+    const expectedSinceDateFormat = moment().subtract(1, 'days').format('L');
+
+    updateUserLocale(localeName);
+    cy.get('#query-date-input').should('have.value', expectedSinceDateFormat);
   });
 
   it('Add columns to incident table', () => {

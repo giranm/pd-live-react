@@ -207,6 +207,20 @@ export const manageIncidentTableColumns = (desiredState = 'add', columns = []) =
   });
 
   cy.get('.btn').contains('Update Columns').click();
+  checkActionAlertsModalContent('Updated incident table columns');
+  cy.get('.close').click();
+};
+
+export const updateUserLocale = (localeName = 'English (United Kingdom)') => {
+  cy.get('.settings-panel-dropdown').click();
+  cy.get('.dropdown-item').contains('Settings').click();
+  cy.get('.nav-item').contains('User Profile').click();
+
+  cy.get('#user-locale-select').click();
+  cy.contains('div', localeName).click();
+
+  cy.get('.btn').contains('Update User Profile').click();
+  checkActionAlertsModalContent('Updated user profile settings');
   cy.get('.close').click();
 };
 
