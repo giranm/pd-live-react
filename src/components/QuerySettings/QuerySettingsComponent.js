@@ -14,7 +14,9 @@ import {
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import DatePicker from 'react-datepicker';
+import DatePicker, {
+  setDefaultLocale,
+} from 'react-datepicker';
 
 import {
   FontAwesomeIcon,
@@ -61,6 +63,7 @@ const QuerySettingsComponent = ({
   services,
   teams,
   priorities,
+  users,
   updateQuerySettingsSinceDate,
   updateQuerySettingsIncidentStatus,
   updateQuerySettingsIncidentUrgency,
@@ -77,6 +80,9 @@ const QuerySettingsComponent = ({
     teamIds,
     serviceIds,
   } = querySettings;
+  const {
+    currentUserLocale,
+  } = users;
   const eventKey = displayQuerySettings ? '0' : '1';
 
   // Generate lists/data from store
@@ -100,6 +106,9 @@ const QuerySettingsComponent = ({
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
 
+  // Register Locale for Date Picker
+  setDefaultLocale(currentUserLocale);
+
   return (
     <div className="query-settings-ctr" id="query-settings-ctr">
       <Accordion defaultActiveKey="0">
@@ -113,7 +122,8 @@ const QuerySettingsComponent = ({
                 <DatePicker
                   id="query-date-input"
                   className="date-picker"
-                  dateFormat="dd/MM/yyyy"
+                  dateFormat="P"
+                  locale={currentUserLocale}
                   todayButton="Today"
                   selected={sinceDate}
                   onChange={(date) => updateQuerySettingsSinceDate(date)}
@@ -270,6 +280,7 @@ const mapStateToProps = (state) => ({
   services: state.services.services,
   teams: state.teams.teams,
   priorities: state.priorities.priorities,
+  users: state.users,
 });
 
 const mapDispatchToProps = (dispatch) => ({
