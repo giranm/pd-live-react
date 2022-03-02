@@ -34,9 +34,13 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
     const localeCode = 'en-US';
     moment.locale(localeCode);
     const expectedSinceDateFormat = moment().subtract(1, 'days').format('L');
+    const expectedIncidentDateFormat = moment().format('LL');
 
     updateUserLocale(localeName);
     cy.get('#query-date-input').should('have.value', expectedSinceDateFormat);
+    cy.get('[data-incident-header="Created At"][data-incident-row-cell-idx="0"]')
+      .should('be.visible')
+      .should('contain', expectedIncidentDateFormat);
   });
 
   it('Add columns to incident table', () => {
