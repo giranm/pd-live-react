@@ -5,12 +5,16 @@ import {
   acceptDisclaimer,
   waitForIncidentTable,
   updateUserLocale,
+  updateDefaultSinceDateLookback,
   manageIncidentTableColumns,
   activateButton,
   priorityNames,
 } from '../../support/util/common';
 
 describe('Manage Settings', { failFast: { enabled: false } }, () => {
+  const localeCode = 'en-US';
+  moment.locale(localeCode);
+
   before(() => {
     acceptDisclaimer();
     priorityNames.forEach((currentPriority) => {
@@ -31,8 +35,6 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
 
   it('Change user locale to en-US', () => {
     const localeName = 'English (United States)';
-    const localeCode = 'en-US';
-    moment.locale(localeCode);
     const expectedSinceDateFormat = moment().subtract(1, 'days').format('L');
     const expectedIncidentDateFormat = moment().format('LL');
 
@@ -41,6 +43,15 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
     cy.get('[data-incident-header="Created At"][data-incident-row-cell-idx="0"]')
       .should('be.visible')
       .should('contain', expectedIncidentDateFormat);
+  });
+
+  ['1 Day', '3 Days', '1 Week', '2 Weeks', '1 Month', '3 Months', '6 Months'].forEach((tenor) => {
+    it(`Update default since date lookback to ${tenor}`, () => {
+      const [sinceDateNum, sinceDateTenor] = tenor.split(' ');
+      const expectedDate = moment().subtract(Number(sinceDateNum), sinceDateTenor).format('L');
+      updateDefaultSinceDateLookback(tenor);
+      cy.get('#query-date-input').should('have.value', expectedDate);
+    });
   });
 
   it('Add columns to incident table', () => {
