@@ -96,7 +96,7 @@ To prepare PagerDuty Live for release, the current workflow should be carried ou
       $ git push --set-upstream origin release/<VERSION>
       ```
    
-   6. Raise [pull requests](https://github.com/giranm/pd-live-react/pulls) to merge into both `develop` and `main` branches.
+   6. Raise [pull requests](https://github.com/giranm/pd-live-react/pulls) to merge into `main` branch.
 
    7. Build static bundle via `$ yarn build` or use appropriate CI/CD workflow.
 

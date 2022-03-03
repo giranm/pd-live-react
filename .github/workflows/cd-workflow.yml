@@ -1,9 +1,9 @@
-name: PagerDuty Live Continuous Deployment Pipeline (Develop)
+name: PagerDuty Live Continuous Deployment Pipeline (Main)
 
 on:
   push:
     branches:
-      - develop
+      - test-main
 
 jobs:
   build-deploy:
@@ -48,3 +48,21 @@ jobs:
           build_dir: build
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  sync-branches:
+    runs-on: ubuntu-latest
+    name: Sync Develop from Main
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Opening pull request
+        id: pull
+        uses: tretuna/sync-branches@1.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          FROM_BRANCH: 'test-main'
+          TO_BRANCH: 'develop'
