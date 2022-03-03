@@ -1,7 +1,7 @@
 {
   "name": "pd-live-react",
   "homepage": "https://giranm.github.io/pd-live-react",
-  "version": "0.0.10-alpha.0",
+  "version": "0.0.11-alpha.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.3.0",
