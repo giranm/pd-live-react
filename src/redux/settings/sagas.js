@@ -2,13 +2,16 @@ import {
   put, select, takeLatest,
 } from 'redux-saga/effects';
 
+// eslint-disable-next-line import/no-cycle
 import {
-  PURGE,
-} from 'redux-persist';
+  persistor,
+} from 'redux/store';
 
 import {
   TOGGLE_SETTINGS_REQUESTED,
   TOGGLE_SETTINGS_COMPLETED,
+  SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
+  SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -29,21 +32,31 @@ export function* toggleSettingsModalImpl() {
   });
 }
 
+export function* setDefaultSinceDateTenor() {
+  yield takeLatest(SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED, setDefaultSinceDateTenorImpl);
+}
+
+export function* setDefaultSinceDateTenorImpl(action) {
+  const {
+    defaultSinceDateTenor,
+  } = action;
+  yield put({
+    type: SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
+    defaultSinceDateTenor,
+  });
+}
+
 export function* clearLocalCache() {
   yield takeLatest(CLEAR_LOCAL_CACHE_REQUESTED, clearLocalCacheImpl);
 }
 
 export function* clearLocalCacheImpl() {
+  // Ref: https://github.com/wwayne/redux-reset/issues/7#issuecomment-496404924
   yield put({
-    type: PURGE,
-    key: 'root',
-    result: () => null,
+    type: 'RESET',
   });
-  yield put({
-    type: PURGE,
-    key: 'incidentTable.incidentTableState',
-    result: () => null,
-  });
+  yield persistor.purge();
+  yield persistor.persist();
   yield put({
     type: CLEAR_LOCAL_CACHE_COMPLETED,
   });

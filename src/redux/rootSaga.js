@@ -96,8 +96,9 @@ import {
   getEscalationPoliciesAsync,
 } from './escalation_policies/sagas';
 
+// eslint-disable-next-line import/no-cycle
 import {
-  toggleSettingsModal, clearLocalCache,
+  toggleSettingsModal, setDefaultSinceDateTenor, clearLocalCache,
 } from './settings/sagas';
 
 import {
@@ -196,6 +197,7 @@ export default function* rootSaga() {
 
     // Settings
     toggleSettingsModal(),
+    setDefaultSinceDateTenor(),
     clearLocalCache(),
 
     // Connection

@@ -224,6 +224,19 @@ export const updateUserLocale = (localeName = 'English (United Kingdom)') => {
   cy.get('.close').click();
 };
 
+export const updateDefaultSinceDateLookback = (tenor = '1 Day') => {
+  cy.get('.settings-panel-dropdown').click();
+  cy.get('.dropdown-item').contains('Settings').click();
+  cy.get('.nav-item').contains('User Profile').click();
+
+  cy.get(`input[value="${tenor}"]`).parent().click();
+
+  cy.get('.btn').contains('Update User Profile').click();
+  checkActionAlertsModalContent('Updated user profile settings');
+  cy.get('.close').click();
+  cy.reload();
+};
+
 export const priorityNames = ['--', 'P5', 'P4', 'P3', 'P2', 'P1'];
 
 /*

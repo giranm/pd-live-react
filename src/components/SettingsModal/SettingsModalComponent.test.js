@@ -1,6 +1,12 @@
+import '@testing-library/jest-dom';
+
 import {
   mockStore, componentWrapper,
 } from 'mocks/store.test';
+
+import {
+  defaultSinceDateTenors,
+} from 'util/settings';
 
 import SettingsModalComponent from './SettingsModalComponent';
 
@@ -11,6 +17,7 @@ describe('SettingsModalComponent', () => {
     store = mockStore({
       settings: {
         displaySettingsModal: true,
+        defaultSinceDateTenor: '1 Day',
       },
       incidentTable: {
         incidentTableColumnsNames: [],
@@ -45,6 +52,17 @@ describe('SettingsModalComponent', () => {
           : false))
         .contains('English (United Kingdom)'),
     ).toBeTruthy();
+
+    expect(
+      wrapper
+        .find('#user-profile-default-since-date-tenor-label')
+        .contains('Default Since Date Lookback'),
+    ).toBeTruthy();
+    expect(wrapper.find('input[value="1 Day"]').prop('checked')).toBeTruthy();
+    defaultSinceDateTenors.forEach((tenor) => {
+      expect(wrapper.find(`input[value="${tenor}"]`).getDOMNode()).toBeVisible();
+    });
+
     expect(
       wrapper.find('#update-user-profile-button').contains('Update User Profile'),
     ).toBeTruthy();
