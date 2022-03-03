@@ -49,20 +49,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-  sync-branches:
+  sync-branch:
     runs-on: ubuntu-latest
-    name: Sync Develop from Main
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Node
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@master
+      - name: Merge main -> develop
+        uses: devmasx/merge-branch@master
         with:
-          node-version: 12
-      - name: Opening pull request
-        id: pull
-        uses: tretuna/sync-branches@1.4.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          FROM_BRANCH: 'test-main'
-          TO_BRANCH: 'develop'
+          type: now
+          from_branch: test-main
+          target_branch: develop
+          github_token: ${{ secrets.GH_TOKEN }}
