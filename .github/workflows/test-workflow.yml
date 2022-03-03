@@ -1,6 +1,9 @@
 name: Test Framework Suite
 
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   build-id:
@@ -83,3 +86,31 @@ jobs:
           --key ${CYPRESS_RECORD_KEY} \
           --ci-build-id ${{ needs.build-id.outputs.uuid }} && \
           pkill Xvfb
+
+      # Below steps required to pass GitHub status as we are manually running Cypress
+      - name: Cypress tests ✅
+        if: ${{ success() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GH_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "cypress-run",
+            "state": "success",
+            "description": "Cypress tests passed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
+      - name: Cypress tests 🚨
+        if: ${{ failure() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GH_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "cypress-run",
+            "state": "failure",
+            "description": "Cypress tests failed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
