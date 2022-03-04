@@ -1,5 +1,5 @@
 import {
-  useState,
+  useState, useEffect,
 } from 'react';
 import {
   connect,
@@ -108,14 +108,17 @@ const QuerySettingsComponent = ({
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
 
-  // Generate since date based on configured default
+  // Generate since date based on configured default and dispatch action for query.
   const today = moment();
   const [sinceDateNum, sinceDateTenor] = defaultSinceDateTenor
     ? defaultSinceDateTenor.split(' ')
     : ['1', 'Day'];
-  const [sinceDate, setSinceDate] = useState(
-    today.subtract(Number(sinceDateNum), sinceDateTenor).toDate(),
-  );
+  const sinceDateCalc = today.subtract(Number(sinceDateNum), sinceDateTenor).toDate();
+  const [sinceDate, setSinceDate] = useState(sinceDateCalc);
+
+  useEffect(() => {
+    updateQuerySettingsSinceDate(sinceDate);
+  }, [sinceDate]);
 
   return (
     <div className="query-settings-ctr" id="query-settings-ctr">
@@ -138,7 +141,6 @@ const QuerySettingsComponent = ({
                   maxDate={new Date()}
                   onChange={(date) => {
                     setSinceDate(date);
-                    updateQuerySettingsSinceDate(date);
                   }}
                 />
               </Col>

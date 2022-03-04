@@ -1,6 +1,8 @@
-import '@testing-library/jest-dom';
-import gb from 'date-fns/locale/en-GB';
+import 'mocks/pdoauth';
 
+import '@testing-library/jest-dom';
+
+import gb from 'date-fns/locale/en-GB';
 import moment from 'moment';
 
 import {
@@ -8,39 +10,27 @@ import {
 } from 'react-datepicker';
 
 import {
-  mockStore, componentWrapper,
+  componentWrapper, waitForComponentToPaint,
 } from 'mocks/store.test';
+
+// Required to validate how store is actually affected.
+import {
+  store,
+} from 'redux/store';
+
+import {
+  UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
+} from 'redux/query_settings/actions';
 
 import QuerySettingsComponent from './QuerySettingsComponent';
 
 describe('QuerySettingsComponent', () => {
-  let store;
   const defaultSinceDateTenor = '1 Day';
   const currentUserLocale = 'en-GB';
   registerLocale(currentUserLocale, gb);
   moment.locale(currentUserLocale);
 
-  beforeEach(() => {
-    store = mockStore({
-      querySettings: {
-        displayQuerySettings: true,
-        incidentStatus: ['Triggered'],
-        incidentUrgency: ['High'],
-        incidentPriority: ['PXYZABC'],
-        teamIds: [],
-        serviceIds: [],
-      },
-      services: { services: [{ name: 'TestService', id: 'PXYZABC' }] },
-      teams: { teams: [{ name: 'TestTeam', id: 'PXYZABC' }] },
-      priorities: { priorities: [{ name: 'P1', id: 'PXYZABC', color: '000000' }] },
-      users: {
-        currentUserLocale,
-      },
-      settings: {
-        defaultSinceDateTenor,
-      },
-    });
-  });
+  const sinceDateInput = (wrapper) => wrapper.find('#query-date-input').hostNodes();
 
   it('should render component', () => {
     // NB: Jest doesn't properly identify if react-bootstrap el is not visible, see workaround below
@@ -54,6 +44,27 @@ describe('QuerySettingsComponent', () => {
     const [sinceDateNum, sinceDateTenor] = defaultSinceDateTenor.split(' ');
     const expectedDate = moment().subtract(Number(sinceDateNum), sinceDateTenor).format('L');
     const wrapper = componentWrapper(store, QuerySettingsComponent);
-    expect(wrapper.find('#query-date-input').hostNodes().prop('value')).toEqual(expectedDate);
+    expect(sinceDateInput(wrapper).hostNodes().prop('value')).toEqual(expectedDate);
+  });
+
+  it('should update state.querySettings.sinceDate on since date change', () => {
+    const expectedDate = moment().subtract(1, 'Month');
+    const wrapper = componentWrapper(store, QuerySettingsComponent);
+
+    // Handle component rendering due to useEffect
+    waitForComponentToPaint(wrapper);
+    sinceDateInput(wrapper)
+      .props()
+      .onChange({ target: { value: expectedDate.format('L') } });
+    sinceDateInput(wrapper).simulate('change');
+    waitForComponentToPaint(wrapper);
+
+    const {
+      querySettings,
+    } = store.getState();
+
+    expect(sinceDateInput(wrapper).prop('value')).toEqual(expectedDate.format('L'));
+    expect(moment(querySettings.sinceDate).format('L')).toEqual(expectedDate.format('L'));
+    expect(querySettings.status).toEqual(UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED);
   });
 });
