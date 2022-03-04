@@ -3,7 +3,7 @@ name: PagerDuty Live Continuous Deployment Pipeline (Main)
 on:
   push:
     branches:
-      - test-main
+      - main
 
 jobs:
   build-deploy:
@@ -57,6 +57,6 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: test-main
+          from_branch: main
           target_branch: develop
           github_token: ${{ secrets.GH_TOKEN }}
