@@ -1,0 +1,116 @@
+name: Test Framework Suite
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build-id:
+    runs-on: ubuntu-latest
+    outputs:
+      uuid: ${{ steps.uuid.outputs.value }}
+    steps:
+      - name: 'uuid'
+        id: uuid
+        run: echo "::set-output name=value::$GITHUB_SHA-$(date +"%s")"
+
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Yarn
+        run: npm install -g yarn
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-modules-
+      - name: Install modules
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: Run Jest Tests
+        run: yarn jest
+
+  cypress-run:
+    needs: build-id
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node16.13.0-chrome95-ff94
+      options: --user 1001
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3, 4, 5]
+    env:
+      REACT_APP_PD_ENV: 'github-ci'
+      REACT_APP_PD_SUBDOMAIN_ALLOW_LIST: '*'
+      REACT_APP_PD_USER_TOKEN: ${{ secrets.PD_INTEGRATION_USER_TOKEN }}
+      REACT_APP_PD_REQUIRED_ABILITY: ${{ secrets.PD_REQUIRED_ABILITY }}
+      REACT_APP_DD_APPLICATION_ID: ${{ secrets.DD_APPLICATION_ID }}
+      REACT_APP_DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
+      REACT_APP_DD_SITE: ${{ secrets.DD_SITE }}
+      REACT_APP_DD_SAMPLE_RATE: ${{ secrets.DD_SAMPLE_RATE }}
+      REACT_APP_DD_TRACK_INTERACTIONS: ${{ secrets.DD_TRACK_INTERACTIONS }}
+      REACT_APP_DD_DEFAULT_PRIVACY_LEVEL: ${{ secrets.DD_DEFAULT_PRIVACY_LEVEL }}
+      CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache Yarn Dependencies
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            ~/.cache/Cypress
+            '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-modules-
+      - name: Install modules
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: Run Cypress Tests
+        run: |
+          Xvfb -screen 0 1920x1080x24 :99 & export DISPLAY=:99
+          yarn start &
+          npx wait-on http://localhost:3000 && \
+          npx cypress run \
+          --group "e2e" \
+          --browser chrome \
+          --headless \
+          --parallel \
+          --record \
+          --key ${CYPRESS_RECORD_KEY} \
+          --ci-build-id ${{ needs.build-id.outputs.uuid }} && \
+          pkill Xvfb
+
+      # Below steps required to pass GitHub status as we are manually running Cypress
+      - name: Cypress tests ✅
+        if: ${{ success() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GH_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "cypress-run",
+            "state": "success",
+            "description": "Cypress tests passed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
+      - name: Cypress tests 🚨
+        if: ${{ failure() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GH_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "cypress-run",
+            "state": "failure",
+            "description": "Cypress tests failed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'

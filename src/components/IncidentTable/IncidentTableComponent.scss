@@ -1,0 +1,194 @@
+@import 'assets/styles/pagerduty.scss';
+
+/* Querying Incidents */
+.querying-incidents {
+  position: relative;
+  left: 10px;
+  top: 5px;
+}
+
+/* Empty Incidents */
+.empty-incidents {
+  height: 500px;
+  text-align: center;
+}
+
+.empty-incidents-badge {
+  padding-top: 20px;
+}
+
+/* Table Positioning */
+.incident-table {
+  margin-top: 10px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.incident-table::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.incident-table::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: $pd-light;
+}
+
+.incident-table::-webkit-scrollbar-thumb:hover {
+  border-radius: 10px;
+  background-color: $pd-gray;
+}
+
+.incident-table-settings-btn {
+  position: relative;
+  float: right;
+  background-color: $pd-brand-gray-dark;
+}
+
+.incident-table-settings-ctr {
+  position: absolute;
+  width: 100%;
+  right: 10px;
+}
+
+/* Priority Pill */
+.priority-label {
+  display: inline;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 40px;
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+  margin-right: 5px;
+  padding: 5px 10px 3px;
+  border-radius: 5px;
+  vertical-align: -4px;
+  border-radius: 4px;
+  position: relative;
+  left: 5px;
+}
+
+.priority-label-dropdown {
+  display: block;
+  position: relative;
+  top: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 18px;
+  white-space: nowrap;
+  padding: 5px 10px 3px;
+  border-radius: 5px;
+}
+
+/* Status Badge */
+.status-badge {
+  left: 10px;
+  width: 30px;
+  height: 26px;
+  font-size: unset !important;
+  padding-top: 5px !important;
+  position: relative;
+}
+
+/* Urgency Badge */
+.urgency-badge {
+  width: 80px;
+  height: 26px;
+  font-size: unset !important;
+  padding-top: 5px !important;
+  position: relative;
+}
+
+/* Assignment Badge */
+.assignment-badge {
+  width: 32px;
+  height: 32px;
+  line-height: initial;
+  text-align: center;
+  color: $pd-white;
+  border-radius: 100%;
+}
+
+/* React-Table CSS */
+
+.table {
+  border-spacing: 0;
+}
+
+.thead {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+  z-index: 1 !important;
+}
+
+.th {
+  padding: 10px !important;
+  background-color: white;
+  color: $pd-dark;
+  font-weight: 700;
+  border-right: 1px $pd-brand-background-3 solid;
+}
+
+.th-sorted {
+  padding: 10px !important;
+  background-color: white;
+  color: $pd-primary;
+  font-weight: 1000;
+  border-right: 1px $pd-brand-background-3 solid;
+}
+
+.resizer {
+  display: inline-block;
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(50%);
+  z-index: 1;
+  touch-action: none;
+  &.isResizing {
+    background: $pd-primary;
+  }
+}
+
+.tbody {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.tr {
+  font-size: 14px;
+  background-color: $pd-brand-background-2 !important;
+}
+
+.tr-odd {
+  font-size: 14px;
+  background-color: $pd-brand-background-3 !important;
+}
+
+.tr:hover,
+.tr-odd:hover {
+  background-color: $pd-gray-medium !important;
+}
+
+.td {
+  padding: 10px !important;
+  padding-left: 10px !important;
+  align-items: center !important;
+  display: flex !important;
+}
+
+// https://stackoverflow.com/a/13924997/6480733
+.td-wrapper {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
