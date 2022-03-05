@@ -1192,28 +1192,28 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@datadog/browser-core@4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.2.0.tgz#0e63afea132bcd759c2525f319315f6ec7fad2ca"
-  integrity sha512-GoOiMSuH3XKBl3kPvlK4UM3EW3ZL4SCXCMIwopjCcKOfiiVuhIg9klZneLX50rJdP8rrulGBj5fQCpdk/XypKw==
+"@datadog/browser-core@4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.5.0.tgz#bc1ed738692405ab25428d5f756210f4738e8350"
+  integrity sha512-JQvexizqNNjLjJ2fDIk8wq1RVmYSlmxJcj5uXM2o5yWHu4aAEkB2P/w2yXordCpvhjDyd5Q+58dlQMNIsFII3g==
   dependencies:
     tslib "^1.10.0"
 
-"@datadog/browser-rum-core@4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.2.0.tgz#269a4385d544e12333e135ba01b4f3a42f909c36"
-  integrity sha512-Pqt8yYwXENOIiqg1qAYrxT9/V7PKs8o/khqPd6Wn2J769Apc8eONkMElnRkTcu8MXVgHzzK+fc+Ci2f7yauhRg==
+"@datadog/browser-rum-core@4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.5.0.tgz#c33a1a906ab39e7997b9f93ec2de8787361aeb87"
+  integrity sha512-m4mSZdtep/k6PAz5tHThgT/BXLR9jC7dbCgoK3t5uTPjpLM5npPMKmZd0ozae+wUjRLgTH+6GPkHBobrufr7Ag==
   dependencies:
-    "@datadog/browser-core" "4.2.0"
+    "@datadog/browser-core" "4.5.0"
     tslib "^1.10.0"
 
-"@datadog/browser-rum@^4.1.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.2.0.tgz#c782a0a9806f06bff5cac6f0e3305b521a0aed19"
-  integrity sha512-93vqAPCSlaMslYNMxa3YXQy8UP+MTogapFa9PTwtzD7lc5YeVYsDz4n2cp6DtfzN0eYHIHhP7D3xMP+1Up6LCw==
+"@datadog/browser-rum@^4.3.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.5.0.tgz#35e6c2679a9d3ddc699760b20c8dbaae203af154"
+  integrity sha512-yJTNA/aBKAT312uFIznoaaJtkX6j3/yN/fbsC2dR5FRCXvwpPGh9qWhMZeGBhP+rlFNrv0H9AohGFCVH+uP2Pw==
   dependencies:
-    "@datadog/browser-core" "4.2.0"
-    "@datadog/browser-rum-core" "4.2.0"
+    "@datadog/browser-core" "4.5.0"
+    "@datadog/browser-rum-core" "4.5.0"
     tslib "^1.10.0"
 
 "@emotion/cache@^11.4.0", "@emotion/cache@^11.7.1":
