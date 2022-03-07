@@ -134,6 +134,9 @@ export function* updateRecentLogEntries() {
       type: UPDATE_RECENT_LOG_ENTRIES_COMPLETED,
       recentLogEntries: recentLogEntriesLocal,
     });
+    console.log('addList', addList);
+    console.log('updateList', updateList);
+    console.log('removeList', removeList);
     yield put({
       type: UPDATE_INCIDENTS_LIST,
       addList,
