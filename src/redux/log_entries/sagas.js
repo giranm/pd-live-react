@@ -53,7 +53,7 @@ export function* getLogEntries(action) {
     yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
 
     // Call to update recent log entries with this data.
-    yield put({ type: UPDATE_RECENT_LOG_ENTRIES });
+    yield call(updateRecentLogEntries);
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
