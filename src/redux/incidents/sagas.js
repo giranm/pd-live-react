@@ -23,6 +23,14 @@ import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
 import {
+  UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
+  UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
+  UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED,
+  UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
+  UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
+  UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+} from 'redux/query_settings/actions';
+import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
   FETCH_INCIDENTS_ERROR,
@@ -69,6 +77,16 @@ export function* getIncidentsAsync() {
 }
 
 export function* getIncidents() {
+  // Wait for query actions to have been completed.
+  take([
+    UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
+    UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
+    UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED,
+    UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
+    UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
+    UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+  ]);
+
   try {
     //  Build params from query settings and call pd lib
     const {
@@ -106,16 +124,10 @@ export function* getIncidents() {
     });
 
     // Filter incident list on priority (can't do this from API)
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_PRIORITY,
-      incidentPriority,
-    });
+    yield call(filterIncidentsByPriorityImpl, { incidentPriority });
 
     // Filter updated incident list by query; updates memoized data within incidents table
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_QUERY,
-      searchQuery,
-    });
+    yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
     yield put({
@@ -200,14 +212,30 @@ export function* getAllIncidentNotes() {
       incidents: updatedIncidentsList,
     });
 
-    // Filter updated incident list by query; updates memoized data within incidents table
+    /*
+      Apply filters that already are configured down below
+    */
     const {
-      searchQuery,
+      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
     } = yield select(selectQuerySettings);
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_QUERY,
-      searchQuery,
-    });
+
+    // Filter updated incident list on priority (can't do this from API)
+    yield call(filterIncidentsByPriorityImpl, { incidentPriority });
+
+    // Filter updated incident list on status
+    yield call(filterIncidentsByStatusImpl, { incidentStatus });
+
+    // Filter updated incident list on urgency
+    yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
+
+    // Filter updated incident list on team
+    yield call(filterIncidentsByTeamImpl, { teamIds });
+
+    // // Filter updated incident list on service
+    yield call(filterIncidentsByServiceImpl, { serviceIds });
+
+    // Filter updated incident list by query
+    yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
     yield put({
@@ -271,9 +299,9 @@ export function* updateIncidentsList(action) {
       updateList.map((updateItem) => {
         if (updateItem.incident) {
           // Check if item is matched against updatedIncidentsList (skip)
-          // eslint-disable-next-line max-len
-          if (updatedIncidentsList.find((incident) => incident.id === updateItem.incident.id)) return;
-
+          if (updatedIncidentsList.find((incident) => incident.id === updateItem.incident.id)) {
+            return;
+          }
           // Update incident list (push if we haven't updated already)
           pushToArray(updatedIncidentsList, updateItem.incident, 'id');
         }
@@ -309,40 +337,22 @@ export function* updateIncidentsList(action) {
     */
 
     // Filter updated incident list on priority (can't do this from API)
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_PRIORITY,
-      incidentPriority,
-    });
+    yield call(filterIncidentsByPriorityImpl, { incidentPriority });
 
     // Filter updated incident list on status
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_STATUS,
-      incidentStatus,
-    });
+    yield call(filterIncidentsByStatusImpl, { incidentStatus });
 
     // Filter updated incident list on urgency
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_URGENCY,
-      incidentUrgency,
-    });
+    yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
 
     // Filter updated incident list on team
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_TEAM,
-      teamIds,
-    });
+    yield call(filterIncidentsByTeamImpl, { teamIds });
 
-    // Filter updated incident list on service
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_SERVICE,
-      serviceIds,
-    });
+    // // Filter updated incident list on service
+    yield call(filterIncidentsByServiceImpl, { serviceIds });
 
     // Filter updated incident list by query
-    yield put({
-      type: FILTER_INCIDENTS_LIST_BY_QUERY,
-      searchQuery,
-    });
+    yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: UPDATE_INCIDENTS_LIST_ERROR, message: e.message });
   }
@@ -455,16 +465,12 @@ export function* filterIncidentsByTeamImpl(action) {
     let filteredIncidentsByTeamList;
 
     // Typically there is no filtered view by teams, so if empty, show all teams.
-    /* FIXME: If a team filter is enabled, we see the incident coming in.
-      However removing the filter then doesn't display incidents (e.g. re-request API)
-    */
     if (teamIds.length) {
       filteredIncidentsByTeamList = filterIncidentsByFieldOfList(incidents, 'teams', 'id', teamIds);
     } else {
       filteredIncidentsByTeamList = [...incidents];
     }
 
-    // console.log(filteredIncidentsByTeamList, teamIds)
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED,
       incidents: filteredIncidentsByTeamList,
@@ -493,17 +499,11 @@ export function* filterIncidentsByServiceImpl(action) {
     let filteredIncidentsByServiceList;
 
     // Typically there is no filtered view by services, so if empty, show all services.
-    /* FIXME: A similar bug happens (e.g. teams filter) when removing services.
-      Could be something with log_entries
-    */
     if (serviceIds.length) {
-      // console.log("Pre filter incidents", incidents)
       filteredIncidentsByServiceList = filterIncidentsByField(incidents, 'service.id', serviceIds);
     } else {
       filteredIncidentsByServiceList = [...incidents];
     }
-
-    // console.log("Filtered", filteredIncidentsByServiceList);
 
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
@@ -522,12 +522,6 @@ export function* filterIncidentsByQuery() {
 }
 
 export function* filterIncidentsByQueryImpl(action) {
-  // Handle race condition for filtering by priority (as it's outside of API spec)
-  yield take([
-    FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
-    FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
-  ]);
-
   // Filter current incident list by query (aka Global Search)
   try {
     const {
