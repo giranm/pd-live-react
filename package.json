@@ -16,7 +16,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
-    "axios": "^0.25.0",
+    "axios": "^0.26.0",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^4.6.0",
     "bottleneck": "^2.19.5",
