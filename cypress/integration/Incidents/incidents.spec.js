@@ -185,6 +185,10 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
   });
 
   it('Run external system sync on singular incident', () => {
+    // For some reason this doesn't work on first attempt - clearing cache as a workaround
+    acceptDisclaimer();
+    waitForIncidentTable();
+
     const externalSystemName = 'ServiceNow';
     selectIncident(0);
     runExternalSystemSync(externalSystemName);
