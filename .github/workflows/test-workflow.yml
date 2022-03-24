@@ -6,7 +6,7 @@ on:
       - develop
   push:
     branches:
-      - task/sorry-cypress-migration
+      - 'task/sorry-cypress-migration'
 
 jobs:
   build-id:
