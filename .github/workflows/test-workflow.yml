@@ -1,12 +1,10 @@
 name: Test Framework Suite
 
 on:
-  pull_request:
-    branches:
-      - develop
-  push:
-    branches:
-      - 'task/sorry-cypress-migration'
+  push
+  # pull_request:
+  #   branches:
+  #     - develop
 
 jobs:
   build-id:
