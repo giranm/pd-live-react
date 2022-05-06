@@ -73,15 +73,6 @@
       "react-app/jest"
     ]
   },
-  "jest": {
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    },
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
