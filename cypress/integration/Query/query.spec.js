@@ -1,5 +1,10 @@
 import moment from 'moment';
 
+import gb from 'date-fns/locale/en-GB';
+import {
+  registerLocale,
+} from 'react-datepicker';
+
 import {
   acceptDisclaimer,
   waitForIncidentTable,
@@ -10,6 +15,9 @@ import {
   manageIncidentTableColumns,
   priorityNames,
 } from '../../support/util/common';
+
+registerLocale('en-GB', gb);
+moment.locale('en-GB');
 
 describe('Query Incidents', { failFast: { enabled: false } }, () => {
   before(() => {
@@ -34,14 +42,11 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
   });
 
   it('Query for incidents within T-1 since date', () => {
-    // Limit dataset to resolved low-urgency incidents on Service A1 that contain text "ab"
+    // Limit dataset to resolved low-urgency incidents
     activateButton('query-status-resolved-button');
     deactivateButton('query-urgency-low-button');
-    cy.get('#query-service-select').click();
-    cy.contains('div', 'Service A1').click();
-    cy.get('#global-search-input').type('ab');
 
-    // // Update since date to T-1
+    // Update since date to T-1
     const queryDate = moment()
       .subtract(1, 'days')
       .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
@@ -55,14 +60,12 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
         cy.get(
           `[data-incident-header="Created At"][data-incident-row-cell-idx="${incidentIdx}"]`,
         ).then(($el) => {
-          expect(moment($el.text(), 'DD-MMM \\at h:mm:ss A').diff(queryDate)).to.be.greaterThan(0);
+          expect(moment($el.text(), 'LL \\at h:mm:ss A').diff(queryDate)).to.be.greaterThan(0);
         });
       }
     });
 
     // Reset query for next test
-    cy.get('#global-search-input').clear();
-    cy.get('#query-service-select').click().type('{del}');
     activateButton('query-urgency-low-button');
     deactivateButton('query-status-resolved-button');
   });
@@ -72,7 +75,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     deactivateButton('query-status-acknowledged-button');
     deactivateButton('query-status-resolved-button');
     waitForIncidentTable();
-    checkIncidentCellIconAllRows('Status', 'fa-exclamation-triangle');
+    checkIncidentCellIconAllRows('Status', 'fa-triangle-exclamation');
   });
 
   it('Query for acknowledged incidents only', () => {
@@ -80,7 +83,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     activateButton('query-status-acknowledged-button');
     deactivateButton('query-status-resolved-button');
     waitForIncidentTable();
-    checkIncidentCellIconAllRows('Status', 'fa-shield-alt');
+    checkIncidentCellIconAllRows('Status', 'fa-shield-halved');
   });
 
   it('Query for resolved incidents only', () => {
@@ -88,7 +91,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     deactivateButton('query-status-acknowledged-button');
     activateButton('query-status-resolved-button');
     waitForIncidentTable();
-    checkIncidentCellIconAllRows('Status', 'fa-check-circle');
+    checkIncidentCellIconAllRows('Status', 'fa-circle-check');
 
     // Reset query for next test
     activateButton('query-status-triggered-button');
