@@ -75,7 +75,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     deactivateButton('query-status-acknowledged-button');
     deactivateButton('query-status-resolved-button');
     waitForIncidentTable();
-    checkIncidentCellIconAllRows('Status', 'fa-exclamation-triangle');
+    checkIncidentCellIconAllRows('Status', 'fa-triangle-exclamation');
   });
 
   it('Query for acknowledged incidents only', () => {
@@ -83,7 +83,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     activateButton('query-status-acknowledged-button');
     deactivateButton('query-status-resolved-button');
     waitForIncidentTable();
-    checkIncidentCellIconAllRows('Status', 'fa-shield-alt');
+    checkIncidentCellIconAllRows('Status', 'fa-shield-halved');
   });
 
   it('Query for resolved incidents only', () => {
@@ -91,7 +91,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     deactivateButton('query-status-acknowledged-button');
     activateButton('query-status-resolved-button');
     waitForIncidentTable();
-    checkIncidentCellIconAllRows('Status', 'fa-check-circle');
+    checkIncidentCellIconAllRows('Status', 'fa-circle-check');
 
     // Reset query for next test
     activateButton('query-status-triggered-button');
