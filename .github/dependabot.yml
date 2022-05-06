@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Target NPM packages for Dependabot
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    # Raise pull requests for version updates on npm against the `develop` branch
+    target-branch: 'develop'
+    # Labels on pull requests for version updates only
+    labels:
+      - 'npm'
+      - 'dependencies'
