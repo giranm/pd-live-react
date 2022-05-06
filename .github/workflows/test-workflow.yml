@@ -1,10 +1,9 @@
 name: Test Framework Suite
 
 on:
-  push
-  # pull_request:
-  #   branches:
-  #     - develop
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   build-id:
@@ -64,8 +63,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # - name: Install Yarn
-      #   run: npm install -g yarn
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
