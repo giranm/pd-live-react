@@ -23,7 +23,13 @@ export const persistConfig = {
 export const querySettingsPersistConfig = {
   key: 'querySettings',
   storage,
-  blacklist: ['sinceDate', 'untilDate'],
+  blacklist: [
+    'sinceDate',
+    'untilDate',
+    'displayConfirmQueryModal',
+    'totalIncidentsFromQuery',
+    'error',
+  ],
 };
 
 export const userPersistConfig = {

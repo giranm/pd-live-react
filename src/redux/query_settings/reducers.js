@@ -21,6 +21,15 @@ import {
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
   UPDATE_SEARCH_QUERY_REQUESTED,
   UPDATE_SEARCH_QUERY_COMPLETED,
+  VALIDATE_INCIDENT_QUERY_REQUESTED,
+  VALIDATE_INCIDENT_QUERY_COMPLETED,
+  TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_COMPLETED,
+  UPDATE_TOTAL_INCIDENTS_FROM_QUERY_REQUESTED,
+  UPDATE_TOTAL_INCIDENTS_FROM_QUERY_COMPLETED,
+  CONFIRM_INCIDENT_QUERY_REQUESTED,
+  CONFIRM_INCIDENT_QUERY_COMPLETED,
+  CONFIRM_INCIDENT_QUERY_ERROR,
 } from './actions';
 
 const querySettings = produce(
@@ -97,6 +106,48 @@ const querySettings = produce(
         draft.searchQuery = action.searchQuery;
         draft.status = UPDATE_SEARCH_QUERY_COMPLETED;
         break;
+
+      case VALIDATE_INCIDENT_QUERY_REQUESTED:
+        draft.status = VALIDATE_INCIDENT_QUERY_REQUESTED;
+        break;
+
+      case VALIDATE_INCIDENT_QUERY_COMPLETED:
+        draft.status = VALIDATE_INCIDENT_QUERY_COMPLETED;
+        break;
+
+      case TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED:
+        draft.status = TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED;
+        break;
+
+      case TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_COMPLETED:
+        draft.displayConfirmQueryModal = action.displayConfirmQueryModal;
+        draft.status = TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_COMPLETED;
+        break;
+
+      case UPDATE_TOTAL_INCIDENTS_FROM_QUERY_REQUESTED:
+        draft.status = UPDATE_TOTAL_INCIDENTS_FROM_QUERY_REQUESTED;
+        break;
+
+      case UPDATE_TOTAL_INCIDENTS_FROM_QUERY_COMPLETED:
+        draft.totalIncidentsFromQuery = action.totalIncidentsFromQuery;
+        draft.status = UPDATE_TOTAL_INCIDENTS_FROM_QUERY_COMPLETED;
+        break;
+
+      case CONFIRM_INCIDENT_QUERY_REQUESTED:
+        draft.status = CONFIRM_INCIDENT_QUERY_REQUESTED;
+        draft.error = null;
+        break;
+
+      case CONFIRM_INCIDENT_QUERY_COMPLETED:
+        draft.status = CONFIRM_INCIDENT_QUERY_COMPLETED;
+        draft.error = null;
+        break;
+
+      case CONFIRM_INCIDENT_QUERY_ERROR:
+        draft.status = CONFIRM_INCIDENT_QUERY_ERROR;
+        draft.error = CONFIRM_INCIDENT_QUERY_ERROR;
+        break;
+
       default:
         break;
     }
@@ -111,6 +162,8 @@ const querySettings = produce(
     teamIds: [],
     serviceIds: [],
     searchQuery: '',
+    displayConfirmQueryModal: false,
+    totalIncidentsFromQuery: 0,
     status: null,
     fetchingData: false,
     error: null,
