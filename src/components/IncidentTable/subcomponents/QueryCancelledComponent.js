@@ -3,7 +3,7 @@ import {
 } from 'react-bootstrap';
 
 const QueryCancelledComponent = () => (
-  <Container fluid>
+  <Container id="query-cancelled-ctr" fluid>
     <br />
     <Row className="justify-content-md-center">
       <Alert variant="warning">

@@ -49,7 +49,7 @@ const ConfirmQueryModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
-            id="add-note-button"
+            id="retrieve-incidents-button"
             variant="primary"
             onClick={() => {
               confirmIncidentQuery(true);
