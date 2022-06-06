@@ -58,7 +58,7 @@ describe('Sagas: Incidents', () => {
       ])
       .dispatch({
         type: FILTER_INCIDENTS_LIST_BY_QUERY,
-        searchQuery: mockIncident.id,
+        searchQuery: mockIncident.title,
       })
       .put({
         type: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
