@@ -134,6 +134,9 @@ const IncidentTableComponent = ({
     }
   }, 1000);
 
+  // Custom row id fetch to handle dynamic table updates
+  const getRowId = useCallback((row) => row.id, []);
+
   // Create instance of react-table with options and plugins
   const {
     state: {
@@ -152,6 +155,7 @@ const IncidentTableComponent = ({
       columns: memoizedColumns,
       data: filteredIncidentsByQuery, // Potential issue with Memoization hook?
       defaultColumn,
+      getRowId,
       // Prevent re-render when redux store updates
       autoResetPage: false,
       autoResetExpanded: false,
