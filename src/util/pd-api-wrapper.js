@@ -30,11 +30,6 @@ export const getPdAccessTokenObject = () => {
     tokenType = 'bearer';
   }
 
-  // If the token is not present, something is wrong
-  if (!token) {
-    return null;
-  }
-
   // Return object neeed for PD API helpers
   if (tokenType === 'bearer') {
     return {
