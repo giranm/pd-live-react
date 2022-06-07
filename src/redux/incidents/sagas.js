@@ -88,7 +88,6 @@ export function* getIncidents() {
       since: sinceDate.toISOString(),
       until: new Date().toISOString(),
       include: ['first_trigger_log_entries', 'external_references'],
-      limit: MAX_INCIDENTS_LIMIT, // FIXME: This applies limit per batched call
     };
 
     if (incidentStatus) params.statuses = incidentStatus;
@@ -101,7 +100,7 @@ export function* getIncidents() {
     // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
     fetchedIncidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    // FIXME: Temporary fix for batched calls over prescribed limit
+    // FIXME: Temporary fix for batched calls over prescribed limit - need to use new API library
     const incidents = fetchedIncidents.slice(0, MAX_INCIDENTS_LIMIT);
 
     yield put({
