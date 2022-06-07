@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import moment from 'moment';
 
+import Auth from 'components/Auth/Auth';
 import UnauthorizedModalComponent from 'components/UnauthorizedModal/UnauthorizedModalComponent';
 import DisclaimerModalComponent from 'components/DisclaimerModal/DisclaimerModalComponent';
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
@@ -64,12 +65,8 @@ import {
   store,
 } from 'redux/store';
 
-import PDOAuth from 'util/pdoauth';
-
 import {
   PD_REQUIRED_ABILITY,
-  PD_OAUTH_CLIENT_ID,
-  PD_OAUTH_CLIENT_SECRET,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
 } from 'config/constants';
@@ -98,10 +95,7 @@ const App = ({
   // Verify if session token is present
   const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
-    useEffect(() => {
-      PDOAuth.login(PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET);
-    }, []);
-    return null;
+    return <Auth />;
   }
 
   // Begin monitoring and load core objects from API

@@ -6,8 +6,6 @@ import {
   Modal,
 } from 'react-bootstrap';
 
-import PDOAuth from 'util/pdoauth';
-
 import {
   userAcceptDisclaimer as userAcceptDisclaimerConnected,
 } from 'redux/users/actions';
@@ -26,7 +24,8 @@ const UnauthorizedModalComponent = ({
         show={!userAuthorized}
         onHide={() => {
           userAcceptDisclaimer();
-          PDOAuth.logout();
+          sessionStorage.removeItem('pd_access_token');
+          window.location.reload();
         }}
       >
         <Modal.Header closeButton>
