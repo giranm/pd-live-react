@@ -1,13 +1,18 @@
 import {
-  mockStore, componentWrapper,
-} from 'mocks/store.test';
+  shallow,
+} from 'enzyme';
+
+import {
+  Spinner,
+} from 'react-bootstrap';
 
 import QueryActiveComponent from './QueryActiveComponent';
 
 describe('QueryActiveComponent', () => {
   it('should render component with contents="Querying PagerDuty API"', () => {
-    const store = mockStore({});
-    const wrapper = componentWrapper(store, QueryActiveComponent);
+    const wrapper = shallow(<QueryActiveComponent />);
+    // For some reason we can't access by `div.spinner-border` in shallow render
+    expect(wrapper.find(Spinner).getElement(0).props.variant).toEqual('success');
     expect(wrapper.contains('Querying PagerDuty API')).toBeTruthy();
   });
 });
