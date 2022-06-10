@@ -22,11 +22,8 @@ import AddNoteModalComponent from 'components/AddNoteModal/AddNoteModalComponent
 import ReassignModalComponent from 'components/ReassignModal/ReassignModalComponent';
 import AddResponderModalComponent from 'components/AddResponderModal/AddResponderModalComponent';
 import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
+import ConfirmQueryModalComponent from 'components/ConfirmQueryModal/ConfirmQueryModalComponent';
 
-import {
-  getIncidentsAsync as getIncidentsAsyncConnected,
-  getAllIncidentNotesAsync as getAllIncidentNotesAsyncConnected,
-} from 'redux/incidents/actions';
 import {
   getLogEntriesAsync as getLogEntriesAsyncConnected,
   cleanRecentLogEntriesAsync as cleanRecentLogEntriesAsyncConnected,
@@ -90,8 +87,6 @@ const App = ({
   getEscalationPoliciesAsync,
   getExtensionsAsync,
   getResponsePlaysAsync,
-  getIncidentsAsync,
-  getAllIncidentNotesAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
@@ -108,6 +103,7 @@ const App = ({
   const {
     userAuthorized, userAcceptedDisclaimer, currentUserLocale,
   } = state.users;
+  const queryError = state.querySettings.error;
   useEffect(() => {
     userAuthorize();
     if (userAuthorized) {
@@ -120,8 +116,7 @@ const App = ({
       getExtensionsAsync();
       getResponsePlaysAsync();
       getPrioritiesAsync();
-      getIncidentsAsync();
-      getAllIncidentNotesAsync();
+      // NB: Get Incidents and Notes are implicitly done from query now
       checkConnectionStatus();
     }
   }, [userAuthorized]);
@@ -139,7 +134,7 @@ const App = ({
       const {
         abilities,
       } = store.getState().connection;
-      if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY)) {
+      if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY) && !queryError) {
         const lastPolledDate = moment()
           .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
           .toDate();
@@ -147,7 +142,7 @@ const App = ({
       }
     }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(pollingInterval);
-  }, [userAuthorized]);
+  }, [userAuthorized, queryError]);
 
   // Setup log entry clearing
   useEffect(() => {
@@ -191,6 +186,7 @@ const App = ({
         <ReassignModalComponent />
         <AddResponderModalComponent />
         <MergeModalComponent />
+        <ConfirmQueryModalComponent />
       </Container>
     </div>
   );
@@ -210,8 +206,6 @@ const mapDispatchToProps = (dispatch) => ({
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsyncConnected()),
   getExtensionsAsync: () => dispatch(getExtensionsAsyncConnected()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
-  getIncidentsAsync: () => dispatch(getIncidentsAsyncConnected()),
-  getAllIncidentNotesAsync: () => dispatch(getAllIncidentNotesAsyncConnected()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsyncConnected()),
 });

@@ -1,0 +1,178 @@
+import 'mocks/pdoauth';
+
+import {
+  select,
+} from 'redux-saga/effects';
+import {
+  expectSaga,
+} from 'redux-saga-test-plan';
+import * as matchers from 'redux-saga-test-plan/matchers';
+
+import {
+  MAX_INCIDENTS_LIMIT,
+} from 'config/constants';
+
+import {
+  pd,
+} from 'util/pd-api-wrapper';
+import {
+  generateRandomInteger,
+} from 'util/helpers';
+
+import {
+  generateMockIncidents,
+} from 'mocks/incidents.test';
+
+import {
+  UPDATE_CONNECTION_STATUS_REQUESTED,
+} from 'redux/connection/actions';
+import connection from 'redux/connection/reducers';
+
+import {
+  TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED,
+  TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_COMPLETED,
+  UPDATE_TOTAL_INCIDENTS_FROM_QUERY_REQUESTED,
+  UPDATE_TOTAL_INCIDENTS_FROM_QUERY_COMPLETED,
+  CONFIRM_INCIDENT_QUERY_REQUESTED,
+  CONFIRM_INCIDENT_QUERY_COMPLETED,
+  CONFIRM_INCIDENT_QUERY_ERROR,
+} from './actions';
+import querySettings from './reducers';
+import selectQuerySettings from './selectors';
+import {
+  validateIncidentQueryImpl,
+  toggleDisplayConfirmQueryModal,
+  updateTotalIncidentsFromQuery,
+  confirmIncidentQuery,
+} from './sagas';
+
+describe('Sagas: Query Settings', () => {
+  const mockIncidents = generateMockIncidents(1);
+  const mockSelector = {
+    sinceDate: new Date(),
+    incidentStatus: ['triggered'],
+    incidentUrgency: ['high'],
+    teamIds: [],
+    serviceIds: [],
+  };
+  const expectedMockResponse = {
+    data: {
+      incidents: mockIncidents,
+      limit: 1,
+    },
+  };
+
+  it('validateIncidentQueryImpl: Within MAX_INCIDENTS_LIMIT', () => {
+    expectedMockResponse.data.total = generateRandomInteger(1, MAX_INCIDENTS_LIMIT);
+    expectedMockResponse.status = 200;
+    return expectSaga(validateIncidentQueryImpl)
+      .withReducer(querySettings)
+      .provide([
+        [select(selectQuerySettings), mockSelector],
+        [
+          // Matchers is used to mock API calls - ignores params used
+          matchers.call.fn(pd.get),
+          expectedMockResponse,
+        ],
+      ])
+      .silentRun()
+      .then((result) => {
+        // NB due to weird race condition, we can't accurately match on ISO Date string
+        expect(result.storeState.status).toEqual(CONFIRM_INCIDENT_QUERY_REQUESTED);
+      });
+  });
+
+  it('validateIncidentQueryImpl: Over MAX_INCIDENTS_LIMIT', () => {
+    expectedMockResponse.data.total = generateRandomInteger(
+      MAX_INCIDENTS_LIMIT + 1,
+      MAX_INCIDENTS_LIMIT * 2,
+    );
+    expectedMockResponse.status = 200;
+    return expectSaga(validateIncidentQueryImpl)
+      .withReducer(querySettings)
+      .provide([
+        [select(selectQuerySettings), mockSelector],
+        [matchers.call.fn(pd.get), expectedMockResponse],
+      ])
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.status).toEqual(TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED);
+      });
+  });
+
+  it('validateIncidentQueryImpl: API Error', () => {
+    expectedMockResponse.status = 429;
+    return expectSaga(validateIncidentQueryImpl)
+      .withReducer(connection)
+      .provide([
+        [select(selectQuerySettings), mockSelector],
+        [matchers.call.fn(pd.get), expectedMockResponse],
+      ])
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.status).toEqual(UPDATE_CONNECTION_STATUS_REQUESTED);
+      });
+  });
+
+  it('toggleDisplayConfirmQueryModal: displayConfirmQueryModal === false', () => {
+    mockSelector.displayConfirmQueryModal = false;
+    const expectedResult = true;
+    return expectSaga(toggleDisplayConfirmQueryModal)
+      .withReducer(querySettings)
+      .provide([[select(selectQuerySettings), mockSelector]])
+      .dispatch({ type: TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.displayConfirmQueryModal).toEqual(expectedResult);
+        expect(result.storeState.status).toEqual(TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_COMPLETED);
+      });
+  });
+
+  it('toggleDisplayConfirmQueryModal: displayConfirmQueryModal === true', () => {
+    mockSelector.displayConfirmQueryModal = true;
+    const expectedResult = false;
+    return expectSaga(toggleDisplayConfirmQueryModal)
+      .withReducer(querySettings)
+      .provide([[select(selectQuerySettings), mockSelector]])
+      .dispatch({ type: TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.displayConfirmQueryModal).toEqual(expectedResult);
+        expect(result.storeState.status).toEqual(TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_COMPLETED);
+      });
+  });
+
+  it('updateTotalIncidentsFromQuery', () => {
+    const totalIncidentsFromQuery = generateRandomInteger(0, MAX_INCIDENTS_LIMIT);
+    return expectSaga(updateTotalIncidentsFromQuery)
+      .withReducer(querySettings)
+      .dispatch({ type: UPDATE_TOTAL_INCIDENTS_FROM_QUERY_REQUESTED, totalIncidentsFromQuery })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.totalIncidentsFromQuery).toEqual(totalIncidentsFromQuery);
+        expect(result.storeState.status).toEqual(UPDATE_TOTAL_INCIDENTS_FROM_QUERY_COMPLETED);
+      });
+  });
+
+  it('confirmIncidentQuery: confirm === true', () => {
+    const confirm = true;
+    return expectSaga(confirmIncidentQuery)
+      .withReducer(querySettings)
+      .dispatch({ type: CONFIRM_INCIDENT_QUERY_REQUESTED, confirm })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.status).toEqual(CONFIRM_INCIDENT_QUERY_COMPLETED);
+      });
+  });
+
+  it('confirmIncidentQuery: confirm === false', () => {
+    const confirm = false;
+    return expectSaga(confirmIncidentQuery)
+      .withReducer(querySettings)
+      .dispatch({ type: CONFIRM_INCIDENT_QUERY_REQUESTED, confirm })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.status).toEqual(CONFIRM_INCIDENT_QUERY_ERROR);
+      });
+  });
+});

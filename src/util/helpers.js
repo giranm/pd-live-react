@@ -63,3 +63,8 @@ export const compareCreatedAt = (a, b) => moment(a.created_at).diff(moment(b.cre
 
 // Get subdomain from user reference url
 export const getSubdomainFromUserUrl = (htmlUrl) => htmlUrl.split('.')[0].split('https://')[1];
+
+// Generate random integer between numbers
+export const generateRandomInteger = (min = 0, max = 100) => Math.floor(
+  min + Math.random() * (max - min + 1),
+);

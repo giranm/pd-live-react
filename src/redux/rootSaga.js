@@ -15,6 +15,10 @@ import {
   updateQuerySettingsTeams,
   updateQuerySettingsServices,
   updateSearchQuery,
+  validateIncidentQuery,
+  toggleDisplayConfirmQueryModal,
+  updateTotalIncidentsFromQuery,
+  confirmIncidentQuery,
 } from './query_settings/sagas';
 
 import {
@@ -121,6 +125,10 @@ export default function* rootSaga() {
     updateQuerySettingsTeams(),
     updateQuerySettingsServices(),
     updateSearchQuery(),
+    validateIncidentQuery(),
+    toggleDisplayConfirmQueryModal(),
+    updateTotalIncidentsFromQuery(),
+    confirmIncidentQuery(),
 
     // Incidents
     getIncidentsAsync(),
