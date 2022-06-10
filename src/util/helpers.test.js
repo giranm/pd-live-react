@@ -1,5 +1,5 @@
 import {
-  getInitials, getSubdomainFromUserUrl,
+  getInitials, getSubdomainFromUserUrl, generateRandomInteger,
 } from './helpers';
 
 describe('getInitials', () => {
@@ -30,5 +30,20 @@ describe('getSubdomainFromUserUrl', () => {
     const htmlURL = 'https://acme-dev.eu.pagerduty.com/users/PABCXYZ';
     const subdomain = getSubdomainFromUserUrl(htmlURL);
     expect(subdomain).toEqual('acme-dev');
+  });
+});
+
+describe('generateRandomInteger', () => {
+  it('Given two valid numbers, it will generate a random integer between both', () => {
+    const min = 0;
+    const max = 100;
+    const randomInteger = generateRandomInteger(min, max);
+    expect(randomInteger).toBeGreaterThanOrEqual(min);
+    expect(randomInteger).toBeLessThanOrEqual(max);
+  });
+  it('Given two identical numbers, it will return the same number', () => {
+    const integer = 20;
+    const expectedInteger = generateRandomInteger(integer, integer);
+    expect(expectedInteger).toEqual(integer);
   });
 });

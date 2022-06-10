@@ -17,19 +17,14 @@ import {
   pushToArray,
 } from 'util/helpers';
 import fuseOptions from 'config/fuse-config';
+import {
+  MAX_INCIDENTS_LIMIT,
+} from 'config/constants';
 
 import selectQuerySettings from 'redux/query_settings/selectors';
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
-import {
-  UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
-  UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
-  UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED,
-  UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
-  UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
-  UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
-} from 'redux/query_settings/actions';
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -77,16 +72,6 @@ export function* getIncidentsAsync() {
 }
 
 export function* getIncidents() {
-  // Wait for query actions to have been completed.
-  take([
-    UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
-    UPDATE_QUERY_SETTING_INCIDENT_STATUS_COMPLETED,
-    UPDATE_QUERY_SETTING_INCIDENT_URGENCY_COMPLETED,
-    UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
-    UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
-    UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
-  ]);
-
   try {
     //  Build params from query settings and call pd lib
     const {
@@ -106,17 +91,17 @@ export function* getIncidents() {
     };
 
     if (incidentStatus) params.statuses = incidentStatus;
-
     if (incidentUrgency) params.urgencies = incidentUrgency;
-
     if (teamIds.length) params.team_ids = teamIds;
-
     if (serviceIds.length) params.service_ids = serviceIds;
 
-    const incidents = yield pdParallelFetch('incidents', params);
+    const fetchedIncidents = yield pdParallelFetch('incidents', params);
 
     // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
-    incidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    fetchedIncidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    // FIXME: Temporary fix for batched calls over prescribed limit - need to use new API library
+    const incidents = fetchedIncidents.slice(0, MAX_INCIDENTS_LIMIT);
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
