@@ -3,7 +3,7 @@ import {
 } from 'react-bootstrap';
 
 const QueryActiveComponent = () => (
-  <Container id="query-active-ctr" fluid>
+  <Container className="query-active-ctr" fluid>
     <br />
     <Row className="justify-content-md-center">
       <Spinner className="" animation="border" role="status" variant="success" />

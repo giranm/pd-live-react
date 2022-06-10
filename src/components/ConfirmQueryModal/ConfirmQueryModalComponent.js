@@ -49,7 +49,7 @@ const ConfirmQueryModalComponent = ({
         </Modal.Body>
         <Modal.Footer>
           <Button
-            id="retrieve-incidents-button"
+            id="retrieve-incident-query-button"
             variant="primary"
             onClick={() => {
               confirmIncidentQuery(true);
@@ -58,7 +58,7 @@ const ConfirmQueryModalComponent = ({
           >
             Retrieve Incidents
           </Button>
-          <Button variant="danger" onClick={handleCancel}>
+          <Button id="cancel-incident-query-button" variant="danger" onClick={handleCancel}>
             Cancel
           </Button>
         </Modal.Footer>
