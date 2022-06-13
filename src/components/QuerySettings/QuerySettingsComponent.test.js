@@ -1,5 +1,3 @@
-import 'mocks/pdoauth';
-
 import '@testing-library/jest-dom';
 
 import gb from 'date-fns/locale/en-GB';

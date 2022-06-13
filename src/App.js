@@ -63,6 +63,8 @@ import {
 } from 'redux/store';
 
 import {
+  PD_OAUTH_CLIENT_ID,
+  PD_OAUTH_CLIENT_SECRET,
   PD_REQUIRED_ABILITY,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
@@ -92,7 +94,7 @@ const App = ({
   if (!token) {
     return (
       <div className="App">
-        <AuthComponent />
+        <AuthComponent clientId={PD_OAUTH_CLIENT_ID} clientSecret={PD_OAUTH_CLIENT_SECRET} />
       </div>
     );
   }

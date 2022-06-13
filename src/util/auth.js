@@ -70,25 +70,23 @@ export const createCodeVerifier = () => {
   return base64Unicode(generatedCode.buffer);
 };
 
-export const getAuthURL = async (clientID, clientSecret, redirectURL, codeVerifier) => {
+export const getAuthURL = async (clientId, clientSecret, redirectURL, codeVerifier) => {
   const challengeBuffer = await digestVerifier(codeVerifier);
   // base64 encode the challenge
   const challenge = base64Unicode(challengeBuffer);
   // build authUrl
   const authUrl = 'https://app.pagerduty.com/oauth/authorize?'
-    + `client_id=${clientID}&`
+    + `client_id=${clientId}&`
     // + `client_secret=${clientSecret}&`
     + `redirect_uri=${redirectURL}&`
     + 'response_type=code&'
     + `code_challenge=${encodeURI(challenge)}&`
     + 'code_challenge_method=S256';
-
-  console.log('authUrl', authUrl);
   return authUrl;
 };
 
 export const exchangeCodeForToken = async (
-  clientID,
+  clientId,
   clientSecret,
   redirectURL,
   codeVerifier,
@@ -103,13 +101,11 @@ export const exchangeCodeForToken = async (
     return json;
   };
 
-  console.log('codeVerifier', codeVerifier, 'code', code);
-
   const requestTokenUrl = 'https://app.pagerduty.com/oauth/token?'
     + 'grant_type=authorization_code&'
     + `code=${code}&`
     + `redirect_uri=${redirectURL}&`
-    + `client_id=${clientID}&`
+    + `client_id=${clientId}&`
     // + `client_secret=${clientSecret}&`
     + `code_verifier=${codeVerifier}`;
   const data = await postData(requestTokenUrl, {});
