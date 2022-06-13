@@ -7,8 +7,6 @@ import {
 
 import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent';
 
-import PDOAuth from 'util/pdoauth';
-
 import PD_APP_VERSION from 'config/version';
 
 import {
@@ -80,10 +78,11 @@ const NavigationBarComponent = ({
               }
               <NavDropdown.Item
                 onClick={() => {
-                  PDOAuth.logout();
                   userAcceptDisclaimer();
                   userUnauthorize();
                   stopMonitoring();
+                  sessionStorage.removeItem('pd_access_token');
+                  window.location.reload();
                 }}
               >
                 Log Out

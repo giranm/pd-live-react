@@ -10,8 +10,6 @@ import {
   Modal, Form, Button,
 } from 'react-bootstrap';
 
-import PDOAuth from 'util/pdoauth';
-
 import {
   userAcceptDisclaimer as userAcceptDisclaimerConnected,
   userUnauthorize as userUnauthorizeConnected,
@@ -256,8 +254,9 @@ const DisclaimerModalComponent = ({
             id="disclaimer-decline-button"
             variant="danger"
             onClick={() => {
-              PDOAuth.logout();
               userUnauthorize();
+              sessionStorage.removeItem('pd_access_token');
+              window.location.reload();
             }}
           >
             Decline

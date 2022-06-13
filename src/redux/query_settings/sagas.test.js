@@ -1,5 +1,3 @@
-import 'mocks/pdoauth';
-
 import {
   select,
 } from 'redux-saga/effects';
