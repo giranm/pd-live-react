@@ -1,13 +1,17 @@
 /* eslint-disable no-unused-vars */
 import React, {
-  useState,
-  useEffect,
+  useState, useEffect,
 } from 'react';
 
 import {
-  PD_OAUTH_CLIENT_ID,
-  PD_OAUTH_CLIENT_SECRET,
+  Form, Button, Dropdown, Spinner, Row, Container,
+} from 'react-bootstrap';
+
+import {
+  PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET,
 } from 'config/constants';
+
+import './AuthComponent.scss';
 
 const gen64x8bitNonce = () => {
   const array = new Uint8Array(64);
@@ -121,7 +125,7 @@ const exchangeCodeForToken = async (clientID, clientSecret, redirectURL, codeVer
   return null;
 };
 
-const Auth = (props) => {
+const AuthComponent = (props) => {
   const [authURL, setAuthURL] = useState();
 
   const id = PD_OAUTH_CLIENT_ID;
@@ -155,26 +159,34 @@ const Auth = (props) => {
     }
   }, []);
 
-  /* eslint-disable react/jsx-one-expression-per-line */
   if (code && codeVerifier) {
     return (
       <div align="center">
-        <p>&nbsp;</p>
-        Logging in to PagerDuty...
+        <br />
+        <Row className="justify-content-md-center">
+          <Spinner animation="border" role="status" variant="success" />
+          <h5 className="querying-incidents">
+            <b>Signing into PagerDuty Live</b>
+          </h5>
+        </Row>
       </div>
     );
   }
   return (
     <div align="center">
-      <p>&nbsp;</p>
-      <h2>PagerDuty Login</h2>
-      Connect to PagerDuty to use this app.
-      <p>&nbsp;</p>
-      <a id="pd-login-button" className="btn btn-lg btn-primary auth-button" href={authURL}>
-        Authorize PagerDuty
-      </a>
+      <Form id="pd-login-form">
+        <div id="pd-login-logo" />
+        <Dropdown.Divider />
+        <div id="pd-login-description">
+          <h1>Live Incidents Console</h1>
+          <p>Connect using PagerDuty OAuth to use this app</p>
+        </div>
+        <Button id="pd-login-button" variant="primary" size="lg" href={authURL}>
+          Sign In
+        </Button>
+      </Form>
     </div>
   );
 };
 
-export default Auth;
+export default AuthComponent;

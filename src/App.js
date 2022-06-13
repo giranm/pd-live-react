@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 import moment from 'moment';
 
-import Auth from 'components/Auth/Auth';
+import AuthComponent from 'components/Auth/AuthComponent';
 import UnauthorizedModalComponent from 'components/UnauthorizedModal/UnauthorizedModalComponent';
 import DisclaimerModalComponent from 'components/DisclaimerModal/DisclaimerModalComponent';
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
@@ -90,7 +90,11 @@ const App = ({
   // Verify if session token is present
   const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
-    return <Auth />;
+    return (
+      <div className="App">
+        <AuthComponent />
+      </div>
+    );
   }
 
   // Begin monitoring and load core objects from API
