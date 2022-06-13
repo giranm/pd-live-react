@@ -7,7 +7,7 @@ import {
 // Docs: https://fusejs.io/api/options.html
 const fuseOptions = {
   threshold: 0.2,
-  distance: 100,
+  ignoreLocation: true,
   useExtendedSearch: true,
   keys: availableIncidentTableColumns.map((col) => {
     // Handle specific cases for columns with functional accessor
