@@ -83,6 +83,7 @@ export const getAuthURL = async (clientID, clientSecret, redirectURL, codeVerifi
     + `code_challenge=${encodeURI(challenge)}&`
     + 'code_challenge_method=S256';
 
+  console.log('authUrl', authUrl);
   return authUrl;
 };
 
@@ -101,6 +102,8 @@ export const exchangeCodeForToken = async (
     const json = response.json();
     return json;
   };
+
+  console.log('codeVerifier', codeVerifier, 'code', code);
 
   const requestTokenUrl = 'https://app.pagerduty.com/oauth/token?'
     + 'grant_type=authorization_code&'
