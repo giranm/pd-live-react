@@ -116,7 +116,7 @@ const App = ({
       getExtensionsAsync();
       getResponsePlaysAsync();
       getPrioritiesAsync();
-      // NB: Get Incidents and Notes are implicitly done from query now
+      // NB: Get incidents, notes, and alerts are implicitly done from query now
       checkConnectionStatus();
     }
   }, [userAuthorized]);

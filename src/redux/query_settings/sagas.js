@@ -17,6 +17,7 @@ import {
   FETCH_INCIDENTS_REQUESTED,
   FILTER_INCIDENTS_LIST_BY_QUERY,
   FETCH_ALL_INCIDENT_NOTES_REQUESTED,
+  FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
 } from 'redux/incidents/actions';
 import {
   FETCH_SERVICES_REQUESTED,
@@ -276,6 +277,7 @@ export function* confirmIncidentQueryImpl(action) {
   if (confirm) {
     yield put({ type: FETCH_INCIDENTS_REQUESTED });
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
+    yield put({ type: FETCH_ALL_INCIDENT_ALERTS_REQUESTED });
     yield put({ type: CONFIRM_INCIDENT_QUERY_COMPLETED });
   } else {
     yield put({ type: CONFIRM_INCIDENT_QUERY_ERROR });

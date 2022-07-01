@@ -35,6 +35,9 @@ import {
   FETCH_ALL_INCIDENT_NOTES_REQUESTED,
   FETCH_ALL_INCIDENT_NOTES_COMPLETED,
   FETCH_ALL_INCIDENT_NOTES_ERROR,
+  FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
+  FETCH_ALL_INCIDENT_ALERTS_COMPLETED,
+  FETCH_ALL_INCIDENT_ALERTS_ERROR,
   UPDATE_INCIDENTS_LIST,
   UPDATE_INCIDENTS_LIST_COMPLETED,
   UPDATE_INCIDENTS_LIST_ERROR,
@@ -227,6 +230,60 @@ export function* getAllIncidentNotes() {
       type: UPDATE_CONNECTION_STATUS_REQUESTED,
       connectionStatus: 'neutral',
       connectionStatusMessage: 'Unable to fetch all incident notes',
+    });
+  }
+}
+
+export function* getAllIncidentAlertsAsync() {
+  yield takeEvery(FETCH_ALL_INCIDENT_ALERTS_REQUESTED, getAllIncidentAlerts);
+}
+
+export function* getAllIncidentAlerts() {
+  // TODO: Add boolean logic to determine if alerts should be fetched...
+  try {
+    // Wait until incidents have been fetched before obtaining alerts
+    yield take([FETCH_INCIDENTS_COMPLETED, FETCH_INCIDENTS_ERROR]);
+
+    // Build list of promises to call PD endpoint
+    const {
+      incidents,
+    } = yield select(selectIncidents);
+    const requests = incidents.map(({
+      id,
+    }) => throttledPdAxiosRequest('GET', `incidents/${id}/alerts`));
+    const results = yield Promise.all(requests);
+
+    // Grab matching incident and apply note update
+    const updatedIncidentsList = incidents.map((incident, idx) => {
+      const tempIncident = { ...incident };
+      tempIncident.alerts = results[idx].data.alerts;
+      return tempIncident;
+    });
+
+    // Update store with incident having alerts data
+    yield put({
+      type: FETCH_ALL_INCIDENT_ALERTS_COMPLETED,
+      incidents: updatedIncidentsList,
+    });
+
+    /*
+      Apply filters that already are configured down below
+    */
+    const {
+      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
+    } = yield select(selectQuerySettings);
+    yield call(filterIncidentsByPriorityImpl, { incidentPriority });
+    yield call(filterIncidentsByStatusImpl, { incidentStatus });
+    yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
+    yield call(filterIncidentsByTeamImpl, { teamIds });
+    yield call(filterIncidentsByServiceImpl, { serviceIds });
+    yield call(filterIncidentsByQueryImpl, { searchQuery });
+  } catch (e) {
+    yield put({ type: FETCH_ALL_INCIDENT_ALERTS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to fetch all incident alerts',
     });
   }
 }
