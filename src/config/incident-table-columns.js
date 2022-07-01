@@ -69,11 +69,7 @@ export const availableIncidentTableColumns = [
     // width: 800,
     Cell: ({
       row,
-    }) => (
-      <span className="td-wrapper">
-        {row.original.description}
-      </span>
-    ),
+    }) => <span className="td-wrapper">{row.original.description}</span>,
   },
   {
     accessor: 'created_at',
@@ -346,11 +342,7 @@ export const availableIncidentTableColumns = [
     // width: 800,
     Cell: ({
       row,
-    }) => (
-      <span className="td-wrapper">
-        {row.original.description}
-      </span>
-    ),
+    }) => <span className="td-wrapper">{row.original.description}</span>,
   },
   {
     accessor: (incident) => {
@@ -371,11 +363,7 @@ export const availableIncidentTableColumns = [
     // maxWidth: 500,
     Cell: ({
       value,
-    }) => (
-      <div className="td-wrapper">
-        {value}
-      </div>
-    ),
+    }) => <div className="td-wrapper">{value}</div>,
   },
   {
     accessor: (incident) => (incident.external_references
@@ -413,6 +401,168 @@ export const availableIncidentTableColumns = [
       }
       return '--';
     },
+  },
+  {
+    accessor: (incident) => {
+      let content;
+      if (
+        incident.alerts
+        && incident.alerts.length > 0
+        && incident.alerts[0].body
+        && incident.alerts[0].body.cef_details
+        && incident.alerts[0].body.cef_details.severity
+      ) {
+        content = incident.alerts[0].body.cef_details.severity;
+      } else if (incident.alerts) {
+        content = '--';
+      } else {
+        content = 'Fetching alerts ...';
+      }
+      return content;
+    },
+    Header: 'Severity',
+    sortable: true,
+    minWidth: 100,
+    sortType: (row1, row2) => {
+      const severityRank = {
+        critical: 4,
+        error: 3,
+        warning: 2,
+        info: 1,
+        '--': 0,
+      };
+      const row1Rank = row1.values.Severity ? severityRank[row1.values.Severity] : 0;
+      const row2Rank = row2.values.Severity ? severityRank[row2.values.Severity] : 0;
+      const order = row1Rank > row2Rank ? 1 : -1;
+      return order;
+    },
+    Cell: ({
+      value,
+    }) => {
+      let variant = '';
+      switch (value) {
+        case 'critical':
+          variant = 'dark';
+          break;
+        case 'error':
+          variant = 'danger';
+          break;
+        case 'warning':
+          variant = 'warning';
+          break;
+        case 'info':
+          variant = 'info';
+          break;
+        default:
+          variant = null;
+          break;
+      }
+      return (
+        <Badge className="urgency-badge" variant={variant}>
+          {value}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessor: (incident) => {
+      let content;
+      if (
+        incident.alerts
+        && incident.alerts.length > 0
+        && incident.alerts[0].body
+        && incident.alerts[0].body.cef_details
+        && incident.alerts[0].body.cef_details.source_component
+      ) {
+        content = incident.alerts[0].body.cef_details.source_component;
+      } else if (incident.alerts) {
+        content = '--';
+      } else {
+        content = 'Fetching alerts ...';
+      }
+      return content;
+    },
+    Header: 'Component',
+    sortable: true,
+    minWidth: 130,
+    Cell: ({
+      value,
+    }) => <div className="td-wrapper">{value}</div>,
+  },
+  {
+    accessor: (incident) => {
+      let content;
+      if (
+        incident.alerts
+        && incident.alerts.length > 0
+        && incident.alerts[0].body
+        && incident.alerts[0].body.cef_details
+        && incident.alerts[0].body.cef_details.source_origin
+      ) {
+        content = incident.alerts[0].body.cef_details.source_origin;
+      } else if (incident.alerts) {
+        content = '--';
+      } else {
+        content = 'Fetching alerts ...';
+      }
+      return content;
+    },
+    Header: 'Source',
+    sortable: true,
+    minWidth: 100,
+    Cell: ({
+      value,
+    }) => <div className="td-wrapper">{value}</div>,
+  },
+  {
+    accessor: (incident) => {
+      let content;
+      if (
+        incident.alerts
+        && incident.alerts.length > 0
+        && incident.alerts[0].body
+        && incident.alerts[0].body.cef_details
+        && incident.alerts[0].body.cef_details.event_class
+      ) {
+        content = incident.alerts[0].body.cef_details.event_class;
+      } else if (incident.alerts) {
+        content = '--';
+      } else {
+        content = 'Fetching alerts ...';
+      }
+      return content;
+    },
+    Header: 'Class',
+    sortable: true,
+    minWidth: 100,
+    Cell: ({
+      value,
+    }) => <div className="td-wrapper">{value}</div>,
+  },
+  {
+    accessor: (incident) => {
+      let content;
+      if (
+        incident.alerts
+        && incident.alerts.length > 0
+        && incident.alerts[0].body
+        && incident.alerts[0].body.cef_details
+        && incident.alerts[0].body.cef_details.service_group
+      ) {
+        content = incident.alerts[0].body.cef_details.service_group;
+      } else if (incident.alerts) {
+        content = '--';
+      } else {
+        content = 'Fetching alerts ...';
+      }
+      return content;
+    },
+    Header: 'Group',
+    sortable: true,
+    minWidth: 100,
+    Cell: ({
+      value,
+    }) => <div className="td-wrapper">{value}</div>,
   },
 ];
 

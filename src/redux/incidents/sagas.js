@@ -241,8 +241,8 @@ export function* getAllIncidentAlertsAsync() {
 export function* getAllIncidentAlerts() {
   // TODO: Add boolean logic to determine if alerts should be fetched...
   try {
-    // Wait until incidents have been fetched before obtaining alerts
-    yield take([FETCH_INCIDENTS_COMPLETED, FETCH_INCIDENTS_ERROR]);
+    // Wait until incidents & notes have been fetched before obtaining alerts
+    yield take([FETCH_ALL_INCIDENT_NOTES_COMPLETED, FETCH_ALL_INCIDENT_NOTES_ERROR]);
 
     // Build list of promises to call PD endpoint
     const {

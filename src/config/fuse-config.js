@@ -28,6 +28,21 @@ const fuseOptions = {
       case 'Latest Note':
         key = 'notes.content';
         break;
+      case 'Severity':
+        key = 'alerts.body.cef_details.severity';
+        break;
+      case 'Component':
+        key = 'alerts.body.cef_details.source_component';
+        break;
+      case 'Source':
+        key = 'alerts.body.cef_details.source_origin';
+        break;
+      case 'Class':
+        key = 'alerts.body.cef_details.event_class';
+        break;
+      case 'Group':
+        key = 'alerts.body.cef_details.service_group';
+        break;
       default:
         key = col.accessor;
         break;
