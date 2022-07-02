@@ -17,6 +17,7 @@ import {
   Form,
 } from 'react-bootstrap';
 import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import DualListBox from 'react-dual-listbox';
 
 import {
@@ -32,6 +33,7 @@ import {
 import {
   toggleSettingsModal as toggleSettingsModalConnected,
   setDefaultSinceDateTenor as setDefaultSinceDateTenorConnected,
+  setAlertCustomDetailColumns as setAlertCustomDetailColumnsConnected,
   clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
 
@@ -65,13 +67,14 @@ const SettingsModalComponent = ({
   users,
   updateUserLocale,
   setDefaultSinceDateTenor,
+  setAlertCustomDetailColumns,
   saveIncidentTable,
   clearLocalCache,
   updateActionAlertsModal,
   toggleDisplayActionAlertsModal,
 }) => {
   const {
-    displaySettingsModal, defaultSinceDateTenor,
+    displaySettingsModal, defaultSinceDateTenor, customDetailFields,
   } = settings;
   const {
     incidentTableColumnsNames,
@@ -168,17 +171,31 @@ const SettingsModalComponent = ({
             </Tab>
             <Tab eventKey="incident-table-columns" title="Incident Table Columns">
               <br />
-              <DualListBox
-                canFilter
-                preserveSelectOrder
-                showOrderButtons
-                showHeaderLabels
-                showNoOptionsText
-                simpleValue={false}
-                options={availableColumns}
-                selected={selectedColumns}
-                onChange={(cols) => setSelectedColumns(cols)}
-              />
+              <Col>
+                <h4>Column Selector</h4>
+                <DualListBox
+                  canFilter
+                  preserveSelectOrder
+                  showOrderButtons
+                  showHeaderLabels
+                  showNoOptionsText
+                  simpleValue={false}
+                  options={availableColumns}
+                  selected={selectedColumns}
+                  onChange={(cols) => setSelectedColumns(cols)}
+                />
+              </Col>
+              <br />
+              <Col>
+                <h4>Alert Custom Detail Column Definitions</h4>
+                <CreatableSelect
+                  isMulti
+                  isClearable
+                  placeholder="Enter 'Column Header:JSON Path' (e.g. Environment:details.env)"
+                  defaultValue={customDetailFields}
+                  onChange={(fields) => setAlertCustomDetailColumns(fields)}
+                />
+              </Col>
               <br />
               <Button
                 id="update-incident-table-columns-button"
@@ -224,6 +241,9 @@ const mapDispatchToProps = (dispatch) => ({
   updateUserLocale: (locale) => dispatch(updateUserLocaleConnected(locale)),
   setDefaultSinceDateTenor: (defaultSinceDateTenor) => {
     dispatch(setDefaultSinceDateTenorConnected(defaultSinceDateTenor));
+  },
+  setAlertCustomDetailColumns: (customDetailFields) => {
+    dispatch(setAlertCustomDetailColumnsConnected(customDetailFields));
   },
   saveIncidentTable: (updatedIncidentTableColumns) => {
     dispatch(saveIncidentTableConnected(updatedIncidentTableColumns));

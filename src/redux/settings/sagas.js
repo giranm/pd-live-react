@@ -12,6 +12,8 @@ import {
   TOGGLE_SETTINGS_COMPLETED,
   SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
   SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -43,6 +45,20 @@ export function* setDefaultSinceDateTenorImpl(action) {
   yield put({
     type: SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
     defaultSinceDateTenor,
+  });
+}
+
+export function* setAlertCustomDetailColumns() {
+  yield takeLatest(SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED, setAlertCustomDetailColumnsImpl);
+}
+
+export function* setAlertCustomDetailColumnsImpl(action) {
+  const {
+    customDetailFields,
+  } = action;
+  yield put({
+    type: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+    customDetailFields,
   });
 }
 

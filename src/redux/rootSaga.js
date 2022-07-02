@@ -103,7 +103,10 @@ import {
 
 // eslint-disable-next-line import/no-cycle
 import {
-  toggleSettingsModal, setDefaultSinceDateTenor, clearLocalCache,
+  toggleSettingsModal,
+  setDefaultSinceDateTenor,
+  setAlertCustomDetailColumns,
+  clearLocalCache,
 } from './settings/sagas';
 
 import {
@@ -208,6 +211,7 @@ export default function* rootSaga() {
     // Settings
     toggleSettingsModal(),
     setDefaultSinceDateTenor(),
+    setAlertCustomDetailColumns(),
     clearLocalCache(),
 
     // Connection

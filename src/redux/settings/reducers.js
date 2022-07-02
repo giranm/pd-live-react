@@ -5,6 +5,8 @@ import {
   TOGGLE_SETTINGS_COMPLETED,
   SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
   SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -30,6 +32,15 @@ const settings = produce(
         draft.status = SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED;
         break;
 
+      case SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED:
+        draft.status = SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED;
+        break;
+
+      case SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED:
+        draft.customDetailFields = action.customDetailFields;
+        draft.status = SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED;
+        break;
+
       case CLEAR_LOCAL_CACHE_REQUESTED:
         draft.status = CLEAR_LOCAL_CACHE_REQUESTED;
         break;
@@ -45,6 +56,7 @@ const settings = produce(
   {
     displaySettingsModal: false,
     defaultSinceDateTenor: '1 Day',
+    customDetailFields: ['Environment:details.env'],
     status: '',
   },
 );
