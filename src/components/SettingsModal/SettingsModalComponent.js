@@ -42,7 +42,6 @@ import locales from 'config/locales';
 import {
   availableIncidentTableColumns,
   availableAlertTableColumns,
-  getReactTableColumnSchemas,
 } from 'config/incident-table-columns';
 
 import {
@@ -104,9 +103,19 @@ const SettingsModalComponent = ({
 
   const [tempSinceDateTenor, setTempSinceDateTenor] = useState(defaultSinceDateTenor);
 
-  const transformedIncidentTableColumns = getReactTableColumnSchemas(incidentTableColumns);
   const [selectedColumns, setSelectedColumns] = useState(
-    transformedIncidentTableColumns.map(incidentColumnMap),
+    incidentTableColumns.map((column) => {
+      // Recreate original value used from react-select
+      const value = column.columnType === 'incident'
+        ? column.Header
+        : `${column.Header}:${column.accessorPath}`;
+      return {
+        Header: column.Header,
+        columnType: column.columnType,
+        label: column.Header,
+        value,
+      };
+    }),
   );
 
   const [availableColumns, setAvailableColumns] = useState(getAllAvailableColumns());
