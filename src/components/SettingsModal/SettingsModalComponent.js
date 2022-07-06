@@ -41,6 +41,7 @@ import locales from 'config/locales';
 
 import {
   availableIncidentTableColumns,
+  availableAlertTableColumns,
   getReactTableColumnSchemas,
 } from 'config/incident-table-columns';
 
@@ -55,12 +56,18 @@ import {
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
 
-const columnMapper = (column) => ({
+const columnMapper = (column, columnType) => ({
   label: column.Header,
   value: column.Header,
   Header: column.Header,
-  columnType: 'incident',
+  columnType,
 });
+const incidentColumnMap = (column) => columnMapper(column, 'incident');
+const alertColumnMap = (column) => columnMapper(column, 'alert');
+
+const getAllAvailableColumns = () => availableIncidentTableColumns
+  .map(incidentColumnMap)
+  .concat(availableAlertTableColumns.map(alertColumnMap));
 
 const SettingsModalComponent = ({
   settings,
@@ -99,17 +106,28 @@ const SettingsModalComponent = ({
 
   const transformedIncidentTableColumns = getReactTableColumnSchemas(incidentTableColumns);
   const [selectedColumns, setSelectedColumns] = useState(
-    transformedIncidentTableColumns.map(columnMapper),
+    transformedIncidentTableColumns.map(incidentColumnMap),
   );
 
-  const [availableColumns, setAvailableColumns] = useState(
-    availableIncidentTableColumns.map(columnMapper),
-  );
+  const [availableColumns, setAvailableColumns] = useState(getAllAvailableColumns());
 
+  // Handle alert custom detail fields being updated
   useEffect(() => {
-    const tempAvailableIncidentTableColumns = availableIncidentTableColumns.map(columnMapper);
+    const tempAvailableIncidentTableColumns = getAllAvailableColumns();
     alertCustomDetailFields.forEach((field) => {
       const tempField = { ...field };
+      const [derivedHeader, derivedAccessorPath] = tempField.label.split(':');
+
+      // Derive header and accessorPath for redux store
+      if (derivedHeader) {
+        tempField.Header = derivedHeader;
+      }
+      if (derivedAccessorPath) {
+        tempField.accessorPath = derivedAccessorPath;
+      } else {
+        tempField.accessorPath = null;
+      }
+
       tempField.columnType = 'alert';
       tempAvailableIncidentTableColumns.push(tempField);
     });

@@ -100,30 +100,10 @@ const IncidentTableComponent = ({
     [],
   );
 
-  const memoizedColumns = useMemo(() => {
-    // Merge current columns state with any modifications to order etc
-    const columns = getReactTableColumnSchemas(incidentTableColumns);
-    // const columnWidths = incidentTableState.columnResizing
-    //   ? incidentTableState.columnResizing.columnWidths
-    //   : null;
-    // const tempColumns = columns.map((col) => {
-    //   const tempCol = { ...col };
-    //   if (columnWidths && tempCol.accessor in columnWidths) {
-    //     tempCol.width = columnWidths[tempCol.accessor];
-    //     // console.log('using cached table by accessor', tempCol);
-    //   } else if (columnWidths && tempCol.Header in columnWidths) {
-    //     tempCol.width = columnWidths[tempCol.Header];
-    //     // console.log('using cached table by Header', tempCol);
-    //   } else {
-    //     tempCol.width = tempCol.minWidth;
-    //     // console.log('using default', tempCol);
-    //   }
-    //   return tempCol;
-    // });
-    // return tempColumns;
-    console.log('Rendered cols', columns);
-    return columns;
-  }, [incidentTableColumns]);
+  const memoizedColumns = useMemo(
+    () => getReactTableColumnSchemas(incidentTableColumns),
+    [incidentTableColumns],
+  );
 
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 

@@ -23,13 +23,8 @@ import {
   HIGH, LOW,
 } from 'util/incidents';
 import {
-  getObjectsFromList,
+  getObjectsFromList, getTextWidth,
 } from 'util/helpers';
-
-// eslint-disable-next-line import/no-cycle
-import {
-  store,
-} from 'redux/store';
 
 // Define all possible columns for incidents under PagerDuty's API
 export const availableIncidentTableColumns = [
@@ -39,7 +34,6 @@ export const availableIncidentTableColumns = [
     Header: '#',
     sortable: true,
     minWidth: 80,
-    // width: 80,
     Cell: ({
       row,
     }) => (
@@ -54,7 +48,6 @@ export const availableIncidentTableColumns = [
     Header: 'Title',
     sortable: true,
     minWidth: 400,
-    // width: 800,
     Cell: ({
       row,
     }) => (
@@ -74,7 +67,6 @@ export const availableIncidentTableColumns = [
     Header: 'Description',
     sortable: true,
     minWidth: 400,
-    // width: 800,
     Cell: ({
       row,
     }) => <span className="td-wrapper">{row.original.description}</span>,
@@ -85,7 +77,6 @@ export const availableIncidentTableColumns = [
     Header: 'Created At',
     sortable: true,
     minWidth: 180,
-    // width: 180,
     Cell: ({
       row,
     }) => {
@@ -99,8 +90,6 @@ export const availableIncidentTableColumns = [
     Header: 'Status',
     sortable: true,
     minWidth: 100,
-    // width: 160,
-    // maxWidth: 160,
     Cell: ({
       row,
     }) => <StatusComponent status={row.original.status} />,
@@ -111,15 +100,13 @@ export const availableIncidentTableColumns = [
     Header: 'Incident Key',
     sortable: true,
     minWidth: 300,
-    // width: 300,
   },
   {
     columnType: 'incident',
     accessor: 'service.summary',
     Header: 'Service',
     sortable: true,
-    minWidth: 300,
-    // width: 300,
+    minWidth: 150,
     Cell: ({
       row,
     }) => (
@@ -143,7 +130,6 @@ export const availableIncidentTableColumns = [
     Header: 'Assignees',
     sortable: true,
     minWidth: 160,
-    // width: 160,
     Cell: ({
       row,
     }) => {
@@ -178,7 +164,6 @@ export const availableIncidentTableColumns = [
     Header: 'Num Alerts',
     sortable: true,
     minWidth: 130,
-    // width: 130,
   },
   {
     columnType: 'incident',
@@ -186,7 +171,6 @@ export const availableIncidentTableColumns = [
     Header: 'Escalation Policy',
     sortable: true,
     minWidth: 200,
-    // width: 200,
     Cell: ({
       row,
     }) => (
@@ -209,7 +193,6 @@ export const availableIncidentTableColumns = [
     Header: 'Teams',
     sortable: true,
     minWidth: 200,
-    // width: 200,
     Cell: ({
       row,
     }) => {
@@ -249,7 +232,6 @@ export const availableIncidentTableColumns = [
     Header: 'Acknowledgments',
     sortable: true,
     minWidth: 250,
-    // width: 250,
     Cell: ({
       row,
     }) => {
@@ -270,7 +252,6 @@ export const availableIncidentTableColumns = [
     Header: 'Last Status Change By',
     sortable: true,
     minWidth: 250,
-    // width: 250,
     Cell: ({
       row,
     }) => (
@@ -305,7 +286,6 @@ export const availableIncidentTableColumns = [
     Header: 'Priority',
     sortable: true,
     minWidth: 90,
-    // width: 90,
     sortType: (row1, row2) => {
       const row1Rank = row1.original.priority ? row1.original.priority.order : 0;
       const row2Rank = row2.original.priority ? row2.original.priority.order : 0;
@@ -320,7 +300,6 @@ export const availableIncidentTableColumns = [
     Header: 'Urgency',
     sortable: true,
     minWidth: 120,
-    // width: 120,
     Cell: ({
       row,
     }) => {
@@ -354,7 +333,6 @@ export const availableIncidentTableColumns = [
     Header: 'Incident ID',
     sortable: true,
     minWidth: 160,
-    // width: 160,
   },
   {
     columnType: 'incident',
@@ -362,7 +340,6 @@ export const availableIncidentTableColumns = [
     Header: 'Summary',
     sortable: true,
     minWidth: 400,
-    // width: 800,
     Cell: ({
       row,
     }) => <span className="td-wrapper">{row.original.description}</span>,
@@ -383,8 +360,6 @@ export const availableIncidentTableColumns = [
     Header: 'Latest Note',
     sortable: true,
     minWidth: 200,
-    // width: 200,
-    // maxWidth: 500,
     Cell: ({
       value,
     }) => <div className="td-wrapper">{value}</div>,
@@ -427,8 +402,12 @@ export const availableIncidentTableColumns = [
       return '--';
     },
   },
+];
+
+// Define all possible columns for alerts under PagerDuty's API
+export const availableAlertTableColumns = [
   {
-    columnType: 'incident',
+    columnType: 'alert',
     accessor: (incident) => {
       let content;
       if (
@@ -491,7 +470,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
-    columnType: 'incident',
+    columnType: 'alert',
     accessor: (incident) => {
       let content;
       if (
@@ -517,7 +496,7 @@ export const availableIncidentTableColumns = [
     }) => <div className="td-wrapper">{value}</div>,
   },
   {
-    columnType: 'incident',
+    columnType: 'alert',
     accessor: (incident) => {
       let content;
       if (
@@ -543,7 +522,7 @@ export const availableIncidentTableColumns = [
     }) => <div className="td-wrapper">{value}</div>,
   },
   {
-    columnType: 'incident',
+    columnType: 'alert',
     accessor: (incident) => {
       let content;
       if (
@@ -569,7 +548,7 @@ export const availableIncidentTableColumns = [
     }) => <div className="td-wrapper">{value}</div>,
   },
   {
-    columnType: 'incident',
+    columnType: 'alert',
     accessor: (incident) => {
       let content;
       if (
@@ -596,26 +575,75 @@ export const availableIncidentTableColumns = [
   },
 ];
 
+// Helper function to define a column for a custom field from the incident object
+export const customReactTableColumnSchema = (columnType, header, accessorPath) => {
+  let accessor;
+  let fullJsonPath;
+  // Handle accessorPath based on columnType (e.g. alert vs custom incident field)
+  if (columnType === 'alert') {
+    accessor = (incident) => {
+      fullJsonPath = `alerts[0].body.cef_details.${accessorPath}`;
+      const targetValue = Object.byString(incident, fullJsonPath); // TODO: Replace with more robust JSON search
+      let content;
+      if (!accessorPath) {
+        content = 'Invalid JSON Path';
+      } else if (targetValue) {
+        content = targetValue;
+      } else if (!targetValue) {
+        content = '--';
+      } else {
+        content = 'Fetching alerts ...';
+      }
+      return content;
+    };
+  } else {
+    // TODO: Entrypoint for custom incident fields
+  }
+  return {
+    columnType,
+    accessorPath,
+    fullJsonPath,
+    accessor,
+    Header: header,
+    sortable: true,
+    minWidth: getTextWidth(header, 'bold 16px sans-serif') + 40,
+    Cell: ({
+      value,
+    }) => <div className="td-wrapper">{value}</div>,
+  };
+};
+
 // Helper function to retrieve React Table column schemas from list of column objects
-// eslint-disable-next-line max-len
 export const getReactTableColumnSchemas = (columns) => {
   const reactTableColumnSchemas = [];
-  const {
-    // eslint-disable-next-line no-unused-vars
-    alertCustomDetailFields,
-  } = store.getState().settings;
-
   columns.forEach((col) => {
+    let columnSchema;
     if (col.columnType === 'incident') {
-      const columnSchema = {
+      // Handle standard incident data in column
+      columnSchema = {
         ...getObjectsFromList(availableIncidentTableColumns, [col.Header], 'Header')[0],
       };
-      columnSchema.width = col.width;
-      reactTableColumnSchemas.push(columnSchema);
     } else if (col.columnType === 'alert') {
-      // TODO: Pull in specific alert renderer
+      // Handle alert level data in column
+      switch (col.Header) {
+        // Standard PD-CEF fields
+        case 'Severity':
+        case 'Group':
+        case 'Source':
+        case 'Component':
+        case 'Class':
+          columnSchema = {
+            ...getObjectsFromList(availableAlertTableColumns, [col.Header], 'Header')[0],
+          };
+          break;
+        // Custom alert details
+        default:
+          columnSchema = { ...customReactTableColumnSchema('alert', col.Header, col.accessorPath) };
+      }
     }
+    // Explicitly set width for rendering (this may come from existing redux store)
+    columnSchema.width = col.width;
+    reactTableColumnSchemas.push(columnSchema);
   });
-
   return reactTableColumnSchemas;
 };

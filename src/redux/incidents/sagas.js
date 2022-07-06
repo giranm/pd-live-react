@@ -22,9 +22,11 @@ import {
 } from 'config/constants';
 
 import selectQuerySettings from 'redux/query_settings/selectors';
+import selectIncidentTable from 'redux/incident_table/selectors';
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
+
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -572,10 +574,21 @@ export function* filterIncidentsByQueryImpl(action) {
     const {
       incidents,
     } = yield select(selectIncidents);
+    const {
+      incidentTableColumns,
+    } = yield select(selectIncidentTable);
     let filteredIncidentsByQuery;
 
+    // Update Fuse options to include custom alert JSON to be searched
+    const updatedFuseOptions = { ...fuseOptions };
+    const customAlertDetailColumnKeys = incidentTableColumns
+      .filter((col) => !!col.accessorPath)
+      .map((col) => `alerts.body.cef_details.${col.accessorPath}`);
+    updatedFuseOptions.keys = fuseOptions.keys.concat(customAlertDetailColumnKeys);
+
+    // Run query with non-empty input
     if (searchQuery !== '') {
-      const fuse = new Fuse(incidents, fuseOptions);
+      const fuse = new Fuse(incidents, updatedFuseOptions);
       filteredIncidentsByQuery = fuse.search(searchQuery).map((res) => res.item);
     } else {
       filteredIncidentsByQuery = [...incidents];

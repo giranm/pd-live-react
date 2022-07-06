@@ -1,5 +1,5 @@
 import {
-  put, takeLatest, select, take,
+  put, takeLatest, select,
 } from 'redux-saga/effects';
 
 // eslint-disable-next-line import/no-cycle
@@ -28,7 +28,6 @@ export function* saveIncidentTable() {
 export function* saveIncidentTableImpl(action) {
   // Attempt saving each setting down by dispatching the relevant actions
   try {
-    take([UPDATE_INCIDENT_TABLE_STATE_COMPLETED]);
     const {
       incidentTableColumns, incidentTableState,
     } = yield select(selectIncidentTable);
@@ -36,40 +35,39 @@ export function* saveIncidentTableImpl(action) {
       updatedIncidentTableColumns,
     } = action;
 
-    // Merge state from incident table and defined columns.
-    const reactTableColumns = getReactTableColumnSchemas(updatedIncidentTableColumns);
-    const columnWidths = incidentTableState.columnResizing
+    // Merge state from incident table and defined columns into a format which can be persisted
+    const reactTableColumnSchemas = getReactTableColumnSchemas(updatedIncidentTableColumns);
+    const existingColumnWidths = incidentTableState.columnResizing
       ? incidentTableState.columnResizing.columnWidths
       : null;
-    const mappedCols = reactTableColumns.map((col) => {
-      const existingCol = incidentTableColumns.find((c) => c.Header === col.Header);
-      const tempCol = { ...col };
-      if (columnWidths && tempCol.accessor in columnWidths) {
-        tempCol.width = columnWidths[tempCol.accessor];
-        console.log('Width from cached table by accessor', tempCol);
-      } else if (columnWidths && tempCol.Header in columnWidths) {
-        tempCol.width = columnWidths[tempCol.Header];
-        console.log('Width from cached table by Header', tempCol);
+    const persistableColumns = reactTableColumnSchemas.map((columnSchema) => {
+      // Get object for column if it already exists in view
+      const existingCol = incidentTableColumns.find(
+        (column) => column.Header === columnSchema.Header,
+      );
+      // Patch column width either from incident table state, redux store, or default definition
+      const tempCol = { ...columnSchema };
+      if (existingColumnWidths && tempCol.accessor in existingColumnWidths) {
+        tempCol.width = existingColumnWidths[tempCol.accessor];
+      } else if (existingColumnWidths && tempCol.Header in existingColumnWidths) {
+        tempCol.width = existingColumnWidths[tempCol.Header];
       } else if (existingCol && existingCol.width) {
         tempCol.width = existingCol.width;
-        console.log('Width from existing redux store', tempCol);
       } else {
         tempCol.width = tempCol.minWidth;
-        console.log('Width from default', tempCol);
       }
-      return { Header: tempCol.Header, width: tempCol.width, columnType: tempCol.columnType };
+      return {
+        Header: tempCol.Header,
+        accessorPath: tempCol.accessorPath,
+        width: tempCol.width,
+        columnType: tempCol.columnType,
+      };
     });
-
-    console.log('Current incidentTableColumns', incidentTableColumns);
-    console.log('updated incidentTableColumns', updatedIncidentTableColumns);
-    console.log('reactTableColumnsSchema', reactTableColumns);
-    console.log('incidentTableState', incidentTableState);
-    console.log('mappedCols', mappedCols);
 
     // Update incident table columns
     yield put({
       type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
-      incidentTableColumns: mappedCols,
+      incidentTableColumns: persistableColumns,
     });
 
     // TODO: Other table settings can be dispatched here...
@@ -103,7 +101,6 @@ export function* updateIncidentTableStateImpl(action) {
   const {
     incidentTableState,
   } = action;
-  console.log('incidentTableState', incidentTableState);
   yield put({
     type: UPDATE_INCIDENT_TABLE_STATE_COMPLETED,
     incidentTableState,
