@@ -1,5 +1,5 @@
 import {
-  useState,
+  useEffect, useState,
 } from 'react';
 import {
   connect,
@@ -41,7 +41,7 @@ import locales from 'config/locales';
 
 import {
   availableIncidentTableColumns,
-  getIncidentTableColumns,
+  getReactTableColumnSchemas,
 } from 'config/incident-table-columns';
 
 import {
@@ -58,6 +58,8 @@ import './SettingsModalComponent.scss';
 const columnMapper = (column) => ({
   label: column.Header,
   value: column.Header,
+  Header: column.Header,
+  columnType: 'incident',
 });
 
 const SettingsModalComponent = ({
@@ -74,10 +76,10 @@ const SettingsModalComponent = ({
   toggleDisplayActionAlertsModal,
 }) => {
   const {
-    displaySettingsModal, defaultSinceDateTenor, customDetailFields,
+    displaySettingsModal, defaultSinceDateTenor, alertCustomDetailFields,
   } = settings;
   const {
-    incidentTableColumnsNames,
+    incidentTableColumns,
   } = incidentTable;
   const {
     currentUserLocale,
@@ -95,11 +97,24 @@ const SettingsModalComponent = ({
 
   const [tempSinceDateTenor, setTempSinceDateTenor] = useState(defaultSinceDateTenor);
 
-  const transformedIncidentTableColumns = getIncidentTableColumns(incidentTableColumnsNames);
+  const transformedIncidentTableColumns = getReactTableColumnSchemas(incidentTableColumns);
   const [selectedColumns, setSelectedColumns] = useState(
     transformedIncidentTableColumns.map(columnMapper),
   );
-  const availableColumns = availableIncidentTableColumns.map(columnMapper);
+
+  const [availableColumns, setAvailableColumns] = useState(
+    availableIncidentTableColumns.map(columnMapper),
+  );
+
+  useEffect(() => {
+    const tempAvailableIncidentTableColumns = availableIncidentTableColumns.map(columnMapper);
+    alertCustomDetailFields.forEach((field) => {
+      const tempField = { ...field };
+      tempField.columnType = 'alert';
+      tempAvailableIncidentTableColumns.push(tempField);
+    });
+    setAvailableColumns(tempAvailableIncidentTableColumns);
+  }, [alertCustomDetailFields]);
 
   return (
     <div className="settings-ctr">
@@ -192,7 +207,7 @@ const SettingsModalComponent = ({
                   isMulti
                   isClearable
                   placeholder="Enter 'Column Header:JSON Path' (e.g. Environment:details.env)"
-                  defaultValue={customDetailFields}
+                  defaultValue={alertCustomDetailFields}
                   onChange={(fields) => setAlertCustomDetailColumns(fields)}
                 />
               </Col>
@@ -242,8 +257,8 @@ const mapDispatchToProps = (dispatch) => ({
   setDefaultSinceDateTenor: (defaultSinceDateTenor) => {
     dispatch(setDefaultSinceDateTenorConnected(defaultSinceDateTenor));
   },
-  setAlertCustomDetailColumns: (customDetailFields) => {
-    dispatch(setAlertCustomDetailColumnsConnected(customDetailFields));
+  setAlertCustomDetailColumns: (alertCustomDetailFields) => {
+    dispatch(setAlertCustomDetailColumnsConnected(alertCustomDetailFields));
   },
   saveIncidentTable: (updatedIncidentTableColumns) => {
     dispatch(saveIncidentTableConnected(updatedIncidentTableColumns));

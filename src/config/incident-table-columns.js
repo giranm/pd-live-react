@@ -26,9 +26,15 @@ import {
   getObjectsFromList,
 } from 'util/helpers';
 
+// eslint-disable-next-line import/no-cycle
+import {
+  store,
+} from 'redux/store';
+
 // Define all possible columns for incidents under PagerDuty's API
 export const availableIncidentTableColumns = [
   {
+    columnType: 'incident',
     accessor: 'incident_number',
     Header: '#',
     sortable: true,
@@ -43,6 +49,7 @@ export const availableIncidentTableColumns = [
     ),
   },
   {
+    columnType: 'incident',
     accessor: 'title',
     Header: 'Title',
     sortable: true,
@@ -62,6 +69,7 @@ export const availableIncidentTableColumns = [
     ),
   },
   {
+    columnType: 'incident',
     accessor: 'description',
     Header: 'Description',
     sortable: true,
@@ -72,6 +80,7 @@ export const availableIncidentTableColumns = [
     }) => <span className="td-wrapper">{row.original.description}</span>,
   },
   {
+    columnType: 'incident',
     accessor: 'created_at',
     Header: 'Created At',
     sortable: true,
@@ -85,6 +94,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: 'status',
     Header: 'Status',
     sortable: true,
@@ -96,6 +106,7 @@ export const availableIncidentTableColumns = [
     }) => <StatusComponent status={row.original.status} />,
   },
   {
+    columnType: 'incident',
     accessor: 'incident_key',
     Header: 'Incident Key',
     sortable: true,
@@ -103,6 +114,7 @@ export const availableIncidentTableColumns = [
     // width: 300,
   },
   {
+    columnType: 'incident',
     accessor: 'service.summary',
     Header: 'Service',
     sortable: true,
@@ -122,6 +134,7 @@ export const availableIncidentTableColumns = [
     ),
   },
   {
+    columnType: 'incident',
     accessor: (incident) => (incident.assignments
       ? incident.assignments.map(({
         assignee,
@@ -146,6 +159,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: 'last_status_change_at',
     Header: 'Last Status Change At',
     sortable: true,
@@ -159,6 +173,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: 'alert_counts.all',
     Header: 'Num Alerts',
     sortable: true,
@@ -166,6 +181,7 @@ export const availableIncidentTableColumns = [
     // width: 130,
   },
   {
+    columnType: 'incident',
     accessor: 'escalation_policy.summary',
     Header: 'Escalation Policy',
     sortable: true,
@@ -185,6 +201,7 @@ export const availableIncidentTableColumns = [
     ),
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       if (incident.teams) return incident.teams.map((team) => team.summary).join(', ');
       return 'N/A';
@@ -223,6 +240,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: (incident) => (incident.acknowledgements
       ? incident.acknowledgements.map(({
         acknowledger,
@@ -247,6 +265,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: 'last_status_change_by.summary',
     Header: 'Last Status Change By',
     sortable: true,
@@ -266,6 +285,7 @@ export const availableIncidentTableColumns = [
     ),
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       if (incident.priority) {
         return (
@@ -295,6 +315,7 @@ export const availableIncidentTableColumns = [
   },
   // TODO: incidents_responders, responder_requests, subscriber_requests
   {
+    columnType: 'incident',
     accessor: 'urgency',
     Header: 'Urgency',
     sortable: true,
@@ -328,6 +349,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: 'id',
     Header: 'Incident ID',
     sortable: true,
@@ -335,6 +357,7 @@ export const availableIncidentTableColumns = [
     // width: 160,
   },
   {
+    columnType: 'incident',
     accessor: 'summary',
     Header: 'Summary',
     sortable: true,
@@ -345,6 +368,7 @@ export const availableIncidentTableColumns = [
     }) => <span className="td-wrapper">{row.original.description}</span>,
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       let content;
       if (incident.notes && incident.notes.length > 0) {
@@ -366,6 +390,7 @@ export const availableIncidentTableColumns = [
     }) => <div className="td-wrapper">{value}</div>,
   },
   {
+    columnType: 'incident',
     accessor: (incident) => (incident.external_references
       ? incident.external_references.map((ext) => ext.external_id).join(', ')
       : 'N/A'),
@@ -403,6 +428,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       let content;
       if (
@@ -465,6 +491,7 @@ export const availableIncidentTableColumns = [
     },
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       let content;
       if (
@@ -490,6 +517,7 @@ export const availableIncidentTableColumns = [
     }) => <div className="td-wrapper">{value}</div>,
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       let content;
       if (
@@ -515,6 +543,7 @@ export const availableIncidentTableColumns = [
     }) => <div className="td-wrapper">{value}</div>,
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       let content;
       if (
@@ -540,6 +569,7 @@ export const availableIncidentTableColumns = [
     }) => <div className="td-wrapper">{value}</div>,
   },
   {
+    columnType: 'incident',
     accessor: (incident) => {
       let content;
       if (
@@ -566,6 +596,26 @@ export const availableIncidentTableColumns = [
   },
 ];
 
-// Helper function to retrieve columns definitions from list of names
+// Helper function to retrieve React Table column schemas from list of column objects
 // eslint-disable-next-line max-len
-export const getIncidentTableColumns = (columnNames) => getObjectsFromList(availableIncidentTableColumns, columnNames, 'Header');
+export const getReactTableColumnSchemas = (columns) => {
+  const reactTableColumnSchemas = [];
+  const {
+    // eslint-disable-next-line no-unused-vars
+    alertCustomDetailFields,
+  } = store.getState().settings;
+
+  columns.forEach((col) => {
+    if (col.columnType === 'incident') {
+      const columnSchema = {
+        ...getObjectsFromList(availableIncidentTableColumns, [col.Header], 'Header')[0],
+      };
+      columnSchema.width = col.width;
+      reactTableColumnSchemas.push(columnSchema);
+    } else if (col.columnType === 'alert') {
+      // TODO: Pull in specific alert renderer
+    }
+  });
+
+  return reactTableColumnSchemas;
+};

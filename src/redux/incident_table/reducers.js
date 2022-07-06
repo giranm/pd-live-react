@@ -12,15 +12,15 @@ import {
   SELECT_INCIDENT_TABLE_ROWS_COMPLETED,
 } from './actions';
 
-const defaultColumnNames = [
-  '#',
-  'Status',
-  'Priority',
-  'Title',
-  'Assignees',
-  'Created At',
-  'Service',
-  'Latest Note',
+const defaultColumns = [
+  { Header: '#', width: 60, columnType: 'incident' },
+  { Header: 'Status', width: 100, columnType: 'incident' },
+  { Header: 'Priority', width: 90, columnType: 'incident' },
+  { Header: 'Title', width: 400, columnType: 'incident' },
+  { Header: 'Assignees', width: 160, columnType: 'incident' },
+  { Header: 'Created At', width: 180, columnType: 'incident' },
+  { Header: 'Service', width: 300, columnType: 'incident' },
+  { Header: 'Latest Note', width: 200, columnType: 'incident' },
 ];
 
 const incidentTable = produce(
@@ -44,7 +44,7 @@ const incidentTable = produce(
         break;
 
       case UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED:
-        draft.incidentTableColumnsNames = action.incidentTableColumnsNames;
+        draft.incidentTableColumns = action.incidentTableColumns;
         draft.status = UPDATE_INCIDENT_TABLE_COLUMNS_COMPLETED;
         break;
 
@@ -74,7 +74,7 @@ const incidentTable = produce(
   },
   {
     incidentTableState: {},
-    incidentTableColumnsNames: defaultColumnNames,
+    incidentTableColumns: defaultColumns,
     allSelected: false,
     selectedCount: 0,
     selectedRows: [],

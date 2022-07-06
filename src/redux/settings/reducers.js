@@ -37,7 +37,7 @@ const settings = produce(
         break;
 
       case SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED:
-        draft.customDetailFields = action.customDetailFields;
+        draft.alertCustomDetailFields = action.alertCustomDetailFields;
         draft.status = SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED;
         break;
 
@@ -56,7 +56,9 @@ const settings = produce(
   {
     displaySettingsModal: false,
     defaultSinceDateTenor: '1 Day',
-    customDetailFields: ['Environment:details.env'],
+    alertCustomDetailFields: [
+      { label: 'Environment:details.env', value: 'Environment:details.env', columnType: 'alert' },
+    ],
     status: '',
   },
 );

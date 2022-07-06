@@ -20,7 +20,7 @@ describe('SettingsModalComponent', () => {
         defaultSinceDateTenor: '1 Day',
       },
       incidentTable: {
-        incidentTableColumnsNames: [],
+        incidentTableColumns: [],
       },
       users: {
         currentUserLocale: 'en-GB',

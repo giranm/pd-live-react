@@ -22,9 +22,9 @@ export const setDefaultSinceDateTenor = (defaultSinceDateTenor) => ({
   defaultSinceDateTenor,
 });
 
-export const setAlertCustomDetailColumns = (customDetailFields) => ({
+export const setAlertCustomDetailColumns = (alertCustomDetailFields) => ({
   type: SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
-  customDetailFields,
+  alertCustomDetailFields,
 });
 
 export const clearLocalCache = () => ({

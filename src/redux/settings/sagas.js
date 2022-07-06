@@ -54,11 +54,11 @@ export function* setAlertCustomDetailColumns() {
 
 export function* setAlertCustomDetailColumnsImpl(action) {
   const {
-    customDetailFields,
+    alertCustomDetailFields,
   } = action;
   yield put({
     type: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
-    customDetailFields,
+    alertCustomDetailFields,
   });
 }
 
