@@ -3,11 +3,10 @@ import {
 } from 'redux-saga/effects';
 
 import {
-  UPDATE_INCIDENTS_LIST,
-} from 'redux/incidents/actions';
-
-import {
-  RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY,
+  RESOLVE_LOG_ENTRY,
+  TRIGGER_LOG_ENTRY,
+  ANNOTATE_LOG_ENTRY,
+  LINK_LOG_ENTRY,
 } from 'util/log-entries';
 import {
   pd,
@@ -16,6 +15,13 @@ import {
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
+import {
+  UPDATE_INCIDENTS_LIST,
+} from 'redux/incidents/actions';
+import {
+  getAlerts,
+} from 'redux/alerts/sagas';
+
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
   FETCH_LOG_ENTRIES_COMPLETED,
@@ -50,7 +56,10 @@ export function* getLogEntries(action) {
     }
     const logEntries = response.resource;
 
-    yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
+    // Fetch alerts using same methodology
+    const alerts = yield call(getAlerts, since);
+
+    yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries, alerts });
 
     // Call to update recent log entries with this data.
     yield call(updateRecentLogEntries);
@@ -74,9 +83,9 @@ export function* updateRecentLogEntriesAsync() {
 
 export function* updateRecentLogEntries() {
   try {
-    // Grab log entries from store and determine what is recent based on last polling
+    // Grab log entries & alerts from store and determine what is recent based on last polling
     const {
-      logEntries, recentLogEntries,
+      logEntries, recentLogEntries, alerts,
     } = yield select(selectLogEntries);
     const recentLogEntriesLocal = [...recentLogEntries];
     const addSet = new Set();
@@ -116,6 +125,17 @@ export function* updateRecentLogEntries() {
             created_at: logEntry.created_at,
           },
         ];
+        modifiedLogEntry.incident = tempIncident;
+        updateSet.add(modifiedLogEntry);
+      } else if (logEntry.type === LINK_LOG_ENTRY) {
+        // Handle special case for alerts: create synthetic alerts object
+        const modifiedLogEntry = { ...logEntry };
+        const tempIncident = { ...modifiedLogEntry.incident };
+        // LINK_LOG_ENTRY is triggered on merge too; bypass and treat as update
+        if (modifiedLogEntry.grouping_reason !== 'manual-move-to-existing-incident') {
+          const incidentAlerts = alerts.filter((alert) => alert.incident.id === tempIncident.id);
+          tempIncident.alerts = incidentAlerts;
+        }
         modifiedLogEntry.incident = tempIncident;
         updateSet.add(modifiedLogEntry);
       } else {

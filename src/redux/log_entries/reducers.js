@@ -24,6 +24,7 @@ const logEntries = produce(
         draft.fetchingData = false;
         draft.status = FETCH_LOG_ENTRIES_COMPLETED;
         draft.logEntries = action.logEntries;
+        draft.alerts = action.alerts;
         break;
 
       case FETCH_LOG_ENTRIES_ERROR:
@@ -76,6 +77,7 @@ const logEntries = produce(
   {
     logEntries: [],
     recentLogEntries: [],
+    alerts: [],
     addList: [],
     updateList: [],
     removeList: [],

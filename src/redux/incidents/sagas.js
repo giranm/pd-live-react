@@ -23,6 +23,7 @@ import {
 
 import selectQuerySettings from 'redux/query_settings/selectors';
 import selectIncidentTable from 'redux/incident_table/selectors';
+import selectLogEntries from 'redux/log_entries/selectors';
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
@@ -305,6 +306,9 @@ export function* updateIncidentsList(action) {
     const {
       incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
     } = yield select(selectQuerySettings);
+    const {
+      alerts,
+    } = yield select(selectLogEntries);
     let updatedIncidentsList = [...incidents];
 
     // Add new incidents to list (need to re-query to get external_references + notes)
@@ -317,13 +321,14 @@ export function* updateIncidentsList(action) {
     });
     const addListNoteResponses = yield all(addListNoteRequests);
 
-    // Synthetically create notes object and add to new incident
+    // Synthetically create notes + alerts object to be added to new incident
     addListResponses.map((response, idx) => {
       const {
         notes,
       } = addListNoteResponses[idx].response.data;
       const newIncident = { ...response.data.incident };
       newIncident.notes = notes;
+      newIncident.alerts = alerts.filter((alert) => alert.incident.id === newIncident.id);
       updatedIncidentsList.push(newIncident);
     });
 
