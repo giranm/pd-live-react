@@ -18,6 +18,7 @@ describe('SettingsModalComponent', () => {
       settings: {
         displaySettingsModal: true,
         defaultSinceDateTenor: '1 Day',
+        alertCustomDetailFields: [],
       },
       incidentTable: {
         incidentTableColumns: [],
@@ -76,6 +77,10 @@ describe('SettingsModalComponent', () => {
     // FIXME: Determine correct way to click DOM with Jest - this does not update internal state
     tabElement.simulate('click');
     expect(tabElement.contains('Incident Table')).toBeTruthy();
+    expect(wrapper.find('h4').contains('Column Selector')).toBeTruthy();
+    expect(wrapper.find('#incident-column-select')).toBeTruthy();
+    expect(wrapper.find('h4').contains('Alert Custom Detail Column Definitions')).toBeTruthy();
+    expect(wrapper.find('#alert-column-definition-select')).toBeTruthy();
     expect(
       wrapper.find('#update-incident-table-button').contains('Update Incident Table'),
     ).toBeTruthy();

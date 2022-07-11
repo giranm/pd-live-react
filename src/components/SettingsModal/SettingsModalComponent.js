@@ -216,6 +216,7 @@ const SettingsModalComponent = ({
               <Col>
                 <h4>Column Selector</h4>
                 <DualListBox
+                  id="incident-column-select"
                   canFilter
                   preserveSelectOrder
                   showOrderButtons
@@ -231,6 +232,7 @@ const SettingsModalComponent = ({
               <Col>
                 <h4>Alert Custom Detail Column Definitions</h4>
                 <CreatableSelect
+                  id="alert-column-definition-select"
                   isMulti
                   isClearable
                   placeholder="Enter 'Column Header:JSON Path' (e.g. Environment:details.env)"
