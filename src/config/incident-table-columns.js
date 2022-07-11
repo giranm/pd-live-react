@@ -2,6 +2,10 @@
 import moment from 'moment';
 
 import {
+  JSONPath,
+} from 'jsonpath-plus';
+
+import {
   Badge,
 } from 'react-bootstrap';
 
@@ -579,19 +583,29 @@ export const availableAlertTableColumns = [
 export const customReactTableColumnSchema = (columnType, header, accessorPath) => {
   let accessor;
   let fullJsonPath;
+  let result;
+  let content;
   // Handle accessorPath based on columnType (e.g. alert vs custom incident field)
   if (columnType === 'alert') {
     accessor = (incident) => {
       fullJsonPath = `alerts[0].body.cef_details.${accessorPath}`;
-      const targetValue = Object.byString(incident, fullJsonPath); // TODO: Replace with more robust JSON search
-      let content;
+      try {
+        result = JSONPath({
+          path: fullJsonPath,
+          json: incident,
+          wrap: false,
+        });
+      } catch (e) {
+        result = null;
+      }
       if (!accessorPath) {
         content = 'Invalid JSON Path';
-      } else if (targetValue) {
-        content = targetValue;
-      } else if (!targetValue) {
+      } else if (result) {
+        content = result;
+      } else if (!result) {
         content = '--';
       } else {
+        // FIXME: This codepath doesn't work
         content = 'Fetching alerts ...';
       }
       return content;
