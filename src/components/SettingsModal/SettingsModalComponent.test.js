@@ -70,14 +70,14 @@ describe('SettingsModalComponent', () => {
 
   it('should display incident table settings', () => {
     const wrapper = componentWrapper(store, SettingsModalComponent);
-    const tabSelector = 'a[data-rb-event-key="incident-table-columns"]';
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
     const tabElement = wrapper.find(tabSelector);
 
     // FIXME: Determine correct way to click DOM with Jest - this does not update internal state
     tabElement.simulate('click');
-    expect(tabElement.contains('Incident Table Columns')).toBeTruthy();
+    expect(tabElement.contains('Incident Table')).toBeTruthy();
     expect(
-      wrapper.find('#update-incident-table-columns-button').contains('Update Columns'),
+      wrapper.find('#update-incident-table-button').contains('Update Incident Table'),
     ).toBeTruthy();
   });
 

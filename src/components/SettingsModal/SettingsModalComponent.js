@@ -211,7 +211,7 @@ const SettingsModalComponent = ({
                 Update User Profile
               </Button>
             </Tab>
-            <Tab eventKey="incident-table-columns" title="Incident Table Columns">
+            <Tab eventKey="incident-table" title="Incident Table">
               <br />
               <Col>
                 <h4>Column Selector</h4>
@@ -240,15 +240,15 @@ const SettingsModalComponent = ({
               </Col>
               <br />
               <Button
-                id="update-incident-table-columns-button"
+                id="update-incident-table-button"
                 variant="primary"
                 onClick={() => {
                   saveIncidentTable(selectedColumns);
-                  updateActionAlertsModal('success', 'Updated incident table columns');
+                  updateActionAlertsModal('success', 'Updated incident table settings');
                   toggleDisplayActionAlertsModal();
                 }}
               >
-                Update Columns
+                Update Incident Table
               </Button>
             </Tab>
             <Tab eventKey="local-cache" title="Local Cache">
