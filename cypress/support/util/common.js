@@ -211,6 +211,21 @@ export const manageIncidentTableColumns = (desiredState = 'add', columns = []) =
   cy.get('.close').click();
 };
 
+export const manageCustomAlertColumnDefinitions = (customAlertColumnDefinitions) => {
+  cy.get('.settings-panel-dropdown').click();
+  cy.get('.dropdown-item').contains('Settings').click();
+  cy.get('.nav-item').contains('Incident Table').click();
+
+  cy.get('#alert-column-definition-select').click().type('{del}'); // Clear default example
+  customAlertColumnDefinitions.forEach((customAlertColumnDefinition) => {
+    cy.get('#alert-column-definition-select').click().type(`${customAlertColumnDefinition}{enter}`);
+  });
+
+  cy.get('.btn').contains('Update Incident Table').click();
+  checkActionAlertsModalContent('Updated incident table settings');
+  cy.get('.close').click();
+};
+
 export const updateUserLocale = (localeName = 'English (United Kingdom)') => {
   cy.get('.settings-panel-dropdown').click();
   cy.get('.dropdown-item').contains('Settings').click();

@@ -7,6 +7,7 @@ import {
   updateUserLocale,
   updateDefaultSinceDateLookback,
   manageIncidentTableColumns,
+  manageCustomAlertColumnDefinitions,
   activateButton,
   priorityNames,
 } from '../../support/util/common';
@@ -54,15 +55,15 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
     });
   });
 
-  it('Add columns to incident table', () => {
-    const columns = ['Teams', 'Num Alerts'];
+  it('Add standard columns to incident table', () => {
+    const columns = ['Teams', 'Num Alerts', 'Group', 'Component'];
     manageIncidentTableColumns('add', columns);
     columns.forEach((columnName) => {
       cy.get(`[data-column-name="${columnName}"]`).scrollIntoView().should('be.visible');
     });
   });
 
-  it('Remove columns from incident table', () => {
+  it('Remove standard columns from incident table', () => {
     const columns = ['Service', 'Latest Note'];
     manageIncidentTableColumns('remove', columns);
 
@@ -70,6 +71,32 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
     cy.get('body').then((body) => {
       columns.forEach((columnName) => {
         expect(body.find(`[data-column-name="${columnName}"]`).length).to.equal(0);
+      });
+    });
+  });
+
+  it('Add valid custom alert column to incident table', () => {
+    const customAlertColumnDefinitions = ['Quote:details.quote'];
+    manageCustomAlertColumnDefinitions(customAlertColumnDefinitions);
+    manageIncidentTableColumns('add', customAlertColumnDefinitions);
+    customAlertColumnDefinitions.forEach((columnName) => {
+      const [header] = columnName.split(':');
+      cy.get(`[data-column-name="${header}"]`).scrollIntoView().should('be.visible');
+      cy.get(`[data-incident-header="${header}"][data-incident-row-cell-idx="0"]`).then(($el) => {
+        expect($el.text()).to.exist;
+      });
+    });
+  });
+
+  it('Add invalid custom alert column to incident table', () => {
+    const customAlertColumnDefinitions = ['SOMEINVALIDCOLUMN'];
+    manageCustomAlertColumnDefinitions(customAlertColumnDefinitions);
+    manageIncidentTableColumns('add', customAlertColumnDefinitions);
+    customAlertColumnDefinitions.forEach((columnName) => {
+      const [header] = columnName.split(':');
+      cy.get(`[data-column-name="${header}"]`).scrollIntoView().should('be.visible');
+      cy.get(`[data-incident-header="${header}"][data-incident-row-cell-idx="0"]`).then(($el) => {
+        expect($el.text()).to.equal('Invalid JSON Path');
       });
     });
   });

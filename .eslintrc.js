@@ -43,6 +43,9 @@ module.exports = {
         node: true,
         jest: true,
       },
+      rules: {
+        'no-unused-expression': 'off',
+      },
     },
   ],
   settings: {
