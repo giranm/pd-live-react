@@ -75,6 +75,31 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
     });
   });
 
+  it('Update and store incident column width correctly', () => {
+    const columnName = 'Status';
+    const targetColumn = 'Priority';
+    let newColumnWidth;
+
+    // Resize column by dragging header and find updated width
+    cy.get(`[data-column-name="${columnName}"] > div`).drag(
+      `[data-column-name="${targetColumn}"] > div`,
+    );
+    cy.get(`[data-column-name="${columnName}"]`)
+      .invoke('css', 'width')
+      .then((str) => {
+        newColumnWidth = parseInt(str, 10);
+      });
+
+    // Remove, re-add column, and ensure width has not been changed
+    manageIncidentTableColumns('remove', [columnName, targetColumn]);
+    manageIncidentTableColumns('add', [columnName]);
+    cy.get(`[data-column-name="${columnName}"]`)
+      .invoke('css', 'width')
+      .then((str) => {
+        expect(parseInt(str, 10)).to.equal(newColumnWidth);
+      });
+  });
+
   it('Add valid custom alert column to incident table', () => {
     const customAlertColumnDefinitions = ['Quote:details.quote'];
     manageCustomAlertColumnDefinitions(customAlertColumnDefinitions);

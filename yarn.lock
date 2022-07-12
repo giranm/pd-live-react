@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@4tw/cypress-drag-drop@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@4tw/cypress-drag-drop/-/cypress-drag-drop-2.2.1.tgz#bfacd45269ec3a5cbdb776cb05b7803d346f0792"
+  integrity sha512-+ioJSnEwx70IiMyb4pLEjOS5u6AMWRIVCV20toCY7lb0YcvA0ipbjQBa9DdxEI7Zg2E2jtcIj7Rx0e3WNUbk/w==
+
 "@aelesia/commons@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@aelesia/commons/-/commons-0.5.0.tgz#4c236feeabf15d992482a3d3f11179f853247351"
