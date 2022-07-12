@@ -588,8 +588,8 @@ export function* filterIncidentsByQueryImpl(action) {
     const customAlertDetailColumnKeys = incidentTableColumns
       .filter((col) => !!col.accessorPath)
       .map((col) => {
-        // Handle cases when '*' glob is used
-        const strippedAccessor = col.accessorPath.replace('[*]', '');
+        // Handle cases when '[]' accessors are used
+        const strippedAccessor = col.accessorPath.replace(/(\[.*?\])/g, '');
         return `alerts.body.cef_details.${strippedAccessor}`;
       });
     updatedFuseOptions.keys = fuseOptions.keys.concat(customAlertDetailColumnKeys);
