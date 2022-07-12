@@ -106,9 +106,12 @@ const SettingsModalComponent = ({
   const [selectedColumns, setSelectedColumns] = useState(
     incidentTableColumns.map((column) => {
       // Recreate original value used from react-select
-      const value = column.columnType === 'incident'
-        ? column.Header
-        : `${column.Header}:${column.accessorPath}`;
+      let value;
+      if (column.columnType === 'alert' && column.accessorPath) {
+        value = `${column.Header}:${column.accessorPath}`;
+      } else {
+        value = column.Header;
+      }
       return {
         Header: column.Header,
         columnType: column.columnType,
