@@ -600,8 +600,10 @@ export const customReactTableColumnSchema = (columnType, header, accessorPath) =
       }
       if (!accessorPath) {
         content = 'Invalid JSON Path';
-      } else if (result) {
+      } else if (result && !Array.isArray(result)) {
         content = result;
+      } else if (result && Array.isArray(result)) {
+        content = result.join(', ');
       } else if (!result) {
         content = '--';
       } else {

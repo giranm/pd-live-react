@@ -587,7 +587,11 @@ export function* filterIncidentsByQueryImpl(action) {
     const updatedFuseOptions = { ...fuseOptions };
     const customAlertDetailColumnKeys = incidentTableColumns
       .filter((col) => !!col.accessorPath)
-      .map((col) => `alerts.body.cef_details.${col.accessorPath}`);
+      .map((col) => {
+        // Handle cases when '*' glob is used
+        const strippedAccessor = col.accessorPath.replace('[*]', '');
+        return `alerts.body.cef_details.${strippedAccessor}`;
+      });
     updatedFuseOptions.keys = fuseOptions.keys.concat(customAlertDetailColumnKeys);
 
     // Run query with non-empty input
