@@ -9,7 +9,7 @@ import {
   LINK_LOG_ENTRY,
 } from 'util/log-entries';
 import {
-  pd,
+  pd, pdParallelFetch,
 } from 'util/pd-api-wrapper';
 
 import {
@@ -18,9 +18,6 @@ import {
 import {
   UPDATE_INCIDENTS_LIST,
 } from 'redux/incidents/actions';
-import {
-  getAlerts,
-} from 'redux/alerts/sagas';
 
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
@@ -55,11 +52,7 @@ export function* getLogEntries(action) {
       throw Error('Unable to fetch log entries');
     }
     const logEntries = response.resource;
-
-    // Fetch alerts using same methodology
-    const alerts = yield call(getAlerts, since);
-
-    yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries, alerts });
+    yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
 
     // Call to update recent log entries with this data.
     yield call(updateRecentLogEntries);
@@ -85,17 +78,20 @@ export function* updateRecentLogEntries() {
   try {
     // Grab log entries & alerts from store and determine what is recent based on last polling
     const {
-      logEntries, recentLogEntries, alerts,
+      logEntries, recentLogEntries,
     } = yield select(selectLogEntries);
     const recentLogEntriesLocal = [...recentLogEntries];
     const addSet = new Set();
     const removeSet = new Set();
     const updateSet = new Set();
 
-    logEntries.forEach((logEntry) => {
+    // yield doesn't work with forEach; using old implementation
+    for (let i = 0; i < logEntries.length; i++) {
       // Skip duplicate log entry
+      const logEntry = logEntries[i];
       if (recentLogEntriesLocal.filter((x) => x.id === logEntry.id).length > 0) {
-        return;
+        // eslint-disable-next-line no-continue
+        continue;
       }
 
       // Push new log entry to array with details
@@ -129,20 +125,19 @@ export function* updateRecentLogEntries() {
         updateSet.add(modifiedLogEntry);
       } else if (logEntry.type === LINK_LOG_ENTRY) {
         // Handle special case for alerts: create synthetic alerts object
+        // TODO: Consider aggregating LINK_LOG_ENTRY by incident id to avoid duplicate API calls
         const modifiedLogEntry = { ...logEntry };
         const tempIncident = { ...modifiedLogEntry.incident };
-        // LINK_LOG_ENTRY is triggered on merge too; bypass and treat as update
-        if (modifiedLogEntry.grouping_reason !== 'manual-move-to-existing-incident') {
-          const incidentAlerts = alerts.filter((alert) => alert.incident.id === tempIncident.id);
-          tempIncident.alerts = incidentAlerts;
-        }
+        const alerts = yield pdParallelFetch(`incidents/${tempIncident.id}/alerts`);
+        alerts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        tempIncident.alerts = alerts;
         modifiedLogEntry.incident = tempIncident;
         updateSet.add(modifiedLogEntry);
       } else {
         // Assume everything else is an update
         updateSet.add(logEntry);
       }
-    });
+    }
 
     // Generate update lists from sets
     const addList = [...addSet].filter((x) => !removeSet.has(x));
