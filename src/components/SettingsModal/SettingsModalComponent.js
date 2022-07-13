@@ -139,7 +139,10 @@ const SettingsModalComponent = ({
       } else {
         tempField.accessorPath = null;
       }
-
+      // Verify if duplicate header is being used; disable option for column selector if so
+      if (tempAvailableIncidentTableColumns.map((col) => col.Header).includes(derivedHeader)) {
+        tempField.disabled = true;
+      }
       tempField.columnType = 'alert';
       tempAvailableIncidentTableColumns.push(tempField);
     });
