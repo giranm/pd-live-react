@@ -9,7 +9,7 @@ import {
   LINK_LOG_ENTRY,
 } from 'util/log-entries';
 import {
-  pd, pdParallelFetch,
+  pd,
 } from 'util/pd-api-wrapper';
 
 import {
@@ -128,9 +128,11 @@ export function* updateRecentLogEntries() {
         // TODO: Consider aggregating LINK_LOG_ENTRY by incident id to avoid duplicate API calls
         const modifiedLogEntry = { ...logEntry };
         const tempIncident = { ...modifiedLogEntry.incident };
-        const alerts = yield pdParallelFetch(`incidents/${tempIncident.id}/alerts`);
-        alerts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        tempIncident.alerts = alerts;
+        const alertsResponse = yield call(
+          pd.get,
+          `incidents/${tempIncident.id}/alerts/${logEntry.linked_incident.id}`,
+        );
+        tempIncident.alerts = [{ ...alertsResponse.data }.alert];
         modifiedLogEntry.incident = tempIncident;
         updateSet.add(modifiedLogEntry);
       } else {
