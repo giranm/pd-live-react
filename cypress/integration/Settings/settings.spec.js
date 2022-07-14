@@ -108,6 +108,7 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       const [header] = columnName.split(':');
       cy.get(`[data-column-name="${header}"]`).scrollIntoView().should('be.visible');
       cy.get(`[data-incident-header="${header}"][data-incident-row-cell-idx="0"]`).then(($el) => {
+        // eslint-disable-next-line no-unused-expressions
         expect($el.text()).to.exist;
       });
     });
