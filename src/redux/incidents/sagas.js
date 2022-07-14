@@ -186,8 +186,8 @@ export function* getAllIncidentNotes() {
     } = yield select(selectIncidents);
     const requests = incidents.map(({
       id,
-    }) => throttledPdAxiosRequest('GET', `incidents/${id}/notes`));
-    const results = yield Promise.all(requests);
+    }) => call(throttledPdAxiosRequest, 'GET', `incidents/${id}/notes`));
+    const results = yield all(requests);
 
     // Grab matching incident and apply note update
     const updatedIncidentsList = incidents.map((incident, idx) => {
@@ -208,23 +208,11 @@ export function* getAllIncidentNotes() {
     const {
       incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
     } = yield select(selectQuerySettings);
-
-    // Filter updated incident list on priority (can't do this from API)
     yield call(filterIncidentsByPriorityImpl, { incidentPriority });
-
-    // Filter updated incident list on status
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
-
-    // Filter updated incident list on urgency
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
-
-    // Filter updated incident list on team
     yield call(filterIncidentsByTeamImpl, { teamIds });
-
-    // // Filter updated incident list on service
     yield call(filterIncidentsByServiceImpl, { serviceIds });
-
-    // Filter updated incident list by query
     yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
@@ -251,10 +239,10 @@ export function* getAllIncidentAlerts() {
     } = yield select(selectIncidents);
     const requests = incidents.map(({
       id,
-    }) => throttledPdAxiosRequest('GET', `incidents/${id}/alerts`));
-    const results = yield Promise.all(requests);
+    }) => call(throttledPdAxiosRequest, 'GET', `incidents/${id}/alerts`));
+    const results = yield all(requests);
 
-    // Grab matching incident and apply note update
+    // Grab matching incident and apply alert update
     const updatedIncidentsList = incidents.map((incident, idx) => {
       const tempIncident = { ...incident };
       tempIncident.alerts = results[idx].data.alerts;
