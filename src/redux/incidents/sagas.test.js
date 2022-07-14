@@ -45,6 +45,8 @@ describe('Sagas: Incidents', () => {
       status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
       fetchingData: false,
       fetchingIncidents: false,
+      fetchingIncidentNotes: false,
+      fetchingIncidentAlerts: false,
       error: null,
     })
     .silentRun());
@@ -72,6 +74,8 @@ describe('Sagas: Incidents', () => {
         status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
         fetchingData: false,
         fetchingIncidents: false,
+        fetchingIncidentNotes: false,
+        fetchingIncidentAlerts: false,
         error: null,
       })
       .silentRun();
