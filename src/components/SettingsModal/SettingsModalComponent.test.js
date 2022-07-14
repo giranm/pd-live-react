@@ -18,10 +18,24 @@ describe('SettingsModalComponent', () => {
       settings: {
         displaySettingsModal: true,
         defaultSinceDateTenor: '1 Day',
-        alertCustomDetailFields: [],
+        alertCustomDetailFields: [
+          {
+            label: 'Summary:details.to.some.path',
+            value: 'Summary:details.to.some.path',
+            columnType: 'alert',
+          },
+          {
+            label: 'CustomField:details.to.some.path',
+            value: 'CustomField:details.to.some.path',
+            columnType: 'alert',
+          },
+        ],
       },
       incidentTable: {
-        incidentTableColumns: [],
+        incidentTableColumns: [
+          { Header: '#', accessorPath: null, columnType: 'incident' },
+          { Header: 'Summary', accessorPath: null, columnType: 'incident' },
+        ],
       },
       users: {
         currentUserLocale: 'en-GB',
@@ -84,6 +98,24 @@ describe('SettingsModalComponent', () => {
     expect(
       wrapper.find('#update-incident-table-button').contains('Update Incident Table'),
     ).toBeTruthy();
+  });
+
+  it('should render an enabled custom column option with unique header name', () => {
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+    expect(wrapper.find('[value="CustomField:details.to.some.path"]').prop('disabled')).toEqual(
+      undefined,
+    );
+  });
+
+  it('should render a disabled custom column option which has a duplicate header/name', () => {
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+    expect(wrapper.find('[value="Summary:details.to.some.path"]').prop('disabled')).toEqual(true);
   });
 
   it('should display local cache settings', () => {
