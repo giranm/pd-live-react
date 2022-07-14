@@ -22,9 +22,11 @@ import {
 } from 'config/constants';
 
 import selectQuerySettings from 'redux/query_settings/selectors';
+import selectIncidentTable from 'redux/incident_table/selectors';
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
+
 import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
@@ -35,6 +37,9 @@ import {
   FETCH_ALL_INCIDENT_NOTES_REQUESTED,
   FETCH_ALL_INCIDENT_NOTES_COMPLETED,
   FETCH_ALL_INCIDENT_NOTES_ERROR,
+  FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
+  FETCH_ALL_INCIDENT_ALERTS_COMPLETED,
+  FETCH_ALL_INCIDENT_ALERTS_ERROR,
   UPDATE_INCIDENTS_LIST,
   UPDATE_INCIDENTS_LIST_COMPLETED,
   UPDATE_INCIDENTS_LIST_ERROR,
@@ -181,8 +186,8 @@ export function* getAllIncidentNotes() {
     } = yield select(selectIncidents);
     const requests = incidents.map(({
       id,
-    }) => throttledPdAxiosRequest('GET', `incidents/${id}/notes`));
-    const results = yield Promise.all(requests);
+    }) => call(throttledPdAxiosRequest, 'GET', `incidents/${id}/notes`));
+    const results = yield all(requests);
 
     // Grab matching incident and apply note update
     const updatedIncidentsList = incidents.map((incident, idx) => {
@@ -203,23 +208,11 @@ export function* getAllIncidentNotes() {
     const {
       incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
     } = yield select(selectQuerySettings);
-
-    // Filter updated incident list on priority (can't do this from API)
     yield call(filterIncidentsByPriorityImpl, { incidentPriority });
-
-    // Filter updated incident list on status
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
-
-    // Filter updated incident list on urgency
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
-
-    // Filter updated incident list on team
     yield call(filterIncidentsByTeamImpl, { teamIds });
-
-    // // Filter updated incident list on service
     yield call(filterIncidentsByServiceImpl, { serviceIds });
-
-    // Filter updated incident list by query
     yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
@@ -227,6 +220,59 @@ export function* getAllIncidentNotes() {
       type: UPDATE_CONNECTION_STATUS_REQUESTED,
       connectionStatus: 'neutral',
       connectionStatusMessage: 'Unable to fetch all incident notes',
+    });
+  }
+}
+
+export function* getAllIncidentAlertsAsync() {
+  yield takeEvery(FETCH_ALL_INCIDENT_ALERTS_REQUESTED, getAllIncidentAlerts);
+}
+
+export function* getAllIncidentAlerts() {
+  try {
+    // Wait until incidents & notes have been fetched before obtaining alerts
+    yield take([FETCH_ALL_INCIDENT_NOTES_COMPLETED, FETCH_ALL_INCIDENT_NOTES_ERROR]);
+
+    // Build list of promises to call PD endpoint
+    const {
+      incidents,
+    } = yield select(selectIncidents);
+    const requests = incidents.map(({
+      id,
+    }) => call(throttledPdAxiosRequest, 'GET', `incidents/${id}/alerts`));
+    const results = yield all(requests);
+
+    // Grab matching incident and apply alert update
+    const updatedIncidentsList = incidents.map((incident, idx) => {
+      const tempIncident = { ...incident };
+      tempIncident.alerts = results[idx].data.alerts;
+      return tempIncident;
+    });
+
+    // Update store with incident having alerts data
+    yield put({
+      type: FETCH_ALL_INCIDENT_ALERTS_COMPLETED,
+      incidents: updatedIncidentsList,
+    });
+
+    /*
+      Apply filters that already are configured down below
+    */
+    const {
+      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
+    } = yield select(selectQuerySettings);
+    yield call(filterIncidentsByPriorityImpl, { incidentPriority });
+    yield call(filterIncidentsByStatusImpl, { incidentStatus });
+    yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
+    yield call(filterIncidentsByTeamImpl, { teamIds });
+    yield call(filterIncidentsByServiceImpl, { serviceIds });
+    yield call(filterIncidentsByQueryImpl, { searchQuery });
+  } catch (e) {
+    yield put({ type: FETCH_ALL_INCIDENT_ALERTS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to fetch all incident alerts',
     });
   }
 }
@@ -248,7 +294,7 @@ export function* updateIncidentsList(action) {
     } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
-    // Add new incidents to list (need to re-query to get external_references + notes)
+    // Add new incidents to list (need to re-query to get external_references, notes, and alerts)
     const addListRequests = addList.map((addItem) => {
       if (addItem.incident) return getIncidentByIdRequest(addItem.incident.id);
     });
@@ -257,14 +303,22 @@ export function* updateIncidentsList(action) {
       if (addItem.incident) return call(pd.get, `incidents/${addItem.incident.id}/notes`);
     });
     const addListNoteResponses = yield all(addListNoteRequests);
+    const addListAlertRequests = addList.map((addItem) => {
+      if (addItem.incident) return call(pd.get, `incidents/${addItem.incident.id}/alerts`);
+    });
+    const addListAlertResponses = yield all(addListAlertRequests);
 
-    // Synthetically create notes object and add to new incident
+    // Synthetically create notes + alerts object to be added to new incident
     addListResponses.map((response, idx) => {
       const {
         notes,
       } = addListNoteResponses[idx].response.data;
+      const {
+        alerts,
+      } = addListAlertResponses[idx].response.data;
       const newIncident = { ...response.data.incident };
       newIncident.notes = notes;
+      newIncident.alerts = alerts;
       updatedIncidentsList.push(newIncident);
     });
 
@@ -515,10 +569,25 @@ export function* filterIncidentsByQueryImpl(action) {
     const {
       incidents,
     } = yield select(selectIncidents);
+    const {
+      incidentTableColumns,
+    } = yield select(selectIncidentTable);
     let filteredIncidentsByQuery;
 
+    // Update Fuse options to include custom alert JSON to be searched
+    const updatedFuseOptions = { ...fuseOptions };
+    const customAlertDetailColumnKeys = incidentTableColumns
+      .filter((col) => !!col.accessorPath)
+      .map((col) => {
+        // Handle cases when '[]' accessors are used
+        const strippedAccessor = col.accessorPath.replace(/(\[.*?\])/g, '');
+        return `alerts.body.cef_details.${strippedAccessor}`;
+      });
+    updatedFuseOptions.keys = fuseOptions.keys.concat(customAlertDetailColumnKeys);
+
+    // Run query with non-empty input
     if (searchQuery !== '') {
-      const fuse = new Fuse(incidents, fuseOptions);
+      const fuse = new Fuse(incidents, updatedFuseOptions);
       filteredIncidentsByQuery = fuse.search(searchQuery).map((res) => res.item);
     } else {
       filteredIncidentsByQuery = [...incidents];

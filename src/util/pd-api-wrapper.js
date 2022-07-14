@@ -68,13 +68,10 @@ export const pdAxiosRequest = async (method, endpoint, params = {}, data = {}) =
 
 // Ref: https://www.npmjs.com/package/bottleneck#refresh-interval
 const limiter = new Bottleneck({
-  reservoir: 1800, // initial value
-  reservoirRefreshAmount: 1800,
-  reservoirRefreshInterval: 60 * 1000, // must be divisible by 250
-
-  // also use maxConcurrent and/or minTime for safety
-  maxConcurrent: 60,
-  minTime: 80, // pick a value that makes sense for your use case
+  reservoir: 1900,
+  reservoirRefreshAmount: 1900,
+  reservoirRefreshInterval: 60 * 1000,
+  minTime: 60,
 });
 
 export const throttledPdAxiosRequest = limiter.wrap(pdAxiosRequest);

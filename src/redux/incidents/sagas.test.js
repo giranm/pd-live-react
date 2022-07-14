@@ -9,6 +9,8 @@ import {
   generateMockIncidents,
 } from 'mocks/incidents.test';
 
+import selectIncidentTable from 'redux/incident_table/selectors';
+
 import {
   FILTER_INCIDENTS_LIST_BY_QUERY,
   FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
@@ -27,6 +29,7 @@ describe('Sagas: Incidents', () => {
     .withReducer(incidents)
     .provide([
       [select(selectIncidents), { incidents: mockIncidents, filteredIncidentsByQuery: [] }],
+      [select(selectIncidentTable), { incidentTableColumns: [] }],
     ])
     .dispatch({
       type: FILTER_INCIDENTS_LIST_BY_QUERY,
@@ -42,6 +45,8 @@ describe('Sagas: Incidents', () => {
       status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
       fetchingData: false,
       fetchingIncidents: false,
+      fetchingIncidentNotes: false,
+      fetchingIncidentAlerts: false,
       error: null,
     })
     .silentRun());
@@ -53,6 +58,7 @@ describe('Sagas: Incidents', () => {
       .withReducer(incidents)
       .provide([
         [select(selectIncidents), { incidents: mockIncidents, filteredIncidentsByQuery: [] }],
+        [select(selectIncidentTable), { incidentTableColumns: [] }],
       ])
       .dispatch({
         type: FILTER_INCIDENTS_LIST_BY_QUERY,
@@ -68,6 +74,8 @@ describe('Sagas: Incidents', () => {
         status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
         fetchingData: false,
         fetchingIncidents: false,
+        fetchingIncidentNotes: false,
+        fetchingIncidentAlerts: false,
         error: null,
       })
       .silentRun();
