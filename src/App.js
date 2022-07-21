@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import moment from 'moment';
 
+import AuthComponent from 'components/Auth/AuthComponent';
 import UnauthorizedModalComponent from 'components/UnauthorizedModal/UnauthorizedModalComponent';
 import DisclaimerModalComponent from 'components/DisclaimerModal/DisclaimerModalComponent';
 import NavigationBarComponent from 'components/NavigationBar/NavigationBarComponent';
@@ -22,11 +23,8 @@ import AddNoteModalComponent from 'components/AddNoteModal/AddNoteModalComponent
 import ReassignModalComponent from 'components/ReassignModal/ReassignModalComponent';
 import AddResponderModalComponent from 'components/AddResponderModal/AddResponderModalComponent';
 import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
+import ConfirmQueryModalComponent from 'components/ConfirmQueryModal/ConfirmQueryModalComponent';
 
-import {
-  getIncidentsAsync as getIncidentsAsyncConnected,
-  getAllIncidentNotesAsync as getAllIncidentNotesAsyncConnected,
-} from 'redux/incidents/actions';
 import {
   getLogEntriesAsync as getLogEntriesAsyncConnected,
   cleanRecentLogEntriesAsync as cleanRecentLogEntriesAsyncConnected,
@@ -65,6 +63,8 @@ import {
 } from 'redux/store';
 
 import {
+  PD_OAUTH_CLIENT_ID,
+  PD_OAUTH_CLIENT_SECRET,
   PD_REQUIRED_ABILITY,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
@@ -86,21 +86,24 @@ const App = ({
   getEscalationPoliciesAsync,
   getExtensionsAsync,
   getResponsePlaysAsync,
-  getIncidentsAsync,
-  getAllIncidentNotesAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
 }) => {
   // Verify if session token is present
   const token = sessionStorage.getItem('pd_access_token');
   if (!token) {
-    return null;
+    return (
+      <div className="App">
+        <AuthComponent clientId={PD_OAUTH_CLIENT_ID} clientSecret={PD_OAUTH_CLIENT_SECRET} />
+      </div>
+    );
   }
 
   // Begin monitoring and load core objects from API
   const {
     userAuthorized, userAcceptedDisclaimer, currentUserLocale,
   } = state.users;
+  const queryError = state.querySettings.error;
   useEffect(() => {
     userAuthorize();
     if (userAuthorized) {
@@ -113,8 +116,7 @@ const App = ({
       getExtensionsAsync();
       getResponsePlaysAsync();
       getPrioritiesAsync();
-      getIncidentsAsync();
-      getAllIncidentNotesAsync();
+      // NB: Get incidents, notes, and alerts are implicitly done from query now
       checkConnectionStatus();
     }
   }, [userAuthorized]);
@@ -132,7 +134,7 @@ const App = ({
       const {
         abilities,
       } = store.getState().connection;
-      if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY)) {
+      if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY) && !queryError) {
         const lastPolledDate = moment()
           .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
           .toDate();
@@ -140,7 +142,7 @@ const App = ({
       }
     }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(pollingInterval);
-  }, [userAuthorized]);
+  }, [userAuthorized, queryError]);
 
   // Setup log entry clearing
   useEffect(() => {
@@ -184,6 +186,7 @@ const App = ({
         <ReassignModalComponent />
         <AddResponderModalComponent />
         <MergeModalComponent />
+        <ConfirmQueryModalComponent />
       </Container>
     </div>
   );
@@ -203,8 +206,6 @@ const mapDispatchToProps = (dispatch) => ({
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsyncConnected()),
   getExtensionsAsync: () => dispatch(getExtensionsAsyncConnected()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
-  getIncidentsAsync: () => dispatch(getIncidentsAsyncConnected()),
-  getAllIncidentNotesAsync: () => dispatch(getAllIncidentNotesAsyncConnected()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsyncConnected()),
 });

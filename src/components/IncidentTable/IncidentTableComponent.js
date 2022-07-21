@@ -18,9 +18,6 @@ import {
   FixedSizeList,
 } from 'react-window';
 
-import {
-  Container, Row, Spinner,
-} from 'react-bootstrap';
 import BTable from 'react-bootstrap/Table';
 
 import {
@@ -33,11 +30,13 @@ import {
 } from 'redux/incident_table/actions';
 
 import {
-  getIncidentTableColumns,
+  getReactTableColumnSchemas,
 } from 'config/incident-table-columns';
 
 import CheckboxComponent from './subcomponents/CheckboxComponent';
 import EmptyIncidentsComponent from './subcomponents/EmptyIncidentsComponent';
+import QueryActiveComponent from './subcomponents/QueryActiveComponent';
+import QueryCancelledComponent from './subcomponents/QueryCancelledComponent';
 
 import './IncidentTableComponent.scss';
 
@@ -76,9 +75,10 @@ const IncidentTableComponent = ({
   incidentTable,
   incidentActions,
   incidents,
+  querySettings,
 }) => {
   const {
-    incidentTableState, incidentTableColumnsNames,
+    incidentTableState, incidentTableColumns,
   } = incidentTable;
   const {
     status,
@@ -86,6 +86,9 @@ const IncidentTableComponent = ({
   const {
     filteredIncidentsByQuery, fetchingIncidents,
   } = incidents;
+  const {
+    displayConfirmQueryModal,
+  } = querySettings;
 
   // React Table Config
   const defaultColumn = useMemo(
@@ -97,21 +100,10 @@ const IncidentTableComponent = ({
     [],
   );
 
-  const memoizedColumns = useMemo(() => {
-    // Merge current columns state with any modifications to order etc
-    const columns = getIncidentTableColumns(incidentTableColumnsNames);
-    const columnWidths = incidentTableState.columnResizing
-      ? incidentTableState.columnResizing.columnWidths
-      : null;
-    const tempColumns = columns.map((col) => {
-      const tempCol = { ...col };
-      if (columnWidths && tempCol.accessor in columnWidths) {
-        tempCol.width = columnWidths[tempCol.accessor];
-      }
-      return tempCol;
-    });
-    return tempColumns;
-  }, [incidentTableColumnsNames]);
+  const memoizedColumns = useMemo(
+    () => getReactTableColumnSchemas(incidentTableColumns),
+    [incidentTableColumns],
+  );
 
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
@@ -131,6 +123,9 @@ const IncidentTableComponent = ({
     }
   }, 1000);
 
+  // Custom row id fetch to handle dynamic table updates
+  const getRowId = useCallback((row) => row.id, []);
+
   // Create instance of react-table with options and plugins
   const {
     state: {
@@ -149,6 +144,7 @@ const IncidentTableComponent = ({
       columns: memoizedColumns,
       data: filteredIncidentsByQuery, // Potential issue with Memoization hook?
       defaultColumn,
+      getRowId,
       // Prevent re-render when redux store updates
       autoResetPage: false,
       autoResetExpanded: false,
@@ -247,18 +243,16 @@ const IncidentTableComponent = ({
   }, [status]);
 
   // Render components based on application state
+  if (displayConfirmQueryModal) {
+    return <></>;
+  }
+
+  if (!displayConfirmQueryModal && querySettings.error) {
+    return <QueryCancelledComponent />;
+  }
+
   if (fetchingIncidents) {
-    return (
-      <Container fluid>
-        <br />
-        <Row className="justify-content-md-center">
-          <Spinner className="" animation="border" role="status" variant="success" />
-          <h5 className="querying-incidents">
-            <b>Querying PagerDuty API</b>
-          </h5>
-        </Row>
-      </Container>
-    );
+    return <QueryActiveComponent />;
   }
 
   // TODO: Find a better way to prevent Empty Incidents from being shown during render
@@ -325,6 +319,7 @@ const mapStateToProps = (state) => ({
   incidentTable: state.incidentTable,
   incidentActions: state.incidentActions,
   incidents: state.incidents,
+  querySettings: state.querySettings,
 });
 
 const mapDispatchToProps = (dispatch) => ({

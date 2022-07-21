@@ -1,5 +1,3 @@
-import 'mocks/pdoauth';
-
 import {
   // eslint-disable-next-line no-unused-vars
   select,
