@@ -24,6 +24,7 @@ export const DD_DEFAULT_PRIVACY_LEVEL = env.REACT_APP_DD_DEFAULT_PRIVACY_LEVEL |
 export const LOG_ENTRIES_POLLING_INTERVAL_SECONDS = 5;
 export const LOG_ENTRIES_CLEARING_INTERVAL_SECONDS = 30;
 export const INCIDENTS_PAGINATION_LIMIT = 100;
+export const MAX_INCIDENTS_LIMIT = 200;
 
 // Date formatting (Locale Agnostic)
 export const DATE_FORMAT = 'LL \\at h:mm:ss A';

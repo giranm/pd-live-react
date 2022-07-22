@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-loop-func */
-import PDOAuth from 'util/pdoauth';
+
 import {
   api,
 } from '@pagerduty/pdjs';
@@ -8,7 +8,7 @@ import axios from 'axios';
 import Bottleneck from 'bottleneck';
 
 import {
-  PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET, PD_USER_TOKEN,
+  PD_USER_TOKEN,
 } from 'config/constants';
 import {
   compareCreatedAt,
@@ -28,11 +28,6 @@ export const getPdAccessTokenObject = () => {
   } else {
     token = sessionStorage.getItem('pd_access_token');
     tokenType = 'bearer';
-  }
-
-  // Begin OAuth workflow if env token not present
-  if (!token) {
-    PDOAuth.login(PD_OAUTH_CLIENT_ID, PD_OAUTH_CLIENT_SECRET);
   }
 
   // Return object neeed for PD API helpers
@@ -73,13 +68,10 @@ export const pdAxiosRequest = async (method, endpoint, params = {}, data = {}) =
 
 // Ref: https://www.npmjs.com/package/bottleneck#refresh-interval
 const limiter = new Bottleneck({
-  reservoir: 1800, // initial value
-  reservoirRefreshAmount: 1800,
-  reservoirRefreshInterval: 60 * 1000, // must be divisible by 250
-
-  // also use maxConcurrent and/or minTime for safety
-  maxConcurrent: 60,
-  minTime: 80, // pick a value that makes sense for your use case
+  reservoir: 1900,
+  reservoirRefreshAmount: 1900,
+  reservoirRefreshInterval: 60 * 1000,
+  minTime: 60,
 });
 
 export const throttledPdAxiosRequest = limiter.wrap(pdAxiosRequest);

@@ -9,14 +9,12 @@ import {
 
 import {
   Container,
-  Badge,
   Row,
   Col,
   Button,
   Dropdown,
   DropdownButton,
   ButtonGroup,
-  Spinner,
 } from 'react-bootstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -75,11 +73,12 @@ import {
   getObjectsFromListbyKey,
 } from 'util/helpers';
 
+import SelectedIncidentsComponent from './subcomponents/SelectedIncidentsComponent';
+
 const animatedComponents = makeAnimated();
 
 const IncidentActionsComponent = ({
   incidentTable,
-  incidents,
   priorities,
   escalationPolicies,
   extensions,
@@ -98,9 +97,6 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
-  const {
-    fetchingIncidents, filteredIncidentsByQuery,
-  } = incidents;
   const {
     selectedCount, selectedRows,
   } = incidentTable;
@@ -222,26 +218,7 @@ const IncidentActionsComponent = ({
       <Container className="incident-actions-ctr" id="incident-actions-ctr" fluid>
         <Row>
           <Col sm={{ span: -1 }}>
-            <div className="selected-incidents-ctr">
-              {fetchingIncidents ? (
-                <>
-                  <Spinner animation="border" variant="success" />
-                  <p className="selected-incidents">Querying</p>
-                </>
-              ) : (
-                <>
-                  <h4>
-                    <Badge
-                      className="selected-incidents-badge"
-                      variant={filteredIncidentsByQuery.length ? 'primary' : 'secondary'}
-                    >
-                      {`${selectedCount}/${filteredIncidentsByQuery.length}`}
-                    </Badge>
-                  </h4>
-                  <p className="selected-incidents">Selected</p>
-                </>
-              )}
-            </div>
+            <SelectedIncidentsComponent />
           </Col>
           <Col>
             <Button
@@ -517,7 +494,6 @@ const IncidentActionsComponent = ({
 
 const mapStateToProps = (state) => ({
   incidentTable: state.incidentTable,
-  incidents: state.incidents,
   priorities: state.priorities.priorities,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   extensions: state.extensions,

@@ -15,12 +15,17 @@ import {
   updateQuerySettingsTeams,
   updateQuerySettingsServices,
   updateSearchQuery,
+  validateIncidentQuery,
+  toggleDisplayConfirmQueryModal,
+  updateTotalIncidentsFromQuery,
+  confirmIncidentQuery,
 } from './query_settings/sagas';
 
 import {
   getIncidentsAsync,
   getIncidentNotesAsync,
   getAllIncidentNotesAsync,
+  getAllIncidentAlertsAsync,
   updateIncidentsListAsync,
   filterIncidentsByPriority,
   filterIncidentsByStatus,
@@ -98,7 +103,10 @@ import {
 
 // eslint-disable-next-line import/no-cycle
 import {
-  toggleSettingsModal, setDefaultSinceDateTenor, clearLocalCache,
+  toggleSettingsModal,
+  setDefaultSinceDateTenor,
+  setAlertCustomDetailColumns,
+  clearLocalCache,
 } from './settings/sagas';
 
 import {
@@ -121,11 +129,16 @@ export default function* rootSaga() {
     updateQuerySettingsTeams(),
     updateQuerySettingsServices(),
     updateSearchQuery(),
+    validateIncidentQuery(),
+    toggleDisplayConfirmQueryModal(),
+    updateTotalIncidentsFromQuery(),
+    confirmIncidentQuery(),
 
     // Incidents
     getIncidentsAsync(),
     getIncidentNotesAsync(),
     getAllIncidentNotesAsync(),
+    getAllIncidentAlertsAsync(),
     updateIncidentsListAsync(),
     filterIncidentsByPriority(),
     filterIncidentsByStatus(),
@@ -198,6 +211,7 @@ export default function* rootSaga() {
     // Settings
     toggleSettingsModal(),
     setDefaultSinceDateTenor(),
+    setAlertCustomDetailColumns(),
     clearLocalCache(),
 
     // Connection

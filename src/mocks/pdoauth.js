@@ -1,19 +1,18 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 // Stub for methods used in PD OAuth
+import crypto from 'crypto';
+
 import {
   TextEncoder, TextDecoder,
 } from 'util';
 
-Object.defineProperty(window, 'crypto', {
+Object.defineProperty(global, 'crypto', {
   value: {
-    getRandomValues: (arr) => jest.fn().mockReturnValueOnce(new Uint32Array(10)),
-  },
-});
-
-Object.defineProperty(crypto, 'subtle', {
-  value: {
-    digest: (hash, verifier) => '#',
+    getRandomValues: (arr) => crypto.randomBytes(arr.length),
+    subtle: {
+      digest: (algorithm, data) => new Promise((resolve) => resolve(
+        crypto.createHash(algorithm.toLowerCase().replace('-', '')).update(data).digest(),
+      )),
+    },
   },
 });
 

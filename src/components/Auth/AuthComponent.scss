@@ -1,0 +1,34 @@
+@import 'assets/styles/pagerduty.scss';
+
+#pd-login-form {
+  position: relative;
+  top: 80px;
+  z-index: 0;
+  max-width: 30em;
+  margin: 0 auto;
+  padding: 2em 0 2em 0;
+  border-radius: 5px;
+  border: 1px solid $pd-light;
+  box-shadow: 0px 0px 10px 1px $pd-gray-medium;
+  background-color: $pd-white;
+}
+
+#pd-login-logo {
+  display: block;
+  text-indent: -9999px;
+  overflow: hidden;
+  width: 175px;
+  height: 60px;
+  background-image: url(https://pd-static-assets.pagerduty.com/logos/main.svg);
+  background-repeat: no-repeat;
+  background-position: center left;
+  background-size: 175px 60px;
+}
+
+#pd-login-description {
+  padding: 1em 0 1em 0;
+}
+
+#pd-login-button {
+  width: 80%;
+}

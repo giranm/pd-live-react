@@ -20,3 +20,4 @@ import './commands';
 // require('./commands')
 
 import 'cypress-fail-fast';
+import '@4tw/cypress-drag-drop';

@@ -3,11 +3,10 @@ import {
 } from 'redux-saga/effects';
 
 import {
-  UPDATE_INCIDENTS_LIST,
-} from 'redux/incidents/actions';
-
-import {
-  RESOLVE_LOG_ENTRY, TRIGGER_LOG_ENTRY, ANNOTATE_LOG_ENTRY,
+  RESOLVE_LOG_ENTRY,
+  TRIGGER_LOG_ENTRY,
+  ANNOTATE_LOG_ENTRY,
+  LINK_LOG_ENTRY,
 } from 'util/log-entries';
 import {
   pd,
@@ -16,6 +15,10 @@ import {
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
+import {
+  UPDATE_INCIDENTS_LIST,
+} from 'redux/incidents/actions';
+
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
   FETCH_LOG_ENTRIES_COMPLETED,
@@ -49,7 +52,6 @@ export function* getLogEntries(action) {
       throw Error('Unable to fetch log entries');
     }
     const logEntries = response.resource;
-
     yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
 
     // Call to update recent log entries with this data.
@@ -74,7 +76,7 @@ export function* updateRecentLogEntriesAsync() {
 
 export function* updateRecentLogEntries() {
   try {
-    // Grab log entries from store and determine what is recent based on last polling
+    // Grab log entries & alerts from store and determine what is recent based on last polling
     const {
       logEntries, recentLogEntries,
     } = yield select(selectLogEntries);
@@ -83,10 +85,13 @@ export function* updateRecentLogEntries() {
     const removeSet = new Set();
     const updateSet = new Set();
 
-    logEntries.forEach((logEntry) => {
+    // yield doesn't work with forEach; using old implementation
+    for (let i = 0; i < logEntries.length; i++) {
       // Skip duplicate log entry
+      const logEntry = logEntries[i];
       if (recentLogEntriesLocal.filter((x) => x.id === logEntry.id).length > 0) {
-        return;
+        // eslint-disable-next-line no-continue
+        continue;
       }
 
       // Push new log entry to array with details
@@ -118,11 +123,23 @@ export function* updateRecentLogEntries() {
         ];
         modifiedLogEntry.incident = tempIncident;
         updateSet.add(modifiedLogEntry);
+      } else if (logEntry.type === LINK_LOG_ENTRY) {
+        // Handle special case for alerts: create synthetic alerts object
+        // TODO: Consider aggregating LINK_LOG_ENTRY by incident id to avoid duplicate API calls
+        const modifiedLogEntry = { ...logEntry };
+        const tempIncident = { ...modifiedLogEntry.incident };
+        const alertsResponse = yield call(
+          pd.get,
+          `incidents/${tempIncident.id}/alerts/${logEntry.linked_incident.id}`,
+        );
+        tempIncident.alerts = [{ ...alertsResponse.data }.alert];
+        modifiedLogEntry.incident = tempIncident;
+        updateSet.add(modifiedLogEntry);
       } else {
         // Assume everything else is an update
         updateSet.add(logEntry);
       }
-    });
+    }
 
     // Generate update lists from sets
     const addList = [...addSet].filter((x) => !removeSet.has(x));
