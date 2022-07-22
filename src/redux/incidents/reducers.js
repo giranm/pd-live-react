@@ -10,6 +10,9 @@ import {
   FETCH_ALL_INCIDENT_NOTES_REQUESTED,
   FETCH_ALL_INCIDENT_NOTES_COMPLETED,
   FETCH_ALL_INCIDENT_NOTES_ERROR,
+  FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
+  FETCH_ALL_INCIDENT_ALERTS_COMPLETED,
+  FETCH_ALL_INCIDENT_ALERTS_ERROR,
   UPDATE_INCIDENTS_LIST,
   UPDATE_INCIDENTS_LIST_COMPLETED,
   UPDATE_INCIDENTS_LIST_ERROR,
@@ -55,36 +58,62 @@ const incidents = produce(
 
       case FETCH_INCIDENT_NOTES_REQUESTED:
         draft.fetchingData = true;
+        draft.fetchingIncidentNotes = true;
         draft.status = FETCH_INCIDENT_NOTES_REQUESTED;
         draft.incidentId = action.incidentId;
         break;
 
       case FETCH_INCIDENT_NOTES_COMPLETED:
         draft.fetchingData = false;
+        draft.fetchingIncidentNotes = false;
         draft.status = FETCH_INCIDENT_NOTES_COMPLETED;
         draft.incidents = action.incidents;
         break;
 
       case FETCH_INCIDENT_NOTES_ERROR:
         draft.fetchingData = false;
+        draft.fetchingIncidentNotes = false;
         draft.status = FETCH_INCIDENT_NOTES_ERROR;
         draft.error = action.message;
         break;
 
       case FETCH_ALL_INCIDENT_NOTES_REQUESTED:
         draft.fetchingData = true;
+        draft.fetchingIncidentNotes = true;
         draft.status = FETCH_ALL_INCIDENT_NOTES_REQUESTED;
         break;
 
       case FETCH_ALL_INCIDENT_NOTES_COMPLETED:
         draft.fetchingData = false;
+        draft.fetchingIncidentNotes = false;
         draft.status = FETCH_ALL_INCIDENT_NOTES_COMPLETED;
         draft.incidents = action.incidents;
         break;
 
       case FETCH_ALL_INCIDENT_NOTES_ERROR:
         draft.fetchingData = false;
+        draft.fetchingIncidentNotes = false;
         draft.status = FETCH_ALL_INCIDENT_NOTES_ERROR;
+        draft.error = action.message;
+        break;
+
+      case FETCH_ALL_INCIDENT_ALERTS_REQUESTED:
+        draft.fetchingData = true;
+        draft.fetchingIncidentAlerts = true;
+        draft.status = FETCH_ALL_INCIDENT_ALERTS_REQUESTED;
+        break;
+
+      case FETCH_ALL_INCIDENT_ALERTS_COMPLETED:
+        draft.fetchingData = false;
+        draft.fetchingIncidentAlerts = false;
+        draft.status = FETCH_ALL_INCIDENT_ALERTS_COMPLETED;
+        draft.incidents = action.incidents;
+        break;
+
+      case FETCH_ALL_INCIDENT_ALERTS_ERROR:
+        draft.fetchingData = false;
+        draft.fetchingIncidentAlerts = false;
+        draft.status = FETCH_ALL_INCIDENT_ALERTS_ERROR;
         draft.error = action.message;
         break;
 
@@ -217,6 +246,8 @@ const incidents = produce(
     status: null,
     fetchingData: false,
     fetchingIncidents: false,
+    fetchingIncidentNotes: false,
+    fetchingIncidentAlerts: false,
     error: null,
   },
 );

@@ -17,6 +17,8 @@ export const SNOOZE_TIMES = {
   '24 hrs': 60 * 60 * 24,
 };
 
+export const INCIDENT_STATES = [TRIGGERED, ACKNOWLEDGED, RESOLVED];
+
 // Helper function to filter incidents by json path + possible values
 // eslint-disable-next-line max-len
 export const filterIncidentsByField = (incidents, jsonPath, possibleValues) => incidents.filter((incident) => {

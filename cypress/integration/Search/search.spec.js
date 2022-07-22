@@ -4,6 +4,7 @@ import {
   waitForIncidentTable,
   activateButton,
   priorityNames,
+  selectIncident,
 } from '../../support/util/common';
 
 describe('Search Incidents', { failFast: { enabled: false } }, () => {
@@ -30,6 +31,19 @@ describe('Search Incidents', { failFast: { enabled: false } }, () => {
     cy.wait(5000);
     cy.get('[data-incident-header="Service"]').each(($el) => {
       cy.wrap($el).should('have.text', 'Service A1');
+    });
+  });
+
+  it('Search for 2nd selected incident returns exactly 1 incident only', () => {
+    const incidentIdx = 1;
+    selectIncident(incidentIdx);
+    cy.get(`@selectedIncidentId_${incidentIdx}`).then((incidentId) => {
+      cy.get('#global-search-input').clear().type(incidentId);
+    });
+    cy.wait(1000);
+    cy.get('.selected-incidents-badge').then(($el) => {
+      const text = $el.text();
+      expect(text).to.equal('1/1');
     });
   });
 

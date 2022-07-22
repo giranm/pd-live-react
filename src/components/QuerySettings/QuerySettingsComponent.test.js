@@ -1,5 +1,3 @@
-import 'mocks/pdoauth';
-
 import '@testing-library/jest-dom';
 
 import gb from 'date-fns/locale/en-GB';
@@ -19,7 +17,7 @@ import {
 } from 'redux/store';
 
 import {
-  UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED,
+  VALIDATE_INCIDENT_QUERY_REQUESTED,
 } from 'redux/query_settings/actions';
 
 import QuerySettingsComponent from './QuerySettingsComponent';
@@ -65,6 +63,6 @@ describe('QuerySettingsComponent', () => {
 
     expect(sinceDateInput(wrapper).prop('value')).toEqual(expectedDate.format('L'));
     expect(moment(querySettings.sinceDate).format('L')).toEqual(expectedDate.format('L'));
-    expect(querySettings.status).toEqual(UPDATE_QUERY_SETTING_SINCE_DATE_COMPLETED);
+    expect(querySettings.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
   });
 });

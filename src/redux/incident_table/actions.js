@@ -19,9 +19,9 @@ export const saveIncidentTable = (updatedIncidentTableColumns) => ({
   updatedIncidentTableColumns,
 });
 
-export const updateIncidentTableColumns = (incidentTableColumnsNames) => ({
+export const updateIncidentTableColumns = (incidentTableColumns) => ({
   type: UPDATE_INCIDENT_TABLE_COLUMNS_REQUESTED,
-  incidentTableColumnsNames,
+  incidentTableColumns,
 });
 
 export const updateIncidentTableState = (incidentTableState) => ({

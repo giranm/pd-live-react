@@ -18,9 +18,24 @@ describe('SettingsModalComponent', () => {
       settings: {
         displaySettingsModal: true,
         defaultSinceDateTenor: '1 Day',
+        alertCustomDetailFields: [
+          {
+            label: 'Summary:details.to.some.path',
+            value: 'Summary:details.to.some.path',
+            columnType: 'alert',
+          },
+          {
+            label: 'CustomField:details.to.some.path',
+            value: 'CustomField:details.to.some.path',
+            columnType: 'alert',
+          },
+        ],
       },
       incidentTable: {
-        incidentTableColumnsNames: [],
+        incidentTableColumns: [
+          { Header: '#', accessorPath: null, columnType: 'incident' },
+          { Header: 'Summary', accessorPath: null, columnType: 'incident' },
+        ],
       },
       users: {
         currentUserLocale: 'en-GB',
@@ -70,15 +85,37 @@ describe('SettingsModalComponent', () => {
 
   it('should display incident table settings', () => {
     const wrapper = componentWrapper(store, SettingsModalComponent);
-    const tabSelector = 'a[data-rb-event-key="incident-table-columns"]';
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
     const tabElement = wrapper.find(tabSelector);
 
     // FIXME: Determine correct way to click DOM with Jest - this does not update internal state
     tabElement.simulate('click');
-    expect(tabElement.contains('Incident Table Columns')).toBeTruthy();
+    expect(tabElement.contains('Incident Table')).toBeTruthy();
+    expect(wrapper.find('h4').contains('Column Selector')).toBeTruthy();
+    expect(wrapper.find('#incident-column-select')).toBeTruthy();
+    expect(wrapper.find('h4').contains('Alert Custom Detail Column Definitions')).toBeTruthy();
+    expect(wrapper.find('#alert-column-definition-select')).toBeTruthy();
     expect(
-      wrapper.find('#update-incident-table-columns-button').contains('Update Columns'),
+      wrapper.find('#update-incident-table-button').contains('Update Incident Table'),
     ).toBeTruthy();
+  });
+
+  it('should render an enabled custom column option with unique header name', () => {
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+    expect(wrapper.find('[value="CustomField:details.to.some.path"]').prop('disabled')).toEqual(
+      undefined,
+    );
+  });
+
+  it('should render a disabled custom column option which has a duplicate header/name', () => {
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+    expect(wrapper.find('[value="Summary:details.to.some.path"]').prop('disabled')).toEqual(true);
   });
 
   it('should display local cache settings', () => {

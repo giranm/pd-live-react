@@ -1,23 +1,20 @@
-import 'mocks/pdoauth';
-
-import {
-  // eslint-disable-next-line no-unused-vars
-  select,
-} from 'redux-saga/effects';
 import {
   expectSaga,
 } from 'redux-saga-test-plan';
 
 import {
-  SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
-  SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
-} from './actions';
+  faker,
+} from '@faker-js/faker';
 
 import settings from './reducers';
-// eslint-disable-next-line no-unused-vars
-import selectSettings from './selectors';
 import {
-  setDefaultSinceDateTenor,
+  SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
+  SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+} from './actions';
+import {
+  setDefaultSinceDateTenor, setAlertCustomDetailColumns,
 } from './sagas';
 
 describe('Sagas: Settings', () => {
@@ -37,6 +34,39 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: tenor,
         status: SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
+        alertCustomDetailFields: [
+          {
+            label: 'Environment:details.env',
+            value: 'Environment:details.env',
+            columnType: 'alert',
+          },
+        ],
+      })
+      .silentRun();
+  });
+  it('setAlertCustomDetailColumns', () => {
+    const alertCustomDetailFields = [
+      {
+        label: faker.git.branch(),
+        value: faker.git.branch(),
+        columnType: 'alert',
+      },
+    ];
+    return expectSaga(setAlertCustomDetailColumns)
+      .withReducer(settings)
+      .dispatch({
+        type: SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
+        alertCustomDetailFields,
+      })
+      .put({
+        type: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+        alertCustomDetailFields,
+      })
+      .hasFinalState({
+        displaySettingsModal: false,
+        defaultSinceDateTenor: '1 Day',
+        status: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+        alertCustomDetailFields,
       })
       .silentRun();
   });

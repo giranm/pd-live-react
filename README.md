@@ -73,16 +73,16 @@ To prepare PagerDuty Live for release, the current workflow should be carried ou
    1. Checkout to `develop` branch and verify if it's stable - i.e. no test and linting failures.
    
    2. Update version information in `package.json` using `npm version` - example commands given below:
-      -  Bumping patch version for alpha release 
+      -  Bumping patch version for beta release 
          ```
-         $ npm --no-git-tag-version version prepatch --preid alpha
-         v0.0.1-alpha.0
+         $ npm --no-git-tag-version version preminor --preid beta
+         v0.1.0-beta.0
          ```
          
       -  Bumping minor version for main release 
          ```
          $ npm --no-git-tag-version version minor
-         v0.1.0
+         v0.2.0
          ```
    
    3. Update application code version using `$ yarn genversion`
