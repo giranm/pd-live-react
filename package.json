@@ -21,7 +21,7 @@
     "babel-eslint": "^10.1.0",
     "bootstrap": "^4.6.0",
     "bottleneck": "^2.19.5",
-    "date-fns": "^2.28.0",
+    "date-fns": "^2.29.1",
     "enzyme": "^3.11.0",
     "font-awesome": "^4.7.0",
     "fuse.js": "^6.6.2",
