@@ -5150,10 +5150,10 @@ cy2@^1.3.0:
     js-yaml "^4.0.0"
     npm-which "^3.0.1"
 
-cypress-fail-fast@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/cypress-fail-fast/-/cypress-fail-fast-3.4.1.tgz#3c4e0647f374ac02fdd4cb8154a3047471ceaad6"
-  integrity sha512-74UoLLRSNL9hbNqW4JVTEh7S1BKigrZmLmcxdntDmIDZrZFezb1A7BiSKSEXV8naLJ5xt8zK8YrEctpf0NZn3Q==
+cypress-fail-fast@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/cypress-fail-fast/-/cypress-fail-fast-5.0.0.tgz#760af2c1bc196c848066c8a877446a946f88358b"
+  integrity sha512-K1NlrS2TswcgWlY17+nsfgmzennQK9VghgfmPLMdwFtm5CBoKwPaIsNGzPJLXt6KWM3PN/c24qv+xl7Rm1LUeg==
   dependencies:
     chalk "4.1.2"
 
