@@ -6774,10 +6774,10 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
-genversion@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/genversion/-/genversion-3.0.2.tgz#e39718e483442315bdf195a90134bc5915f57316"
-  integrity sha512-hto4m/V3DQOJbIH2nVNPhkScqwAzpYnmTLDOs+2AYxqGWVKsUW6Qxcz2FXRQlbAXgWpJxbxgnWqb1/s17lK2yg==
+genversion@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/genversion/-/genversion-3.1.1.tgz#5da18c1ea21813b560f923b37dbbb0df528b7c06"
+  integrity sha512-/H861PMsihhjgX2qqhTN8egM11V04imhA+3JRFY3jjPua2Sy1NqaqqQPjSP8rdM9jZoKpFhVj9g3Fs9XPCjBYQ==
   dependencies:
     commander "^7.2.0"
     find-package "^1.0.0"
