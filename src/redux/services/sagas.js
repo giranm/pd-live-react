@@ -9,6 +9,9 @@ import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
 import {
+  FETCH_EXTENSIONS_REQUESTED,
+} from 'redux/extensions/actions';
+import {
   FETCH_SERVICES_REQUESTED,
   FETCH_SERVICES_COMPLETED,
   FETCH_SERVICES_ERROR,
@@ -36,6 +39,9 @@ export function* getServices(action) {
       type: FETCH_SERVICES_COMPLETED,
       services: response.resource,
     });
+
+    // We now obtain extensions for mapping once services have been fetched
+    yield put({ type: FETCH_EXTENSIONS_REQUESTED });
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
