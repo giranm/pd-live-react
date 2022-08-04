@@ -87,18 +87,12 @@ export function* mapServicesToExtensionsImpl() {
               modifiedExtension.extension_type = CUSTOM_INCIDENT_ACTION;
 
               // ServiceNow
-            } else if (
-              extensionSummary.includes('ServiceNow')
-              && modifiedExtension.config.sync_options === 'manual_sync'
-            ) {
+            } else if (extensionSummary.includes('ServiceNow')) {
               modifiedExtension.extension_type = EXTERNAL_SYSTEM;
               modifiedExtension.extension_label = 'Sync with ServiceNow';
 
               // Jira
-            } else if (
-              extensionSummary.includes('Jira')
-              && !modifiedExtension.config.jira.createIssueOnIncidentTrigger
-            ) {
+            } else if (extensionSummary.includes('Jira')) {
               modifiedExtension.extension_type = EXTERNAL_SYSTEM;
               modifiedExtension.extension_label = `Sync with ${extensionSummary}`;
 
