@@ -579,9 +579,16 @@ export function* filterIncidentsByQueryImpl(action) {
     const customAlertDetailColumnKeys = incidentTableColumns
       .filter((col) => !!col.accessorPath)
       .map((col) => {
-        // Handle cases when '[]' accessors are used
-        const strippedAccessor = col.accessorPath.replace(/(\[.*?\])/g, '');
-        return `alerts.body.cef_details.${strippedAccessor}`;
+        // Handle case when '[*]' accessors are used
+        const strippedAccessor = col.accessorPath.replace(/([[*\]])/g, '.');
+        return (
+          `alerts.body.cef_details.${strippedAccessor}`
+            .split('.')
+            // Handle case when special character is wrapped in quotation marks
+            .map((a) => (a.includes("'") ? a.replaceAll("'", '') : a))
+            // Handle empty paths from injection into strippedAccessor
+            .filter((a) => a !== '')
+        );
       });
     updatedFuseOptions.keys = fuseOptions.keys.concat(customAlertDetailColumnKeys);
 

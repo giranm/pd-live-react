@@ -80,4 +80,48 @@ describe('Sagas: Incidents', () => {
       })
       .silentRun();
   });
+
+  it('filterIncidentsByQuery: Search by Alert Custom Detail Field', () => {
+    const mockIncident = mockIncidents[0];
+    const customField = 'some obsecure field';
+    const customFieldValue = mockIncident.alerts[0].body.cef_details.details[customField];
+    const expectedIncidentResult = [mockIncident];
+    return expectSaga(filterIncidentsByQuery)
+      .withReducer(incidents)
+      .provide([
+        [select(selectIncidents), { incidents: mockIncidents, filteredIncidentsByQuery: [] }],
+        [
+          select(selectIncidentTable),
+          {
+            incidentTableColumns: [
+              {
+                Header: customField,
+                accessorPath: `details['${customField}']`,
+                width: 150,
+                columnType: 'alert',
+              },
+            ],
+          },
+        ],
+      ])
+      .dispatch({
+        type: FILTER_INCIDENTS_LIST_BY_QUERY,
+        searchQuery: customFieldValue,
+      })
+      .put({
+        type: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
+        filteredIncidentsByQuery: expectedIncidentResult,
+      })
+      .hasFinalState({
+        incidents: [],
+        filteredIncidentsByQuery: expectedIncidentResult,
+        status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
+        fetchingData: false,
+        fetchingIncidents: false,
+        fetchingIncidentNotes: false,
+        fetchingIncidentAlerts: false,
+        error: null,
+      })
+      .silentRun();
+  });
 });
