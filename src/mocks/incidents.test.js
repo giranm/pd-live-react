@@ -99,6 +99,8 @@ const generateMockIncident = () => {
   const status = INCIDENT_STATES[Math.floor(Math.random() * INCIDENT_STATES.length)];
   const incidentKey = faker.random.alphaNumeric(32);
   const incidentId = faker.random.alphaNumeric(14);
+  const escalationPolicyId = faker.random.alphaNumeric(7);
+  const serviceId = faker.random.alphaNumeric(7);
   const createdAt = faker.date
     .between('2020-01-01T00:00:00.000Z', '2022-01-01T00:00:00.000Z')
     .toISOString();
@@ -113,6 +115,12 @@ const generateMockIncident = () => {
     id: incidentId,
     type: 'incident',
     summary: title,
+    escalation_policy: {
+      id: escalationPolicyId,
+    },
+    service: {
+      id: serviceId,
+    },
     alerts: generateMockAlerts(5),
     notes: generateMockNotes(5),
   };

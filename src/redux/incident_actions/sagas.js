@@ -399,10 +399,7 @@ export function* merge(action) {
     const {
       targetIncident, incidents, displayModal,
     } = action;
-    const incidentsToBeMerged = filterIncidentsByField(incidents, 'status', [
-      TRIGGERED,
-      ACKNOWLEDGED,
-    ]);
+    const incidentsToBeMerged = [...incidents];
 
     // Build request manually given PUT
     const data = {

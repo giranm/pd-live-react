@@ -7,6 +7,7 @@ import {
   TRIGGER_LOG_ENTRY,
   ANNOTATE_LOG_ENTRY,
   LINK_LOG_ENTRY,
+  UNLINK_LOG_ENTRY,
 } from 'util/log-entries';
 import {
   pd,
@@ -102,7 +103,7 @@ export function* updateRecentLogEntries() {
       });
 
       // Find out what incidents need to be updated based on log entry type
-      if (logEntry.type === RESOLVE_LOG_ENTRY) {
+      if (logEntry.type === RESOLVE_LOG_ENTRY || logEntry.type === UNLINK_LOG_ENTRY) {
         removeSet.add(logEntry);
       } else if (logEntry.type === TRIGGER_LOG_ENTRY) {
         addSet.add(logEntry);
