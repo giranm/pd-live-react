@@ -1485,25 +1485,25 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@datadog/browser-core@4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.15.0.tgz#44efdec550c1923b61967490c7ac3fb93c390089"
-  integrity sha512-uLyCiksfrkrSdpYpfaS+e3feI0YQIRtJu5pEZpMrww9hvjY4XFdicG73Va8+O6WhZeGFfV13RMTlxWhsQSFA0w==
+"@datadog/browser-core@4.16.1":
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.16.1.tgz#4f9ee1841b7343049b3734f69d9e8aee70ad1815"
+  integrity sha512-VrJDNUHlCkp2ABqTBui7M1gwZ+UNu0+dpJSIydWVCX7ch4fSE7anEplvrr1y4Y3aC0GYp5KShJQxlxx91YPcHQ==
 
-"@datadog/browser-rum-core@4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.15.0.tgz#5c0c55881da161a47564228c25b0333f45f2a250"
-  integrity sha512-7HiOGO7Du5kNknGs0CzVrUzmdYRf+7I++d8EqIWIIb8KMx8eKaiCBlY1ac+0nTHrbQCdQuV4s6xFpKYpEa8oiA==
+"@datadog/browser-rum-core@4.16.1":
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.16.1.tgz#95a17cf141787d90ff8d4db125eb2f21d2a40b2c"
+  integrity sha512-HFw9/TYfieNbaTpLr1oZhrwOIX0xGvE2l0vQrwcMA42//vLHJ3OYgnBCQmYpycWxVrvWHspyG9aK9MBE3FgA/Q==
   dependencies:
-    "@datadog/browser-core" "4.15.0"
+    "@datadog/browser-core" "4.16.1"
 
-"@datadog/browser-rum@^4.15.0":
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.15.0.tgz#c09995ba3ec0e9666fd75255c99c7cc7b51151db"
-  integrity sha512-4QHf84rC8CEkZbvPh1x48/fk3vv0CVy/aT2lX/da8raIHCyF5j/zXsKpMiV6DJ7ZSFaYIfiuinGiNKH/0cVf7Q==
+"@datadog/browser-rum@^4.16.1":
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.16.1.tgz#4351c98f34a9e84e62322b5d134dd95753802f95"
+  integrity sha512-XxDfTv6KDr/dK6OTjRUmihym3ZhxV+FlcGbGNk9bwCLJCczgNo3yRLrWGpfxqdoiacOVZhn4BB8oUI+OD/2DAQ==
   dependencies:
-    "@datadog/browser-core" "4.15.0"
-    "@datadog/browser-rum-core" "4.15.0"
+    "@datadog/browser-core" "4.16.1"
+    "@datadog/browser-rum-core" "4.16.1"
 
 "@emotion/babel-plugin@^11.7.1":
   version "11.9.2"
@@ -6774,10 +6774,10 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
-genversion@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/genversion/-/genversion-3.0.2.tgz#e39718e483442315bdf195a90134bc5915f57316"
-  integrity sha512-hto4m/V3DQOJbIH2nVNPhkScqwAzpYnmTLDOs+2AYxqGWVKsUW6Qxcz2FXRQlbAXgWpJxbxgnWqb1/s17lK2yg==
+genversion@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/genversion/-/genversion-3.1.1.tgz#5da18c1ea21813b560f923b37dbbb0df528b7c06"
+  integrity sha512-/H861PMsihhjgX2qqhTN8egM11V04imhA+3JRFY3jjPua2Sy1NqaqqQPjSP8rdM9jZoKpFhVj9g3Fs9XPCjBYQ==
   dependencies:
     commander "^7.2.0"
     find-package "^1.0.0"
