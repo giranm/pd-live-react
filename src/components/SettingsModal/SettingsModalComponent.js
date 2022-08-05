@@ -105,11 +105,17 @@ const SettingsModalComponent = ({
 
   const [selectedColumns, setSelectedColumns] = useState(
     incidentTableColumns.map((column) => {
-      // Recreate original value used from react-select
+      // Recreate original value used from react-select in order to populate dual list
       let value;
-      if (column.columnType === 'alert' && column.accessorPath) {
-        value = `${column.Header}:${column.accessorPath}`;
+      if (column.columnType === 'alert') {
+        // Alert column based on aggregator
+        if (column.accessorPath && !column.aggregator) {
+          value = `${column.Header}:${column.accessorPath}`;
+        } else if (column.accessorPath && column.aggregator) {
+          value = `${column.Header}:${column.accessorPath}:${column.aggregator}`;
+        }
       } else {
+        // Incident column
         value = column.Header;
       }
       return {
@@ -128,9 +134,9 @@ const SettingsModalComponent = ({
     const tempAvailableIncidentTableColumns = getAllAvailableColumns();
     alertCustomDetailFields.forEach((field) => {
       const tempField = { ...field };
-      const [derivedHeader, derivedAccessorPath] = tempField.label.split(':');
+      const [derivedHeader, derivedAccessorPath, derivedAggregator] = tempField.label.split(':');
 
-      // Derive header and accessorPath for redux store
+      // Derive header, accessorPath, and aggregator for redux store
       if (derivedHeader) {
         tempField.Header = derivedHeader;
       }
@@ -138,6 +144,11 @@ const SettingsModalComponent = ({
         tempField.accessorPath = derivedAccessorPath;
       } else {
         tempField.accessorPath = null;
+      }
+      if (derivedAggregator === 'agg' || derivedAggregator === 'aggregator') {
+        tempField.aggregator = derivedAggregator;
+      } else {
+        tempField.aggregator = null;
       }
       // Verify if duplicate header is being used; disable option for column selector if so
       if (tempAvailableIncidentTableColumns.map((col) => col.Header).includes(derivedHeader)) {
