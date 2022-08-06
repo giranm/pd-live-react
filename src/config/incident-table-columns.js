@@ -615,7 +615,7 @@ export const customReactTableColumnSchema = (
       } else if (result && Array.isArray(result)) {
         // Deduplicate values if aggregator is used
         if (aggregator) {
-          content = [...new Set(result)].join(', ');
+          content = [...new Set(result)].sort().join(', ');
         } else {
           content = result.join(', ');
         }
