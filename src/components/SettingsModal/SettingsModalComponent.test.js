@@ -8,16 +8,22 @@ import {
   defaultSinceDateTenors,
 } from 'util/settings';
 
+import {
+  MAX_INCIDENTS_LIMIT_LOWER, MAX_INCIDENTS_LIMIT_UPPER,
+} from 'config/constants';
+
 import SettingsModalComponent from './SettingsModalComponent';
 
 describe('SettingsModalComponent', () => {
+  let baseStore;
   let store;
 
   beforeEach(() => {
-    store = mockStore({
+    baseStore = {
       settings: {
         displaySettingsModal: true,
         defaultSinceDateTenor: '1 Day',
+        maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
         alertCustomDetailFields: [
           {
             label: 'Summary:details.to.some.path',
@@ -40,15 +46,17 @@ describe('SettingsModalComponent', () => {
       users: {
         currentUserLocale: 'en-GB',
       },
-    });
+    };
   });
 
   it('should render modal', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     expect(wrapper.find('.modal-title').contains('Settings')).toBeTruthy();
   });
 
   it('should display user profile settings', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="user-profile"]';
     const tabElement = wrapper.find(tabSelector);
@@ -79,11 +87,35 @@ describe('SettingsModalComponent', () => {
     });
 
     expect(
+      wrapper.find('#user-profile-incidents-table-limit-label').contains('Incidents Table Limit'),
+    ).toBeTruthy();
+    expect(
+      wrapper.find('input#user-profile-incidents-table-limit-input').prop('defaultValue'),
+    ).toEqual(MAX_INCIDENTS_LIMIT_LOWER);
+
+    expect(
       wrapper.find('#update-user-profile-button').contains('Update User Profile'),
     ).toBeTruthy();
   });
 
+  it('should deactivate user profile update button for incorrect incident limit input', () => {
+    baseStore.settings.maxIncidentsLimit = MAX_INCIDENTS_LIMIT_UPPER + 1;
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="user-profile"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+
+    expect(
+      wrapper
+        .find('input#user-profile-incidents-table-limit-input')
+        .hasClass('form-control is-invalid'),
+    ).toBeTruthy();
+    expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();
+  });
+
   it('should display incident table settings', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="incident-table"]';
     const tabElement = wrapper.find(tabSelector);
@@ -101,6 +133,7 @@ describe('SettingsModalComponent', () => {
   });
 
   it('should render an enabled custom column option with unique header name', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="incident-table"]';
     const tabElement = wrapper.find(tabSelector);
@@ -111,6 +144,7 @@ describe('SettingsModalComponent', () => {
   });
 
   it('should render a disabled custom column option which has a duplicate header/name', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="incident-table"]';
     const tabElement = wrapper.find(tabSelector);
@@ -119,6 +153,7 @@ describe('SettingsModalComponent', () => {
   });
 
   it('should display local cache settings', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="local-cache"]';
     const tabElement = wrapper.find(tabSelector);

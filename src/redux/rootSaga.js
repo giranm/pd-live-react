@@ -106,6 +106,7 @@ import {
   toggleSettingsModal,
   setDefaultSinceDateTenor,
   setAlertCustomDetailColumns,
+  setMaxIncidentsLimit,
   clearLocalCache,
 } from './settings/sagas';
 
@@ -212,6 +213,7 @@ export default function* rootSaga() {
     toggleSettingsModal(),
     setDefaultSinceDateTenor(),
     setAlertCustomDetailColumns(),
+    setMaxIncidentsLimit(),
     clearLocalCache(),
 
     // Connection

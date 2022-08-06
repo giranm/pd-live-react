@@ -7,6 +7,8 @@ import {
   SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+  SET_MAX_INCIDENTS_LIMIT_REQUESTED,
+  SET_MAX_INCIDENTS_LIMIT_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -41,6 +43,15 @@ const settings = produce(
         draft.status = SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED;
         break;
 
+      case SET_MAX_INCIDENTS_LIMIT_REQUESTED:
+        draft.status = SET_MAX_INCIDENTS_LIMIT_REQUESTED;
+        break;
+
+      case SET_MAX_INCIDENTS_LIMIT_COMPLETED:
+        draft.maxIncidentsLimit = action.maxIncidentsLimit;
+        draft.status = SET_MAX_INCIDENTS_LIMIT_COMPLETED;
+        break;
+
       case CLEAR_LOCAL_CACHE_REQUESTED:
         draft.status = CLEAR_LOCAL_CACHE_REQUESTED;
         break;
@@ -56,6 +67,7 @@ const settings = produce(
   {
     displaySettingsModal: false,
     defaultSinceDateTenor: '1 Day',
+    maxIncidentsLimit: 200,
     alertCustomDetailFields: [
       { label: 'Environment:details.env', value: 'Environment:details.env', columnType: 'alert' },
     ],

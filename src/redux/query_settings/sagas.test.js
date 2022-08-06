@@ -7,7 +7,7 @@ import {
 import * as matchers from 'redux-saga-test-plan/matchers';
 
 import {
-  MAX_INCIDENTS_LIMIT,
+  MAX_INCIDENTS_LIMIT_LOWER,
 } from 'config/constants';
 
 import {
@@ -25,6 +25,8 @@ import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
 import connection from 'redux/connection/reducers';
+
+import selectSettings from 'redux/settings/selectors';
 
 import {
   TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED,
@@ -59,14 +61,18 @@ describe('Sagas: Query Settings', () => {
       limit: 1,
     },
   };
+  const mockSettings = {
+    maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
+  };
 
-  it('validateIncidentQueryImpl: Within MAX_INCIDENTS_LIMIT', () => {
-    expectedMockResponse.data.total = generateRandomInteger(1, MAX_INCIDENTS_LIMIT);
+  it('validateIncidentQueryImpl: Within MAX_INCIDENTS_LIMIT_LOWER', () => {
+    expectedMockResponse.data.total = generateRandomInteger(1, MAX_INCIDENTS_LIMIT_LOWER);
     expectedMockResponse.status = 200;
     return expectSaga(validateIncidentQueryImpl)
       .withReducer(querySettings)
       .provide([
         [select(selectQuerySettings), mockSelector],
+        [select(selectSettings), mockSettings],
         [
           // Matchers is used to mock API calls - ignores params used
           matchers.call.fn(pd.get),
@@ -80,16 +86,17 @@ describe('Sagas: Query Settings', () => {
       });
   });
 
-  it('validateIncidentQueryImpl: Over MAX_INCIDENTS_LIMIT', () => {
+  it('validateIncidentQueryImpl: Over MAX_INCIDENTS_LIMIT_LOWER', () => {
     expectedMockResponse.data.total = generateRandomInteger(
-      MAX_INCIDENTS_LIMIT + 1,
-      MAX_INCIDENTS_LIMIT * 2,
+      MAX_INCIDENTS_LIMIT_LOWER + 1,
+      MAX_INCIDENTS_LIMIT_LOWER * 2,
     );
     expectedMockResponse.status = 200;
     return expectSaga(validateIncidentQueryImpl)
       .withReducer(querySettings)
       .provide([
         [select(selectQuerySettings), mockSelector],
+        [select(selectSettings), mockSettings],
         [matchers.call.fn(pd.get), expectedMockResponse],
       ])
       .silentRun()
@@ -104,6 +111,7 @@ describe('Sagas: Query Settings', () => {
       .withReducer(connection)
       .provide([
         [select(selectQuerySettings), mockSelector],
+        [select(selectSettings), mockSettings],
         [matchers.call.fn(pd.get), expectedMockResponse],
       ])
       .silentRun()
@@ -117,7 +125,10 @@ describe('Sagas: Query Settings', () => {
     const expectedResult = true;
     return expectSaga(toggleDisplayConfirmQueryModal)
       .withReducer(querySettings)
-      .provide([[select(selectQuerySettings), mockSelector]])
+      .provide([
+        [select(selectQuerySettings), mockSelector],
+        [select(selectSettings), mockSettings],
+      ])
       .dispatch({ type: TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED })
       .silentRun()
       .then((result) => {
@@ -131,7 +142,10 @@ describe('Sagas: Query Settings', () => {
     const expectedResult = false;
     return expectSaga(toggleDisplayConfirmQueryModal)
       .withReducer(querySettings)
-      .provide([[select(selectQuerySettings), mockSelector]])
+      .provide([
+        [select(selectQuerySettings), mockSelector],
+        [select(selectSettings), mockSettings],
+      ])
       .dispatch({ type: TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED })
       .silentRun()
       .then((result) => {
@@ -141,7 +155,7 @@ describe('Sagas: Query Settings', () => {
   });
 
   it('updateTotalIncidentsFromQuery', () => {
-    const totalIncidentsFromQuery = generateRandomInteger(0, MAX_INCIDENTS_LIMIT);
+    const totalIncidentsFromQuery = generateRandomInteger(0, MAX_INCIDENTS_LIMIT_LOWER);
     return expectSaga(updateTotalIncidentsFromQuery)
       .withReducer(querySettings)
       .dispatch({ type: UPDATE_TOTAL_INCIDENTS_FROM_QUERY_REQUESTED, totalIncidentsFromQuery })

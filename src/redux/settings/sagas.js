@@ -14,6 +14,8 @@ import {
   SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+  SET_MAX_INCIDENTS_LIMIT_REQUESTED,
+  SET_MAX_INCIDENTS_LIMIT_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -59,6 +61,20 @@ export function* setAlertCustomDetailColumnsImpl(action) {
   yield put({
     type: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
     alertCustomDetailFields,
+  });
+}
+
+export function* setMaxIncidentsLimit() {
+  yield takeLatest(SET_MAX_INCIDENTS_LIMIT_REQUESTED, setMaxIncidentsLimitImpl);
+}
+
+export function* setMaxIncidentsLimitImpl(action) {
+  const {
+    maxIncidentsLimit,
+  } = action;
+  yield put({
+    type: SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+    maxIncidentsLimit,
   });
 }
 

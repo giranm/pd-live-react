@@ -17,10 +17,8 @@ import {
   pushToArray,
 } from 'util/helpers';
 import fuseOptions from 'config/fuse-config';
-import {
-  MAX_INCIDENTS_LIMIT,
-} from 'config/constants';
 
+import selectSettings from 'redux/settings/selectors';
 import selectQuerySettings from 'redux/query_settings/selectors';
 import selectIncidentTable from 'redux/incident_table/selectors';
 import {
@@ -80,6 +78,9 @@ export function* getIncidents() {
   try {
     //  Build params from query settings and call pd lib
     const {
+      maxIncidentsLimit,
+    } = yield select(selectSettings);
+    const {
       sinceDate,
       incidentStatus,
       incidentUrgency,
@@ -106,7 +107,7 @@ export function* getIncidents() {
     fetchedIncidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     // FIXME: Temporary fix for batched calls over prescribed limit - need to use new API library
-    const incidents = fetchedIncidents.slice(0, MAX_INCIDENTS_LIMIT);
+    const incidents = fetchedIncidents.slice(0, maxIncidentsLimit);
 
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,

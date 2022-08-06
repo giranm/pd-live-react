@@ -6,15 +6,23 @@ import {
   faker,
 } from '@faker-js/faker';
 
+import {
+  MAX_INCIDENTS_LIMIT_LOWER, MAX_INCIDENTS_LIMIT_UPPER,
+} from 'config/constants';
+
 import settings from './reducers';
 import {
   SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
   SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+  SET_MAX_INCIDENTS_LIMIT_REQUESTED,
+  SET_MAX_INCIDENTS_LIMIT_COMPLETED,
 } from './actions';
 import {
-  setDefaultSinceDateTenor, setAlertCustomDetailColumns,
+  setDefaultSinceDateTenor,
+  setAlertCustomDetailColumns,
+  setMaxIncidentsLimit,
 } from './sagas';
 
 describe('Sagas: Settings', () => {
@@ -33,7 +41,7 @@ describe('Sagas: Settings', () => {
       .hasFinalState({
         displaySettingsModal: false,
         defaultSinceDateTenor: tenor,
-        status: SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
+        maxIncidentsLimit: 200,
         alertCustomDetailFields: [
           {
             label: 'Environment:details.env',
@@ -41,6 +49,7 @@ describe('Sagas: Settings', () => {
             columnType: 'alert',
           },
         ],
+        status: SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
       })
       .silentRun();
   });
@@ -65,8 +74,39 @@ describe('Sagas: Settings', () => {
       .hasFinalState({
         displaySettingsModal: false,
         defaultSinceDateTenor: '1 Day',
-        status: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+        maxIncidentsLimit: 200,
         alertCustomDetailFields,
+        status: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+      })
+      .silentRun();
+  });
+  it('setMaxIncidentsLimit', () => {
+    const maxIncidentsLimit = faker.datatype.number({
+      min: MAX_INCIDENTS_LIMIT_LOWER,
+      max: MAX_INCIDENTS_LIMIT_UPPER,
+    });
+    return expectSaga(setMaxIncidentsLimit)
+      .withReducer(settings)
+      .dispatch({
+        type: SET_MAX_INCIDENTS_LIMIT_REQUESTED,
+        maxIncidentsLimit,
+      })
+      .put({
+        type: SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+        maxIncidentsLimit,
+      })
+      .hasFinalState({
+        displaySettingsModal: false,
+        defaultSinceDateTenor: '1 Day',
+        maxIncidentsLimit,
+        alertCustomDetailFields: [
+          {
+            label: 'Environment:details.env',
+            value: 'Environment:details.env',
+            columnType: 'alert',
+          },
+        ],
+        status: SET_MAX_INCIDENTS_LIMIT_COMPLETED,
       })
       .silentRun();
   });
