@@ -580,7 +580,12 @@ export const availableAlertTableColumns = [
 ];
 
 // Helper function to define a column for a custom field from the incident object
-export const customReactTableColumnSchema = (columnType, header, accessorPath) => {
+export const customReactTableColumnSchema = (
+  columnType,
+  header,
+  accessorPath,
+  aggregator = null,
+) => {
   let accessor;
   let fullJsonPath;
   let result;
@@ -588,7 +593,12 @@ export const customReactTableColumnSchema = (columnType, header, accessorPath) =
   // Handle accessorPath based on columnType (e.g. alert vs custom incident field)
   if (columnType === 'alert') {
     accessor = (incident) => {
-      fullJsonPath = `alerts[0].body.cef_details.${accessorPath}`;
+      // Determine if field content should be aggregated or from latest alert
+      if (aggregator) {
+        fullJsonPath = `alerts[*].body.cef_details.${accessorPath}`;
+      } else {
+        fullJsonPath = `alerts[0].body.cef_details.${accessorPath}`;
+      }
       try {
         result = JSONPath({
           path: fullJsonPath,
@@ -603,7 +613,12 @@ export const customReactTableColumnSchema = (columnType, header, accessorPath) =
       } else if (result && !Array.isArray(result)) {
         content = result;
       } else if (result && Array.isArray(result)) {
-        content = result.join(', ');
+        // Deduplicate values if aggregator is used
+        if (aggregator) {
+          content = [...new Set(result)].sort().join(', ');
+        } else {
+          content = result.join(', ');
+        }
       } else if (!result) {
         content = '--';
       } else {
@@ -620,6 +635,7 @@ export const customReactTableColumnSchema = (columnType, header, accessorPath) =
     accessorPath,
     fullJsonPath,
     accessor,
+    aggregator,
     Header: header,
     sortable: true,
     minWidth: getTextWidth(header, 'bold 16px sans-serif') + 40,
@@ -654,7 +670,9 @@ export const getReactTableColumnSchemas = (columns) => {
           break;
         // Custom alert details
         default:
-          columnSchema = { ...customReactTableColumnSchema('alert', col.Header, col.accessorPath) };
+          columnSchema = {
+            ...customReactTableColumnSchema('alert', col.Header, col.accessorPath, col.aggregator),
+          };
       }
     }
     // Explicitly set width for rendering (this may come from existing redux store)

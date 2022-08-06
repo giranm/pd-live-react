@@ -20,6 +20,8 @@ import {
   UPDATE_INCIDENTS_LIST,
 } from 'redux/incidents/actions';
 
+import selectIncidents from 'redux/incidents/selectors';
+
 import {
   FETCH_LOG_ENTRIES_REQUESTED,
   FETCH_LOG_ENTRIES_COMPLETED,
@@ -86,6 +88,11 @@ export function* updateRecentLogEntries() {
     const removeSet = new Set();
     const updateSet = new Set();
 
+    // Get existing incidents in store for patching alerts
+    const {
+      incidents,
+    } = yield select(selectIncidents);
+
     // yield doesn't work with forEach; using old implementation
     for (let i = 0; i < logEntries.length; i++) {
       // Skip duplicate log entry
@@ -127,13 +134,17 @@ export function* updateRecentLogEntries() {
       } else if (logEntry.type === LINK_LOG_ENTRY) {
         // Handle special case for alerts: create synthetic alerts object
         // TODO: Consider aggregating LINK_LOG_ENTRY by incident id to avoid duplicate API calls
+        // TODO: Consider moving this logic to updateIncidentsList saga
         const modifiedLogEntry = { ...logEntry };
         const tempIncident = { ...modifiedLogEntry.incident };
+        const existingIncident = incidents.find(
+          (incident) => incident.id === modifiedLogEntry.incident.id,
+        );
         const alertsResponse = yield call(
           pd.get,
           `incidents/${tempIncident.id}/alerts/${logEntry.linked_incident.id}`,
         );
-        tempIncident.alerts = [{ ...alertsResponse.data }.alert];
+        tempIncident.alerts = [{ ...alertsResponse.data }.alert, ...existingIncident.alerts];
         modifiedLogEntry.incident = tempIncident;
         updateSet.add(modifiedLogEntry);
       } else {
