@@ -71,6 +71,7 @@ const limiter = new Bottleneck({
   reservoir: 1900,
   reservoirRefreshAmount: 1900,
   reservoirRefreshInterval: 60 * 1000,
+  maxConcurrent: 20,
   minTime: 60,
 });
 

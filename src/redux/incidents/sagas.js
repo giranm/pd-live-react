@@ -7,7 +7,7 @@ import {
 import Fuse from 'fuse.js';
 
 import {
-  pd, throttledPdAxiosRequest, pdParallelFetch,
+  pd, throttledPdAxiosRequest,
 } from 'util/pd-api-wrapper';
 
 import {
@@ -24,6 +24,10 @@ import selectIncidentTable from 'redux/incident_table/selectors';
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
+
+import {
+  INCIDENTS_PAGINATION_LIMIT,
+} from 'config/constants';
 
 import {
   FETCH_INCIDENTS_REQUESTED,
@@ -90,23 +94,37 @@ export function* getIncidents() {
       searchQuery,
     } = yield select(selectQuerySettings);
 
-    const params = {
+    const baseParams = {
       since: sinceDate.toISOString(),
       until: new Date().toISOString(),
       include: ['first_trigger_log_entries', 'external_references'],
+      limit: INCIDENTS_PAGINATION_LIMIT,
     };
 
-    if (incidentStatus) params.statuses = incidentStatus;
-    if (incidentUrgency) params.urgencies = incidentUrgency;
-    if (teamIds.length) params.team_ids = teamIds;
-    if (serviceIds.length) params.service_ids = serviceIds;
+    if (incidentStatus) baseParams.statuses = incidentStatus;
+    if (incidentUrgency) baseParams.urgencies = incidentUrgency;
+    if (teamIds.length) baseParams.team_ids = teamIds;
+    if (serviceIds.length) baseParams.service_ids = serviceIds;
 
-    const fetchedIncidents = yield pdParallelFetch('incidents', params);
+    // Define API requests to be made in parallel
+    const numberOfApiCalls = Math.ceil(maxIncidentsLimit / INCIDENTS_PAGINATION_LIMIT);
+    const incidentRequests = [];
+    for (let i = 0; i < numberOfApiCalls; i++) {
+      const params = { ...baseParams };
+      params.offset = i * INCIDENTS_PAGINATION_LIMIT;
+      incidentRequests.push(call(throttledPdAxiosRequest, 'GET', 'incidents', params));
+    }
+    const incidentResults = yield all(incidentRequests);
 
-    // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
+    // Stitch results together
+    const fetchedIncidents = [];
+    const incidentResultsData = incidentResults.map((res) => [...res.data.incidents]);
+    incidentResultsData.forEach((data) => {
+      data.forEach((incident) => fetchedIncidents.push(incident));
+    });
+
+    // Sort incidents by reverse created_at date (i.e. recent incidents at the top) and truncate
     fetchedIncidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-    // FIXME: Temporary fix for batched calls over prescribed limit - need to use new API library
     const incidents = fetchedIncidents.slice(0, maxIncidentsLimit);
 
     yield put({
