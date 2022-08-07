@@ -18,11 +18,14 @@ import {
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
   SET_MAX_INCIDENTS_LIMIT_REQUESTED,
   SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+  SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
+  SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
 } from './actions';
 import {
   setDefaultSinceDateTenor,
   setAlertCustomDetailColumns,
   setMaxIncidentsLimit,
+  setAutoAcceptIncidentsQuery,
 } from './sagas';
 
 describe('Sagas: Settings', () => {
@@ -42,6 +45,7 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: tenor,
         maxIncidentsLimit: 200,
+        autoAcceptIncidentsQuery: false,
         alertCustomDetailFields: [
           {
             label: 'Environment:details.env',
@@ -75,6 +79,7 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: 200,
+        autoAcceptIncidentsQuery: false,
         alertCustomDetailFields,
         status: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
       })
@@ -99,6 +104,7 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit,
+        autoAcceptIncidentsQuery: false,
         alertCustomDetailFields: [
           {
             label: 'Environment:details.env',
@@ -107,6 +113,34 @@ describe('Sagas: Settings', () => {
           },
         ],
         status: SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+      })
+      .silentRun();
+  });
+  it('setAutoAcceptIncidentsQuery', () => {
+    const autoAcceptIncidentsQuery = true;
+    return expectSaga(setAutoAcceptIncidentsQuery)
+      .withReducer(settings)
+      .dispatch({
+        type: SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
+        autoAcceptIncidentsQuery,
+      })
+      .put({
+        type: SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
+        autoAcceptIncidentsQuery,
+      })
+      .hasFinalState({
+        displaySettingsModal: false,
+        defaultSinceDateTenor: '1 Day',
+        maxIncidentsLimit: 200,
+        autoAcceptIncidentsQuery,
+        alertCustomDetailFields: [
+          {
+            label: 'Environment:details.env',
+            value: 'Environment:details.env',
+            columnType: 'alert',
+          },
+        ],
+        status: SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
       })
       .silentRun();
   });

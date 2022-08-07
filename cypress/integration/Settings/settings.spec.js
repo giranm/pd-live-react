@@ -11,6 +11,7 @@ import {
   updateUserLocale,
   updateDefaultSinceDateLookback,
   updateMaxIncidentsLimit,
+  updateAutoAcceptIncidentQuery,
   manageIncidentTableColumns,
   manageCustomAlertColumnDefinitions,
   activateButton,
@@ -69,6 +70,18 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       .then((state) => expect(
         Number(state.settings.maxIncidentsLimit),
       ).to.equal(maxIncidentsLimit));
+  });
+
+  it('Update auto-accept incident query', () => {
+    [true, false].forEach((autoAcceptIncidentsQuery) => {
+      updateAutoAcceptIncidentQuery(autoAcceptIncidentsQuery);
+      cy.window()
+        .its('store')
+        .invoke('getState')
+        .then((state) => expect(
+          state.settings.autoAcceptIncidentsQuery,
+        ).to.equal(autoAcceptIncidentsQuery));
+    });
   });
 
   it('Add standard columns to incident table', () => {

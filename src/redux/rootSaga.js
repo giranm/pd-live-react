@@ -107,6 +107,7 @@ import {
   setDefaultSinceDateTenor,
   setAlertCustomDetailColumns,
   setMaxIncidentsLimit,
+  setAutoAcceptIncidentsQuery,
   clearLocalCache,
 } from './settings/sagas';
 
@@ -214,6 +215,7 @@ export default function* rootSaga() {
     setDefaultSinceDateTenor(),
     setAlertCustomDetailColumns(),
     setMaxIncidentsLimit(),
+    setAutoAcceptIncidentsQuery(),
     clearLocalCache(),
 
     // Connection

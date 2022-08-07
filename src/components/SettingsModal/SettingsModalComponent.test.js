@@ -24,6 +24,7 @@ describe('SettingsModalComponent', () => {
         displaySettingsModal: true,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
+        autoAcceptIncidentsQuery: false,
         alertCustomDetailFields: [
           {
             label: 'Summary:details.to.some.path',
@@ -94,6 +95,15 @@ describe('SettingsModalComponent', () => {
     ).toEqual(MAX_INCIDENTS_LIMIT_LOWER);
 
     expect(
+      wrapper
+        .find('#user-profile-auto-accept-incident-query-label')
+        .contains('Auto Accept Incident Query'),
+    ).toBeTruthy();
+    expect(
+      wrapper.find('input#user-profile-auto-accept-incident-query-checkbox').prop('checked'),
+    ).toEqual(false);
+
+    expect(
       wrapper.find('#update-user-profile-button').contains('Update User Profile'),
     ).toBeTruthy();
   });
@@ -112,6 +122,22 @@ describe('SettingsModalComponent', () => {
         .hasClass('form-control is-invalid'),
     ).toBeTruthy();
     expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();
+  });
+
+  it('should set autoAcceptIncidentsQuery to true when checked', () => {
+    const autoAcceptIncidentsQuery = true;
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="user-profile"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+
+    wrapper
+      .find('input#user-profile-auto-accept-incident-query-checkbox')
+      .simulate('change', { target: { checked: autoAcceptIncidentsQuery } });
+    expect(
+      wrapper.find('input#user-profile-auto-accept-incident-query-checkbox').prop('checked'),
+    ).toEqual(autoAcceptIncidentsQuery);
   });
 
   it('should display incident table settings', () => {

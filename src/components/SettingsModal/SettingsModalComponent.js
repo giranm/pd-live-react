@@ -35,6 +35,7 @@ import {
   setDefaultSinceDateTenor as setDefaultSinceDateTenorConnected,
   setAlertCustomDetailColumns as setAlertCustomDetailColumnsConnected,
   setMaxIncidentsLimit as setMaxIncidentsLimitConnected,
+  setAutoAcceptIncidentsQuery as setAutoAcceptIncidentsQueryConnected,
   clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
 
@@ -83,6 +84,7 @@ const SettingsModalComponent = ({
   setAlertCustomDetailColumns,
   saveIncidentTable,
   setMaxIncidentsLimit,
+  setAutoAcceptIncidentsQuery,
   clearLocalCache,
   updateActionAlertsModal,
   toggleDisplayActionAlertsModal,
@@ -91,6 +93,7 @@ const SettingsModalComponent = ({
     displaySettingsModal,
     defaultSinceDateTenor,
     maxIncidentsLimit,
+    autoAcceptIncidentsQuery,
     alertCustomDetailFields,
   } = settings;
   const {
@@ -124,6 +127,8 @@ const SettingsModalComponent = ({
       setIsValidMaxIncidentsLimit(true);
     }
   }, [tempMaxIncidentsLimit]);
+
+  const [tempAutoAcceptQuery, setTempAutoAcceptQuery] = useState(autoAcceptIncidentsQuery);
 
   const [selectedColumns, setSelectedColumns] = useState(
     incidentTableColumns.map((column) => {
@@ -252,6 +257,19 @@ const SettingsModalComponent = ({
                     />
                   </Col>
                 </Form.Group>
+                <Form.Group as={Row}>
+                  <Form.Label id="user-profile-auto-accept-incident-query-label" column sm={2}>
+                    Auto Accept Incident Query
+                  </Form.Label>
+                  <Col xs={6}>
+                    <Form.Check
+                      id="user-profile-auto-accept-incident-query-checkbox"
+                      type="checkbox"
+                      checked={tempAutoAcceptQuery}
+                      onChange={(e) => setTempAutoAcceptQuery(e.target.checked)}
+                    />
+                  </Col>
+                </Form.Group>
               </Form>
               <br />
               <Button
@@ -262,6 +280,7 @@ const SettingsModalComponent = ({
                   updateUserLocale(selectedLocale.value);
                   setDefaultSinceDateTenor(tempSinceDateTenor);
                   setMaxIncidentsLimit(tempMaxIncidentsLimit);
+                  setAutoAcceptIncidentsQuery(tempAutoAcceptQuery);
                   updateActionAlertsModal('success', 'Updated user profile settings');
                   toggleDisplayActionAlertsModal();
                 }}
@@ -352,6 +371,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setMaxIncidentsLimit: (maxIncidentsLimit) => {
     dispatch(setMaxIncidentsLimitConnected(maxIncidentsLimit));
+  },
+  setAutoAcceptIncidentsQuery: (autoAcceptIncidentsQuery) => {
+    dispatch(setAutoAcceptIncidentsQueryConnected(autoAcceptIncidentsQuery));
   },
   clearLocalCache: () => dispatch(clearLocalCacheConnected()),
   updateActionAlertsModal: (actionAlertsModalType, actionAlertsModalMessage) => {

@@ -182,7 +182,7 @@ export function* validateIncidentQueryImpl() {
   try {
     // Find total incidents from data query
     const {
-      maxIncidentsLimit,
+      maxIncidentsLimit, autoAcceptIncidentsQuery,
     } = yield select(selectSettings);
 
     const {
@@ -219,7 +219,7 @@ export function* validateIncidentQueryImpl() {
     });
 
     // Determine if Confirm Query Modal component should be rendered
-    if (totalIncidentsFromQuery > maxIncidentsLimit) {
+    if (totalIncidentsFromQuery > maxIncidentsLimit && !autoAcceptIncidentsQuery) {
       yield put({ type: TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED });
     } else {
       yield put({ type: CONFIRM_INCIDENT_QUERY_REQUESTED, confirm: true });

@@ -63,6 +63,7 @@ describe('Sagas: Query Settings', () => {
   };
   const mockSettings = {
     maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
+    autoAcceptIncidentsQuery: false,
   };
 
   it('validateIncidentQueryImpl: Within MAX_INCIDENTS_LIMIT_LOWER', () => {
@@ -102,6 +103,26 @@ describe('Sagas: Query Settings', () => {
       .silentRun()
       .then((result) => {
         expect(result.storeState.status).toEqual(TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED);
+      });
+  });
+
+  it('validateIncidentQueryImpl: Over MAX_INCIDENTS_LIMIT_LOWER with auto-accept query', () => {
+    expectedMockResponse.data.total = generateRandomInteger(
+      MAX_INCIDENTS_LIMIT_LOWER + 1,
+      MAX_INCIDENTS_LIMIT_LOWER * 2,
+    );
+    expectedMockResponse.status = 200;
+    mockSettings.autoAcceptIncidentsQuery = true;
+    return expectSaga(validateIncidentQueryImpl)
+      .withReducer(querySettings)
+      .provide([
+        [select(selectQuerySettings), mockSelector],
+        [select(selectSettings), mockSettings],
+        [matchers.call.fn(pd.get), expectedMockResponse],
+      ])
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.status).toEqual(CONFIRM_INCIDENT_QUERY_REQUESTED);
       });
   });
 
