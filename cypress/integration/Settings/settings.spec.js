@@ -2,10 +2,16 @@ import moment from 'moment';
 import 'moment/min/locales.min';
 
 import {
+  faker,
+} from '@faker-js/faker';
+
+import {
   acceptDisclaimer,
   waitForIncidentTable,
   updateUserLocale,
   updateDefaultSinceDateLookback,
+  updateMaxIncidentsLimit,
+  updateAutoAcceptIncidentQuery,
   manageIncidentTableColumns,
   manageCustomAlertColumnDefinitions,
   activateButton,
@@ -52,6 +58,29 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       const expectedDate = moment().subtract(Number(sinceDateNum), sinceDateTenor).format('L');
       updateDefaultSinceDateLookback(tenor);
       cy.get('#query-date-input').should('have.value', expectedDate);
+    });
+  });
+
+  it('Update max incidents limit', () => {
+    const maxIncidentsLimit = faker.datatype.number({ min: 200, max: 1000 });
+    updateMaxIncidentsLimit(maxIncidentsLimit);
+    cy.window()
+      .its('store')
+      .invoke('getState')
+      .then((state) => expect(
+        Number(state.settings.maxIncidentsLimit),
+      ).to.equal(maxIncidentsLimit));
+  });
+
+  it('Update auto-accept incident query', () => {
+    [true, false].forEach((autoAcceptIncidentsQuery) => {
+      updateAutoAcceptIncidentQuery(autoAcceptIncidentsQuery);
+      cy.window()
+        .its('store')
+        .invoke('getState')
+        .then((state) => expect(
+          state.settings.autoAcceptIncidentsQuery,
+        ).to.equal(autoAcceptIncidentsQuery));
     });
   });
 

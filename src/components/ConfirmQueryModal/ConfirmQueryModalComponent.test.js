@@ -3,7 +3,7 @@ import {
 } from 'mocks/store.test';
 
 import {
-  MAX_INCIDENTS_LIMIT,
+  MAX_INCIDENTS_LIMIT_LOWER,
 } from 'config/constants';
 
 import {
@@ -14,11 +14,12 @@ import ConfirmQueryModalComponent from './ConfirmQueryModalComponent';
 
 describe('ConfirmQueryModalComponent', () => {
   it('should render modal noting max incident limit has been reached', () => {
-    const totalIncidentsFromQuery = generateRandomInteger(
-      MAX_INCIDENTS_LIMIT + 1,
-      MAX_INCIDENTS_LIMIT * 2,
-    );
+    const limit = MAX_INCIDENTS_LIMIT_LOWER;
+    const totalIncidentsFromQuery = generateRandomInteger(limit + 1, limit * 2);
     const store = mockStore({
+      settings: {
+        maxIncidentsLimit: limit,
+      },
       querySettings: {
         displayConfirmQueryModal: true,
         totalIncidentsFromQuery,
@@ -32,7 +33,7 @@ describe('ConfirmQueryModalComponent', () => {
     expect(wrapper.find('.modal-body').at(0).getDOMNode().textContent).toEqual(
       [
         `Current query parameters match\u00A0${totalIncidentsFromQuery}\u00A0incidents.`,
-        `Only the first\u00A0${MAX_INCIDENTS_LIMIT}\u00A0incidents will be retrieved.Continue?`,
+        `Only the first\u00A0${limit}\u00A0incidents will be retrieved.Continue?`,
       ].join(''),
     );
   });
