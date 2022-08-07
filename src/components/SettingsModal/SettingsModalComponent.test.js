@@ -87,10 +87,10 @@ describe('SettingsModalComponent', () => {
     });
 
     expect(
-      wrapper.find('#user-profile-incidents-table-limit-label').contains('Incidents Table Limit'),
+      wrapper.find('#user-profile-max-incidents-limit-label').contains('Max Incidents Limit'),
     ).toBeTruthy();
     expect(
-      wrapper.find('input#user-profile-incidents-table-limit-input').prop('defaultValue'),
+      wrapper.find('input#user-profile-max-incidents-limit-input').prop('defaultValue'),
     ).toEqual(MAX_INCIDENTS_LIMIT_LOWER);
 
     expect(
@@ -108,7 +108,7 @@ describe('SettingsModalComponent', () => {
 
     expect(
       wrapper
-        .find('input#user-profile-incidents-table-limit-input')
+        .find('input#user-profile-max-incidents-limit-input')
         .hasClass('form-control is-invalid'),
     ).toBeTruthy();
     expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();

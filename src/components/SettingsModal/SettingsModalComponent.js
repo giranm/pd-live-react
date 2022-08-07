@@ -236,12 +236,12 @@ const SettingsModalComponent = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row}>
-                  <Form.Label id="user-profile-incidents-table-limit-label" column sm={2}>
-                    Incidents Table Limit
+                  <Form.Label id="user-profile-max-incidents-limit-label" column sm={2}>
+                    Max Incidents Limit
                   </Form.Label>
                   <Col xs={6}>
                     <Form.Control
-                      id="user-profile-incidents-table-limit-input"
+                      id="user-profile-max-incidents-limit-input"
                       type="number"
                       defaultValue={maxIncidentsLimit}
                       min={MAX_INCIDENTS_LIMIT_LOWER}

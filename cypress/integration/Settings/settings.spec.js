@@ -2,10 +2,15 @@ import moment from 'moment';
 import 'moment/min/locales.min';
 
 import {
+  faker,
+} from '@faker-js/faker';
+
+import {
   acceptDisclaimer,
   waitForIncidentTable,
   updateUserLocale,
   updateDefaultSinceDateLookback,
+  updateMaxIncidentsLimit,
   manageIncidentTableColumns,
   manageCustomAlertColumnDefinitions,
   activateButton,
@@ -53,6 +58,17 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       updateDefaultSinceDateLookback(tenor);
       cy.get('#query-date-input').should('have.value', expectedDate);
     });
+  });
+
+  it('Update max incidents limit', () => {
+    const maxIncidentsLimit = faker.datatype.number({ min: 200, max: 1000 });
+    updateMaxIncidentsLimit(maxIncidentsLimit);
+    cy.window()
+      .its('store')
+      .invoke('getState')
+      .then((state) => expect(
+        Number(state.settings.maxIncidentsLimit),
+      ).to.equal(maxIncidentsLimit));
   });
 
   it('Add standard columns to incident table', () => {

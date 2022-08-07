@@ -20,4 +20,9 @@ const persistor = persistStore(store);
 
 sagaMiddleware.run(rootSaga);
 
+// Expore store for Cypress tests
+if (window.Cypress) {
+  window.store = store;
+}
+
 export { store, persistor };
