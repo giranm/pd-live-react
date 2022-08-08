@@ -108,6 +108,7 @@ import {
   setAlertCustomDetailColumns,
   setMaxIncidentsLimit,
   setAutoAcceptIncidentsQuery,
+  setAutoRefreshInterval,
   clearLocalCache,
 } from './settings/sagas';
 
@@ -216,6 +217,7 @@ export default function* rootSaga() {
     setAlertCustomDetailColumns(),
     setMaxIncidentsLimit(),
     setAutoAcceptIncidentsQuery(),
+    setAutoRefreshInterval(),
     clearLocalCache(),
 
     // Connection

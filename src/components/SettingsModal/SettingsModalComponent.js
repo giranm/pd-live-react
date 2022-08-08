@@ -36,6 +36,7 @@ import {
   setAlertCustomDetailColumns as setAlertCustomDetailColumnsConnected,
   setMaxIncidentsLimit as setMaxIncidentsLimitConnected,
   setAutoAcceptIncidentsQuery as setAutoAcceptIncidentsQueryConnected,
+  setAutoRefreshInterval as setAutoRefreshIntervalConnected,
   clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
 
@@ -47,7 +48,10 @@ import {
 } from 'config/incident-table-columns';
 
 import {
-  MAX_INCIDENTS_LIMIT_LOWER, MAX_INCIDENTS_LIMIT_UPPER,
+  MAX_INCIDENTS_LIMIT_LOWER,
+  MAX_INCIDENTS_LIMIT_UPPER,
+  REFRESH_INTERVAL_LOWER,
+  REFRESH_INTERVAL_UPPER,
 } from 'config/constants';
 
 import {
@@ -85,6 +89,7 @@ const SettingsModalComponent = ({
   saveIncidentTable,
   setMaxIncidentsLimit,
   setAutoAcceptIncidentsQuery,
+  setAutoRefreshInterval,
   clearLocalCache,
   updateActionAlertsModal,
   toggleDisplayActionAlertsModal,
@@ -94,6 +99,7 @@ const SettingsModalComponent = ({
     defaultSinceDateTenor,
     maxIncidentsLimit,
     autoAcceptIncidentsQuery,
+    autoRefreshInterval,
     alertCustomDetailFields,
   } = settings;
   const {
@@ -114,6 +120,19 @@ const SettingsModalComponent = ({
   });
 
   const [tempSinceDateTenor, setTempSinceDateTenor] = useState(defaultSinceDateTenor);
+
+  const [isValidAutoRefreshInterval, setValidAutoRefreshInterval] = useState(true);
+  const [tempAutoRefreshInterval, setTempAutoRefreshInterval] = useState(autoRefreshInterval);
+  useEffect(() => {
+    if (
+      tempAutoRefreshInterval < REFRESH_INTERVAL_LOWER
+      || tempAutoRefreshInterval > REFRESH_INTERVAL_UPPER
+    ) {
+      setValidAutoRefreshInterval(false);
+    } else {
+      setValidAutoRefreshInterval(true);
+    }
+  }, [tempAutoRefreshInterval]);
 
   const [isValidMaxIncidentsLimit, setIsValidMaxIncidentsLimit] = useState(true);
   const [tempMaxIncidentsLimit, setTempMaxIncidentsLimit] = useState(maxIncidentsLimit);
@@ -241,6 +260,23 @@ const SettingsModalComponent = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row}>
+                  <Form.Label id="user-profile-auto-refresh-interval-label" column sm={2}>
+                    Auto Refresh Interval (mins)
+                  </Form.Label>
+                  <Col xs={6}>
+                    <Form.Control
+                      id="user-profile-auto-refresh-interval-input"
+                      type="number"
+                      defaultValue={autoRefreshInterval}
+                      min={REFRESH_INTERVAL_LOWER}
+                      max={REFRESH_INTERVAL_UPPER}
+                      step={5}
+                      onChange={(e) => setTempAutoRefreshInterval(e.target.value)}
+                      isInvalid={!isValidAutoRefreshInterval}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
                   <Form.Label id="user-profile-max-incidents-limit-label" column sm={2}>
                     Max Incidents Limit
                   </Form.Label>
@@ -275,12 +311,18 @@ const SettingsModalComponent = ({
               <Button
                 id="update-user-profile-button"
                 variant="primary"
-                disabled={!isValidMaxIncidentsLimit}
+                disabled={(() => {
+                  if (!isValidAutoRefreshInterval || !isValidMaxIncidentsLimit) {
+                    return true;
+                  }
+                  return false;
+                })()}
                 onClick={() => {
                   updateUserLocale(selectedLocale.value);
                   setDefaultSinceDateTenor(tempSinceDateTenor);
                   setMaxIncidentsLimit(tempMaxIncidentsLimit);
                   setAutoAcceptIncidentsQuery(tempAutoAcceptQuery);
+                  setAutoRefreshInterval(tempAutoRefreshInterval);
                   updateActionAlertsModal('success', 'Updated user profile settings');
                   toggleDisplayActionAlertsModal();
                 }}
@@ -374,6 +416,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setAutoAcceptIncidentsQuery: (autoAcceptIncidentsQuery) => {
     dispatch(setAutoAcceptIncidentsQueryConnected(autoAcceptIncidentsQuery));
+  },
+  setAutoRefreshInterval: (autoRefreshInterval) => {
+    dispatch(setAutoRefreshIntervalConnected(autoRefreshInterval));
   },
   clearLocalCache: () => dispatch(clearLocalCacheConnected()),
   updateActionAlertsModal: (actionAlertsModalType, actionAlertsModalMessage) => {
