@@ -6,9 +6,7 @@ import {
   pd,
 } from 'util/pd-api-wrapper';
 
-import {
-  MAX_INCIDENTS_LIMIT,
-} from 'config/constants';
+import selectSettings from 'redux/settings/selectors';
 
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
@@ -17,6 +15,7 @@ import {
   FETCH_INCIDENTS_REQUESTED,
   FILTER_INCIDENTS_LIST_BY_QUERY,
   FETCH_ALL_INCIDENT_NOTES_REQUESTED,
+  FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
 } from 'redux/incidents/actions';
 import {
   FETCH_SERVICES_REQUESTED,
@@ -183,6 +182,10 @@ export function* validateIncidentQueryImpl() {
   try {
     // Find total incidents from data query
     const {
+      maxIncidentsLimit, autoAcceptIncidentsQuery,
+    } = yield select(selectSettings);
+
+    const {
       sinceDate,
       incidentStatus,
       incidentUrgency,
@@ -216,7 +219,7 @@ export function* validateIncidentQueryImpl() {
     });
 
     // Determine if Confirm Query Modal component should be rendered
-    if (totalIncidentsFromQuery > MAX_INCIDENTS_LIMIT) {
+    if (totalIncidentsFromQuery > maxIncidentsLimit && !autoAcceptIncidentsQuery) {
       yield put({ type: TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED });
     } else {
       yield put({ type: CONFIRM_INCIDENT_QUERY_REQUESTED, confirm: true });
@@ -276,6 +279,7 @@ export function* confirmIncidentQueryImpl(action) {
   if (confirm) {
     yield put({ type: FETCH_INCIDENTS_REQUESTED });
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
+    yield put({ type: FETCH_ALL_INCIDENT_ALERTS_REQUESTED });
     yield put({ type: CONFIRM_INCIDENT_QUERY_COMPLETED });
   } else {
     yield put({ type: CONFIRM_INCIDENT_QUERY_ERROR });

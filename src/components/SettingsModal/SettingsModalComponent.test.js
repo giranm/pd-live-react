@@ -8,32 +8,56 @@ import {
   defaultSinceDateTenors,
 } from 'util/settings';
 
+import {
+  MAX_INCIDENTS_LIMIT_LOWER, MAX_INCIDENTS_LIMIT_UPPER,
+} from 'config/constants';
+
 import SettingsModalComponent from './SettingsModalComponent';
 
 describe('SettingsModalComponent', () => {
+  let baseStore;
   let store;
 
   beforeEach(() => {
-    store = mockStore({
+    baseStore = {
       settings: {
         displaySettingsModal: true,
         defaultSinceDateTenor: '1 Day',
+        maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
+        autoAcceptIncidentsQuery: false,
+        alertCustomDetailFields: [
+          {
+            label: 'Summary:details.to.some.path',
+            value: 'Summary:details.to.some.path',
+            columnType: 'alert',
+          },
+          {
+            label: 'CustomField:details.to.some.path',
+            value: 'CustomField:details.to.some.path',
+            columnType: 'alert',
+          },
+        ],
       },
       incidentTable: {
-        incidentTableColumnsNames: [],
+        incidentTableColumns: [
+          { Header: '#', accessorPath: null, columnType: 'incident' },
+          { Header: 'Summary', accessorPath: null, columnType: 'incident' },
+        ],
       },
       users: {
         currentUserLocale: 'en-GB',
       },
-    });
+    };
   });
 
   it('should render modal', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     expect(wrapper.find('.modal-title').contains('Settings')).toBeTruthy();
   });
 
   it('should display user profile settings', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="user-profile"]';
     const tabElement = wrapper.find(tabSelector);
@@ -64,24 +88,98 @@ describe('SettingsModalComponent', () => {
     });
 
     expect(
+      wrapper.find('#user-profile-max-incidents-limit-label').contains('Max Incidents Limit'),
+    ).toBeTruthy();
+    expect(
+      wrapper.find('input#user-profile-max-incidents-limit-input').prop('defaultValue'),
+    ).toEqual(MAX_INCIDENTS_LIMIT_LOWER);
+
+    expect(
+      wrapper
+        .find('#user-profile-auto-accept-incident-query-label')
+        .contains('Auto Accept Incident Query'),
+    ).toBeTruthy();
+    expect(
+      wrapper.find('input#user-profile-auto-accept-incident-query-checkbox').prop('checked'),
+    ).toEqual(false);
+
+    expect(
       wrapper.find('#update-user-profile-button').contains('Update User Profile'),
     ).toBeTruthy();
   });
 
-  it('should display incident table settings', () => {
+  it('should deactivate user profile update button for incorrect incident limit input', () => {
+    baseStore.settings.maxIncidentsLimit = MAX_INCIDENTS_LIMIT_UPPER + 1;
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
-    const tabSelector = 'a[data-rb-event-key="incident-table-columns"]';
+    const tabSelector = 'a[data-rb-event-key="user-profile"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+
+    expect(
+      wrapper
+        .find('input#user-profile-max-incidents-limit-input')
+        .hasClass('form-control is-invalid'),
+    ).toBeTruthy();
+    expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();
+  });
+
+  it('should set autoAcceptIncidentsQuery to true when checked', () => {
+    const autoAcceptIncidentsQuery = true;
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="user-profile"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+
+    wrapper
+      .find('input#user-profile-auto-accept-incident-query-checkbox')
+      .simulate('change', { target: { checked: autoAcceptIncidentsQuery } });
+    expect(
+      wrapper.find('input#user-profile-auto-accept-incident-query-checkbox').prop('checked'),
+    ).toEqual(autoAcceptIncidentsQuery);
+  });
+
+  it('should display incident table settings', () => {
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
     const tabElement = wrapper.find(tabSelector);
 
     // FIXME: Determine correct way to click DOM with Jest - this does not update internal state
     tabElement.simulate('click');
-    expect(tabElement.contains('Incident Table Columns')).toBeTruthy();
+    expect(tabElement.contains('Incident Table')).toBeTruthy();
+    expect(wrapper.find('h4').contains('Column Selector')).toBeTruthy();
+    expect(wrapper.find('#incident-column-select')).toBeTruthy();
+    expect(wrapper.find('h4').contains('Alert Custom Detail Column Definitions')).toBeTruthy();
+    expect(wrapper.find('#alert-column-definition-select')).toBeTruthy();
     expect(
-      wrapper.find('#update-incident-table-columns-button').contains('Update Columns'),
+      wrapper.find('#update-incident-table-button').contains('Update Incident Table'),
     ).toBeTruthy();
   });
 
+  it('should render an enabled custom column option with unique header name', () => {
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+    expect(wrapper.find('[value="CustomField:details.to.some.path"]').prop('disabled')).toEqual(
+      undefined,
+    );
+  });
+
+  it('should render a disabled custom column option which has a duplicate header/name', () => {
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="incident-table"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+    expect(wrapper.find('[value="Summary:details.to.some.path"]').prop('disabled')).toEqual(true);
+  });
+
   it('should display local cache settings', () => {
+    store = mockStore(baseStore);
     const wrapper = componentWrapper(store, SettingsModalComponent);
     const tabSelector = 'a[data-rb-event-key="local-cache"]';
     const tabElement = wrapper.find(tabSelector);

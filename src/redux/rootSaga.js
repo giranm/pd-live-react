@@ -25,6 +25,7 @@ import {
   getIncidentsAsync,
   getIncidentNotesAsync,
   getAllIncidentNotesAsync,
+  getAllIncidentAlertsAsync,
   updateIncidentsListAsync,
   filterIncidentsByPriority,
   filterIncidentsByStatus,
@@ -102,7 +103,12 @@ import {
 
 // eslint-disable-next-line import/no-cycle
 import {
-  toggleSettingsModal, setDefaultSinceDateTenor, clearLocalCache,
+  toggleSettingsModal,
+  setDefaultSinceDateTenor,
+  setAlertCustomDetailColumns,
+  setMaxIncidentsLimit,
+  setAutoAcceptIncidentsQuery,
+  clearLocalCache,
 } from './settings/sagas';
 
 import {
@@ -134,6 +140,7 @@ export default function* rootSaga() {
     getIncidentsAsync(),
     getIncidentNotesAsync(),
     getAllIncidentNotesAsync(),
+    getAllIncidentAlertsAsync(),
     updateIncidentsListAsync(),
     filterIncidentsByPriority(),
     filterIncidentsByStatus(),
@@ -206,6 +213,9 @@ export default function* rootSaga() {
     // Settings
     toggleSettingsModal(),
     setDefaultSinceDateTenor(),
+    setAlertCustomDetailColumns(),
+    setMaxIncidentsLimit(),
+    setAutoAcceptIncidentsQuery(),
     clearLocalCache(),
 
     // Connection

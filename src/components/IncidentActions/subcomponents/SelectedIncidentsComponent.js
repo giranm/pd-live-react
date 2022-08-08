@@ -10,7 +10,10 @@ const SelectedIncidentsComponent = ({
   incidents, incidentTable, querySettings,
 }) => {
   const {
-    fetchingIncidents, filteredIncidentsByQuery,
+    fetchingIncidents,
+    fetchingIncidentNotes,
+    fetchingIncidentAlerts,
+    filteredIncidentsByQuery,
   } = incidents;
   const {
     selectedCount,
@@ -19,10 +22,10 @@ const SelectedIncidentsComponent = ({
     error: queryError,
   } = querySettings;
 
-  const queryIncidentsRender = (
+  const fetchingDataRender = (variant, message) => (
     <div className="selected-incidents-ctr">
-      <Spinner animation="border" variant="success" />
-      <p className="selected-incidents">Querying</p>
+      <Spinner animation="border" variant={variant} />
+      <p className="selected-incidents">{message}</p>
     </div>
   );
 
@@ -55,10 +58,18 @@ const SelectedIncidentsComponent = ({
   }
 
   if (fetchingIncidents) {
-    return queryIncidentsRender;
+    return fetchingDataRender('success', 'Querying');
   }
 
-  if (!fetchingIncidents) {
+  if (fetchingIncidentNotes) {
+    return fetchingDataRender('primary', 'Fetching Notes');
+  }
+
+  if (fetchingIncidentAlerts) {
+    return fetchingDataRender('info', 'Fetching Alerts');
+  }
+
+  if (!fetchingIncidents && !fetchingIncidentNotes && !fetchingIncidentAlerts) {
     return selectedIncidentsRender;
   }
 

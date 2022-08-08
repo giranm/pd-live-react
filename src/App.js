@@ -46,9 +46,6 @@ import {
   getEscalationPoliciesAsync as getEscalationPoliciesAsyncConnected,
 } from 'redux/escalation_policies/actions';
 import {
-  getExtensionsAsync as getExtensionsAsyncConnected,
-} from 'redux/extensions/actions';
-import {
   getResponsePlaysAsync as getResponsePlaysAsyncConnected,
 } from 'redux/response_plays/actions';
 import {
@@ -84,7 +81,6 @@ const App = ({
   getPrioritiesAsync,
   getUsersAsync,
   getEscalationPoliciesAsync,
-  getExtensionsAsync,
   getResponsePlaysAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
@@ -113,10 +109,9 @@ const App = ({
       getServicesAsync();
       getTeamsAsync();
       getEscalationPoliciesAsync();
-      getExtensionsAsync();
       getResponsePlaysAsync();
       getPrioritiesAsync();
-      // NB: Get Incidents and Notes are implicitly done from query now
+      // NB: Get incidents, notes, and alerts are implicitly done from query now
       checkConnectionStatus();
     }
   }, [userAuthorized]);
@@ -204,7 +199,6 @@ const mapDispatchToProps = (dispatch) => ({
   getPrioritiesAsync: () => dispatch(getPrioritiesAsyncConnected()),
   getUsersAsync: () => dispatch(getUsersAsyncConnected()),
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsyncConnected()),
-  getExtensionsAsync: () => dispatch(getExtensionsAsyncConnected()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsyncConnected()),

@@ -12,6 +12,12 @@ import {
   TOGGLE_SETTINGS_COMPLETED,
   SET_DEFAULT_SINCE_DATE_TENOR_REQUESTED,
   SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED,
+  SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+  SET_MAX_INCIDENTS_LIMIT_REQUESTED,
+  SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+  SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
+  SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -43,6 +49,48 @@ export function* setDefaultSinceDateTenorImpl(action) {
   yield put({
     type: SET_DEFAULT_SINCE_DATE_TENOR_COMPLETED,
     defaultSinceDateTenor,
+  });
+}
+
+export function* setAlertCustomDetailColumns() {
+  yield takeLatest(SET_ALERT_CUSTOM_DETAIL_COLUMNS_REQUESTED, setAlertCustomDetailColumnsImpl);
+}
+
+export function* setAlertCustomDetailColumnsImpl(action) {
+  const {
+    alertCustomDetailFields,
+  } = action;
+  yield put({
+    type: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
+    alertCustomDetailFields,
+  });
+}
+
+export function* setMaxIncidentsLimit() {
+  yield takeLatest(SET_MAX_INCIDENTS_LIMIT_REQUESTED, setMaxIncidentsLimitImpl);
+}
+
+export function* setMaxIncidentsLimitImpl(action) {
+  const {
+    maxIncidentsLimit,
+  } = action;
+  yield put({
+    type: SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+    maxIncidentsLimit,
+  });
+}
+
+export function* setAutoAcceptIncidentsQuery() {
+  yield takeLatest(SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED, setAutoAcceptIncidentsQueryImpl);
+}
+
+export function* setAutoAcceptIncidentsQueryImpl(action) {
+  const {
+    autoAcceptIncidentsQuery,
+  } = action;
+  yield put({
+    type: SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
+    autoAcceptIncidentsQuery,
   });
 }
 

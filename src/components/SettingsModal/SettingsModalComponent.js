@@ -1,5 +1,5 @@
 import {
-  useState,
+  useEffect, useState,
 } from 'react';
 import {
   connect,
@@ -17,6 +17,7 @@ import {
   Form,
 } from 'react-bootstrap';
 import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import DualListBox from 'react-dual-listbox';
 
 import {
@@ -32,6 +33,9 @@ import {
 import {
   toggleSettingsModal as toggleSettingsModalConnected,
   setDefaultSinceDateTenor as setDefaultSinceDateTenorConnected,
+  setAlertCustomDetailColumns as setAlertCustomDetailColumnsConnected,
+  setMaxIncidentsLimit as setMaxIncidentsLimitConnected,
+  setAutoAcceptIncidentsQuery as setAutoAcceptIncidentsQueryConnected,
   clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
 
@@ -39,8 +43,12 @@ import locales from 'config/locales';
 
 import {
   availableIncidentTableColumns,
-  getIncidentTableColumns,
+  availableAlertTableColumns,
 } from 'config/incident-table-columns';
+
+import {
+  MAX_INCIDENTS_LIMIT_LOWER, MAX_INCIDENTS_LIMIT_UPPER,
+} from 'config/constants';
 
 import {
   defaultSinceDateTenors,
@@ -53,10 +61,18 @@ import {
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
 
-const columnMapper = (column) => ({
+const columnMapper = (column, columnType) => ({
   label: column.Header,
   value: column.Header,
+  Header: column.Header,
+  columnType,
 });
+const incidentColumnMap = (column) => columnMapper(column, 'incident');
+const alertColumnMap = (column) => columnMapper(column, 'alert');
+
+const getAllAvailableColumns = () => availableIncidentTableColumns
+  .map(incidentColumnMap)
+  .concat(availableAlertTableColumns.map(alertColumnMap));
 
 const SettingsModalComponent = ({
   settings,
@@ -65,16 +81,23 @@ const SettingsModalComponent = ({
   users,
   updateUserLocale,
   setDefaultSinceDateTenor,
+  setAlertCustomDetailColumns,
   saveIncidentTable,
+  setMaxIncidentsLimit,
+  setAutoAcceptIncidentsQuery,
   clearLocalCache,
   updateActionAlertsModal,
   toggleDisplayActionAlertsModal,
 }) => {
   const {
-    displaySettingsModal, defaultSinceDateTenor,
+    displaySettingsModal,
+    defaultSinceDateTenor,
+    maxIncidentsLimit,
+    autoAcceptIncidentsQuery,
+    alertCustomDetailFields,
   } = settings;
   const {
-    incidentTableColumnsNames,
+    incidentTableColumns,
   } = incidentTable;
   const {
     currentUserLocale,
@@ -92,11 +115,77 @@ const SettingsModalComponent = ({
 
   const [tempSinceDateTenor, setTempSinceDateTenor] = useState(defaultSinceDateTenor);
 
-  const transformedIncidentTableColumns = getIncidentTableColumns(incidentTableColumnsNames);
+  const [isValidMaxIncidentsLimit, setIsValidMaxIncidentsLimit] = useState(true);
+  const [tempMaxIncidentsLimit, setTempMaxIncidentsLimit] = useState(maxIncidentsLimit);
+  useEffect(() => {
+    if (
+      tempMaxIncidentsLimit < MAX_INCIDENTS_LIMIT_LOWER
+      || tempMaxIncidentsLimit > MAX_INCIDENTS_LIMIT_UPPER
+    ) {
+      setIsValidMaxIncidentsLimit(false);
+    } else {
+      setIsValidMaxIncidentsLimit(true);
+    }
+  }, [tempMaxIncidentsLimit]);
+
+  const [tempAutoAcceptQuery, setTempAutoAcceptQuery] = useState(autoAcceptIncidentsQuery);
+
   const [selectedColumns, setSelectedColumns] = useState(
-    transformedIncidentTableColumns.map(columnMapper),
+    incidentTableColumns.map((column) => {
+      // Recreate original value used from react-select in order to populate dual list
+      let value;
+      if (column.columnType === 'alert') {
+        // Alert column based on aggregator
+        if (column.accessorPath && !column.aggregator) {
+          value = `${column.Header}:${column.accessorPath}`;
+        } else if (column.accessorPath && column.aggregator) {
+          value = `${column.Header}:${column.accessorPath}:${column.aggregator}`;
+        }
+      } else {
+        // Incident column
+        value = column.Header;
+      }
+      return {
+        Header: column.Header,
+        columnType: column.columnType,
+        label: column.Header,
+        value,
+      };
+    }),
   );
-  const availableColumns = availableIncidentTableColumns.map(columnMapper);
+
+  const [availableColumns, setAvailableColumns] = useState(getAllAvailableColumns());
+
+  // Handle alert custom detail fields being updated
+  useEffect(() => {
+    const tempAvailableIncidentTableColumns = getAllAvailableColumns();
+    alertCustomDetailFields.forEach((field) => {
+      const tempField = { ...field };
+      const [derivedHeader, derivedAccessorPath, derivedAggregator] = tempField.label.split(':');
+
+      // Derive header, accessorPath, and aggregator for redux store
+      if (derivedHeader) {
+        tempField.Header = derivedHeader;
+      }
+      if (derivedAccessorPath) {
+        tempField.accessorPath = derivedAccessorPath;
+      } else {
+        tempField.accessorPath = null;
+      }
+      if (derivedAggregator === 'agg' || derivedAggregator === 'aggregator') {
+        tempField.aggregator = derivedAggregator;
+      } else {
+        tempField.aggregator = null;
+      }
+      // Verify if duplicate header is being used; disable option for column selector if so
+      if (tempAvailableIncidentTableColumns.map((col) => col.Header).includes(derivedHeader)) {
+        tempField.disabled = true;
+      }
+      tempField.columnType = 'alert';
+      tempAvailableIncidentTableColumns.push(tempField);
+    });
+    setAvailableColumns(tempAvailableIncidentTableColumns);
+  }, [alertCustomDetailFields]);
 
   return (
     <div className="settings-ctr">
@@ -151,14 +240,47 @@ const SettingsModalComponent = ({
                     </ButtonGroup>
                   </Col>
                 </Form.Group>
+                <Form.Group as={Row}>
+                  <Form.Label id="user-profile-max-incidents-limit-label" column sm={2}>
+                    Max Incidents Limit
+                  </Form.Label>
+                  <Col xs={6}>
+                    <Form.Control
+                      id="user-profile-max-incidents-limit-input"
+                      type="number"
+                      defaultValue={maxIncidentsLimit}
+                      min={MAX_INCIDENTS_LIMIT_LOWER}
+                      max={MAX_INCIDENTS_LIMIT_UPPER}
+                      step={100}
+                      onChange={(e) => setTempMaxIncidentsLimit(e.target.value)}
+                      isInvalid={!isValidMaxIncidentsLimit}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
+                  <Form.Label id="user-profile-auto-accept-incident-query-label" column sm={2}>
+                    Auto Accept Incident Query
+                  </Form.Label>
+                  <Col xs={6}>
+                    <Form.Check
+                      id="user-profile-auto-accept-incident-query-checkbox"
+                      type="checkbox"
+                      checked={tempAutoAcceptQuery}
+                      onChange={(e) => setTempAutoAcceptQuery(e.target.checked)}
+                    />
+                  </Col>
+                </Form.Group>
               </Form>
               <br />
               <Button
                 id="update-user-profile-button"
                 variant="primary"
+                disabled={!isValidMaxIncidentsLimit}
                 onClick={() => {
                   updateUserLocale(selectedLocale.value);
                   setDefaultSinceDateTenor(tempSinceDateTenor);
+                  setMaxIncidentsLimit(tempMaxIncidentsLimit);
+                  setAutoAcceptIncidentsQuery(tempAutoAcceptQuery);
                   updateActionAlertsModal('success', 'Updated user profile settings');
                   toggleDisplayActionAlertsModal();
                 }}
@@ -166,30 +288,46 @@ const SettingsModalComponent = ({
                 Update User Profile
               </Button>
             </Tab>
-            <Tab eventKey="incident-table-columns" title="Incident Table Columns">
+            <Tab eventKey="incident-table" title="Incident Table">
               <br />
-              <DualListBox
-                canFilter
-                preserveSelectOrder
-                showOrderButtons
-                showHeaderLabels
-                showNoOptionsText
-                simpleValue={false}
-                options={availableColumns}
-                selected={selectedColumns}
-                onChange={(cols) => setSelectedColumns(cols)}
-              />
+              <Col>
+                <h4>Column Selector</h4>
+                <DualListBox
+                  id="incident-column-select"
+                  canFilter
+                  preserveSelectOrder
+                  showOrderButtons
+                  showHeaderLabels
+                  showNoOptionsText
+                  simpleValue={false}
+                  options={availableColumns}
+                  selected={selectedColumns}
+                  onChange={(cols) => setSelectedColumns(cols)}
+                />
+              </Col>
+              <br />
+              <Col>
+                <h4>Alert Custom Detail Column Definitions</h4>
+                <CreatableSelect
+                  id="alert-column-definition-select"
+                  isMulti
+                  isClearable
+                  placeholder="Enter 'Column Header:JSON Path' (e.g. Environment:details.env)"
+                  defaultValue={alertCustomDetailFields}
+                  onChange={(fields) => setAlertCustomDetailColumns(fields)}
+                />
+              </Col>
               <br />
               <Button
-                id="update-incident-table-columns-button"
+                id="update-incident-table-button"
                 variant="primary"
                 onClick={() => {
                   saveIncidentTable(selectedColumns);
-                  updateActionAlertsModal('success', 'Updated incident table columns');
+                  updateActionAlertsModal('success', 'Updated incident table settings');
                   toggleDisplayActionAlertsModal();
                 }}
               >
-                Update Columns
+                Update Incident Table
               </Button>
             </Tab>
             <Tab eventKey="local-cache" title="Local Cache">
@@ -225,8 +363,17 @@ const mapDispatchToProps = (dispatch) => ({
   setDefaultSinceDateTenor: (defaultSinceDateTenor) => {
     dispatch(setDefaultSinceDateTenorConnected(defaultSinceDateTenor));
   },
+  setAlertCustomDetailColumns: (alertCustomDetailFields) => {
+    dispatch(setAlertCustomDetailColumnsConnected(alertCustomDetailFields));
+  },
   saveIncidentTable: (updatedIncidentTableColumns) => {
     dispatch(saveIncidentTableConnected(updatedIncidentTableColumns));
+  },
+  setMaxIncidentsLimit: (maxIncidentsLimit) => {
+    dispatch(setMaxIncidentsLimitConnected(maxIncidentsLimit));
+  },
+  setAutoAcceptIncidentsQuery: (autoAcceptIncidentsQuery) => {
+    dispatch(setAutoAcceptIncidentsQueryConnected(autoAcceptIncidentsQuery));
   },
   clearLocalCache: () => dispatch(clearLocalCacheConnected()),
   updateActionAlertsModal: (actionAlertsModalType, actionAlertsModalMessage) => {

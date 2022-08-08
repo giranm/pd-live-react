@@ -100,7 +100,6 @@ const IncidentActionsComponent = ({
   const {
     selectedCount, selectedRows,
   } = incidentTable;
-  const resolvedIncidents = filterIncidentsByField(selectedRows, 'status', [RESOLVED]);
   const unresolvedIncidents = filterIncidentsByField(selectedRows, 'status', [
     TRIGGERED,
     ACKNOWLEDGED,
@@ -112,11 +111,7 @@ const IncidentActionsComponent = ({
   const enableActions = !(unresolvedIncidents.length > 0);
   const enablePostActions = !(selectedCount > 0);
   const enablePostSingularAction = selectedCount !== 1;
-  const enableMergeAction = !(
-    !enableActions
-    && selectedCount > 1
-    && resolvedIncidents.length === 0
-  );
+  const enableMergeAction = !(selectedCount > 0);
   const enableEscalationAction = !(
     selectedCount === 1
     && highUrgencyIncidents.length

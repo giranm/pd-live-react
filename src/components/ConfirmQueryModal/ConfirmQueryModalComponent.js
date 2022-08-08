@@ -11,15 +11,15 @@ import {
   confirmIncidentQuery as confirmIncidentQueryConnected,
 } from 'redux/query_settings/actions';
 
-import {
-  MAX_INCIDENTS_LIMIT,
-} from 'config/constants';
-
 const ConfirmQueryModalComponent = ({
+  settings,
   querySettings,
   toggleDisplayConfirmQueryModal,
   confirmIncidentQuery,
 }) => {
+  const {
+    maxIncidentsLimit,
+  } = settings;
   const {
     displayConfirmQueryModal, totalIncidentsFromQuery,
   } = querySettings;
@@ -41,7 +41,7 @@ const ConfirmQueryModalComponent = ({
           &nbsp;incidents.
           <br />
           Only the first&nbsp;
-          {MAX_INCIDENTS_LIMIT}
+          {maxIncidentsLimit}
           &nbsp;incidents will be retrieved.
           <br />
           <br />
@@ -68,6 +68,7 @@ const ConfirmQueryModalComponent = ({
 };
 
 const mapStateToProps = (state) => ({
+  settings: state.settings,
   querySettings: state.querySettings,
 });
 

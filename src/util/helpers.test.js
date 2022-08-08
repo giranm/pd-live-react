@@ -1,5 +1,8 @@
 import {
-  getInitials, getSubdomainFromUserUrl, generateRandomInteger,
+  getInitials,
+  getSubdomainFromUserUrl,
+  generateRandomInteger,
+  getTextWidth,
 } from './helpers';
 
 describe('getInitials', () => {
@@ -45,5 +48,15 @@ describe('generateRandomInteger', () => {
     const integer = 20;
     const expectedInteger = generateRandomInteger(integer, integer);
     expect(expectedInteger).toEqual(integer);
+  });
+});
+
+describe('getTextWidth', () => {
+  it('Given text and font type, it will return a valid text width', () => {
+    const text = 'This is a test string';
+    const font = '12pt sans-serif bold';
+    const expectedTextWidth = 21;
+    const calculatedTextWidth = getTextWidth(text, font);
+    expect(expectedTextWidth).toEqual(calculatedTextWidth);
   });
 });

@@ -30,7 +30,7 @@ import {
 } from 'redux/incident_table/actions';
 
 import {
-  getIncidentTableColumns,
+  getReactTableColumnSchemas,
 } from 'config/incident-table-columns';
 
 import CheckboxComponent from './subcomponents/CheckboxComponent';
@@ -78,7 +78,7 @@ const IncidentTableComponent = ({
   querySettings,
 }) => {
   const {
-    incidentTableState, incidentTableColumnsNames,
+    incidentTableState, incidentTableColumns,
   } = incidentTable;
   const {
     status,
@@ -100,21 +100,10 @@ const IncidentTableComponent = ({
     [],
   );
 
-  const memoizedColumns = useMemo(() => {
-    // Merge current columns state with any modifications to order etc
-    const columns = getIncidentTableColumns(incidentTableColumnsNames);
-    const columnWidths = incidentTableState.columnResizing
-      ? incidentTableState.columnResizing.columnWidths
-      : null;
-    const tempColumns = columns.map((col) => {
-      const tempCol = { ...col };
-      if (columnWidths && tempCol.accessor in columnWidths) {
-        tempCol.width = columnWidths[tempCol.accessor];
-      }
-      return tempCol;
-    });
-    return tempColumns;
-  }, [incidentTableColumnsNames]);
+  const memoizedColumns = useMemo(
+    () => getReactTableColumnSchemas(incidentTableColumns),
+    [incidentTableColumns],
+  );
 
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
