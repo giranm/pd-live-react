@@ -47,6 +47,7 @@ describe('Sagas: Incidents', () => {
       fetchingIncidents: false,
       fetchingIncidentNotes: false,
       fetchingIncidentAlerts: false,
+      refreshingIncidents: false,
       error: null,
     })
     .silentRun());
@@ -76,6 +77,7 @@ describe('Sagas: Incidents', () => {
         fetchingIncidents: false,
         fetchingIncidentNotes: false,
         fetchingIncidentAlerts: false,
+        refreshingIncidents: false,
         error: null,
       })
       .silentRun();
@@ -120,6 +122,7 @@ describe('Sagas: Incidents', () => {
         fetchingIncidents: false,
         fetchingIncidentNotes: false,
         fetchingIncidentAlerts: false,
+        refreshingIncidents: false,
         error: null,
       })
       .silentRun();

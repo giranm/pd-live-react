@@ -14,6 +14,7 @@ const SelectedIncidentsComponent = ({
     fetchingIncidentNotes,
     fetchingIncidentAlerts,
     filteredIncidentsByQuery,
+    refreshingIncidents,
   } = incidents;
   const {
     selectedCount,
@@ -69,7 +70,16 @@ const SelectedIncidentsComponent = ({
     return fetchingDataRender('info', 'Fetching Alerts');
   }
 
-  if (!fetchingIncidents && !fetchingIncidentNotes && !fetchingIncidentAlerts) {
+  if (refreshingIncidents) {
+    return fetchingDataRender('success', 'Refreshing');
+  }
+
+  if (
+    !fetchingIncidents
+    && !fetchingIncidentNotes
+    && !fetchingIncidentAlerts
+    && !refreshingIncidents
+  ) {
     return selectedIncidentsRender;
   }
 

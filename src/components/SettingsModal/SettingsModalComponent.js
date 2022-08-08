@@ -271,7 +271,7 @@ const SettingsModalComponent = ({
                       min={REFRESH_INTERVAL_LOWER}
                       max={REFRESH_INTERVAL_UPPER}
                       step={5}
-                      onChange={(e) => setTempAutoRefreshInterval(e.target.value)}
+                      onChange={(e) => setTempAutoRefreshInterval(Number(e.target.value))}
                       isInvalid={!isValidAutoRefreshInterval}
                     />
                   </Col>
@@ -288,7 +288,7 @@ const SettingsModalComponent = ({
                       min={MAX_INCIDENTS_LIMIT_LOWER}
                       max={MAX_INCIDENTS_LIMIT_UPPER}
                       step={100}
-                      onChange={(e) => setTempMaxIncidentsLimit(e.target.value)}
+                      onChange={(e) => setTempMaxIncidentsLimit(Number(e.target.value))}
                       isInvalid={!isValidMaxIncidentsLimit}
                     />
                   </Col>
