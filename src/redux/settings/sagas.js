@@ -18,6 +18,8 @@ import {
   SET_MAX_INCIDENTS_LIMIT_COMPLETED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
+  SET_AUTO_REFRESH_INTERVAL_REQUESTED,
+  SET_AUTO_REFRESH_INTERVAL_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -91,6 +93,20 @@ export function* setAutoAcceptIncidentsQueryImpl(action) {
   yield put({
     type: SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
     autoAcceptIncidentsQuery,
+  });
+}
+
+export function* setAutoRefreshInterval() {
+  yield takeLatest(SET_AUTO_REFRESH_INTERVAL_REQUESTED, setAutoRefreshIntervalImpl);
+}
+
+export function* setAutoRefreshIntervalImpl(action) {
+  const {
+    autoRefreshInterval,
+  } = action;
+  yield put({
+    type: SET_AUTO_REFRESH_INTERVAL_COMPLETED,
+    autoRefreshInterval,
   });
 }
 

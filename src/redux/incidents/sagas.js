@@ -11,7 +11,9 @@ import {
 } from 'util/pd-api-wrapper';
 
 import {
-  filterIncidentsByField, filterIncidentsByFieldOfList,
+  filterIncidentsByField,
+  filterIncidentsByFieldOfList,
+  UPDATE_INCIDENT_REDUCER_STATUS,
 } from 'util/incidents';
 import {
   pushToArray,
@@ -26,6 +28,10 @@ import {
 } from 'redux/connection/actions';
 
 import {
+  UPDATE_RECENT_LOG_ENTRIES_COMPLETED,
+} from 'redux/log_entries/actions';
+
+import {
   INCIDENTS_PAGINATION_LIMIT,
 } from 'config/constants';
 
@@ -33,6 +39,9 @@ import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
   FETCH_INCIDENTS_ERROR,
+  REFRESH_INCIDENTS_REQUESTED,
+  REFRESH_INCIDENTS_COMPLETED,
+  REFRESH_INCIDENTS_ERROR,
   FETCH_INCIDENT_NOTES_REQUESTED,
   FETCH_INCIDENT_NOTES_COMPLETED,
   FETCH_INCIDENT_NOTES_ERROR,
@@ -74,25 +83,18 @@ export const getIncidentByIdRequest = (incidentId) => call(pd, {
   },
 });
 
-export function* getIncidentsAsync() {
-  yield takeLatest(FETCH_INCIDENTS_REQUESTED, getIncidents);
-}
-
-export function* getIncidents() {
+export function* getIncidentsImpl() {
+  //  Build params from query settings and call pd lib
+  let incidents = [];
   try {
-    //  Build params from query settings and call pd lib
     const {
       maxIncidentsLimit,
     } = yield select(selectSettings);
     const {
-      sinceDate,
-      incidentStatus,
-      incidentUrgency,
-      teamIds,
-      serviceIds,
-      incidentPriority,
-      searchQuery,
-    } = yield select(selectQuerySettings);
+      sinceDate, incidentStatus, incidentUrgency, teamIds, serviceIds,
+    } = yield select(
+      selectQuerySettings,
+    );
 
     const baseParams = {
       since: sinceDate.toISOString(),
@@ -125,8 +127,35 @@ export function* getIncidents() {
 
     // Sort incidents by reverse created_at date (i.e. recent incidents at the top) and truncate
     fetchedIncidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    const incidents = fetchedIncidents.slice(0, maxIncidentsLimit);
+    incidents = fetchedIncidents.slice(0, maxIncidentsLimit);
+  } catch (e) {
+    yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to fetch incidents',
+    });
+  }
+  return incidents;
+}
 
+export function* getIncidentsAsync() {
+  yield takeLatest(FETCH_INCIDENTS_REQUESTED, getIncidents);
+}
+
+export function* getIncidents() {
+  try {
+    // Update status and fetch; this is required because we're manually calling getIncidents()
+    yield put({
+      type: UPDATE_INCIDENT_REDUCER_STATUS,
+      status: FETCH_INCIDENTS_REQUESTED,
+      fetchingIncidents: true,
+    });
+
+    const {
+      incidentPriority, searchQuery,
+    } = yield select(selectQuerySettings);
+    const incidents = yield getIncidentsImpl();
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
       incidents,
@@ -143,6 +172,30 @@ export function* getIncidents() {
       type: UPDATE_CONNECTION_STATUS_REQUESTED,
       connectionStatus: 'neutral',
       connectionStatusMessage: 'Unable to fetch incidents',
+    });
+  }
+}
+
+export function* refreshIncidentsAsync() {
+  yield takeLatest(REFRESH_INCIDENTS_REQUESTED, refreshIncidents);
+}
+
+export function* refreshIncidents() {
+  try {
+    // Fetch incidents, notes, and alerts for refresh
+    const incidents = yield getIncidentsImpl();
+    yield put({
+      type: REFRESH_INCIDENTS_COMPLETED,
+      incidents,
+    });
+    yield call(getAllIncidentNotes);
+    yield call(getAllIncidentAlerts);
+  } catch (e) {
+    yield put({ type: REFRESH_INCIDENTS_ERROR, message: e.message });
+    yield put({
+      type: UPDATE_CONNECTION_STATUS_REQUESTED,
+      connectionStatus: 'neutral',
+      connectionStatusMessage: 'Unable to refresh incidents',
     });
   }
 }
@@ -196,8 +249,11 @@ export function* getAllIncidentNotesAsync() {
 
 export function* getAllIncidentNotes() {
   try {
-    // Wait until incidents have been fetched before obtaining notes
-    yield take([FETCH_INCIDENTS_COMPLETED, FETCH_INCIDENTS_ERROR]);
+    yield put({
+      type: UPDATE_INCIDENT_REDUCER_STATUS,
+      status: FETCH_ALL_INCIDENT_NOTES_REQUESTED,
+      fetchingIncidentNotes: true,
+    });
 
     // Build list of promises to call PD endpoint
     const {
@@ -249,8 +305,11 @@ export function* getAllIncidentAlertsAsync() {
 
 export function* getAllIncidentAlerts() {
   try {
-    // Wait until incidents & notes have been fetched before obtaining alerts
-    yield take([FETCH_ALL_INCIDENT_NOTES_COMPLETED, FETCH_ALL_INCIDENT_NOTES_ERROR]);
+    yield put({
+      type: UPDATE_INCIDENT_REDUCER_STATUS,
+      status: FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
+      fetchingIncidentAlerts: true,
+    });
 
     // Build list of promises to call PD endpoint
     const {
@@ -302,8 +361,9 @@ export function* updateIncidentsListAsync() {
 
 export function* updateIncidentsList(action) {
   try {
+    take(UPDATE_RECENT_LOG_ENTRIES_COMPLETED);
     const {
-      addList, updateList, removeList,
+      addList, updateList,
     } = action;
     const {
       incidents,
@@ -341,7 +401,7 @@ export function* updateIncidentsList(action) {
       updatedIncidentsList.push(newIncident);
     });
 
-    // Update existing incidents within list
+    // Update existing incidents within list including resolved
     if (incidents.length && updateList.length) {
       updatedIncidentsList = updatedIncidentsList.map((existingIncident) => {
         const updatedItem = updateList.find((updateItem) => {
@@ -365,13 +425,6 @@ export function* updateIncidentsList(action) {
         }
       });
     }
-
-    // Remove incidents within list
-    updatedIncidentsList = updatedIncidentsList.filter(
-      (existingIncident) => !removeList.some((removeItem) => {
-        if (removeItem.incident) return removeItem.incident.id === existingIncident.id;
-      }),
-    );
 
     // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
     updatedIncidentsList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

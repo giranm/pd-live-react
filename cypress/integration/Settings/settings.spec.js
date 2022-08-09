@@ -12,6 +12,7 @@ import {
   updateDefaultSinceDateLookback,
   updateMaxIncidentsLimit,
   updateAutoAcceptIncidentQuery,
+  updateAutoRefreshInterval,
   manageIncidentTableColumns,
   manageCustomAlertColumnDefinitions,
   activateButton,
@@ -59,6 +60,17 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       updateDefaultSinceDateLookback(tenor);
       cy.get('#query-date-input').should('have.value', expectedDate);
     });
+  });
+
+  it('Update auto-refresh interval', () => {
+    const autoRefreshInterval = faker.datatype.number({ min: 5, max: 60 });
+    updateAutoRefreshInterval(autoRefreshInterval);
+    cy.window()
+      .its('store')
+      .invoke('getState')
+      .then((state) => expect(
+        Number(state.settings.autoRefreshInterval),
+      ).to.equal(autoRefreshInterval));
   });
 
   it('Update max incidents limit', () => {

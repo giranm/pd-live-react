@@ -12,11 +12,13 @@ import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
 import {
-  FETCH_INCIDENTS_REQUESTED,
   FILTER_INCIDENTS_LIST_BY_QUERY,
-  FETCH_ALL_INCIDENT_NOTES_REQUESTED,
-  FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
 } from 'redux/incidents/actions';
+
+import {
+  getIncidents, getAllIncidentNotes, getAllIncidentAlerts,
+} from 'redux/incidents/sagas';
+
 import {
   FETCH_SERVICES_REQUESTED,
 } from 'redux/services/actions';
@@ -277,9 +279,9 @@ export function* confirmIncidentQueryImpl(action) {
     confirm,
   } = action;
   if (confirm) {
-    yield put({ type: FETCH_INCIDENTS_REQUESTED });
-    yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
-    yield put({ type: FETCH_ALL_INCIDENT_ALERTS_REQUESTED });
+    yield call(getIncidents);
+    yield call(getAllIncidentNotes);
+    yield call(getAllIncidentAlerts);
     yield put({ type: CONFIRM_INCIDENT_QUERY_COMPLETED });
   } else {
     yield put({ type: CONFIRM_INCIDENT_QUERY_ERROR });

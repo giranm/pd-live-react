@@ -7,7 +7,10 @@ import {
 } from '@faker-js/faker';
 
 import {
-  MAX_INCIDENTS_LIMIT_LOWER, MAX_INCIDENTS_LIMIT_UPPER,
+  MAX_INCIDENTS_LIMIT_LOWER,
+  MAX_INCIDENTS_LIMIT_UPPER,
+  REFRESH_INTERVAL_LOWER,
+  REFRESH_INTERVAL_UPPER,
 } from 'config/constants';
 
 import settings from './reducers';
@@ -20,12 +23,15 @@ import {
   SET_MAX_INCIDENTS_LIMIT_COMPLETED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
+  SET_AUTO_REFRESH_INTERVAL_REQUESTED,
+  SET_AUTO_REFRESH_INTERVAL_COMPLETED,
 } from './actions';
 import {
   setDefaultSinceDateTenor,
   setAlertCustomDetailColumns,
   setMaxIncidentsLimit,
   setAutoAcceptIncidentsQuery,
+  setAutoRefreshInterval,
 } from './sagas';
 
 describe('Sagas: Settings', () => {
@@ -46,6 +52,7 @@ describe('Sagas: Settings', () => {
         defaultSinceDateTenor: tenor,
         maxIncidentsLimit: 200,
         autoAcceptIncidentsQuery: false,
+        autoRefreshInterval: 5,
         alertCustomDetailFields: [
           {
             label: 'Environment:details.env',
@@ -80,6 +87,7 @@ describe('Sagas: Settings', () => {
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: 200,
         autoAcceptIncidentsQuery: false,
+        autoRefreshInterval: 5,
         alertCustomDetailFields,
         status: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
       })
@@ -105,6 +113,7 @@ describe('Sagas: Settings', () => {
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit,
         autoAcceptIncidentsQuery: false,
+        autoRefreshInterval: 5,
         alertCustomDetailFields: [
           {
             label: 'Environment:details.env',
@@ -133,6 +142,7 @@ describe('Sagas: Settings', () => {
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: 200,
         autoAcceptIncidentsQuery,
+        autoRefreshInterval: 5,
         alertCustomDetailFields: [
           {
             label: 'Environment:details.env',
@@ -141,6 +151,38 @@ describe('Sagas: Settings', () => {
           },
         ],
         status: SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
+      })
+      .silentRun();
+  });
+  it('setAutoRefreshInterval', () => {
+    const autoRefreshInterval = faker.datatype.number({
+      min: REFRESH_INTERVAL_LOWER,
+      max: REFRESH_INTERVAL_UPPER,
+    });
+    return expectSaga(setAutoRefreshInterval)
+      .withReducer(settings)
+      .dispatch({
+        type: SET_AUTO_REFRESH_INTERVAL_REQUESTED,
+        autoRefreshInterval,
+      })
+      .put({
+        type: SET_AUTO_REFRESH_INTERVAL_COMPLETED,
+        autoRefreshInterval,
+      })
+      .hasFinalState({
+        displaySettingsModal: false,
+        defaultSinceDateTenor: '1 Day',
+        maxIncidentsLimit: 200,
+        autoAcceptIncidentsQuery: false,
+        autoRefreshInterval,
+        alertCustomDetailFields: [
+          {
+            label: 'Environment:details.env',
+            value: 'Environment:details.env',
+            columnType: 'alert',
+          },
+        ],
+        status: SET_AUTO_REFRESH_INTERVAL_COMPLETED,
       })
       .silentRun();
   });

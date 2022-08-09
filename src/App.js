@@ -26,6 +26,9 @@ import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
 import ConfirmQueryModalComponent from 'components/ConfirmQueryModal/ConfirmQueryModalComponent';
 
 import {
+  refreshIncidentsAsync as refreshIncidentsAsyncConnected,
+} from 'redux/incidents/actions';
+import {
   getLogEntriesAsync as getLogEntriesAsyncConnected,
   cleanRecentLogEntriesAsync as cleanRecentLogEntriesAsyncConnected,
 } from 'redux/log_entries/actions';
@@ -84,6 +87,7 @@ const App = ({
   getResponsePlaysAsync,
   getLogEntriesAsync,
   cleanRecentLogEntriesAsync,
+  refreshIncidentsAsync,
 }) => {
   // Verify if session token is present
   const token = sessionStorage.getItem('pd_access_token');
@@ -99,6 +103,12 @@ const App = ({
   const {
     userAuthorized, userAcceptedDisclaimer, currentUserLocale,
   } = state.users;
+  const {
+    autoRefreshInterval,
+  } = state.settings;
+  const {
+    fetchingIncidents, fetchingIncidentNotes, fetchingIncidentAlerts, refreshingIncidents,
+  } = state.incidents;
   const queryError = state.querySettings.error;
   useEffect(() => {
     userAuthorize();
@@ -122,22 +132,33 @@ const App = ({
   }, [currentUserLocale]);
 
   // Setup log entry polling
-  useEffect(() => {
-    const pollingInterval = setInterval(() => {
-      checkAbilities();
-      checkConnectionStatus();
-      const {
-        abilities,
-      } = store.getState().connection;
-      if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY) && !queryError) {
-        const lastPolledDate = moment()
-          .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
-          .toDate();
-        getLogEntriesAsync(lastPolledDate);
-      }
-    }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
-    return () => clearInterval(pollingInterval);
-  }, [userAuthorized, queryError]);
+  useEffect(
+    () => {
+      const pollingInterval = setInterval(() => {
+        checkAbilities();
+        checkConnectionStatus();
+        const {
+          abilities,
+        } = store.getState().connection;
+        if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY) && !queryError) {
+          const lastPolledDate = moment()
+            .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
+            .toDate();
+          getLogEntriesAsync(lastPolledDate);
+        }
+      }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
+      return () => clearInterval(pollingInterval);
+    },
+    // Changes to any of these in the store resets log entries timer
+    [
+      userAuthorized,
+      queryError,
+      fetchingIncidents,
+      fetchingIncidentNotes,
+      fetchingIncidentAlerts,
+      refreshingIncidents,
+    ],
+  );
 
   // Setup log entry clearing
   useEffect(() => {
@@ -148,6 +169,21 @@ const App = ({
     }, LOG_ENTRIES_CLEARING_INTERVAL_SECONDS * 1000);
     return () => clearInterval(clearingInterval);
   }, [userAuthorized]);
+
+  // Setup auto-refresh for incidents
+  useEffect(() => {
+    const refreshInterval = setInterval(() => {
+      checkAbilities();
+      checkConnectionStatus();
+      const {
+        abilities,
+      } = store.getState().connection;
+      if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY) && !queryError) {
+        refreshIncidentsAsync();
+      }
+    }, autoRefreshInterval * 60 * 1000);
+    return () => clearInterval(refreshInterval);
+  }, [userAuthorized, queryError, autoRefreshInterval, fetchingIncidents]);
 
   // Display disclaimer modal
   if (!userAcceptedDisclaimer) {
@@ -202,6 +238,7 @@ const mapDispatchToProps = (dispatch) => ({
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),
   cleanRecentLogEntriesAsync: () => dispatch(cleanRecentLogEntriesAsyncConnected()),
+  refreshIncidentsAsync: () => dispatch(refreshIncidentsAsyncConnected()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

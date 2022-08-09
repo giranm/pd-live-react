@@ -11,6 +11,8 @@ import {
   SET_MAX_INCIDENTS_LIMIT_COMPLETED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
+  SET_AUTO_REFRESH_INTERVAL_REQUESTED,
+  SET_AUTO_REFRESH_INTERVAL_COMPLETED,
   CLEAR_LOCAL_CACHE_REQUESTED,
   CLEAR_LOCAL_CACHE_COMPLETED,
 } from './actions';
@@ -63,6 +65,15 @@ const settings = produce(
         draft.status = SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED;
         break;
 
+      case SET_AUTO_REFRESH_INTERVAL_REQUESTED:
+        draft.status = SET_AUTO_REFRESH_INTERVAL_REQUESTED;
+        break;
+
+      case SET_AUTO_REFRESH_INTERVAL_COMPLETED:
+        draft.autoRefreshInterval = action.autoRefreshInterval;
+        draft.status = SET_AUTO_REFRESH_INTERVAL_COMPLETED;
+        break;
+
       case CLEAR_LOCAL_CACHE_REQUESTED:
         draft.status = CLEAR_LOCAL_CACHE_REQUESTED;
         break;
@@ -80,6 +91,7 @@ const settings = produce(
     defaultSinceDateTenor: '1 Day',
     maxIncidentsLimit: 200,
     autoAcceptIncidentsQuery: false,
+    autoRefreshInterval: 5,
     alertCustomDetailFields: [
       { label: 'Environment:details.env', value: 'Environment:details.env', columnType: 'alert' },
     ],

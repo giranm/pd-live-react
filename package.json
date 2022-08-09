@@ -1,7 +1,7 @@
 {
   "name": "pd-live-react",
   "homepage": "https://giranm.github.io/pd-live-react",
-  "version": "0.2.0-beta.0",
+  "version": "0.2.1-beta.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "7.0.0-alpha.3",
@@ -19,7 +19,7 @@
     "autoprefixer": "10.4.8",
     "axios": "^0.27.2",
     "babel-eslint": "^10.1.0",
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^4.6.2",
     "bottleneck": "^2.19.5",
     "date-fns": "^2.29.1",
     "enzyme": "^3.11.0",
@@ -92,7 +92,7 @@
     "@babel/preset-react": "^7.16.7",
     "@cypress/react": "5.12.4",
     "@cypress/webpack-dev-server": "^2.0.0",
-    "@faker-js/faker": "^7.3.0",
+    "@faker-js/faker": "^7.4.0",
     "cy2": "^2.0.0",
     "cypress": "^9.2.1",
     "cypress-fail-fast": "^5.0.0",

@@ -26,6 +26,8 @@ export const LOG_ENTRIES_CLEARING_INTERVAL_SECONDS = 30;
 export const INCIDENTS_PAGINATION_LIMIT = 100;
 export const MAX_INCIDENTS_LIMIT_LOWER = 100;
 export const MAX_INCIDENTS_LIMIT_UPPER = 1000;
+export const REFRESH_INTERVAL_LOWER = 5;
+export const REFRESH_INTERVAL_UPPER = 60;
 
 // Date formatting (Locale Agnostic)
 export const DATE_FORMAT = 'LL \\at h:mm:ss A';

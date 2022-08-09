@@ -9,7 +9,10 @@ import {
 } from 'util/settings';
 
 import {
-  MAX_INCIDENTS_LIMIT_LOWER, MAX_INCIDENTS_LIMIT_UPPER,
+  MAX_INCIDENTS_LIMIT_LOWER,
+  MAX_INCIDENTS_LIMIT_UPPER,
+  REFRESH_INTERVAL_LOWER,
+  REFRESH_INTERVAL_UPPER,
 } from 'config/constants';
 
 import SettingsModalComponent from './SettingsModalComponent';
@@ -25,6 +28,7 @@ describe('SettingsModalComponent', () => {
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
         autoAcceptIncidentsQuery: false,
+        autoRefreshInterval: REFRESH_INTERVAL_LOWER,
         alertCustomDetailFields: [
           {
             label: 'Summary:details.to.some.path',
@@ -88,6 +92,15 @@ describe('SettingsModalComponent', () => {
     });
 
     expect(
+      wrapper
+        .find('#user-profile-auto-refresh-interval-label')
+        .contains('Auto Refresh Interval (mins)'),
+    ).toBeTruthy();
+    expect(
+      wrapper.find('input#user-profile-auto-refresh-interval-input').prop('defaultValue'),
+    ).toEqual(REFRESH_INTERVAL_LOWER);
+
+    expect(
       wrapper.find('#user-profile-max-incidents-limit-label').contains('Max Incidents Limit'),
     ).toBeTruthy();
     expect(
@@ -106,6 +119,22 @@ describe('SettingsModalComponent', () => {
     expect(
       wrapper.find('#update-user-profile-button').contains('Update User Profile'),
     ).toBeTruthy();
+  });
+
+  it('should deactivate user profile update button for incorrect refresh interval input', () => {
+    baseStore.settings.autoRefreshInterval = REFRESH_INTERVAL_UPPER + 1;
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="user-profile"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+
+    expect(
+      wrapper
+        .find('input#user-profile-auto-refresh-interval-input')
+        .hasClass('form-control is-invalid'),
+    ).toBeTruthy();
+    expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();
   });
 
   it('should deactivate user profile update button for incorrect incident limit input', () => {

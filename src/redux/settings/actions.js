@@ -15,6 +15,9 @@ export const SET_MAX_INCIDENTS_LIMIT_COMPLETED = 'SET_MAX_INCIDENTS_LIMIT_COMPLE
 export const SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED = 'SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED';
 export const SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED = 'SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED';
 
+export const SET_AUTO_REFRESH_INTERVAL_REQUESTED = 'SET_AUTO_REFRESH_INTERVAL_REQUESTED';
+export const SET_AUTO_REFRESH_INTERVAL_COMPLETED = 'SET_AUTO_REFRESH_INTERVAL_COMPLETED';
+
 export const CLEAR_LOCAL_CACHE_REQUESTED = 'CLEAR_LOCAL_CACHE_REQUESTED';
 export const CLEAR_LOCAL_CACHE_COMPLETED = 'CLEAR_LOCAL_CACHE_COMPLETED';
 
@@ -41,6 +44,11 @@ export const setMaxIncidentsLimit = (maxIncidentsLimit) => ({
 export const setAutoAcceptIncidentsQuery = (autoAcceptIncidentsQuery) => ({
   type: SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
   autoAcceptIncidentsQuery,
+});
+
+export const setAutoRefreshInterval = (autoRefreshInterval) => ({
+  type: SET_AUTO_REFRESH_INTERVAL_REQUESTED,
+  autoRefreshInterval,
 });
 
 export const clearLocalCache = () => ({
