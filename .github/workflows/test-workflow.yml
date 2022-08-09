@@ -5,6 +5,9 @@ on:
     branches:
       - develop
 
+concurrency:
+  group: 'develop'
+
 jobs:
   build-id:
     runs-on: ubuntu-latest
