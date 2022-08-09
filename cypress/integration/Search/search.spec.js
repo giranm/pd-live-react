@@ -34,22 +34,22 @@ describe('Search Incidents', { failFast: { enabled: false } }, () => {
     });
   });
 
-  it('Search for 2nd selected incident returns exactly 1 incident only', () => {
-    const incidentIdx = 1;
-    selectIncident(incidentIdx);
-    cy.get(`@selectedIncidentId_${incidentIdx}`).then((incidentId) => {
-      cy.get('#global-search-input').clear().type(incidentId);
-    });
-    cy.wait(1000);
-    cy.get('.selected-incidents-badge').then(($el) => {
-      const text = $el.text();
-      expect(text).to.equal('1/1');
-    });
-  });
+  // it('Search for 2nd selected incident returns exactly 1 incident only', () => {
+  //   const incidentIdx = 1;
+  //   selectIncident(incidentIdx);
+  //   cy.get(`@selectedIncidentId_${incidentIdx}`).then((incidentId) => {
+  //     cy.get('#global-search-input').clear().type(incidentId);
+  //   });
+  //   cy.wait(1000);
+  //   cy.get('.selected-incidents-badge').then(($el) => {
+  //     const text = $el.text();
+  //     expect(text).to.equal('1/1');
+  //   });
+  // });
 
-  it('Search for `zzzzzz` returns no incidents', () => {
-    cy.get('#global-search-input').clear().type('zzzzzz');
-    cy.wait(5000);
-    cy.get('.empty-incidents-badge').should('be.visible');
-  });
+  // it('Search for `zzzzzz` returns no incidents', () => {
+  //   cy.get('#global-search-input').clear().type('zzzzzz');
+  //   cy.wait(5000);
+  //   cy.get('.empty-incidents-badge').should('be.visible');
+  // });
 });
