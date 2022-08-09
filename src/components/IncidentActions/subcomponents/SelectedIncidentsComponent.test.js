@@ -22,6 +22,7 @@ describe('SelectedIncidentsComponent', () => {
         fetchingIncidents: true,
         fetchingIncidentNotes: false,
         fetchingIncidentAlerts: false,
+        refreshingIncidents: false,
         filteredIncidentsByQuery: [],
       },
       incidentTable: {
@@ -43,6 +44,7 @@ describe('SelectedIncidentsComponent', () => {
         fetchingIncidents: false,
         fetchingIncidentNotes: true,
         fetchingIncidentAlerts: false,
+        refreshingIncidents: false,
         filteredIncidentsByQuery: [],
       },
       incidentTable: {
@@ -64,6 +66,7 @@ describe('SelectedIncidentsComponent', () => {
         fetchingIncidents: false,
         fetchingIncidentNotes: false,
         fetchingIncidentAlerts: true,
+        refreshingIncidents: false,
         filteredIncidentsByQuery: [],
       },
       incidentTable: {
@@ -79,6 +82,28 @@ describe('SelectedIncidentsComponent', () => {
     expect(wrapper.contains('Fetching Alerts')).toBeTruthy();
   });
 
+  it('should render refreshing spinner', () => {
+    const store = mockStore({
+      incidents: {
+        fetchingIncidents: false,
+        fetchingIncidentNotes: false,
+        fetchingIncidentAlerts: false,
+        refreshingIncidents: true,
+        filteredIncidentsByQuery: [],
+      },
+      incidentTable: {
+        selectedCount: 0,
+      },
+      querySettings: {
+        error: null,
+      },
+    });
+
+    const wrapper = componentWrapper(store, SelectedIncidentsComponent);
+    expect(wrapper.find('div.spinner-border').hasClass('text-success')).toBeTruthy();
+    expect(wrapper.contains('Refreshing')).toBeTruthy();
+  });
+
   it('should render selected incidents information', () => {
     const randomSelectedIncidentCount = generateRandomInteger(0, 100);
     const store = mockStore({
@@ -86,6 +111,7 @@ describe('SelectedIncidentsComponent', () => {
         fetchingIncidents: false,
         fetchingIncidentNotes: false,
         fetchingIncidentAlerts: false,
+        refreshingIncidents: false,
         filteredIncidentsByQuery: mockIncidents,
       },
       incidentTable: {
@@ -110,6 +136,7 @@ describe('SelectedIncidentsComponent', () => {
         fetchingIncidents: false,
         fetchingIncidentNotes: false,
         fetchingIncidentAlerts: false,
+        refreshingIncidents: false,
         filteredIncidentsByQuery: [],
       },
       incidentTable: {

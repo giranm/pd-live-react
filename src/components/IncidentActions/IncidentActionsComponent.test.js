@@ -29,6 +29,7 @@ describe('IncidentActionsComponent', () => {
       fetchingIncidents: false,
       fetchingIncidentNotes: false,
       fetchingIncidentAlerts: false,
+      refreshingIncidents: false,
       filteredIncidentsByQuery: mockIncidents,
     },
     querySettings: [],

@@ -9,6 +9,8 @@ export const SNOOZED = 'snoozed';
 export const HIGH = 'high';
 export const LOW = 'low';
 
+export const UPDATE_INCIDENT_REDUCER_STATUS = 'UPDATE_INCIDENT_REDUCER_STATUS';
+
 export const SNOOZE_TIMES = {
   '5 mins': 60 * 5,
   '30 mins': 60 * 30,

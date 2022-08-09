@@ -1,9 +1,16 @@
 import produce from 'immer';
 
 import {
+  UPDATE_INCIDENT_REDUCER_STATUS,
+} from 'util/incidents';
+
+import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
   FETCH_INCIDENTS_ERROR,
+  REFRESH_INCIDENTS_REQUESTED,
+  REFRESH_INCIDENTS_COMPLETED,
+  REFRESH_INCIDENTS_ERROR,
   FETCH_INCIDENT_NOTES_REQUESTED,
   FETCH_INCIDENT_NOTES_COMPLETED,
   FETCH_INCIDENT_NOTES_ERROR,
@@ -53,6 +60,23 @@ const incidents = produce(
       case FETCH_INCIDENTS_ERROR:
         draft.fetchingIncidents = false;
         draft.status = FETCH_INCIDENTS_ERROR;
+        draft.error = action.message;
+        break;
+
+      case REFRESH_INCIDENTS_REQUESTED:
+        draft.refreshingIncidents = true;
+        draft.status = REFRESH_INCIDENTS_REQUESTED;
+        break;
+
+      case REFRESH_INCIDENTS_COMPLETED:
+        draft.refreshingIncidents = false;
+        draft.status = REFRESH_INCIDENTS_COMPLETED;
+        draft.incidents = action.incidents;
+        break;
+
+      case REFRESH_INCIDENTS_ERROR:
+        draft.refreshingIncidents = false;
+        draft.status = REFRESH_INCIDENTS_ERROR;
         draft.error = action.message;
         break;
 
@@ -236,6 +260,19 @@ const incidents = produce(
         draft.error = action.message;
         break;
 
+      case UPDATE_INCIDENT_REDUCER_STATUS:
+        draft.status = UPDATE_INCIDENT_REDUCER_STATUS;
+        draft.fetchingData = action.fetchingData ? action.fetchingData : false;
+        draft.fetchingIncidents = action.fetchingIncidents ? action.fetchingIncidents : false;
+        draft.fetchingIncidentNotes = action.fetchingIncidentNotes
+          ? action.fetchingIncidentNotes
+          : false;
+        draft.fetchingIncidentAlerts = action.fetchingIncidentAlerts
+          ? action.fetchingIncidentAlerts
+          : false;
+        draft.refreshingIncidents = action.refreshingIncidents ? action.refreshingIncidents : false;
+        break;
+
       default:
         break;
     }
@@ -248,6 +285,7 @@ const incidents = produce(
     fetchingIncidents: false,
     fetchingIncidentNotes: false,
     fetchingIncidentAlerts: false,
+    refreshingIncidents: false,
     error: null,
   },
 );
