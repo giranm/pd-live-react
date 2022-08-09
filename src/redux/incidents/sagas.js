@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest, takeEvery, all, take,
+  put, call, select, takeLatest, takeEvery, all,
 } from 'redux-saga/effects';
 
 import Fuse from 'fuse.js';
@@ -11,7 +11,9 @@ import {
 } from 'util/pd-api-wrapper';
 
 import {
-  filterIncidentsByField, filterIncidentsByFieldOfList,
+  filterIncidentsByField,
+  filterIncidentsByFieldOfList,
+  UPDATE_INCIDENT_REDUCER_STATUS,
 } from 'util/incidents';
 import {
   pushToArray,
@@ -139,10 +141,16 @@ export function* getIncidentsAsync() {
 
 export function* getIncidents() {
   try {
+    // Update status and fetch; this is required because we're manually calling getIncidents()
+    yield put({
+      type: UPDATE_INCIDENT_REDUCER_STATUS,
+      status: FETCH_INCIDENTS_REQUESTED,
+      fetchingIncidents: true,
+    });
+
     const {
       incidentPriority, searchQuery,
     } = yield select(selectQuerySettings);
-
     const incidents = yield getIncidentsImpl();
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
@@ -176,9 +184,8 @@ export function* refreshIncidents() {
       type: REFRESH_INCIDENTS_COMPLETED,
       incidents,
     });
-    // FIXME: Identify why this doesn't work on the first call but works on the second call
-    yield put({ type: FETCH_ALL_INCIDENT_NOTES_REQUESTED });
-    yield put({ type: FETCH_ALL_INCIDENT_ALERTS_REQUESTED });
+    yield call(getAllIncidentNotes);
+    yield call(getAllIncidentAlerts);
   } catch (e) {
     yield put({ type: REFRESH_INCIDENTS_ERROR, message: e.message });
     yield put({
@@ -238,13 +245,11 @@ export function* getAllIncidentNotesAsync() {
 
 export function* getAllIncidentNotes() {
   try {
-    // Wait until incidents have been fetched/refreshed before obtaining notes
-    yield take([
-      FETCH_INCIDENTS_COMPLETED,
-      FETCH_INCIDENTS_ERROR,
-      REFRESH_INCIDENTS_COMPLETED,
-      REFRESH_INCIDENTS_ERROR,
-    ]);
+    yield put({
+      type: UPDATE_INCIDENT_REDUCER_STATUS,
+      status: FETCH_ALL_INCIDENT_NOTES_REQUESTED,
+      fetchingIncidentNotes: true,
+    });
 
     // Build list of promises to call PD endpoint
     const {
@@ -296,8 +301,11 @@ export function* getAllIncidentAlertsAsync() {
 
 export function* getAllIncidentAlerts() {
   try {
-    // Wait until incidents & notes have been fetched before obtaining alerts
-    yield take([FETCH_ALL_INCIDENT_NOTES_COMPLETED, FETCH_ALL_INCIDENT_NOTES_ERROR]);
+    yield put({
+      type: UPDATE_INCIDENT_REDUCER_STATUS,
+      status: FETCH_ALL_INCIDENT_ALERTS_REQUESTED,
+      fetchingIncidentAlerts: true,
+    });
 
     // Build list of promises to call PD endpoint
     const {

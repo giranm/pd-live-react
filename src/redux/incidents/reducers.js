@@ -1,6 +1,10 @@
 import produce from 'immer';
 
 import {
+  UPDATE_INCIDENT_REDUCER_STATUS,
+} from 'util/incidents';
+
+import {
   FETCH_INCIDENTS_REQUESTED,
   FETCH_INCIDENTS_COMPLETED,
   FETCH_INCIDENTS_ERROR,
@@ -254,6 +258,19 @@ const incidents = produce(
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_QUERY_ERROR;
         draft.error = action.message;
+        break;
+
+      case UPDATE_INCIDENT_REDUCER_STATUS:
+        draft.status = UPDATE_INCIDENT_REDUCER_STATUS;
+        draft.fetchingData = action.fetchingData ? action.fetchingData : false;
+        draft.fetchingIncidents = action.fetchingIncidents ? action.fetchingIncidents : false;
+        draft.fetchingIncidentNotes = action.fetchingIncidentNotes
+          ? action.fetchingIncidentNotes
+          : false;
+        draft.fetchingIncidentAlerts = action.fetchingIncidentAlerts
+          ? action.fetchingIncidentAlerts
+          : false;
+        draft.refreshingIncidents = action.refreshingIncidents ? action.refreshingIncidents : false;
         break;
 
       default:

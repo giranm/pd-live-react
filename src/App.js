@@ -179,7 +179,6 @@ const App = ({
         abilities,
       } = store.getState().connection;
       if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY) && !queryError) {
-        console.log('Auto Refreshing');
         refreshIncidentsAsync();
       }
     }, autoRefreshInterval * 60 * 1000);
