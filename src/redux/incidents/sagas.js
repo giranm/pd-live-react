@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import {
-  put, call, select, takeLatest, takeEvery, all,
+  put, call, select, takeLatest, takeEvery, all, take,
 } from 'redux-saga/effects';
 
 import Fuse from 'fuse.js';
@@ -26,6 +26,10 @@ import selectIncidentTable from 'redux/incident_table/selectors';
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
+
+import {
+  UPDATE_RECENT_LOG_ENTRIES_COMPLETED,
+} from 'redux/log_entries/actions';
 
 import {
   INCIDENTS_PAGINATION_LIMIT,
@@ -357,8 +361,9 @@ export function* updateIncidentsListAsync() {
 
 export function* updateIncidentsList(action) {
   try {
+    take(UPDATE_RECENT_LOG_ENTRIES_COMPLETED);
     const {
-      addList, updateList, removeList,
+      addList, updateList,
     } = action;
     const {
       incidents,
@@ -396,7 +401,7 @@ export function* updateIncidentsList(action) {
       updatedIncidentsList.push(newIncident);
     });
 
-    // Update existing incidents within list
+    // Update existing incidents within list including resolved
     if (incidents.length && updateList.length) {
       updatedIncidentsList = updatedIncidentsList.map((existingIncident) => {
         const updatedItem = updateList.find((updateItem) => {
@@ -420,13 +425,6 @@ export function* updateIncidentsList(action) {
         }
       });
     }
-
-    // Remove incidents within list
-    updatedIncidentsList = updatedIncidentsList.filter(
-      (existingIncident) => !removeList.some((removeItem) => {
-        if (removeItem.incident) return removeItem.incident.id === existingIncident.id;
-      }),
-    );
 
     // Sort incidents by reverse created_at date (i.e. recent incidents at the top)
     updatedIncidentsList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

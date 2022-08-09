@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import {
-  put, call, select, takeLatest,
+  put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
 import {
@@ -80,6 +81,7 @@ export function* updateRecentLogEntriesAsync() {
 export function* updateRecentLogEntries() {
   try {
     // Grab log entries & alerts from store and determine what is recent based on last polling
+    take(FETCH_LOG_ENTRIES_COMPLETED);
     const {
       logEntries, recentLogEntries,
     } = yield select(selectLogEntries);
@@ -87,6 +89,7 @@ export function* updateRecentLogEntries() {
     const addSet = new Set();
     const removeSet = new Set();
     const updateSet = new Set();
+    const linkLogEntryList = [];
 
     // Get existing incidents in store for patching alerts
     const {
@@ -111,7 +114,8 @@ export function* updateRecentLogEntries() {
 
       // Find out what incidents need to be updated based on log entry type
       if (logEntry.type === RESOLVE_LOG_ENTRY || logEntry.type === UNLINK_LOG_ENTRY) {
-        removeSet.add(logEntry);
+        // We no longer need to remove the incident as filters later on take care of this
+        updateSet.add(logEntry);
       } else if (logEntry.type === TRIGGER_LOG_ENTRY) {
         addSet.add(logEntry);
       } else if (logEntry.type === ANNOTATE_LOG_ENTRY) {
@@ -133,24 +137,34 @@ export function* updateRecentLogEntries() {
         updateSet.add(modifiedLogEntry);
       } else if (logEntry.type === LINK_LOG_ENTRY) {
         // Handle special case for alerts: create synthetic alerts object
-        // TODO: Consider aggregating LINK_LOG_ENTRY by incident id to avoid duplicate API calls
         // TODO: Consider moving this logic to updateIncidentsList saga
-        const modifiedLogEntry = { ...logEntry };
-        const tempIncident = { ...modifiedLogEntry.incident };
-        const existingIncident = incidents.find(
-          (incident) => incident.id === modifiedLogEntry.incident.id,
-        );
-        const alertsResponse = yield call(
-          pd.get,
-          `incidents/${tempIncident.id}/alerts/${logEntry.linked_incident.id}`,
-        );
-        tempIncident.alerts = [{ ...alertsResponse.data }.alert, ...existingIncident.alerts];
-        modifiedLogEntry.incident = tempIncident;
-        updateSet.add(modifiedLogEntry);
+        linkLogEntryList.push(logEntry);
       } else {
         // Assume everything else is an update
         updateSet.add(logEntry);
       }
+    }
+
+    // Deduplicate link log entries on incident id, then fetch alerts and patch incident object
+    linkLogEntryList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Force reverse sort for find below
+    const incidentIds = [...new Set(linkLogEntryList.map((logEntry) => logEntry.incident.id))];
+    for (let i = 0; i < incidentIds.length; i++) {
+      const incidentId = incidentIds[i];
+      const modifiedLogEntry = {
+        ...linkLogEntryList.find((logEntry) => logEntry.incident.id === incidentId),
+      };
+      const tempIncident = { ...modifiedLogEntry.incident };
+      // FIXME: Pagination fails beyond the max limit below - need to replace PDJS lib.
+      const alertsResponse = yield call(pd.all, `incidents/${incidentId}/alerts`, {
+        data: { limit: 100 },
+      });
+      const fetchedAlerts = [];
+      alertsResponse.data.forEach((data) => {
+        fetchedAlerts.push(...data.alerts);
+      });
+      tempIncident.alerts = fetchedAlerts;
+      modifiedLogEntry.incident = tempIncident;
+      updateSet.add(modifiedLogEntry);
     }
 
     // Generate update lists from sets
