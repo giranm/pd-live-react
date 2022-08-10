@@ -117,7 +117,10 @@ const QuerySettingsComponent = ({
   const [sinceDate, setSinceDate] = useState(sinceDateCalc);
 
   useEffect(() => {
-    updateQuerySettingsSinceDate(sinceDate);
+    const flattedSinceDate = moment(sinceDate)
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+      .toDate();
+    updateQuerySettingsSinceDate(flattedSinceDate);
   }, [sinceDate]);
 
   return (

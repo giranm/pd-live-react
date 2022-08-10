@@ -101,6 +101,7 @@ export function* getIncidentsImpl() {
       until: new Date().toISOString(),
       include: ['first_trigger_log_entries', 'external_references'],
       limit: INCIDENTS_PAGINATION_LIMIT,
+      sort_by: 'created_at:desc',
     };
 
     if (incidentStatus) baseParams.statuses = incidentStatus;
