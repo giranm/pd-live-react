@@ -10,6 +10,7 @@ export const HIGH = 'high';
 export const LOW = 'low';
 
 export const UPDATE_INCIDENT_REDUCER_STATUS = 'UPDATE_INCIDENT_REDUCER_STATUS';
+export const UPDATE_INCIDENT_LAST_FETCH_DATE = 'UPDATE_INCIDENT_LAST_FETCH_DATE';
 
 export const SNOOZE_TIMES = {
   '5 mins': 60 * 5,
