@@ -154,7 +154,10 @@ const querySettings = produce(
   },
   {
     displayQuerySettings: true,
-    sinceDate: moment().subtract(1, 'days').toDate(),
+    sinceDate: moment()
+      .subtract(1, 'days')
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+      .toDate(),
     incidentStatus: [TRIGGERED, ACKNOWLEDGED],
     incidentUrgency: [HIGH, LOW],
     incidentPriority: [],
