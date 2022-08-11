@@ -68,7 +68,7 @@ const generateMockNote = () => {
   // Generate Faker stubs for note
   const noteId = faker.random.alphaNumeric(14);
   const content = faker.random.words(20);
-  const userName = faker.name.findName();
+  const userName = faker.name.fullName();
   const userId = faker.random.alphaNumeric(7);
   const createdAt = faker.date
     .between('2020-01-01T00:00:00.000Z', '2022-01-01T00:00:00.000Z')

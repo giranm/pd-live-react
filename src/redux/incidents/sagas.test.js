@@ -39,18 +39,11 @@ describe('Sagas: Incidents', () => {
       type: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
       filteredIncidentsByQuery: mockIncidents,
     })
-    .hasFinalState({
-      incidents: [],
-      filteredIncidentsByQuery: mockIncidents,
-      status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
-      fetchingData: false,
-      fetchingIncidents: false,
-      fetchingIncidentNotes: false,
-      fetchingIncidentAlerts: false,
-      refreshingIncidents: false,
-      error: null,
-    })
-    .silentRun());
+    .silentRun()
+    .then((result) => {
+      expect(result.storeState.status).toEqual(FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED);
+      expect(result.storeState.filteredIncidentsByQuery).toEqual(mockIncidents);
+    }));
 
   it('filterIncidentsByQuery: Exact Incident Match', () => {
     const mockIncident = mockIncidents[0];
@@ -69,18 +62,11 @@ describe('Sagas: Incidents', () => {
         type: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
         filteredIncidentsByQuery: expectedIncidentResult,
       })
-      .hasFinalState({
-        incidents: [],
-        filteredIncidentsByQuery: expectedIncidentResult,
-        status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
-        fetchingData: false,
-        fetchingIncidents: false,
-        fetchingIncidentNotes: false,
-        fetchingIncidentAlerts: false,
-        refreshingIncidents: false,
-        error: null,
-      })
-      .silentRun();
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.status).toEqual(FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED);
+        expect(result.storeState.filteredIncidentsByQuery).toEqual(expectedIncidentResult);
+      });
   });
 
   it('filterIncidentsByQuery: Search by Alert Custom Detail Field', () => {
@@ -114,17 +100,10 @@ describe('Sagas: Incidents', () => {
         type: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
         filteredIncidentsByQuery: expectedIncidentResult,
       })
-      .hasFinalState({
-        incidents: [],
-        filteredIncidentsByQuery: expectedIncidentResult,
-        status: FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
-        fetchingData: false,
-        fetchingIncidents: false,
-        fetchingIncidentNotes: false,
-        fetchingIncidentAlerts: false,
-        refreshingIncidents: false,
-        error: null,
-      })
-      .silentRun();
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.status).toEqual(FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED);
+        expect(result.storeState.filteredIncidentsByQuery).toEqual(expectedIncidentResult);
+      });
   });
 });
