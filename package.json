@@ -121,6 +121,7 @@
     "redux-saga-test-plan": "^4.0.5",
     "resolve-url-loader": "^5.0.0",
     "string.prototype.replaceall": "^1.0.6",
+    "svg-jest": "^1.0.1",
     "wait-on": "^6.0.1",
     "yarn-audit-fix": "^9.3.3"
   }
