@@ -37,6 +37,8 @@ import {
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+  UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
+  UPDATE_QUERY_SETTINGS_USERS_COMPLETED,
   UPDATE_SEARCH_QUERY_REQUESTED,
   UPDATE_SEARCH_QUERY_COMPLETED,
   VALIDATE_INCIDENT_QUERY_REQUESTED,
@@ -160,6 +162,19 @@ export function* updateQuerySettingsServicesImpl(action) {
     serviceIds,
   } = action;
   yield put({ type: UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED, serviceIds });
+  yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
+}
+
+export function* updateQuerySettingsUsers() {
+  yield takeLatest(UPDATE_QUERY_SETTINGS_USERS_REQUESTED, updateQuerySettingsUsersImpl);
+}
+
+export function* updateQuerySettingsUsersImpl(action) {
+  // Update user ids and re-request incidents list + notes
+  const {
+    userIds,
+  } = action;
+  yield put({ type: UPDATE_QUERY_SETTINGS_USERS_COMPLETED, userIds });
   yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
 }
 

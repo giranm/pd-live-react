@@ -70,6 +70,9 @@ import {
   FILTER_INCIDENTS_LIST_BY_SERVICE,
   FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
+  FILTER_INCIDENTS_LIST_BY_USER,
+  FILTER_INCIDENTS_LIST_BY_USER_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_USER_ERROR,
   FILTER_INCIDENTS_LIST_BY_QUERY,
   FILTER_INCIDENTS_LIST_BY_QUERY_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_QUERY_ERROR,
@@ -95,10 +98,8 @@ export function* getIncidentsImpl() {
       maxIncidentsLimit,
     } = yield select(selectSettings);
     const {
-      sinceDate, incidentStatus, incidentUrgency, teamIds, serviceIds,
-    } = yield select(
-      selectQuerySettings,
-    );
+      sinceDate, incidentStatus, incidentUrgency, teamIds, serviceIds, userIds,
+    } = yield select(selectQuerySettings);
 
     const baseParams = {
       since: sinceDate.toISOString(),
@@ -112,6 +113,7 @@ export function* getIncidentsImpl() {
     if (incidentUrgency) baseParams.urgencies = incidentUrgency;
     if (teamIds.length) baseParams.team_ids = teamIds;
     if (serviceIds.length) baseParams.service_ids = serviceIds;
+    if (userIds.length) baseParams.user_ids = userIds;
 
     // Define API requests to be made in parallel
     const numberOfApiCalls = Math.ceil(maxIncidentsLimit / INCIDENTS_PAGINATION_LIMIT);
@@ -286,13 +288,20 @@ export function* getAllIncidentNotes() {
       Apply filters that already are configured down below
     */
     const {
-      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
+      incidentPriority,
+      incidentStatus,
+      incidentUrgency,
+      teamIds,
+      serviceIds,
+      userIds,
+      searchQuery,
     } = yield select(selectQuerySettings);
     yield call(filterIncidentsByPriorityImpl, { incidentPriority });
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
     yield call(filterIncidentsByTeamImpl, { teamIds });
     yield call(filterIncidentsByServiceImpl, { serviceIds });
+    yield call(filterIncidentsByUserImpl, { userIds });
     yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: FETCH_ALL_INCIDENT_NOTES_ERROR, message: e.message });
@@ -342,13 +351,20 @@ export function* getAllIncidentAlerts() {
       Apply filters that already are configured down below
     */
     const {
-      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
+      incidentPriority,
+      incidentStatus,
+      incidentUrgency,
+      teamIds,
+      serviceIds,
+      userIds,
+      searchQuery,
     } = yield select(selectQuerySettings);
     yield call(filterIncidentsByPriorityImpl, { incidentPriority });
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
     yield call(filterIncidentsByTeamImpl, { teamIds });
     yield call(filterIncidentsByServiceImpl, { serviceIds });
+    yield call(filterIncidentsByUserImpl, { userIds });
     yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: FETCH_ALL_INCIDENT_ALERTS_ERROR, message: e.message });
@@ -374,7 +390,13 @@ export function* updateIncidentsList(action) {
       incidents,
     } = yield select(selectIncidents);
     const {
-      incidentPriority, incidentStatus, incidentUrgency, teamIds, serviceIds, searchQuery,
+      incidentPriority,
+      incidentStatus,
+      incidentUrgency,
+      teamIds,
+      serviceIds,
+      userIds,
+      searchQuery,
     } = yield select(selectQuerySettings);
     let updatedIncidentsList = [...incidents];
 
@@ -458,20 +480,11 @@ export function* updateIncidentsList(action) {
 
     // Filter updated incident list on priority (can't do this from API)
     yield call(filterIncidentsByPriorityImpl, { incidentPriority });
-
-    // Filter updated incident list on status
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
-
-    // Filter updated incident list on urgency
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
-
-    // Filter updated incident list on team
     yield call(filterIncidentsByTeamImpl, { teamIds });
-
-    // // Filter updated incident list on service
     yield call(filterIncidentsByServiceImpl, { serviceIds });
-
-    // Filter updated incident list by query
+    yield call(filterIncidentsByUserImpl, { userIds });
     yield call(filterIncidentsByQueryImpl, { searchQuery });
   } catch (e) {
     yield put({ type: UPDATE_INCIDENTS_LIST_ERROR, message: e.message });
@@ -632,6 +645,45 @@ export function* filterIncidentsByServiceImpl(action) {
   } catch (e) {
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
+      message: e.message,
+    });
+  }
+}
+
+export function* filterIncidentsByUser() {
+  yield takeLatest(FILTER_INCIDENTS_LIST_BY_USER, filterIncidentsByUserImpl);
+}
+
+export function* filterIncidentsByUserImpl(action) {
+  // Filter current incident list by user
+  try {
+    const {
+      userIds,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
+    let filteredIncidentsByUserList;
+
+    if (userIds.length) {
+      // FIXME: Replace with JSON parse
+      filteredIncidentsByUserList = filterIncidentsByField(
+        incidents,
+        'assignments[0].assignee.id',
+        userIds,
+      );
+      console.log('filteredIncidentsByUserList', filteredIncidentsByUserList);
+    } else {
+      filteredIncidentsByUserList = [...incidents];
+    }
+
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_USER_COMPLETED,
+      incidents: filteredIncidentsByUserList,
+    });
+  } catch (e) {
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_USER_ERROR,
       message: e.message,
     });
   }
