@@ -21,6 +21,7 @@ const generateMockAlert = () => {
   const quote = faker.commerce.productDescription();
   const message = faker.commerce.productDescription();
   const uuid = faker.datatype.uuid();
+  const link = faker.internet.url();
   return {
     type: 'alert',
     id: alertId,
@@ -36,6 +37,7 @@ const generateMockAlert = () => {
         details: {
           quote,
           'some obsecure field': uuid,
+          link,
         },
         event_class: jobType,
         message,
@@ -126,9 +128,8 @@ const generateMockIncident = () => {
   };
 };
 
-export const generateMockIncidents = (num) => Array.from(
-  { length: num }, () => generateMockIncident(),
-);
+// eslint-disable-next-line max-len
+export const generateMockIncidents = (num) => Array.from({ length: num }, () => generateMockIncident());
 
 export default generateMockIncidents;
 

@@ -1,9 +1,12 @@
 /* eslint-disable camelcase */
 import moment from 'moment';
-
 import {
   JSONPath,
 } from 'jsonpath-plus';
+import {
+  sanitizeUrl,
+} from '@braintree/sanitize-url';
+import validator from 'validator';
 
 import {
   Badge,
@@ -17,7 +20,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import PersonInitialsComponent from 'components/IncidentTable/subcomponents/PersonInitialsComponents';
-
 import StatusComponent from 'components/IncidentTable/subcomponents/StatusComponent';
 
 import {
@@ -641,7 +643,18 @@ export const customReactTableColumnSchema = (
     minWidth: getTextWidth(header, 'bold 16px sans-serif') + 40,
     Cell: ({
       value,
-    }) => <div className="td-wrapper">{value}</div>,
+    }) => {
+      // Determine if content should be rendered as link or plaintext
+      const sanitizedValue = sanitizeUrl(value);
+      if (validator.isURL(sanitizedValue)) {
+        return (
+          <a href={sanitizedValue} target="_blank" rel="noopener noreferrer">
+            {sanitizedValue}
+          </a>
+        );
+      }
+      return <div className="td-wrapper">{value}</div>;
+    },
   };
 };
 
