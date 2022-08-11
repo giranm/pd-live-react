@@ -34,6 +34,7 @@ describe('AuthComponent', () => {
     wrapper.find(Button).simulate('click');
     expect(window.location.assign).toBeCalled();
     // FIX ME: This assertion doesn't work within Jest for some reason
+    // eslint-disable-next-line max-len
     // expect(window.location.href).toContain('https://app.pagerduty.com/global/authn/authentication');
   });
 });

@@ -128,6 +128,7 @@ const generateMockIncident = () => {
   };
 };
 
+// eslint-disable-next-line max-len
 export const generateMockIncidents = (num) => Array.from({ length: num }, () => generateMockIncident());
 
 export default generateMockIncidents;
