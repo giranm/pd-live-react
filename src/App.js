@@ -107,7 +107,11 @@ const App = ({
     autoRefreshInterval,
   } = state.settings;
   const {
-    fetchingIncidents, fetchingIncidentNotes, fetchingIncidentAlerts, refreshingIncidents,
+    fetchingIncidents,
+    fetchingIncidentNotes,
+    fetchingIncidentAlerts,
+    refreshingIncidents,
+    lastFetchDate,
   } = state.incidents;
   const queryError = state.querySettings.error;
   useEffect(() => {
@@ -134,6 +138,7 @@ const App = ({
   // Setup log entry polling
   useEffect(
     () => {
+      let useLastFetchDate = true;
       const pollingInterval = setInterval(() => {
         checkAbilities();
         checkConnectionStatus();
@@ -141,10 +146,23 @@ const App = ({
           abilities,
         } = store.getState().connection;
         if (userAuthorized && abilities.includes(PD_REQUIRED_ABILITY) && !queryError) {
-          const lastPolledDate = moment()
-            .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
-            .toDate();
-          getLogEntriesAsync(lastPolledDate);
+          // Determine lookback based on last fetch/refresh of incidents
+          if (
+            !fetchingIncidents
+            && !fetchingIncidentNotes
+            && !fetchingIncidentAlerts
+            && !refreshingIncidents
+          ) {
+            if (useLastFetchDate) {
+              getLogEntriesAsync(lastFetchDate);
+            } else {
+              const lastPolledDate = moment()
+                .subtract(2 * LOG_ENTRIES_POLLING_INTERVAL_SECONDS, 'seconds')
+                .toDate();
+              getLogEntriesAsync(lastPolledDate);
+            }
+            useLastFetchDate = false;
+          }
         }
       }, LOG_ENTRIES_POLLING_INTERVAL_SECONDS * 1000);
       return () => clearInterval(pollingInterval);

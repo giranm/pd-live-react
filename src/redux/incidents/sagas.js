@@ -14,6 +14,7 @@ import {
   filterIncidentsByField,
   filterIncidentsByFieldOfList,
   UPDATE_INCIDENT_REDUCER_STATUS,
+  UPDATE_INCIDENT_LAST_FETCH_DATE,
 } from 'util/incidents';
 import {
   pushToArray,
@@ -87,6 +88,9 @@ export function* getIncidentsImpl() {
   //  Build params from query settings and call pd lib
   let incidents = [];
   try {
+    yield put({
+      type: UPDATE_INCIDENT_LAST_FETCH_DATE,
+    });
     const {
       maxIncidentsLimit,
     } = yield select(selectSettings);
@@ -405,11 +409,15 @@ export function* updateIncidentsList(action) {
     // Update existing incidents within list including resolved
     if (incidents.length && updateList.length) {
       updatedIncidentsList = updatedIncidentsList.map((existingIncident) => {
-        const updatedItem = updateList.find((updateItem) => {
+        // Iteratively patch incident with multiple associated log entries
+        let updatedIncident = null;
+        const updateItems = updateList.filter((updateItem) => {
           if (updateItem.incident) return updateItem.incident.id === existingIncident.id;
         });
-        const updatedIncident = updatedItem ? updatedItem.incident : null;
-        return updatedIncident ? { ...existingIncident, ...updatedIncident } : existingIncident;
+        updateItems.forEach((updateItem) => {
+          updatedIncident = { ...existingIncident, ...updatedIncident, ...updateItem.incident };
+        });
+        return updatedIncident || existingIncident;
       });
     }
 

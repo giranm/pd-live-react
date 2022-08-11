@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 import {
-  UPDATE_INCIDENT_REDUCER_STATUS,
+  UPDATE_INCIDENT_REDUCER_STATUS, UPDATE_INCIDENT_LAST_FETCH_DATE,
 } from 'util/incidents';
 
 import {
@@ -273,6 +273,10 @@ const incidents = produce(
         draft.refreshingIncidents = action.refreshingIncidents ? action.refreshingIncidents : false;
         break;
 
+      case UPDATE_INCIDENT_LAST_FETCH_DATE:
+        draft.lastFetchDate = new Date(Date.now() - 1000);
+        break;
+
       default:
         break;
     }
@@ -286,6 +290,7 @@ const incidents = produce(
     fetchingIncidentNotes: false,
     fetchingIncidentAlerts: false,
     refreshingIncidents: false,
+    lastFetchDate: new Date(),
     error: null,
   },
 );
