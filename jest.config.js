@@ -9,5 +9,6 @@ module.exports = {
   },
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
+    '^.+\\.svg$': 'svg-jest',
   },
 };
