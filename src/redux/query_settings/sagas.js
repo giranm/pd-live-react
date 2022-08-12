@@ -208,6 +208,7 @@ export function* validateIncidentQueryImpl() {
       incidentUrgency,
       teamIds,
       serviceIds,
+      userIds,
       // incidentPriority, // Unfortunately can't do this pre-API call.
     } = yield select(selectQuerySettings);
 
@@ -222,6 +223,7 @@ export function* validateIncidentQueryImpl() {
     if (incidentUrgency) params['urgencies[]'] = incidentUrgency;
     if (teamIds.length) params['team_ids[]'] = teamIds;
     if (serviceIds.length) params['service_ids[]'] = serviceIds;
+    if (userIds.length) params['user_ids[]'] = userIds;
 
     const response = yield call(pd.get, 'incidents', { data: { ...params } });
     if (response.status !== 200) {

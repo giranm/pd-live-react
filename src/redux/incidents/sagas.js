@@ -666,13 +666,12 @@ export function* filterIncidentsByUserImpl(action) {
     let filteredIncidentsByUserList;
 
     if (userIds.length) {
-      // FIXME: Replace with JSON parse
-      filteredIncidentsByUserList = filterIncidentsByField(
+      filteredIncidentsByUserList = filterIncidentsByFieldOfList(
         incidents,
-        'assignments[0].assignee.id',
+        'assignments',
+        'assignee.id',
         userIds,
       );
-      console.log('filteredIncidentsByUserList', filteredIncidentsByUserList);
     } else {
       filteredIncidentsByUserList = [...incidents];
     }

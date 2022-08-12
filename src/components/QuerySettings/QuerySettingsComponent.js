@@ -17,7 +17,6 @@ import {
   Container,
 } from 'react-bootstrap';
 import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
 
 import DatePicker from 'react-datepicker';
 
@@ -41,6 +40,7 @@ import {
   updateQuerySettingsIncidentPriority as updateQuerySettingsIncidentPriorityConnected,
   updateQuerySettingsTeams as updateQuerySettingsTeamsConnected,
   updateQuerySettingsServices as updateQuerySettingsServicesConnected,
+  updateQuerySettingsUsers as updateQuerySettingsUsersConnected,
 } from 'redux/query_settings/actions';
 
 import {
@@ -55,8 +55,6 @@ import {
   reactSelectStyle,
 } from 'util/styles';
 
-const animatedComponents = makeAnimated();
-
 const QuerySettingsComponent = ({
   querySettings,
   services,
@@ -70,6 +68,7 @@ const QuerySettingsComponent = ({
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
   updateQuerySettingsServices,
+  updateQuerySettingsUsers,
 }) => {
   const {
     displayQuerySettings,
@@ -78,9 +77,10 @@ const QuerySettingsComponent = ({
     incidentPriority,
     teamIds,
     serviceIds,
+    userIds,
   } = querySettings;
   const {
-    currentUserLocale,
+    currentUserLocale, users: userList,
   } = users;
   const {
     defaultSinceDateTenor,
@@ -104,9 +104,15 @@ const QuerySettingsComponent = ({
     color: priority.color,
   }));
 
+  const selectListUsers = userList.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }));
+
   // Get "stored" option values
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
+  const storedSelectUsers = getObjectsFromList(selectListUsers, userIds, 'value');
 
   // Generate since date based on configured default and dispatch action for query.
   const today = moment();
@@ -247,6 +253,23 @@ const QuerySettingsComponent = ({
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
+              <Col>
+                Users:
+                {' '}
+                <Form.Group>
+                  <Select
+                    id="query-user-select"
+                    styles={reactSelectStyle}
+                    onChange={(selectedUsers) => {
+                      const userIdsInt = selectedUsers.map((user) => user.value);
+                      updateQuerySettingsUsers(userIdsInt);
+                    }}
+                    isMulti
+                    options={selectListUsers}
+                    value={storedSelectUsers}
+                  />
+                </Form.Group>
+              </Col>
             </Row>
             <Row>
               <Col>
@@ -260,7 +283,6 @@ const QuerySettingsComponent = ({
                       const teamIdsInt = selectedTeams.map((team) => team.value);
                       updateQuerySettingsTeams(teamIdsInt);
                     }}
-                    components={animatedComponents}
                     isMulti
                     options={selectListTeams}
                     value={storedSelectTeams}
@@ -278,7 +300,6 @@ const QuerySettingsComponent = ({
                       const serviceIdsInt = selectedServices.map((service) => service.value);
                       updateQuerySettingsServices(serviceIdsInt);
                     }}
-                    components={animatedComponents}
                     isMulti
                     options={selectListServices}
                     value={storedSelectServices}
@@ -318,6 +339,9 @@ const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeamsConnected(teamIds)),
   updateQuerySettingsServices: (serviceIds) => {
     dispatch(updateQuerySettingsServicesConnected(serviceIds));
+  },
+  updateQuerySettingsUsers: (userIds) => {
+    dispatch(updateQuerySettingsUsersConnected(userIds));
   },
 });
 
