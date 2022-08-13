@@ -23,7 +23,7 @@ moment.locale('en-GB');
 describe('Query Incidents', { failFast: { enabled: false } }, () => {
   before(() => {
     acceptDisclaimer();
-    manageIncidentTableColumns('remove', ['Assignees']);
+    manageIncidentTableColumns('remove', ['Latest Note']);
     manageIncidentTableColumns('add', ['Urgency', 'Teams']);
     priorityNames.forEach((currentPriority) => {
       activateButton(`query-priority-${currentPriority}-button`);
@@ -34,7 +34,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
   beforeEach(() => {
     if (cy.state('test').currentRetry() > 1) {
       acceptDisclaimer();
-      manageIncidentTableColumns('remove', ['Assignees']);
+      manageIncidentTableColumns('remove', ['Latest Note']);
       manageIncidentTableColumns('add', ['Urgency', 'Teams']);
     }
     priorityNames.forEach((currentPriority) => {
@@ -213,6 +213,19 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
       });
     });
     cy.get('#query-team-select').click().type('{del}');
+  });
+
+  it('Query for incidents assigned to User A1, A2, or A3', () => {
+    cy.get('#query-user-select')
+      .click()
+      .type('User A1{enter}')
+      .type('User A2{enter}')
+      .type('User A3{enter}');
+
+    waitForIncidentTable();
+    checkIncidentCellContentAllRows('Assignees', 'UA');
+
+    cy.get('#query-user-select').click().type('{del}{del}{del}');
   });
 
   it('Sort incident column "#" by ascending order', () => {
