@@ -23,7 +23,7 @@ moment.locale('en-GB');
 describe('Query Incidents', { failFast: { enabled: false } }, () => {
   before(() => {
     acceptDisclaimer();
-    manageIncidentTableColumns('remove', ['Assignees']);
+    manageIncidentTableColumns('remove', ['Latest Note']);
     manageIncidentTableColumns('add', ['Urgency', 'Teams']);
     priorityNames.forEach((currentPriority) => {
       activateButton(`query-priority-${currentPriority}-button`);
@@ -34,7 +34,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
   beforeEach(() => {
     if (cy.state('test').currentRetry() > 1) {
       acceptDisclaimer();
-      manageIncidentTableColumns('remove', ['Assignees']);
+      manageIncidentTableColumns('remove', ['Latest Note']);
       manageIncidentTableColumns('add', ['Urgency', 'Teams']);
     }
     priorityNames.forEach((currentPriority) => {
@@ -202,7 +202,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     cy.get('#query-service-select').click().type('{del}');
   });
 
-  it('Query on Team A only allows further querying for associated services', () => {
+  it('Query on Team A only allows further querying for associated services and users', () => {
     cy.get('#query-team-select').click().type('Team A{enter}');
     waitForIncidentTable();
 
@@ -212,7 +212,28 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
         expect(body.find(`[class*="-option"]:contains("${service}")`).length).to.equal(1);
       });
     });
+
+    cy.get('#query-user-select').click();
+    cy.get('body').then((body) => {
+      ['User A1', 'User A2', 'User A3'].forEach((user) => {
+        expect(body.find(`[class*="-option"]:contains("${user}")`).length).to.equal(1);
+      });
+    });
+
     cy.get('#query-team-select').click().type('{del}');
+  });
+
+  it('Query for incidents assigned to User A1, A2, or A3', () => {
+    cy.get('#query-user-select')
+      .click()
+      .type('User A1{enter}')
+      .type('User A2{enter}')
+      .type('User A3{enter}');
+
+    waitForIncidentTable();
+    checkIncidentCellContentAllRows('Assignees', 'UA');
+
+    cy.get('#query-user-select').click().type('{del}{del}{del}');
   });
 
   it('Sort incident column "#" by ascending order', () => {

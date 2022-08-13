@@ -251,7 +251,7 @@ const mapDispatchToProps = (dispatch) => ({
   getServicesAsync: (teamIds) => dispatch(getServicesAsyncConnected(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsyncConnected()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsyncConnected()),
-  getUsersAsync: () => dispatch(getUsersAsyncConnected()),
+  getUsersAsync: (teamIds) => dispatch(getUsersAsyncConnected(teamIds)),
   getEscalationPoliciesAsync: () => dispatch(getEscalationPoliciesAsyncConnected()),
   getResponsePlaysAsync: () => dispatch(getResponsePlaysAsyncConnected()),
   getLogEntriesAsync: (since) => dispatch(getLogEntriesAsyncConnected(since)),

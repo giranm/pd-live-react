@@ -22,6 +22,7 @@ export const acceptDisclaimer = () => {
 
 export const waitForIncidentTable = () => {
   // Ref: https://stackoverflow.com/a/60065672/6480733
+  cy.wait(3000); // Required for query debounce
   cy.get('.incident-table-ctr', { timeout: 60000 }).should('be.visible');
 };
 
