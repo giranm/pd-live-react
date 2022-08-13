@@ -27,7 +27,7 @@ export function* getServices(action) {
     const {
       teamIds,
     } = action;
-    const params = {};
+    const params = { limit: 100 };
     if (teamIds.length) params['team_ids[]'] = teamIds;
 
     const response = yield call(pd.all, 'services', { data: { ...params } });

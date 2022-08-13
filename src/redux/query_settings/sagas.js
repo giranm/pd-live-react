@@ -22,6 +22,11 @@ import {
 import {
   FETCH_SERVICES_REQUESTED,
 } from 'redux/services/actions';
+
+import {
+  GET_USERS_REQUESTED,
+} from 'redux/users/actions';
+
 import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
   TOGGLE_DISPLAY_QUERY_SETTINGS_COMPLETED,
@@ -143,11 +148,12 @@ export function* updateQuerySettingsTeams() {
 }
 
 export function* updateQuerySettingsTeamsImpl(action) {
-  // Update team ids, re-request services under those teams, and re-request incidents list
+  // Update team ids, re-request services and users under those teams, and re-request incidents list
   const {
     teamIds,
   } = action;
   yield put({ type: FETCH_SERVICES_REQUESTED, teamIds });
+  yield put({ type: GET_USERS_REQUESTED, teamIds });
   yield put({ type: UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED, teamIds });
   yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
 }

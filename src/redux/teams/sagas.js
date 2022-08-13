@@ -19,7 +19,7 @@ export function* getTeamsAsync() {
 export function* getTeams() {
   try {
     //  Create params and call pd lib
-    const response = yield call(pd.all, 'teams');
+    const response = yield call(pd.all, 'teams', { data: { limit: 100 } });
     if (response.status !== 200) {
       throw Error('Unable to fetch teams');
     }

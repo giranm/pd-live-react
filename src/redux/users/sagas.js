@@ -108,9 +108,16 @@ export function* getUsersAsync() {
   yield takeLatest(GET_USERS_REQUESTED, getUsers);
 }
 
-export function* getUsers() {
+export function* getUsers(action) {
   try {
-    const response = yield call(pd.all, 'users');
+    //  Create params and call pd lib
+    const {
+      teamIds,
+    } = action;
+    const params = { limit: 100 };
+    if (teamIds.length) params['team_ids[]'] = teamIds;
+
+    const response = yield call(pd.all, 'users', { data: { ...params } });
     if (response.status !== 200) {
       throw Error('Unable to fetch users');
     }

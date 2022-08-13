@@ -202,7 +202,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     cy.get('#query-service-select').click().type('{del}');
   });
 
-  it('Query on Team A only allows further querying for associated services', () => {
+  it('Query on Team A only allows further querying for associated services and users', () => {
     cy.get('#query-team-select').click().type('Team A{enter}');
     waitForIncidentTable();
 
@@ -212,6 +212,14 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
         expect(body.find(`[class*="-option"]:contains("${service}")`).length).to.equal(1);
       });
     });
+
+    cy.get('#query-user-select').click();
+    cy.get('body').then((body) => {
+      ['User A1', 'User A2', 'User A3'].forEach((user) => {
+        expect(body.find(`[class*="-option"]:contains("${user}")`).length).to.equal(1);
+      });
+    });
+
     cy.get('#query-team-select').click().type('{del}');
   });
 
