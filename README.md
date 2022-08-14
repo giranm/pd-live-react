@@ -16,7 +16,7 @@ This is an open-source project designed to be used in a safe/test environment be
 ## Screenshot
 
 <kbd>
-<img width="1625" alt="Screenshot 2021-11-05 at 18 35 16" src="https://user-images.githubusercontent.com/20474443/140561598-d771ea60-157c-4fc6-aaa7-af31765f955f.png">
+<img width="1625" alt="Screenshot 2021-11-05 at 18 35 16" src="https://user-images.githubusercontent.com/20474443/184557375-6f2e18ac-bc0a-4ea7-a9b7-800d59f02ec6.png">
 </kbd>
 
 ## Development
@@ -64,42 +64,44 @@ The following scripts have been created to run unit, component, and integration 
 - `$ yarn jest` (Jest Unit/Component)
 - `$ yarn cypress:run:local` (Cypress Integration with headless Chromedriver)
 
-Please note that running integration tests will require environment variable `REACT_APP_PD_USER_TOKEN` set.  
+Please note that running integration tests will require environment variable `REACT_APP_PD_USER_TOKEN` set.
 
 The integration tests also assume the PagerDuty account associated with the above user token has been setup with the following [Terraform environment](https://github.com/giranm/pd-live-integration-test-environment).
 
 ## Versioning & Release
-To prepare PagerDuty Live for release, the current workflow should be carried out:  
-   1. Checkout to `develop` branch and verify if it's stable - i.e. no test and linting failures.
-   
-   2. Update version information in `package.json` using `npm version` - example commands given below:
-      -  Bumping patch version for beta release 
-         ```
-         $ npm --no-git-tag-version version preminor --preid beta
-         v0.1.0-beta.0
-         ```
-         
-      -  Bumping minor version for main release 
-         ```
-         $ npm --no-git-tag-version version minor
-         v0.2.0
-         ```
-   
-   3. Update application code version using `$ yarn genversion`
 
-   4. Prepare the appropriate release branch via `$ git checkout -b release/<VERSION>` (following above [semver](https://semver.org/))
-   
-   5. Stage modified files, commit, and push changes upstream:
+To prepare PagerDuty Live for release, the current workflow should be carried out:
+
+1.  Checkout to `develop` branch and verify if it's stable - i.e. no test and linting failures.
+
+2.  Update version information in `package.json` using `npm version` - example commands given below:
+
+    - Bumping patch version for beta release
       ```
-      $ git add .
-      $ git commit -m "Publishing release <VERSION>"
-      $ git push --set-upstream origin release/<VERSION>
+      $ npm --no-git-tag-version version preminor --preid beta
+      v0.1.0-beta.0
       ```
-   
-   6. Raise [pull requests](https://github.com/giranm/pd-live-react/pulls) to merge into `main` branch.
+    - Bumping minor version for main release
+      ```
+      $ npm --no-git-tag-version version minor
+      v0.2.0
+      ```
 
-   7. Build static bundle via `$ yarn build` or use appropriate CI/CD workflow.
+3.  Update application code version using `$ yarn genversion`
 
+4.  Prepare the appropriate release branch via `$ git checkout -b release/<VERSION>` (following above [semver](https://semver.org/))
+
+5.  Stage modified files, commit, and push changes upstream:
+
+    ```
+    $ git add .
+    $ git commit -m "Publishing release <VERSION>"
+    $ git push --set-upstream origin release/<VERSION>
+    ```
+
+6.  Raise [pull requests](https://github.com/giranm/pd-live-react/pulls) to merge into `main` branch.
+
+7.  Build static bundle via `$ yarn build` or use appropriate CI/CD workflow.
 
 ## License
 
