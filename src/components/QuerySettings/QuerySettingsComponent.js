@@ -48,9 +48,6 @@ import {
 import {
   FETCH_SERVICES_COMPLETED,
 } from 'redux/services/actions';
-import {
-  GET_USERS_COMPLETED,
-} from 'redux/users/actions';
 
 import {
   TRIGGERED, ACKNOWLEDGED, RESOLVED, HIGH, LOW,
@@ -95,7 +92,7 @@ const QuerySettingsComponent = ({
     services: serviceList, status: serviceStatus,
   } = services;
   const {
-    currentUserLocale, users: userList, status: userStatus,
+    currentUserLocale, users: userList,
   } = users;
   const {
     defaultSinceDateTenor,
@@ -105,7 +102,7 @@ const QuerySettingsComponent = ({
   // Identify when to enable selects once data has been fetched
   const isTeamSelectDisabled = teamStatus !== FETCH_TEAMS_COMPLETED;
   const isServiceSelectDisabled = serviceStatus !== FETCH_SERVICES_COMPLETED;
-  const isUserSelectDisabled = userStatus !== GET_USERS_COMPLETED;
+  const isUserSelectDisabled = !userList.length; // There are multiple states which affect this
 
   // Generate lists/data from store
   const selectListTeams = teamList.map((team) => ({
