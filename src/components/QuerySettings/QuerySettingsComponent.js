@@ -17,7 +17,6 @@ import {
   Container,
 } from 'react-bootstrap';
 import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
 
 import DatePicker from 'react-datepicker';
 
@@ -41,7 +40,14 @@ import {
   updateQuerySettingsIncidentPriority as updateQuerySettingsIncidentPriorityConnected,
   updateQuerySettingsTeams as updateQuerySettingsTeamsConnected,
   updateQuerySettingsServices as updateQuerySettingsServicesConnected,
+  updateQuerySettingsUsers as updateQuerySettingsUsersConnected,
 } from 'redux/query_settings/actions';
+import {
+  FETCH_TEAMS_COMPLETED,
+} from 'redux/teams/actions';
+import {
+  FETCH_SERVICES_COMPLETED,
+} from 'redux/services/actions';
 
 import {
   TRIGGERED, ACKNOWLEDGED, RESOLVED, HIGH, LOW,
@@ -54,8 +60,6 @@ import {
 import {
   reactSelectStyle,
 } from 'util/styles';
-
-const animatedComponents = makeAnimated();
 
 const QuerySettingsComponent = ({
   querySettings,
@@ -70,6 +74,7 @@ const QuerySettingsComponent = ({
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
   updateQuerySettingsServices,
+  updateQuerySettingsUsers,
 }) => {
   const {
     displayQuerySettings,
@@ -78,27 +83,44 @@ const QuerySettingsComponent = ({
     incidentPriority,
     teamIds,
     serviceIds,
+    userIds,
   } = querySettings;
   const {
-    currentUserLocale,
+    teams: teamList, status: teamStatus,
+  } = teams;
+  const {
+    services: serviceList, status: serviceStatus,
+  } = services;
+  const {
+    currentUserLocale, users: userList,
   } = users;
   const {
     defaultSinceDateTenor,
   } = settings;
   const eventKey = displayQuerySettings ? '0' : '1';
 
-  // Generate lists/data from store
-  const selectListServices = services.map((service) => ({
-    label: service.name,
-    value: service.id,
-  }));
+  // Identify when to enable selects once data has been fetched
+  const isTeamSelectDisabled = teamStatus !== FETCH_TEAMS_COMPLETED;
+  const isServiceSelectDisabled = serviceStatus !== FETCH_SERVICES_COMPLETED;
+  const isUserSelectDisabled = !userList.length; // There are multiple states which affect this
 
-  const selectListTeams = teams.map((team) => ({
+  // Generate lists/data from store
+  const selectListTeams = teamList.map((team) => ({
     label: team.name,
     value: team.id,
   }));
 
-  const selectListPriorities = priorities.map((priority) => ({
+  const selectListServices = serviceList.map((service) => ({
+    label: service.name,
+    value: service.id,
+  }));
+
+  const selectListUsers = userList.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }));
+
+  const toggleButtonPriorities = priorities.map((priority) => ({
     label: priority.name,
     value: priority.id,
     color: priority.color,
@@ -107,6 +129,7 @@ const QuerySettingsComponent = ({
   // Get "stored" option values
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
+  const storedSelectUsers = getObjectsFromList(selectListUsers, userIds, 'value');
 
   // Generate since date based on configured default and dispatch action for query.
   const today = moment();
@@ -117,7 +140,10 @@ const QuerySettingsComponent = ({
   const [sinceDate, setSinceDate] = useState(sinceDateCalc);
 
   useEffect(() => {
-    updateQuerySettingsSinceDate(sinceDate);
+    const flattedSinceDate = moment(sinceDate)
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+      .toDate();
+    updateQuerySettingsSinceDate(flattedSinceDate);
   }, [sinceDate]);
 
   return (
@@ -227,7 +253,7 @@ const QuerySettingsComponent = ({
                     value={incidentPriority}
                     onChange={(val) => updateQuerySettingsIncidentPriority(val)}
                   >
-                    {selectListPriorities.map((priority) => (
+                    {toggleButtonPriorities.map((priority) => (
                       <ToggleButton
                         id={`query-priority-${priority.label}-button`}
                         key={priority.value}
@@ -244,8 +270,6 @@ const QuerySettingsComponent = ({
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
-            </Row>
-            <Row>
               <Col>
                 Team:
                 {' '}
@@ -257,10 +281,32 @@ const QuerySettingsComponent = ({
                       const teamIdsInt = selectedTeams.map((team) => team.value);
                       updateQuerySettingsTeams(teamIdsInt);
                     }}
-                    components={animatedComponents}
                     isMulti
                     options={selectListTeams}
                     value={storedSelectTeams}
+                    isLoading={isTeamSelectDisabled}
+                    isDisabled={isTeamSelectDisabled}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                Users:
+                {' '}
+                <Form.Group>
+                  <Select
+                    id="query-user-select"
+                    styles={reactSelectStyle}
+                    onChange={(selectedUsers) => {
+                      const userIdsInt = selectedUsers.map((user) => user.value);
+                      updateQuerySettingsUsers(userIdsInt);
+                    }}
+                    isMulti
+                    options={selectListUsers}
+                    value={storedSelectUsers}
+                    isLoading={isUserSelectDisabled}
+                    isDisabled={isUserSelectDisabled}
                   />
                 </Form.Group>
               </Col>
@@ -275,10 +321,11 @@ const QuerySettingsComponent = ({
                       const serviceIdsInt = selectedServices.map((service) => service.value);
                       updateQuerySettingsServices(serviceIdsInt);
                     }}
-                    components={animatedComponents}
                     isMulti
                     options={selectListServices}
                     value={storedSelectServices}
+                    isLoading={isServiceSelectDisabled}
+                    isDisabled={isServiceSelectDisabled}
                   />
                 </Form.Group>
               </Col>
@@ -292,8 +339,8 @@ const QuerySettingsComponent = ({
 
 const mapStateToProps = (state) => ({
   querySettings: state.querySettings,
-  services: state.services.services,
-  teams: state.teams.teams,
+  services: state.services,
+  teams: state.teams,
   priorities: state.priorities.priorities,
   users: state.users,
   settings: state.settings,
@@ -315,6 +362,9 @@ const mapDispatchToProps = (dispatch) => ({
   updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeamsConnected(teamIds)),
   updateQuerySettingsServices: (serviceIds) => {
     dispatch(updateQuerySettingsServicesConnected(serviceIds));
+  },
+  updateQuerySettingsUsers: (userIds) => {
+    dispatch(updateQuerySettingsUsersConnected(userIds));
   },
 });
 

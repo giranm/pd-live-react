@@ -21,6 +21,7 @@ const generateMockAlert = () => {
   const quote = faker.commerce.productDescription();
   const message = faker.commerce.productDescription();
   const uuid = faker.datatype.uuid();
+  const link = faker.internet.url();
   return {
     type: 'alert',
     id: alertId,
@@ -36,6 +37,7 @@ const generateMockAlert = () => {
         details: {
           quote,
           'some obsecure field': uuid,
+          link,
         },
         event_class: jobType,
         message,
@@ -68,7 +70,7 @@ const generateMockNote = () => {
   // Generate Faker stubs for note
   const noteId = faker.random.alphaNumeric(14);
   const content = faker.random.words(20);
-  const userName = faker.name.findName();
+  const userName = faker.name.fullName();
   const userId = faker.random.alphaNumeric(7);
   const createdAt = faker.date
     .between('2020-01-01T00:00:00.000Z', '2022-01-01T00:00:00.000Z')
@@ -126,9 +128,8 @@ const generateMockIncident = () => {
   };
 };
 
-export const generateMockIncidents = (num) => Array.from(
-  { length: num }, () => generateMockIncident(),
-);
+// eslint-disable-next-line max-len
+export const generateMockIncidents = (num) => Array.from({ length: num }, () => generateMockIncident());
 
 export default generateMockIncidents;
 

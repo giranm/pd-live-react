@@ -19,6 +19,8 @@ import {
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+  UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
+  UPDATE_QUERY_SETTINGS_USERS_COMPLETED,
   UPDATE_SEARCH_QUERY_REQUESTED,
   UPDATE_SEARCH_QUERY_COMPLETED,
   VALIDATE_INCIDENT_QUERY_REQUESTED,
@@ -98,6 +100,15 @@ const querySettings = produce(
         draft.status = UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED;
         break;
 
+      case UPDATE_QUERY_SETTINGS_USERS_REQUESTED:
+        draft.status = UPDATE_QUERY_SETTINGS_USERS_REQUESTED;
+        break;
+
+      case UPDATE_QUERY_SETTINGS_USERS_COMPLETED:
+        draft.userIds = action.userIds;
+        draft.status = UPDATE_QUERY_SETTINGS_USERS_COMPLETED;
+        break;
+
       case UPDATE_SEARCH_QUERY_REQUESTED:
         draft.status = UPDATE_SEARCH_QUERY_REQUESTED;
         break;
@@ -154,12 +165,16 @@ const querySettings = produce(
   },
   {
     displayQuerySettings: true,
-    sinceDate: moment().subtract(1, 'days').toDate(),
+    sinceDate: moment()
+      .subtract(1, 'days')
+      .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+      .toDate(),
     incidentStatus: [TRIGGERED, ACKNOWLEDGED],
     incidentUrgency: [HIGH, LOW],
     incidentPriority: [],
     teamIds: [],
     serviceIds: [],
+    userIds: [],
     searchQuery: '',
     displayConfirmQueryModal: false,
     totalIncidentsFromQuery: 0,

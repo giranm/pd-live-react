@@ -22,6 +22,11 @@ import {
 import {
   FETCH_SERVICES_REQUESTED,
 } from 'redux/services/actions';
+
+import {
+  GET_USERS_REQUESTED,
+} from 'redux/users/actions';
+
 import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
   TOGGLE_DISPLAY_QUERY_SETTINGS_COMPLETED,
@@ -37,6 +42,8 @@ import {
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
+  UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
+  UPDATE_QUERY_SETTINGS_USERS_COMPLETED,
   UPDATE_SEARCH_QUERY_REQUESTED,
   UPDATE_SEARCH_QUERY_COMPLETED,
   VALIDATE_INCIDENT_QUERY_REQUESTED,
@@ -141,11 +148,12 @@ export function* updateQuerySettingsTeams() {
 }
 
 export function* updateQuerySettingsTeamsImpl(action) {
-  // Update team ids, re-request services under those teams, and re-request incidents list
+  // Update team ids, re-request services and users under those teams, and re-request incidents list
   const {
     teamIds,
   } = action;
   yield put({ type: FETCH_SERVICES_REQUESTED, teamIds });
+  yield put({ type: GET_USERS_REQUESTED, teamIds });
   yield put({ type: UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED, teamIds });
   yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
 }
@@ -160,6 +168,19 @@ export function* updateQuerySettingsServicesImpl(action) {
     serviceIds,
   } = action;
   yield put({ type: UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED, serviceIds });
+  yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
+}
+
+export function* updateQuerySettingsUsers() {
+  yield takeLatest(UPDATE_QUERY_SETTINGS_USERS_REQUESTED, updateQuerySettingsUsersImpl);
+}
+
+export function* updateQuerySettingsUsersImpl(action) {
+  // Update user ids and re-request incidents list + notes
+  const {
+    userIds,
+  } = action;
+  yield put({ type: UPDATE_QUERY_SETTINGS_USERS_COMPLETED, userIds });
   yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
 }
 
@@ -193,6 +214,7 @@ export function* validateIncidentQueryImpl() {
       incidentUrgency,
       teamIds,
       serviceIds,
+      userIds,
       // incidentPriority, // Unfortunately can't do this pre-API call.
     } = yield select(selectQuerySettings);
 
@@ -207,6 +229,7 @@ export function* validateIncidentQueryImpl() {
     if (incidentUrgency) params['urgencies[]'] = incidentUrgency;
     if (teamIds.length) params['team_ids[]'] = teamIds;
     if (serviceIds.length) params['service_ids[]'] = serviceIds;
+    if (userIds.length) params['user_ids[]'] = userIds;
 
     const response = yield call(pd.get, 'incidents', { data: { ...params } });
     if (response.status !== 200) {

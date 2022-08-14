@@ -35,8 +35,9 @@ export const userAcceptDisclaimer = () => ({
   type: USER_ACCEPT_DISCLAIMER_REQUESTED,
 });
 
-export const getUsersAsync = () => ({
+export const getUsersAsync = (teamIds = []) => ({
   type: GET_USERS_REQUESTED,
+  teamIds,
 });
 
 export const getCurrentUserAsync = () => ({

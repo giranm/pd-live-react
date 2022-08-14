@@ -1328,6 +1328,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@braintree/sanitize-url@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.0.tgz#fe364f025ba74f6de6c837a84ef44bdb1d61e68f"
+  integrity sha512-mgmE7XBYY/21erpzhexk4Cj1cyTQ9LzvnTxtzM17BJ7ERMNE6W72mQRo0I1Ud8eFJ+RVVIcBNhLFZ3GX4XFz5w==
+
 "@craco/craco@7.0.0-alpha.3":
   version "7.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/@craco/craco/-/craco-7.0.0-alpha.3.tgz#158355141c9a007cf2ee04c8071b0ee44dfa4aae"
@@ -1467,10 +1472,10 @@
     tunnel-agent "^0.6.0"
     uuid "^8.3.2"
 
-"@cypress/webpack-dev-server@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@cypress/webpack-dev-server/-/webpack-dev-server-2.0.0.tgz#6379b28f2047bd8e6f7bf8027d4f693a545992d4"
-  integrity sha512-N3NOwe+tX+jEgl0+ljxGfbIbeXi/h46JvA2nTGUCGFUfyOGElfBtBPjS5KeCix2k7wM2f4L4StkzlpDkIRBlcg==
+"@cypress/webpack-dev-server@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@cypress/webpack-dev-server/-/webpack-dev-server-2.1.0.tgz#c82e45dc58d64f101616f8fbff85d3122e43bc84"
+  integrity sha512-NOzh9uZ4cC1hpdHHZQ93jXaNZTkXaLi8xbjwDu9Zt4B2LxXBCSIeUp5qU78jqwHuq/bddUE5+UBFBC5OAsr05g==
   dependencies:
     find-up "6.3.0"
     fs-extra "9.1.0"
@@ -1490,25 +1495,25 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@datadog/browser-core@4.16.1":
-  version "4.16.1"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.16.1.tgz#4f9ee1841b7343049b3734f69d9e8aee70ad1815"
-  integrity sha512-VrJDNUHlCkp2ABqTBui7M1gwZ+UNu0+dpJSIydWVCX7ch4fSE7anEplvrr1y4Y3aC0GYp5KShJQxlxx91YPcHQ==
+"@datadog/browser-core@4.17.1":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.17.1.tgz#0f18aa8a902e9b5f2cd25692f639c77143788e12"
+  integrity sha512-M34aI8PhRP7K7FkULI7B2Qeoy+V93wlHd5O7s5Q2Y2PAhkjpNWpUMBtmvIE77wCx/VaZxGlwaDWL+Oj9vliW0g==
 
-"@datadog/browser-rum-core@4.16.1":
-  version "4.16.1"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.16.1.tgz#95a17cf141787d90ff8d4db125eb2f21d2a40b2c"
-  integrity sha512-HFw9/TYfieNbaTpLr1oZhrwOIX0xGvE2l0vQrwcMA42//vLHJ3OYgnBCQmYpycWxVrvWHspyG9aK9MBE3FgA/Q==
+"@datadog/browser-rum-core@4.17.1":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.17.1.tgz#056cfe856126653d80535b5f592fb3dfc9dc88ad"
+  integrity sha512-DMUOJsotTwbsJT/wtGabTwC0laBB8RF55aCUk6Tqd4cZWJRnMIZHKgPB+KbTLunxg6Kw9PSGsvKXFPMcKy8UCg==
   dependencies:
-    "@datadog/browser-core" "4.16.1"
+    "@datadog/browser-core" "4.17.1"
 
-"@datadog/browser-rum@^4.16.1":
-  version "4.16.1"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.16.1.tgz#4351c98f34a9e84e62322b5d134dd95753802f95"
-  integrity sha512-XxDfTv6KDr/dK6OTjRUmihym3ZhxV+FlcGbGNk9bwCLJCczgNo3yRLrWGpfxqdoiacOVZhn4BB8oUI+OD/2DAQ==
+"@datadog/browser-rum@^4.17.1":
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.17.1.tgz#a6b8a39c5ee9f16e00fb620fbecba8f402d7715c"
+  integrity sha512-dg9YkDKITUCzEYD7Avb8ranr1D9262WC2ryP3T435H38DoKVag+RvjBO5J1vY8R90OqxBRd2qQtFVNhRuDeKEg==
   dependencies:
-    "@datadog/browser-core" "4.16.1"
-    "@datadog/browser-rum-core" "4.16.1"
+    "@datadog/browser-core" "4.17.1"
+    "@datadog/browser-rum-core" "4.17.1"
 
 "@emotion/babel-plugin@^11.7.1":
   version "11.9.2"
@@ -2377,10 +2382,10 @@
     "@testing-library/dom" "^8.0.0"
     "@types/react-dom" "<18.0.0"
 
-"@testing-library/user-event@^14.3.0":
-  version "14.3.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.3.0.tgz#0a6750b94b40e4739706d41e8efc2ccf64d2aad9"
-  integrity sha512-P02xtBBa8yMaLhK8CzJCIns8rqwnF6FxhR9zs810flHOBXUYCFjLd8Io1rQrAkQRWEmW2PGdZIEdMxf/KLsqFA==
+"@testing-library/user-event@^14.4.3":
+  version "14.4.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.4.3.tgz#af975e367743fa91989cd666666aec31a8f50591"
+  integrity sha512-kCUc5MEwaEMakkO5x7aoD+DLi02ehmEM2QCGWvNqAS1dV/fAvORWEjnjsEIvml59M7Y5kCkWN6fCCyPOe8OL6Q==
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -12192,6 +12197,18 @@ string.prototype.matchall@^4.0.6, string.prototype.matchall@^4.0.7:
     regexp.prototype.flags "^1.4.1"
     side-channel "^1.0.4"
 
+string.prototype.replaceall@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/string.prototype.replaceall/-/string.prototype.replaceall-1.0.6.tgz#566cba7c413713d0b1a85c5dba98b31f8db38196"
+  integrity sha512-OA8VDhE7ssNFlyoDXUHxw6V5cjgPrtosyJKqJX5i1P5tV9eUynsbhx1yz0g+Ye4fjFwAxhKLxt8GSRx2Aqc+Sw==
+  dependencies:
+    call-bind "^1.0.2"
+    define-properties "^1.1.3"
+    es-abstract "^1.19.1"
+    get-intrinsic "^1.1.1"
+    has-symbols "^1.0.2"
+    is-regex "^1.1.4"
+
 string.prototype.trim@^1.2.1:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/string.prototype.trim/-/string.prototype.trim-1.2.5.tgz#a587bcc8bfad8cb9829a577f5de30dd170c1682c"
@@ -12397,6 +12414,11 @@ supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
+
+svg-jest@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/svg-jest/-/svg-jest-1.0.1.tgz#3a820280bfd4c1e0637d68c8d477d37d0ae46abb"
+  integrity sha512-uVbY14nW3IGXkRueduWpQNOVOvC0XE9uu3Y1MIWX6zgweOqPT+hmP/J92yCNBv5kAQzNU7DW2nCO+enZpv+Hsw==
 
 svg-parser@^2.0.2:
   version "2.0.4"
@@ -13082,6 +13104,11 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+validator@^13.7.0:
+  version "13.7.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-13.7.0.tgz#4f9658ba13ba8f3d82ee881d3516489ea85c0857"
+  integrity sha512-nYXQLCBkpJ8X6ltALua9dRrZDHVYxjJ1wgskNt1lH9fzGjs3tgojGSCBjmEPwkWS1y29+DrizMTW19Pr9uB2nw==
 
 vary@~1.1.2:
   version "1.1.2"

@@ -22,6 +22,10 @@ import {
 } from 'mocks/incidents.test';
 
 import {
+  generateMockUsers,
+} from 'mocks/users.test';
+
+import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
 import connection from 'redux/connection/reducers';
@@ -36,6 +40,8 @@ import {
   CONFIRM_INCIDENT_QUERY_REQUESTED,
   CONFIRM_INCIDENT_QUERY_COMPLETED,
   CONFIRM_INCIDENT_QUERY_ERROR,
+  UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
+  VALIDATE_INCIDENT_QUERY_REQUESTED,
 } from './actions';
 import querySettings from './reducers';
 import selectQuerySettings from './selectors';
@@ -44,6 +50,7 @@ import {
   toggleDisplayConfirmQueryModal,
   updateTotalIncidentsFromQuery,
   confirmIncidentQuery,
+  updateQuerySettingsUsers,
 } from './sagas';
 
 describe('Sagas: Query Settings', () => {
@@ -54,6 +61,7 @@ describe('Sagas: Query Settings', () => {
     incidentUrgency: ['high'],
     teamIds: [],
     serviceIds: [],
+    userIds: [],
   };
   const expectedMockResponse = {
     data: {
@@ -206,6 +214,19 @@ describe('Sagas: Query Settings', () => {
       .silentRun()
       .then((result) => {
         expect(result.storeState.status).toEqual(CONFIRM_INCIDENT_QUERY_ERROR);
+      });
+  });
+
+  it('updateQuerySettingsUsers', () => {
+    const users = generateMockUsers(2);
+    const userIds = users.map((user) => user.id);
+    return expectSaga(updateQuerySettingsUsers)
+      .withReducer(querySettings)
+      .dispatch({ type: UPDATE_QUERY_SETTINGS_USERS_REQUESTED, userIds })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.userIds).toEqual(userIds);
+        expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
       });
   });
 });
