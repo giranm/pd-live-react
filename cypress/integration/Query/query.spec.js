@@ -101,7 +101,6 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     // Reset query for next test
     deactivateButton('query-status-resolved-button');
     const queryDate = moment()
-      .subtract(1, 'days')
       .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     cy.get('#query-date-input').clear().type(queryDate.format('DD/MM/yyyy')).type('{enter}');
     waitForIncidentTable();
