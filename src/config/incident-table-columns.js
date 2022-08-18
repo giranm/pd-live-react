@@ -648,7 +648,7 @@ export const customReactTableColumnSchema = (
       const sanitizedValue = sanitizeUrl(value);
       if (validator.isURL(sanitizedValue)) {
         return (
-          <a href={sanitizedValue} target="_blank" rel="noopener noreferrer">
+          <a href={sanitizedValue} target="_blank" rel="noopener noreferrer" className="td-wrapper">
             {sanitizedValue}
           </a>
         );
