@@ -1,4 +1,6 @@
 const { defineConfig } = require('cypress')
+const dotenv = require('dotenv');
+const cypressFailFast = require('cypress-fail-fast/plugin');
 
 module.exports = defineConfig({
   video: false,
@@ -7,10 +9,11 @@ module.exports = defineConfig({
   defaultCommandTimeout: 15000,
   retries: 3,
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
-      return require('./cypress/plugins/index.js')(on, config)
+      dotenv.config();
+      cypressFailFast(on, config);
+      config.env.PD_USER_TOKEN = process.env.REACT_APP_PD_USER_TOKEN;
+      return config;
     },
     baseUrl: 'http://localhost:3000/pd-live-react',
     specPattern: 'cypress/e2e/**/*.spec.{js,ts,jsx,tsx}',
