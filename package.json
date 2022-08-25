@@ -6,7 +6,7 @@
   "dependencies": {
     "@braintree/sanitize-url": "^6.0.0",
     "@craco/craco": "7.0.0-alpha.3",
-    "@datadog/browser-rum": "^4.17.1",
+    "@datadog/browser-rum": "^4.17.2",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-brands-svg-icons": "^6.1.2",
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
