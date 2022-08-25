@@ -116,13 +116,13 @@
     "jest-location-mock": "^1.0.9",
     "prettier": "^2.6.2",
     "prettier-eslint": "^15.0.1",
-    "prettier-eslint-cli": "^7.0.1",
+    "prettier-eslint-cli": "^7.1.0",
     "redux-mock-store": "^1.5.4",
     "redux-saga-test-plan": "^4.0.5",
     "resolve-url-loader": "^5.0.0",
     "string.prototype.replaceall": "^1.0.6",
     "svg-jest": "^1.0.1",
     "wait-on": "^6.0.1",
-    "yarn-audit-fix": "^9.3.3"
+    "yarn-audit-fix": "^9.3.5"
   }
 }
