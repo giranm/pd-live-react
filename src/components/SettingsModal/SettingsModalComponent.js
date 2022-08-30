@@ -74,15 +74,12 @@ const columnMapper = (column, columnType) => ({
 const incidentColumnMap = (column) => columnMapper(column, 'incident');
 const alertColumnMap = (column) => columnMapper(column, 'alert');
 
-const getAllAvailableColumns = () => availableIncidentTableColumns
-  .map(incidentColumnMap)
-  .concat(availableAlertTableColumns.map(alertColumnMap));
-
 const SettingsModalComponent = ({
   settings,
   incidentTable,
   toggleSettingsModal,
   users,
+  fields,
   updateUserLocale,
   setDefaultSinceDateTenor,
   setAlertCustomDetailColumns,
@@ -108,8 +105,15 @@ const SettingsModalComponent = ({
   const {
     currentUserLocale,
   } = users;
+  const {
+    fields: customFields,
+  } = fields;
 
-  // Create internal state for options
+  /*
+    Create internal state for options
+  */
+
+  // User Profile
   const selectLocales = Object.keys(locales).map((locale) => ({
     label: locales[locale],
     value: locale,
@@ -149,6 +153,25 @@ const SettingsModalComponent = ({
 
   const [tempAutoAcceptQuery, setTempAutoAcceptQuery] = useState(autoAcceptIncidentsQuery);
 
+  // Incident Table
+  const getAllAvailableColumns = () => []
+    .concat(availableIncidentTableColumns.map(incidentColumnMap))
+    .concat(availableAlertTableColumns.map(alertColumnMap))
+    .concat(
+      customFields.map((field) => ({
+        Header: field.display_name,
+        label: field.display_name,
+        value: field.summary,
+        columnType: 'custom',
+      })),
+    );
+
+  const [availableColumns, setAvailableColumns] = useState(getAllAvailableColumns());
+
+  useEffect(() => {
+    setAvailableColumns(getAllAvailableColumns());
+  }, [customFields]);
+
   const [selectedColumns, setSelectedColumns] = useState(
     incidentTableColumns.map((column) => {
       // Recreate original value used from react-select in order to populate dual list
@@ -172,8 +195,6 @@ const SettingsModalComponent = ({
       };
     }),
   );
-
-  const [availableColumns, setAvailableColumns] = useState(getAllAvailableColumns());
 
   // Handle alert custom detail fields being updated
   useEffect(() => {
@@ -356,7 +377,7 @@ const SettingsModalComponent = ({
                   isClearable
                   placeholder="Enter 'Column Header:JSON Path' (e.g. Environment:details.env)"
                   defaultValue={alertCustomDetailFields}
-                  onChange={(fields) => setAlertCustomDetailColumns(fields)}
+                  onChange={(alertFields) => setAlertCustomDetailColumns(alertFields)}
                 />
               </Col>
               <br />
@@ -397,6 +418,7 @@ const mapStateToProps = (state) => ({
   settings: state.settings,
   incidentTable: state.incidentTable,
   users: state.users,
+  fields: state.fields,
 });
 
 const mapDispatchToProps = (dispatch) => ({

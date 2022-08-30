@@ -661,36 +661,43 @@ export const customReactTableColumnSchema = (
 // Helper function to retrieve React Table column schemas from list of column objects
 export const getReactTableColumnSchemas = (columns) => {
   const reactTableColumnSchemas = [];
-  columns.forEach((col) => {
-    let columnSchema;
-    if (col.columnType === 'incident') {
-      // Handle standard incident data in column
-      columnSchema = {
-        ...getObjectsFromList(availableIncidentTableColumns, [col.Header], 'Header')[0],
-      };
-    } else if (col.columnType === 'alert') {
-      // Handle alert level data in column
-      switch (col.Header) {
-        // Standard PD-CEF fields
-        case 'Severity':
-        case 'Group':
-        case 'Source':
-        case 'Component':
-        case 'Class':
-          columnSchema = {
-            ...getObjectsFromList(availableAlertTableColumns, [col.Header], 'Header')[0],
-          };
-          break;
-        // Custom alert details
-        default:
-          columnSchema = {
-            ...customReactTableColumnSchema('alert', col.Header, col.accessorPath, col.aggregator),
-          };
+  if (columns) {
+    columns.forEach((col) => {
+      let columnSchema;
+      if (col.columnType === 'incident') {
+        // Handle standard incident data in column
+        columnSchema = {
+          ...getObjectsFromList(availableIncidentTableColumns, [col.Header], 'Header')[0],
+        };
+      } else if (col.columnType === 'alert') {
+        // Handle alert level data in column
+        switch (col.Header) {
+          // Standard PD-CEF fields
+          case 'Severity':
+          case 'Group':
+          case 'Source':
+          case 'Component':
+          case 'Class':
+            columnSchema = {
+              ...getObjectsFromList(availableAlertTableColumns, [col.Header], 'Header')[0],
+            };
+            break;
+          // Custom alert details
+          default:
+            columnSchema = {
+              ...customReactTableColumnSchema(
+                'alert',
+                col.Header,
+                col.accessorPath,
+                col.aggregator,
+              ),
+            };
+        }
       }
-    }
-    // Explicitly set width for rendering (this may come from existing redux store)
-    columnSchema.width = col.width;
-    reactTableColumnSchemas.push(columnSchema);
-  });
+      // Explicitly set width for rendering (this may come from existing redux store)
+      columnSchema.width = col.width;
+      reactTableColumnSchemas.push(columnSchema);
+    });
+  }
   return reactTableColumnSchemas;
 };

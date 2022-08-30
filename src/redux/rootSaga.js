@@ -89,7 +89,9 @@ import {
 import {
   getResponsePlaysAsync, runResponsePlayAsync,
 } from './response_plays/sagas';
-
+import {
+  getFieldsAsync,
+} from './fields/sagas';
 import {
   getServicesAsync,
 } from './services/sagas';
@@ -214,6 +216,9 @@ export default function* rootSaga() {
     // Response Plays
     getResponsePlaysAsync(),
     runResponsePlayAsync(),
+
+    // Fields
+    getFieldsAsync(),
 
     // Settings
     toggleSettingsModal(),

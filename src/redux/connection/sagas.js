@@ -73,6 +73,7 @@ export function* checkConnectionStatusImpl() {
     && store.escalationPolicies.status.includes('COMPLETED')
     && store.extensions.status.includes('COMPLETED')
     && store.responsePlays.status.includes('COMPLETED')
+    && store.fields.status.includes('COMPLETED')
     && store.connection.status.includes('COMPLETED')
   ) {
     // Ignoring priorities as this is persisted to localcache
