@@ -4954,10 +4954,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
-cy2@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/cy2/-/cy2-2.0.0.tgz#c4697c62c939375966ab1f5ec3872a59d8f1c82f"
-  integrity sha512-Vo2fMKda/XzEGt4yPsYzpuXscCe031dwZ2LcTo3FFTS4BZ4dzHdRFrSEG/sPARDUJMryEqc/55qkmgIOR/WRZQ==
+cy2@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/cy2/-/cy2-2.0.1.tgz#1d13bbec387ee31537a8a948bcbf608f06dd3441"
+  integrity sha512-vzLXnNj9LtqGyvsTx+qo4Zj5K8tVVIntXGPGAQE4w/ThZFtONTsGyc1kk29jtsHbJwZQ+zZu3o0GE+kPsSBlCA==
   dependencies:
     debug "^4.3.2"
     js-yaml "^4.0.0"

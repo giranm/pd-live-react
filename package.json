@@ -95,7 +95,7 @@
     "@cypress/react": "6.1.1",
     "@cypress/webpack-dev-server": "^2.2.0",
     "@faker-js/faker": "^7.4.0",
-    "cy2": "^2.0.0",
+    "cy2": "^2.0.1",
     "cypress": "^10.6.0",
     "cypress-fail-fast": "^5.0.0",
     "eslint": "^7.32.0",
