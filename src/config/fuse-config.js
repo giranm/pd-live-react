@@ -35,6 +35,9 @@ const fuseOptions = {
       }
       return key;
     })
+    // Custom incident fields
+    .concat(['field_values.value'])
+    // PD-CEF alert fields
     .concat(
       availableAlertTableColumns.map((col) => {
         let key = '';
