@@ -85,6 +85,9 @@ export const getIncidentByIdRequest = (incidentId) => call(pd, {
   data: {
     'include[]': ['external_references'],
   },
+  headers: {
+    'X-EARLY-ACCESS': 'flex-service-early-access',
+  },
 });
 
 export function* getIncidentsImpl() {
@@ -104,7 +107,7 @@ export function* getIncidentsImpl() {
     const baseParams = {
       since: sinceDate.toISOString(),
       until: new Date().toISOString(),
-      include: ['first_trigger_log_entries', 'external_references'],
+      include: ['first_trigger_log_entries', 'external_references', 'field_values'],
       limit: INCIDENTS_PAGINATION_LIMIT,
       sort_by: 'created_at:desc',
     };

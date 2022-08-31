@@ -61,6 +61,7 @@ export const pdAxiosRequest = async (method, endpoint, params = {}, data = {}) =
     })(),
     Accept: 'application/vnd.pagerduty+json;version=2',
     'content-type': 'application/json; charset=utf-8',
+    'X-EARLY-ACCESS': 'flex-service-early-access',
   },
   params,
   data,

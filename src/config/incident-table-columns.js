@@ -629,8 +629,43 @@ export const customReactTableColumnSchema = (
       }
       return content;
     };
-  } else {
-    // TODO: Entrypoint for custom incident fields
+  } else if (columnType === 'custom') {
+    accessor = (incident) => {
+      // Identify index of custom field
+      const fieldIdx = incident.field_values
+        ? incident.field_values.findIndex((field) => field.display_name === header)
+        : null;
+      // Determine if field content should be aggregated
+      if (aggregator) {
+        fullJsonPath = `field_values[${fieldIdx}].value[*]`;
+      } else {
+        fullJsonPath = `field_values[${fieldIdx}].value`;
+      }
+      try {
+        result = JSONPath({
+          path: fullJsonPath,
+          json: incident,
+          wrap: false,
+        });
+      } catch (e) {
+        result = null;
+      }
+      if (result && !Array.isArray(result)) {
+        content = result;
+      } else if (result && Array.isArray(result)) {
+        // Deduplicate values if aggregator is used
+        if (aggregator) {
+          content = [...new Set(result)].sort().join(', ');
+        } else {
+          content = result.join(', ');
+        }
+      } else if (!result) {
+        content = '--';
+      } else {
+        content = 'Fetching custom fields ...';
+      }
+      return content;
+    };
   }
   return {
     columnType,
@@ -645,7 +680,8 @@ export const customReactTableColumnSchema = (
       value,
     }) => {
       // Determine if content should be rendered as link or plaintext
-      const sanitizedValue = sanitizeUrl(value);
+      const stringValue = value.toString(); // Handle numeric types from custom fields
+      const sanitizedValue = sanitizeUrl(stringValue);
       if (validator.isURL(sanitizedValue)) {
         return (
           <a href={sanitizedValue} target="_blank" rel="noopener noreferrer" className="td-wrapper">
@@ -693,6 +729,10 @@ export const getReactTableColumnSchemas = (columns) => {
               ),
             };
         }
+      } else if (col.columnType === 'custom') {
+        columnSchema = {
+          ...customReactTableColumnSchema('custom', col.Header, col.accessorPath),
+        };
       }
       // Explicitly set width for rendering (this may come from existing redux store)
       columnSchema.width = col.width;

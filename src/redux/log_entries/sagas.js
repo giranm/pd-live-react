@@ -51,7 +51,12 @@ export function* getLogEntries(action) {
       since: since.toISOString().replace(/\.[\d]{3}/, ''),
       'include[]': ['incidents'],
     };
-    const response = yield call(pd.all, 'log_entries', { data: { ...params } });
+    const response = yield call(pd.all, 'log_entries', {
+      data: { ...params },
+      headers: {
+        'X-EARLY-ACCESS': 'flex-service-early-access',
+      },
+    });
     if (response.status !== 200) {
       throw Error('Unable to fetch log entries');
     }

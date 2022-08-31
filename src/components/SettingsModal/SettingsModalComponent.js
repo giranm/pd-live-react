@@ -161,16 +161,13 @@ const SettingsModalComponent = ({
       customFields.map((field) => ({
         Header: field.display_name,
         label: field.display_name,
-        value: field.summary,
+        accessorPath: field.name,
+        value: field.name,
         columnType: 'custom',
       })),
     );
 
   const [availableColumns, setAvailableColumns] = useState(getAllAvailableColumns());
-
-  useEffect(() => {
-    setAvailableColumns(getAllAvailableColumns());
-  }, [customFields]);
 
   const [selectedColumns, setSelectedColumns] = useState(
     incidentTableColumns.map((column) => {
@@ -183,8 +180,10 @@ const SettingsModalComponent = ({
         } else if (column.accessorPath && column.aggregator) {
           value = `${column.Header}:${column.accessorPath}:${column.aggregator}`;
         }
+      } else if (column.columnType === 'custom') {
+        value = column.accessorPath;
       } else {
-        // Incident column
+        // Standard incident fields
         value = column.Header;
       }
       return {
@@ -225,7 +224,7 @@ const SettingsModalComponent = ({
       tempAvailableIncidentTableColumns.push(tempField);
     });
     setAvailableColumns(tempAvailableIncidentTableColumns);
-  }, [alertCustomDetailFields]);
+  }, [alertCustomDetailFields, customFields]);
 
   return (
     <div className="settings-ctr">
