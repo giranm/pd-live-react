@@ -653,11 +653,13 @@ export const customReactTableColumnSchema = (
       if (result && !Array.isArray(result)) {
         content = result;
       } else if (result && Array.isArray(result)) {
-        // Deduplicate values if aggregator is used
+        // Deduplicate values if aggregator is used, else handle empty field value
         if (aggregator) {
           content = [...new Set(result)].sort().join(', ');
-        } else {
+        } else if (result.length >= 1 && result[0] !== null) {
           content = result.join(', ');
+        } else if (result.length === 1 && result[0] === null) {
+          content = '--';
         }
       } else if (!result) {
         content = '--';
@@ -679,17 +681,26 @@ export const customReactTableColumnSchema = (
     Cell: ({
       value,
     }) => {
-      // Determine if content should be rendered as link or plaintext
-      const stringValue = value.toString(); // Handle numeric types from custom fields
+      // Determine how cell should be rendered
+      const stringValue = value.toString();
       const sanitizedValue = sanitizeUrl(stringValue);
-      if (validator.isURL(sanitizedValue)) {
+
+      // Clickable URL
+      if (typeof value === 'string' && validator.isURL(sanitizedValue)) {
         return (
           <a href={sanitizedValue} target="_blank" rel="noopener noreferrer" className="td-wrapper">
             {sanitizedValue}
           </a>
         );
       }
-      return <div className="td-wrapper">{value}</div>;
+
+      // Formatted Date
+      if (typeof value !== 'number' && moment(stringValue).isValid()) {
+        return <div className="td-wrapper">{moment(stringValue).format(DATE_FORMAT)}</div>;
+      }
+
+      // Fallback for all datatypes to be rendered as string
+      return <div className="td-wrapper">{stringValue}</div>;
     },
   };
 };
