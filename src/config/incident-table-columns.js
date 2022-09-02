@@ -712,7 +712,7 @@ export const customReactTableColumnSchema = (
 
       // Identify if current cell was populated with multi-values, attach appropriate render
       const fieldIdx = fields.findIndex((field) => field.name === fieldName);
-      if (fieldIdx > -1 && fields[fieldIdx].multi_value) {
+      if (fieldIdx > -1 && fields[fieldIdx].multi_value && fields[fieldIdx].value[0] !== null) {
         const stringValues = fields[fieldIdx].value.map((val) => val.toString());
         const sanitizedValues = stringValues.map((val) => sanitizeUrl(val));
 
