@@ -29,7 +29,7 @@ import {
   HIGH, LOW,
 } from 'util/incidents';
 import {
-  getObjectsFromList, getTextWidth,
+  getObjectsFromList, getTextWidth, isIsoDate,
 } from 'util/helpers';
 
 // Define all possible columns for incidents under PagerDuty's API
@@ -650,7 +650,7 @@ export const customReactTableColumnSchema = (
       } catch (e) {
         result = null;
       }
-      if (result && !Array.isArray(result)) {
+      if ((result && !Array.isArray(result)) || result === false) {
         content = result;
       } else if (result && Array.isArray(result)) {
         // Deduplicate values if aggregator is used, else handle empty field value
@@ -678,29 +678,85 @@ export const customReactTableColumnSchema = (
     Header: header,
     sortable: true,
     minWidth: getTextWidth(header, 'bold 16px sans-serif') + 40,
-    Cell: ({
-      value,
-    }) => {
-      // Determine how cell should be rendered
+    Cell: (props) => {
+      const {
+        value,
+        column: {
+          accessorPath: fieldName,
+        },
+        row: {
+          original: {
+            field_values: fields,
+          },
+        },
+      } = props;
       const stringValue = value.toString();
       const sanitizedValue = sanitizeUrl(stringValue);
 
-      // Clickable URL
+      // Determine how cell should be rendered based on field type
+      let cellRender = <div className="td-wrapper">{stringValue}</div>;
+
+      // Single URL
       if (typeof value === 'string' && validator.isURL(sanitizedValue)) {
-        return (
+        cellRender = (
           <a href={sanitizedValue} target="_blank" rel="noopener noreferrer" className="td-wrapper">
             {sanitizedValue}
           </a>
         );
       }
 
-      // Formatted Date
-      if (typeof value !== 'number' && moment(stringValue).isValid()) {
-        return <div className="td-wrapper">{moment(stringValue).format(DATE_FORMAT)}</div>;
+      // Single Date
+      if (isIsoDate(stringValue)) {
+        cellRender = <div className="td-wrapper">{moment(stringValue).format(DATE_FORMAT)}</div>;
+      }
+
+      // Identify if current cell was populated with multi-values, attach appropriate render
+      const fieldIdx = fields.findIndex((field) => field.name === fieldName);
+      if (fieldIdx > -1 && fields[fieldIdx].multi_value) {
+        const stringValues = fields[fieldIdx].value.map((val) => val.toString());
+        const sanitizedValues = stringValues.map((val) => sanitizeUrl(val));
+
+        // Multiple URLS
+        if (sanitizedValues.every((sanitizedUrl) => validator.isURL(sanitizedUrl))) {
+          cellRender = (
+            <>
+              {sanitizedValues.map((sanitizedUrl, idx, {
+                length,
+              }) => (
+                <a
+                  idx={`${idx}-${sanitizedUrl}`}
+                  href={sanitizedUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="td-wrapper"
+                >
+                  {sanitizedUrl}
+                  {length - 1 === idx ? null : ', '}
+                </a>
+              ))}
+            </>
+          );
+        }
+
+        // Multiple Dates
+        if (sanitizedValues.every((sanitizedDate) => isIsoDate(sanitizedDate))) {
+          cellRender = (
+            <>
+              {sanitizedValues.map((sanitizedDate, idx, {
+                length,
+              }) => (
+                <div idx={`${idx}-${sanitizedDate}`} className="td-wrapper">
+                  {moment(sanitizedDate).format(DATE_FORMAT)}
+                  {length - 1 === idx ? null : ', '}
+                </div>
+              ))}
+            </>
+          );
+        }
       }
 
       // Fallback for all datatypes to be rendered as string
-      return <div className="td-wrapper">{stringValue}</div>;
+      return cellRender;
     },
   };
 };
