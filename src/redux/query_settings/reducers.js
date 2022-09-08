@@ -17,6 +17,8 @@ import {
   UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
   UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
+  UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED,
+  UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
   UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
@@ -89,6 +91,15 @@ const querySettings = produce(
       case UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED:
         draft.teamIds = action.teamIds;
         draft.status = UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED;
+        break;
+
+      case UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED:
+        draft.status = UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED;
+        break;
+
+      case UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_COMPLETED:
+        draft.escalationPolicyIds = action.escalationPolicyIds;
+        draft.status = UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_COMPLETED;
         break;
 
       case UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED:
@@ -173,6 +184,7 @@ const querySettings = produce(
     incidentUrgency: [HIGH, LOW],
     incidentPriority: [],
     teamIds: [],
+    escalationPolicyIds: [],
     serviceIds: [],
     userIds: [],
     searchQuery: '',

@@ -39,12 +39,16 @@ import {
   updateQuerySettingsIncidentUrgency as updateQuerySettingsIncidentUrgencyConnected,
   updateQuerySettingsIncidentPriority as updateQuerySettingsIncidentPriorityConnected,
   updateQuerySettingsTeams as updateQuerySettingsTeamsConnected,
+  updateQuerySettingsEscalationPolicies as updateQuerySettingsEscalationPoliciesConnected,
   updateQuerySettingsServices as updateQuerySettingsServicesConnected,
   updateQuerySettingsUsers as updateQuerySettingsUsersConnected,
 } from 'redux/query_settings/actions';
 import {
   FETCH_TEAMS_COMPLETED,
 } from 'redux/teams/actions';
+import {
+  FETCH_ESCALATION_POLICIES_COMPLETED,
+} from 'redux/escalation_policies/actions';
 import {
   FETCH_SERVICES_COMPLETED,
 } from 'redux/services/actions';
@@ -63,6 +67,7 @@ import {
 
 const QuerySettingsComponent = ({
   querySettings,
+  escalationPolicies,
   services,
   teams,
   priorities,
@@ -73,6 +78,7 @@ const QuerySettingsComponent = ({
   updateQuerySettingsIncidentUrgency,
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
+  updateQuerySettingsEscalationPolicies,
   updateQuerySettingsServices,
   updateQuerySettingsUsers,
 }) => {
@@ -82,12 +88,16 @@ const QuerySettingsComponent = ({
     incidentUrgency,
     incidentPriority,
     teamIds,
+    escalationPolicyIds,
     serviceIds,
     userIds,
   } = querySettings;
   const {
     teams: teamList, status: teamStatus,
   } = teams;
+  const {
+    escalationPolicies: escalationPolicyList, status: escalationPolicyStatus,
+  } = escalationPolicies;
   const {
     services: serviceList, status: serviceStatus,
   } = services;
@@ -101,6 +111,7 @@ const QuerySettingsComponent = ({
 
   // Identify when to enable selects once data has been fetched
   const isTeamSelectDisabled = teamStatus !== FETCH_TEAMS_COMPLETED;
+  const isEscalationPolicySelectDisabled = escalationPolicyStatus !== FETCH_ESCALATION_POLICIES_COMPLETED;
   const isServiceSelectDisabled = serviceStatus !== FETCH_SERVICES_COMPLETED;
   const isUserSelectDisabled = !userList.length; // There are multiple states which affect this
 
@@ -108,6 +119,11 @@ const QuerySettingsComponent = ({
   const selectListTeams = teamList.map((team) => ({
     label: team.name,
     value: team.id,
+  }));
+
+  const selectListEscalationPolicies = escalationPolicyList.map((escalationPolicy) => ({
+    label: escalationPolicy.name,
+    value: escalationPolicy.id,
   }));
 
   const selectListServices = serviceList.map((service) => ({
@@ -128,6 +144,7 @@ const QuerySettingsComponent = ({
 
   // Get "stored" option values
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
+  const storedSelectEscalationPolicies = getObjectsFromList(selectListEscalationPolicies, escalationPolicyIds, 'value');
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
   const storedSelectUsers = getObjectsFromList(selectListUsers, userIds, 'value');
 
@@ -311,6 +328,25 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col>
+                Escalation Policy:
+                {' '}
+                <Form.Group>
+                  <Select
+                    id="query-escalation-policy-select"
+                    styles={reactSelectStyle}
+                    onChange={(selectedEscalationPolicies) => {
+                      const escalationPolicyIdsInt = selectedEscalationPolicies.map((escalationPolicy) => escalationPolicy.value);
+                      updateQuerySettingsEscalationPolicies(escalationPolicyIdsInt);
+                    }}
+                    isMulti
+                    options={selectListEscalationPolicies}
+                    value={storedSelectEscalationPolicies}
+                    isLoading={isEscalationPolicySelectDisabled}
+                    isDisabled={isEscalationPolicySelectDisabled}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
                 Service:
                 {' '}
                 <Form.Group>
@@ -340,6 +376,7 @@ const QuerySettingsComponent = ({
 const mapStateToProps = (state) => ({
   querySettings: state.querySettings,
   services: state.services,
+  escalationPolicies: state.escalationPolicies,
   teams: state.teams,
   priorities: state.priorities.priorities,
   users: state.users,
@@ -360,6 +397,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateQuerySettingsIncidentPriorityConnected(incidentPriority));
   },
   updateQuerySettingsTeams: (teamIds) => dispatch(updateQuerySettingsTeamsConnected(teamIds)),
+  updateQuerySettingsEscalationPolicies: (escalationPolicyIds) => {
+    dispatch(updateQuerySettingsEscalationPoliciesConnected(escalationPolicyIds));
+  },
   updateQuerySettingsServices: (serviceIds) => {
     dispatch(updateQuerySettingsServicesConnected(serviceIds));
   },

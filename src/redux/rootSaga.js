@@ -13,6 +13,7 @@ import {
   updateQuerySettingsIncidentUrgency,
   updateQuerySettingsIncidentPriority,
   updateQuerySettingsTeams,
+  updateQuerySettingsEscalationPolicies,
   updateQuerySettingsServices,
   updateQuerySettingsUsers,
   updateSearchQuery,
@@ -33,6 +34,7 @@ import {
   filterIncidentsByStatus,
   filterIncidentsByUrgency,
   filterIncidentsByTeam,
+  filterIncidentsByEscalationPolicy,
   filterIncidentsByService,
   filterIncidentsByQuery,
 } from './incidents/sagas';
@@ -132,6 +134,7 @@ export default function* rootSaga() {
     updateQuerySettingsIncidentUrgency(),
     updateQuerySettingsIncidentPriority(),
     updateQuerySettingsTeams(),
+    updateQuerySettingsEscalationPolicies(),
     updateQuerySettingsServices(),
     updateQuerySettingsUsers(),
     updateSearchQuery(),
@@ -151,6 +154,7 @@ export default function* rootSaga() {
     filterIncidentsByStatus(),
     filterIncidentsByUrgency(),
     filterIncidentsByTeam(),
+    filterIncidentsByEscalationPolicy(),
     filterIncidentsByService(),
     filterIncidentsByQuery(),
 

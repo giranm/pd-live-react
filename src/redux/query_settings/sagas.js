@@ -40,6 +40,8 @@ import {
   UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
   UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
+  UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED,
+  UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
   UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
@@ -158,6 +160,19 @@ export function* updateQuerySettingsTeamsImpl(action) {
   yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
 }
 
+export function* updateQuerySettingsEscalationPolicies() {
+  yield takeLatest(UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED, updateQuerySettingsEscalationPoliciesImpl);
+}
+
+export function* updateQuerySettingsEscalationPoliciesImpl(action) {
+  // Update service ids and re-request incidents list + notes
+  const {
+    escalationPolicyIds,
+  } = action;
+  yield put({ type: UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_COMPLETED, escalationPolicyIds });
+  yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
+}
+
 export function* updateQuerySettingsServices() {
   yield takeLatest(UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED, updateQuerySettingsServicesImpl);
 }
@@ -213,6 +228,7 @@ export function* validateIncidentQueryImpl() {
       incidentStatus,
       incidentUrgency,
       teamIds,
+      escalationPolicyIds,
       serviceIds,
       userIds,
       // incidentPriority, // Unfortunately can't do this pre-API call.
@@ -228,6 +244,7 @@ export function* validateIncidentQueryImpl() {
     if (incidentStatus) params['statuses[]'] = incidentStatus;
     if (incidentUrgency) params['urgencies[]'] = incidentUrgency;
     if (teamIds.length) params['team_ids[]'] = teamIds;
+    if (escalationPolicyIds.length) params['escalation_policy_ids[]'] = escalationPolicyIds;
     if (serviceIds.length) params['service_ids[]'] = serviceIds;
     if (userIds.length) params['user_ids[]'] = userIds;
 

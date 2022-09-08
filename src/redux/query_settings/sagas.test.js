@@ -60,6 +60,7 @@ describe('Sagas: Query Settings', () => {
     incidentStatus: ['triggered'],
     incidentUrgency: ['high'],
     teamIds: [],
+    escalationPolicyIds: [],
     serviceIds: [],
     userIds: [],
   };
