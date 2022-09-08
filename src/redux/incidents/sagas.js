@@ -101,7 +101,7 @@ export function* getIncidentsImpl() {
       maxIncidentsLimit,
     } = yield select(selectSettings);
     const {
-      sinceDate, incidentStatus, incidentUrgency, teamIds, escalationPolicyIds, serviceIds, userIds,
+      sinceDate, incidentStatus, incidentUrgency, teamIds, serviceIds, userIds,
     } = yield select(selectQuerySettings);
 
     const baseParams = {
@@ -115,7 +115,6 @@ export function* getIncidentsImpl() {
     if (incidentStatus) baseParams.statuses = incidentStatus;
     if (incidentUrgency) baseParams.urgencies = incidentUrgency;
     if (teamIds.length) baseParams.team_ids = teamIds;
-    if (escalationPolicyIds.length) baseParams.escalation_policy_ids = escalationPolicyIds;
     if (serviceIds.length) baseParams.service_ids = serviceIds;
     if (userIds.length) baseParams.user_ids = userIds;
 
@@ -164,7 +163,7 @@ export function* getIncidents() {
     });
 
     const {
-      incidentPriority, searchQuery,
+      incidentPriority, escalationPolicyIds, searchQuery,
     } = yield select(selectQuerySettings);
     const incidents = yield getIncidentsImpl();
     yield put({
@@ -174,6 +173,8 @@ export function* getIncidents() {
 
     // Filter incident list on priority (can't do this from API)
     yield call(filterIncidentsByPriorityImpl, { incidentPriority });
+    // Filter incident list on escalation policy (can't do this from API)
+    yield call(filterIncidentsByEscalationPolicyImpl, { escalationPolicyIds });
 
     // Filter updated incident list by query; updates memoized data within incidents table
     yield call(filterIncidentsByQueryImpl, { searchQuery });
