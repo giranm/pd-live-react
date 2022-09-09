@@ -144,7 +144,11 @@ const QuerySettingsComponent = ({
 
   // Get "stored" option values
   const storedSelectTeams = getObjectsFromList(selectListTeams, teamIds, 'value');
-  const storedSelectEscalationPolicies = getObjectsFromList(selectListEscalationPolicies, escalationPolicyIds, 'value');
+  const storedSelectEscalationPolicies = getObjectsFromList(
+    selectListEscalationPolicies,
+    escalationPolicyIds,
+    'value',
+  );
   const storedSelectServices = getObjectsFromList(selectListServices, serviceIds, 'value');
   const storedSelectUsers = getObjectsFromList(selectListUsers, userIds, 'value');
 
@@ -335,7 +339,9 @@ const QuerySettingsComponent = ({
                     id="query-escalation-policy-select"
                     styles={reactSelectStyle}
                     onChange={(selectedEscalationPolicies) => {
-                      const escalationPolicyIdsInt = selectedEscalationPolicies.map((escalationPolicy) => escalationPolicy.value);
+                      const escalationPolicyIdsInt = selectedEscalationPolicies.map(
+                        (escalationPolicy) => escalationPolicy.value,
+                      );
                       updateQuerySettingsEscalationPolicies(escalationPolicyIdsInt);
                     }}
                     isMulti

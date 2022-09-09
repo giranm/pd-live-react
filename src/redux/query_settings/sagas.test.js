@@ -248,7 +248,7 @@ describe('Sagas: Query Settings', () => {
         expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
       });
   });
-  
+
   it('updateQuerySettingsTeams', () => {
     const teams = generateMockTeams(2);
     const teamIds = teams.map((team) => team.id);
@@ -261,7 +261,7 @@ describe('Sagas: Query Settings', () => {
         expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
       });
   });
-  
+
   it('updateQuerySettingsEscalationPolicies', () => {
     const escalationPolicies = generateMockEscalationPolicies(2);
     const escalationPolicyIds = escalationPolicies.map((escalationPolicy) => escalationPolicy.id);
@@ -274,7 +274,7 @@ describe('Sagas: Query Settings', () => {
         expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
       });
   });
-  
+
   it('updateQuerySettingsServices', () => {
     const services = generateMockServices(2);
     const serviceIds = services.map((service) => service.id);

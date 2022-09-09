@@ -164,7 +164,9 @@ export function* getIncidents() {
 
     const {
       incidentPriority, escalationPolicyIds, searchQuery,
-    } = yield select(selectQuerySettings);
+    } = yield select(
+      selectQuerySettings,
+    );
     const incidents = yield getIncidentsImpl();
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
@@ -628,7 +630,10 @@ export function* filterIncidentsByTeamImpl(action) {
 }
 
 export function* filterIncidentsByEscalationPolicy() {
-  yield takeLatest(FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY, filterIncidentsByEscalationPolicyImpl);
+  yield takeLatest(
+    FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY,
+    filterIncidentsByEscalationPolicyImpl,
+  );
 }
 
 export function* filterIncidentsByEscalationPolicyImpl(action) {
@@ -644,7 +649,11 @@ export function* filterIncidentsByEscalationPolicyImpl(action) {
 
     // Typically there is no filtered view by escalation policy, so if empty, show all escalation policies.
     if (escalationPolicyIds.length) {
-      filteredIncidentsByEscalationPolicyList = filterIncidentsByField(incidents, 'escalation_policy.id', escalationPolicyIds);
+      filteredIncidentsByEscalationPolicyList = filterIncidentsByField(
+        incidents,
+        'escalation_policy.id',
+        escalationPolicyIds,
+      );
     } else {
       filteredIncidentsByEscalationPolicyList = [...incidents];
     }

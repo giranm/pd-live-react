@@ -161,7 +161,10 @@ export function* updateQuerySettingsTeamsImpl(action) {
 }
 
 export function* updateQuerySettingsEscalationPolicies() {
-  yield takeLatest(UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED, updateQuerySettingsEscalationPoliciesImpl);
+  yield takeLatest(
+    UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED,
+    updateQuerySettingsEscalationPoliciesImpl,
+  );
 }
 
 export function* updateQuerySettingsEscalationPoliciesImpl(action) {
