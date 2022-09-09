@@ -168,7 +168,7 @@ export function* updateQuerySettingsEscalationPolicies() {
 }
 
 export function* updateQuerySettingsEscalationPoliciesImpl(action) {
-  // Update service ids and re-request incidents list + notes
+  // Update escalation policy ids and re-request incidents list + notes
   const {
     escalationPolicyIds,
   } = action;
@@ -231,7 +231,6 @@ export function* validateIncidentQueryImpl() {
       incidentStatus,
       incidentUrgency,
       teamIds,
-      escalationPolicyIds,
       serviceIds,
       userIds,
       // incidentPriority, // Unfortunately can't do this pre-API call.
@@ -247,7 +246,6 @@ export function* validateIncidentQueryImpl() {
     if (incidentStatus) params['statuses[]'] = incidentStatus;
     if (incidentUrgency) params['urgencies[]'] = incidentUrgency;
     if (teamIds.length) params['team_ids[]'] = teamIds;
-    if (escalationPolicyIds.length) params['escalation_policy_ids[]'] = escalationPolicyIds;
     if (serviceIds.length) params['service_ids[]'] = serviceIds;
     if (userIds.length) params['user_ids[]'] = userIds;
 

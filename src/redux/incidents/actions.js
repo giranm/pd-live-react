@@ -106,7 +106,7 @@ export const filterIncidentsByTeam = (teamIds = []) => ({
 });
 
 export const filterIncidentsByEscalationPolicy = (escalationPolicyIds = []) => ({
-  type: FILTER_INCIDENTS_LIST_BY_SERVICE,
+  type: FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY,
   escalationPolicyIds,
 });
 
