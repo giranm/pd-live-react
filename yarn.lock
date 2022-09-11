@@ -8925,12 +8925,7 @@ nan@^2.13.2:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.15.0.tgz#3f34a473ff18e15c1b5626b62903b5ad6e665fee"
   integrity sha512-8ZtvEnA2c5aYCZYd1cvgdnU6cqwixRoYg70xPLWUws5ORTa/lnw+u4amixRS/Ac5U5mQVgp9pnlSUnbNWFaWZQ==
 
-nanoid@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.2.0.tgz#62667522da6673971cca916a6d3eff3f415ff80c"
-  integrity sha512-fmsZYa9lpn69Ad5eDn7FMcnnSR+8R34W9qJEijxYhTbfOWzr22n1QxCMzXLK+ODyW2973V3Fux959iQoUxzUIA==
-
-nanoid@^3.3.4:
+nanoid@^3.0.0, nanoid@^3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
@@ -10458,10 +10453,10 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-dual-listbox@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-dual-listbox/-/react-dual-listbox-2.2.0.tgz#1a0b760462d522a972f8e9b25b7f77e51cf5dfd1"
-  integrity sha512-2UuFh4VRrKOarEJObtX7rGyuVnbDt9BR7ejZLuhuwNX51N5h9ABvyXowccfZCJ5P0ut2IJ4eGXlaL+vxBZ6SFA==
+react-dual-listbox@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-dual-listbox/-/react-dual-listbox-2.3.0.tgz#707ac802ec97bd769de94562bf522dd713c682a7"
+  integrity sha512-AfkdfwzS1ihV6o/CIa3i97QlZWQU2iuOF43879pukWKFawtVc/otATb9fUpIG8Rp8QTR7uldUl9dl9MdWrgNvw==
   dependencies:
     classnames "^2.2.5"
     lodash "^4.17.21"
