@@ -1485,25 +1485,25 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@datadog/browser-core@4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.19.0.tgz#88a038ba443672a5d2789367df3316896a35652f"
-  integrity sha512-/KNVIoYyfgcoD2FhgRCMVgXAJzEJX5I3Rtypbk/itf3P2BZmMMU7FRwM3LTb0+P2ReRnMIfnu7+UbA+gk0sWCQ==
+"@datadog/browser-core@4.19.1":
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.19.1.tgz#7c1bb1afa9b8ae66c12cc8f0ede3bef72680ddff"
+  integrity sha512-BoHpweDiX1ImYZihaD4oiWG2VZb6iDNfaj/si1Rnb5zJ30tFDvbwpEp2UT79Pg08PwGKWK6ra6xXpW5ennkaHw==
 
-"@datadog/browser-rum-core@4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.19.0.tgz#69b044517d39867dd29cf069472bbb2e129188fa"
-  integrity sha512-t6GpePtdy3WJfx59nOWMELvZKRHyvki18B2mP3zq3wkrk7YofzfvlARrPo0oINvUptxrQxT5mNktV/8aDaYUbQ==
+"@datadog/browser-rum-core@4.19.1":
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.19.1.tgz#3cf1c9e141dfb249e2e745dbdcd90c1e4b5f8258"
+  integrity sha512-tIyVQFR9FyX5pZYHu7cgp5NhMeG2nCwAhQ/DNy33QCq3Q2RLwYSQwJQjuptTMgD25K194lGcSSWkCB3K5DFcoQ==
   dependencies:
-    "@datadog/browser-core" "4.19.0"
+    "@datadog/browser-core" "4.19.1"
 
-"@datadog/browser-rum@^4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.19.0.tgz#949c5f14712b8ae3720937aab91db13765f61ede"
-  integrity sha512-/05UmDbq2FazN+TeQ8AIi1WvT/K4bOtWfUQRFjXoOHl16Rtrmpce+GnVpNmeloxW7niRAI1p9Jf1MiCsx/SrwQ==
+"@datadog/browser-rum@^4.19.1":
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.19.1.tgz#6137f732225189434e5f283659c2e9ff56c31a1d"
+  integrity sha512-Y3ae1zqy8gHxlfsTwNsIe3pfSIt5zDLe5+H9Uq8u2GLKZqRkJcWjjMxRjC90feyYwWkQ8Gp5Ag13k2enGO/Nbg==
   dependencies:
-    "@datadog/browser-core" "4.19.0"
-    "@datadog/browser-rum-core" "4.19.0"
+    "@datadog/browser-core" "4.19.1"
+    "@datadog/browser-rum-core" "4.19.1"
 
 "@emotion/babel-plugin@^11.7.1":
   version "11.9.2"
@@ -5034,10 +5034,10 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-date-fns@^2.24.0, date-fns@^2.29.2:
-  version "2.29.2"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.2.tgz#0d4b3d0f3dff0f920820a070920f0d9662c51931"
-  integrity sha512-0VNbwmWJDS/G3ySwFSJA3ayhbURMTJLtwM2DTxf9CWondCnh6DTNlO9JgRSq6ibf4eD0lfMJNBxUdEAHHix+bA==
+date-fns@^2.24.0, date-fns@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 dayjs@^1.10.4, dayjs@^1.8.28:
   version "1.10.7"
@@ -10657,13 +10657,12 @@ react-window@^1.8.7:
     "@babel/runtime" "^7.0.0"
     memoize-one ">=3.1.1 <6"
 
-react@^17.0.2:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
-  integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==
+react@^18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
+  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 read-pkg-up@^7.0.1:
   version "7.0.1"
