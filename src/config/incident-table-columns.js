@@ -212,7 +212,7 @@ export const availableIncidentTableColumns = [
               length,
             }) => (
               <a
-                idx={team.id}
+                data-team-id={team.id}
                 href={team.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -392,7 +392,7 @@ export const availableIncidentTableColumns = [
               length,
             }) => (
               <a
-                idx={ext.id}
+                data-external-reference-id={ext.id}
                 href={ext.external_url}
                 target="_blank"
                 rel="noopener noreferrer"
