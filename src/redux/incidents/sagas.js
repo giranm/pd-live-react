@@ -67,6 +67,9 @@ import {
   FILTER_INCIDENTS_LIST_BY_TEAM,
   FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_TEAM_ERROR,
+  FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY,
+  FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_ERROR,
   FILTER_INCIDENTS_LIST_BY_SERVICE,
   FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
@@ -160,8 +163,10 @@ export function* getIncidents() {
     });
 
     const {
-      incidentPriority, searchQuery,
-    } = yield select(selectQuerySettings);
+      incidentPriority, escalationPolicyIds, searchQuery,
+    } = yield select(
+      selectQuerySettings,
+    );
     const incidents = yield getIncidentsImpl();
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
@@ -170,6 +175,8 @@ export function* getIncidents() {
 
     // Filter incident list on priority (can't do this from API)
     yield call(filterIncidentsByPriorityImpl, { incidentPriority });
+    // Filter incident list on escalation policy (can't do this from API)
+    yield call(filterIncidentsByEscalationPolicyImpl, { escalationPolicyIds });
 
     // Filter updated incident list by query; updates memoized data within incidents table
     yield call(filterIncidentsByQueryImpl, { searchQuery });
@@ -292,6 +299,7 @@ export function* getAllIncidentNotes() {
       incidentStatus,
       incidentUrgency,
       teamIds,
+      escalationPolicyIds,
       serviceIds,
       userIds,
       searchQuery,
@@ -300,6 +308,7 @@ export function* getAllIncidentNotes() {
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
     yield call(filterIncidentsByTeamImpl, { teamIds });
+    yield call(filterIncidentsByEscalationPolicyImpl, { escalationPolicyIds });
     yield call(filterIncidentsByServiceImpl, { serviceIds });
     yield call(filterIncidentsByUserImpl, { userIds });
     yield call(filterIncidentsByQueryImpl, { searchQuery });
@@ -355,6 +364,7 @@ export function* getAllIncidentAlerts() {
       incidentStatus,
       incidentUrgency,
       teamIds,
+      escalationPolicyIds,
       serviceIds,
       userIds,
       searchQuery,
@@ -363,6 +373,7 @@ export function* getAllIncidentAlerts() {
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
     yield call(filterIncidentsByTeamImpl, { teamIds });
+    yield call(filterIncidentsByEscalationPolicyImpl, { escalationPolicyIds });
     yield call(filterIncidentsByServiceImpl, { serviceIds });
     yield call(filterIncidentsByUserImpl, { userIds });
     yield call(filterIncidentsByQueryImpl, { searchQuery });
@@ -394,6 +405,7 @@ export function* updateIncidentsList(action) {
       incidentStatus,
       incidentUrgency,
       teamIds,
+      escalationPolicyIds,
       serviceIds,
       userIds,
       searchQuery,
@@ -483,6 +495,7 @@ export function* updateIncidentsList(action) {
     yield call(filterIncidentsByStatusImpl, { incidentStatus });
     yield call(filterIncidentsByUrgencyImpl, { incidentUrgency });
     yield call(filterIncidentsByTeamImpl, { teamIds });
+    yield call(filterIncidentsByEscalationPolicyImpl, { escalationPolicyIds });
     yield call(filterIncidentsByServiceImpl, { serviceIds });
     yield call(filterIncidentsByUserImpl, { userIds });
     yield call(filterIncidentsByQueryImpl, { searchQuery });
@@ -611,6 +624,47 @@ export function* filterIncidentsByTeamImpl(action) {
   } catch (e) {
     yield put({
       type: FILTER_INCIDENTS_LIST_BY_TEAM_ERROR,
+      message: e.message,
+    });
+  }
+}
+
+export function* filterIncidentsByEscalationPolicy() {
+  yield takeLatest(
+    FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY,
+    filterIncidentsByEscalationPolicyImpl,
+  );
+}
+
+export function* filterIncidentsByEscalationPolicyImpl(action) {
+  // Filter current incident list by escalation policy
+  try {
+    const {
+      escalationPolicyIds,
+    } = action;
+    const {
+      incidents,
+    } = yield select(selectIncidents);
+    let filteredIncidentsByEscalationPolicyList;
+
+    // Typically there is no filtered view by escalation policy, so if empty, show all escalation policies.
+    if (escalationPolicyIds.length) {
+      filteredIncidentsByEscalationPolicyList = filterIncidentsByField(
+        incidents,
+        'escalation_policy.id',
+        escalationPolicyIds,
+      );
+    } else {
+      filteredIncidentsByEscalationPolicyList = [...incidents];
+    }
+
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_COMPLETED,
+      incidents: filteredIncidentsByEscalationPolicyList,
+    });
+  } catch (e) {
+    yield put({
+      type: FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_ERROR,
       message: e.message,
     });
   }

@@ -26,6 +26,18 @@ import {
 } from 'mocks/users.test';
 
 import {
+  generateMockTeams,
+} from 'mocks/teams.test';
+
+import {
+  generateMockEscalationPolicies,
+} from 'mocks/escalation_policies.test';
+
+import {
+  generateMockServices,
+} from 'mocks/services.test';
+
+import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
 } from 'redux/connection/actions';
 import connection from 'redux/connection/reducers';
@@ -41,6 +53,9 @@ import {
   CONFIRM_INCIDENT_QUERY_COMPLETED,
   CONFIRM_INCIDENT_QUERY_ERROR,
   UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
+  UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
+  UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED,
+  UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   VALIDATE_INCIDENT_QUERY_REQUESTED,
 } from './actions';
 import querySettings from './reducers';
@@ -51,6 +66,9 @@ import {
   updateTotalIncidentsFromQuery,
   confirmIncidentQuery,
   updateQuerySettingsUsers,
+  updateQuerySettingsTeams,
+  updateQuerySettingsEscalationPolicies,
+  updateQuerySettingsServices,
 } from './sagas';
 
 describe('Sagas: Query Settings', () => {
@@ -60,6 +78,7 @@ describe('Sagas: Query Settings', () => {
     incidentStatus: ['triggered'],
     incidentUrgency: ['high'],
     teamIds: [],
+    escalationPolicyIds: [],
     serviceIds: [],
     userIds: [],
   };
@@ -226,6 +245,45 @@ describe('Sagas: Query Settings', () => {
       .silentRun()
       .then((result) => {
         expect(result.storeState.userIds).toEqual(userIds);
+        expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
+      });
+  });
+
+  it('updateQuerySettingsTeams', () => {
+    const teams = generateMockTeams(2);
+    const teamIds = teams.map((team) => team.id);
+    return expectSaga(updateQuerySettingsTeams)
+      .withReducer(querySettings)
+      .dispatch({ type: UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED, teamIds })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.teamIds).toEqual(teamIds);
+        expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
+      });
+  });
+
+  it('updateQuerySettingsEscalationPolicies', () => {
+    const escalationPolicies = generateMockEscalationPolicies(2);
+    const escalationPolicyIds = escalationPolicies.map((escalationPolicy) => escalationPolicy.id);
+    return expectSaga(updateQuerySettingsEscalationPolicies)
+      .withReducer(querySettings)
+      .dispatch({ type: UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED, escalationPolicyIds })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.escalationPolicyIds).toEqual(escalationPolicyIds);
+        expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
+      });
+  });
+
+  it('updateQuerySettingsServices', () => {
+    const services = generateMockServices(2);
+    const serviceIds = services.map((service) => service.id);
+    return expectSaga(updateQuerySettingsServices)
+      .withReducer(querySettings)
+      .dispatch({ type: UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED, serviceIds })
+      .silentRun()
+      .then((result) => {
+        expect(result.storeState.serviceIds).toEqual(serviceIds);
         expect(result.storeState.status).toEqual(VALIDATE_INCIDENT_QUERY_REQUESTED);
       });
   });

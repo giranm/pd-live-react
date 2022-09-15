@@ -40,6 +40,8 @@ import {
   UPDATE_QUERY_SETTING_INCIDENT_PRIORITY_COMPLETED,
   UPDATE_QUERY_SETTINGS_TEAMS_REQUESTED,
   UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED,
+  UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED,
+  UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_COMPLETED,
   UPDATE_QUERY_SETTINGS_SERVICES_REQUESTED,
   UPDATE_QUERY_SETTINGS_SERVICES_COMPLETED,
   UPDATE_QUERY_SETTINGS_USERS_REQUESTED,
@@ -155,6 +157,22 @@ export function* updateQuerySettingsTeamsImpl(action) {
   yield put({ type: FETCH_SERVICES_REQUESTED, teamIds });
   yield put({ type: GET_USERS_REQUESTED, teamIds });
   yield put({ type: UPDATE_QUERY_SETTINGS_TEAMS_COMPLETED, teamIds });
+  yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
+}
+
+export function* updateQuerySettingsEscalationPolicies() {
+  yield takeLatest(
+    UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_REQUESTED,
+    updateQuerySettingsEscalationPoliciesImpl,
+  );
+}
+
+export function* updateQuerySettingsEscalationPoliciesImpl(action) {
+  // Update escalation policy ids and re-request incidents list + notes
+  const {
+    escalationPolicyIds,
+  } = action;
+  yield put({ type: UPDATE_QUERY_SETTINGS_ESCALATION_POLICIES_COMPLETED, escalationPolicyIds });
   yield put({ type: VALIDATE_INCIDENT_QUERY_REQUESTED });
 }
 

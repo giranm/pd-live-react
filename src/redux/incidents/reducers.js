@@ -35,6 +35,9 @@ import {
   FILTER_INCIDENTS_LIST_BY_TEAM,
   FILTER_INCIDENTS_LIST_BY_TEAM_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_TEAM_ERROR,
+  FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY,
+  FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_COMPLETED,
+  FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_ERROR,
   FILTER_INCIDENTS_LIST_BY_SERVICE,
   FILTER_INCIDENTS_LIST_BY_SERVICE_COMPLETED,
   FILTER_INCIDENTS_LIST_BY_SERVICE_ERROR,
@@ -226,6 +229,23 @@ const incidents = produce(
       case FILTER_INCIDENTS_LIST_BY_TEAM_ERROR:
         draft.fetchingData = false;
         draft.status = FILTER_INCIDENTS_LIST_BY_TEAM_ERROR;
+        draft.error = action.message;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_COMPLETED:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_COMPLETED;
+        draft.incidents = action.incidents;
+        break;
+
+      case FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_ERROR:
+        draft.fetchingData = false;
+        draft.status = FILTER_INCIDENTS_LIST_BY_ESCALATION_POLICY_ERROR;
         draft.error = action.message;
         break;
 

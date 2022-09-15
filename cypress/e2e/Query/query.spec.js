@@ -24,7 +24,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
   before(() => {
     acceptDisclaimer();
     manageIncidentTableColumns('remove', ['Latest Note']);
-    manageIncidentTableColumns('add', ['Urgency', 'Teams']);
+    manageIncidentTableColumns('add', ['Urgency', 'Teams', 'Escalation Policy']);
     priorityNames.forEach((currentPriority) => {
       activateButton(`query-priority-${currentPriority}-button`);
     });
@@ -35,7 +35,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     if (cy.state('test').currentRetry() > 1) {
       acceptDisclaimer();
       manageIncidentTableColumns('remove', ['Latest Note']);
-      manageIncidentTableColumns('add', ['Urgency', 'Teams']);
+      manageIncidentTableColumns('add', ['Urgency', 'Teams', 'Escalation Policy']);
     }
     priorityNames.forEach((currentPriority) => {
       activateButton(`query-priority-${currentPriority}-button`);
@@ -178,6 +178,16 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
       cy.get('#query-team-select').click().type('{del}');
     });
   });
+  
+  const escalationPolicies = ['Team A (EP)', 'Team B (EP)'];
+  escalationPolicies.forEach((escalationPolicy) => {
+    it(`Query for incidents on ${escalationPolicy} only`, () => {
+      cy.get('#query-escalation-policy-select').click().type(`${escalationPolicy}{enter}`);
+      waitForIncidentTable();
+      checkIncidentCellContentAllRows('Escalation Policy', escalationPolicy);
+      cy.get('#query-escalation-policy-select').click().type('{del}');
+    });
+  });
 
   const services = ['Service A1', 'Service B2'];
   services.forEach((service) => {
@@ -198,6 +208,18 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     checkIncidentCellContentAllRows('Teams', 'Team A');
 
     cy.get('#query-team-select').click().type('{del}');
+    cy.get('#query-service-select').click().type('{del}');
+  });
+  
+  it('Query for incidents on Team A (EP) and Service A1 only', () => {
+    cy.get('#query-escalation-policy-select').click().type('Team A (EP){enter}');
+    cy.get('#query-service-select').click().type('Service A1{enter}');
+
+    waitForIncidentTable();
+    checkIncidentCellContentAllRows('Service', 'Service A1');
+    checkIncidentCellContentAllRows('Escalation Policy', 'Team A (EP)');
+
+    cy.get('#query-escalation-policy-select').click().type('{del}');
     cy.get('#query-service-select').click().type('{del}');
   });
 
