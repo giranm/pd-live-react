@@ -19,12 +19,19 @@ import {
   updateSearchQuery as updateSearchQueryConnected,
 } from 'redux/query_settings/actions';
 
+import {
+  useTranslation,
+} from 'react-i18next';
+
 const GlobalSearchComponent = ({
   searchQuery, updateSearchQuery,
 }) => {
   const debounced = useDebouncedCallback((value) => {
     updateSearchQuery(value);
   }, 500);
+  const {
+    t,
+  } = useTranslation();
   return (
     <div className="global-search-ctr">
       <Row>
@@ -37,7 +44,7 @@ const GlobalSearchComponent = ({
             </InputGroup.Prepend>
             <Form.Control
               id="global-search-input"
-              placeholder="Search"
+              placeholder={t('Search')}
               htmlSize={40}
               onChange={(e) => debounced(e.target.value)}
               defaultValue={searchQuery}
