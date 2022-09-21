@@ -34,12 +34,14 @@ const resources = {
       Escalate: 'Escalate',
       Reassign: 'Reassign',
       'Add Responders': 'Add Responders',
+      Responders: 'Responders',
       Snooze: 'Snooze',
       Custom: 'Custom',
       Merge: 'Merge',
       Resolve: 'Resolve',
       'Update Priority': 'Update Priority',
       'Add Note': 'Add Note',
+      'Add Note to incident(s) here': 'Add Note to incident(s) here',
       'Run Action': 'Run Action',
       'Response Plays': 'Response Plays',
       Actions: 'Actions',
@@ -50,6 +52,17 @@ const resources = {
       'Fetching Notes': 'Fetching Notes',
       'Fetching Alerts': 'Fetching Alerts',
       Refreshing: 'Refreshing',
+      'Search for Escalation Policies and/or Users': 'Search for Escalation Policies and/or Users',
+      'Search for Escalation Policy or User': 'Search for Escalation Policy or User',
+      'Provide brief message for additional responders':
+        'Provide brief message for additional responders',
+      'characters remaining': 'characters remaining',
+      Cancel: 'Cancel',
+      'Reassign To': 'Reassign To',
+      'Merge Incidents': 'Merge Incidents',
+      'The alerts of the selected incidents will be merged into a single incident': 'The alerts of the selected incidents will be merged into a single incident',
+      'Select an open incident to merge into': 'Select an open incident to merge into',
+      'The remaining selected incidents will be resolved after the merge is complete': 'The remaining selected incidents will be resolved after the merge is complete',
     },
   },
   fr: {
@@ -78,12 +91,14 @@ const resources = {
       Escalate: 'Escalader',
       Reassign: 'Réaffecter',
       'Add Responders': 'Ajouter des intervenants',
+      Responders: 'Intervenants',
       Snooze: 'Roupillon',
       Custom: 'Personnalisé',
       Merge: 'Fusionner',
       Resolve: 'Résoudre',
       'Update Priority': 'Modifier la priorité',
       'Add Note': 'Ajouter une note',
+      'Add Note to incident(s) here': 'Ajouter une note aux incidents ici',
       'Run Action': 'Exécuter une action',
       'Response Plays': 'Réponses',
       Actions: 'Actions',
@@ -94,6 +109,19 @@ const resources = {
       'Fetching Notes': 'Récupération des notes',
       'Fetching Alerts': 'Récupération des alertes',
       Refreshing: 'Rafraîchissement',
+      'Search for Escalation Policies and/or Users':
+        "Rechercher des politiques d'escalade et/ou des utilisateurs",
+      'Search for Escalation Policy or User':
+        "Rechercher une politique d'escalade ou un utilisateur",
+      'Provide brief message for additional responders':
+        'Fournir un message court pour les intervenants supplémentaires',
+      'characters remaining': 'caractères restants',
+      Cancel: 'Annuler',
+      'Reassign To': 'Réaffecter à',
+      'Merge Incidents': 'Fusionner les incidents',
+      'The alerts of the selected incidents will be merged into a single incident': 'Les alertes des incidents sélectionnés seront fusionnées en un seul incident',
+      'Select an open incident to merge into': 'Sélectionner un incident ouvert à fusionner',
+      'The remaining selected incidents will be resolved after the merge is complete': 'Les incidents restants sélectionnés seront résolus après la fusion',
     },
   },
 };
@@ -103,6 +131,7 @@ i18n
   .use(LanguageDetector)
   .init({
     resources,
+    fallbackLng: "en", // use en if detected lng is not available
     // lng: 'en', // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
     // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
     // if you're using a language detector, do not define the lng option

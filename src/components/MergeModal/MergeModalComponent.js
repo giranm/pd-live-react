@@ -21,6 +21,10 @@ import {
   TRIGGERED, ACKNOWLEDGED, filterIncidentsByField,
 } from 'util/incidents';
 
+import {
+  useTranslation,
+} from 'react-i18next';
+
 import './MergeModalComponent.scss';
 
 const animatedComponents = makeAnimated();
@@ -32,6 +36,9 @@ const MergeModalComponent = ({
   toggleDisplayMergeModal,
   merge,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     displayMergeModal,
   } = incidentActions;
@@ -68,17 +75,18 @@ const MergeModalComponent = ({
     <div className="merge-modal-ctr">
       <Modal show={displayMergeModal} onHide={toggleDisplayMergeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Merge Incidents</Modal.Title>
+          <Modal.Title>{t('Merge Incidents')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group>
               <Form.Text className="text-muted">
-                The alerts of the selected incidents will be merged into a single incident.
+                {t('The alerts of the selected incidents will be merged into a single incident')}
+                .
               </Form.Text>
               <br />
               <Form.Label>
-                <b>Select an open incident to merge into:</b>
+                <b>{t('Select an open incident to merge into')}:</b>
               </Form.Label>
               <Select
                 id="merge-select"
@@ -96,7 +104,8 @@ const MergeModalComponent = ({
             </Form.Group>
             <Form.Group>
               <Form.Text className="text-muted">
-                The remaining selected incidents will be resolved after the merge is complete.
+                {t('The remaining selected incidents will be resolved after the merge is complete')}
+                .
               </Form.Text>
             </Form.Group>
           </Form>
@@ -108,10 +117,10 @@ const MergeModalComponent = ({
             onClick={() => merge(targetIncident, mergedIncidents)}
             disabled={targetIncident === null}
           >
-            Merge Incidents
+            {t('Merge Incidents')}
           </Button>
           <Button variant="light" onClick={toggleDisplayMergeModal}>
-            Cancel
+            {t('Cancel')}
           </Button>
         </Modal.Footer>
       </Modal>

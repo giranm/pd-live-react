@@ -13,6 +13,9 @@ import {
   toggleDisplayAddNoteModal as toggleDisplayAddNoteModalConnected,
   addNote as addNoteConnected,
 } from 'redux/incident_actions/actions';
+import {
+  useTranslation,
+} from 'react-i18next';
 
 import './AddNoteModalComponent.scss';
 
@@ -22,6 +25,9 @@ const AddNoteModalComponent = ({
   toggleDisplayAddNoteModal,
   addNote,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     displayAddNoteModal,
   } = incidentActions;
@@ -38,14 +44,14 @@ const AddNoteModalComponent = ({
     <div className="add-note-modal-ctr">
       <Modal show={displayAddNoteModal} onHide={toggleDisplayAddNoteModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Note</Modal.Title>
+          <Modal.Title>{t('Add Note')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Control
               id="add-note-textarea"
               as="textarea"
-              placeholder="Add note to incident(s) here"
+              placeholder={t('Add Note to incident(s) here')}
               minLength={1}
               onChange={(e) => {
                 setNote(e.target.value);
@@ -60,7 +66,7 @@ const AddNoteModalComponent = ({
             onClick={() => addNote(selectedRows, note)}
             disabled={note === ''}
           >
-            Add Note
+            {t('Add Note')}
           </Button>
           <Button variant="light" onClick={toggleDisplayAddNoteModal}>
             Cancel
