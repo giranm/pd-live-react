@@ -69,7 +69,7 @@ const AddNoteModalComponent = ({
             {t('Add Note')}
           </Button>
           <Button variant="light" onClick={toggleDisplayAddNoteModal}>
-            Cancel
+            {t('Cancel')}
           </Button>
         </Modal.Footer>
       </Modal>

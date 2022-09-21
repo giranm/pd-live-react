@@ -27,7 +27,7 @@ i18n
     // lng: 'en', // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
     // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
     // if you're using a language detector, do not define the lng option,
-    
+
     // array of allowed languages
     supportedLngs: ['en', 'fr'],
     // if true, will consider variants as supported when the main language is. E.g. en-US will be valid if en is in supportedLngs.
