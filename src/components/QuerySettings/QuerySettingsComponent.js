@@ -31,6 +31,10 @@ import {
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
+import {
+  useTranslation,
+} from 'react-i18next';
+
 import './QuerySettingsComponent.scss';
 
 import {
@@ -82,6 +86,9 @@ const QuerySettingsComponent = ({
   updateQuerySettingsServices,
   updateQuerySettingsUsers,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     displayQuerySettings,
     incidentStatus,
@@ -174,8 +181,8 @@ const QuerySettingsComponent = ({
           <Container className="card bg-light query-settings-inner-ctr" fluid>
             <Row>
               <Col xs="auto">
-                Since:
-                {' '}
+                {t('Since')}
+                {': '}
                 <br />
                 <DatePicker
                   id="query-date-input"
@@ -192,8 +199,8 @@ const QuerySettingsComponent = ({
                 />
               </Col>
               <Col xs="auto">
-                State:
-                {' '}
+                {t('State')}
+                {': '}
                 <Form.Group>
                   <ToggleButtonGroup
                     type="checkbox"
@@ -208,7 +215,7 @@ const QuerySettingsComponent = ({
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faExclamationTriangle} />
                       </div>
-                      Triggered
+                      {t('Triggered')}
                     </ToggleButton>
                     <ToggleButton
                       id="query-status-acknowledged-button"
@@ -218,7 +225,7 @@ const QuerySettingsComponent = ({
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faShieldAlt} />
                       </div>
-                      Acknowleged
+                      {t('Acknowledged')}
                     </ToggleButton>
                     <ToggleButton
                       id="query-status-resolved-button"
@@ -228,14 +235,14 @@ const QuerySettingsComponent = ({
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faCheckCircle} />
                       </div>
-                      Resolved
+                      {t('Resolved')}
                     </ToggleButton>
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
               <Col xs="auto">
-                Urgency:
-                {' '}
+                {t('Urgency')}
+                {': '}
                 <Form.Group>
                   <ToggleButtonGroup
                     type="checkbox"
@@ -250,7 +257,7 @@ const QuerySettingsComponent = ({
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faChevronUp} />
                       </div>
-                      High
+                      {t('High')}
                     </ToggleButton>
                     <ToggleButton
                       id="query-urgency-low-button"
@@ -260,14 +267,14 @@ const QuerySettingsComponent = ({
                       <div className="action-icon">
                         <FontAwesomeIcon icon={faChevronDown} />
                       </div>
-                      Low
+                      {t('Low')}
                     </ToggleButton>
                   </ToggleButtonGroup>
                 </Form.Group>
               </Col>
               <Col xs="auto">
-                Priorities:
-                {' '}
+                {t('Priorities')}
+                {': '}
                 <Form.Group>
                   <ToggleButtonGroup
                     type="checkbox"
@@ -292,8 +299,8 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col>
-                Team:
-                {' '}
+                {t('Team')}
+                {': '}
                 <Form.Group>
                   <Select
                     id="query-team-select"
@@ -313,8 +320,8 @@ const QuerySettingsComponent = ({
             </Row>
             <Row>
               <Col>
-                Users:
-                {' '}
+                {t('Users')}
+                {': '}
                 <Form.Group>
                   <Select
                     id="query-user-select"
@@ -332,8 +339,8 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col>
-                Escalation Policy:
-                {' '}
+                {t('Escalation Policy')}
+                {': '}
                 <Form.Group>
                   <Select
                     id="query-escalation-policy-select"
@@ -353,8 +360,8 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
               <Col>
-                Service:
-                {' '}
+                {t('Service')}
+                {': '}
                 <Form.Group>
                   <Select
                     id="query-service-select"
