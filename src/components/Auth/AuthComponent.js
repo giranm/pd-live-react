@@ -11,9 +11,16 @@ import {
   createCodeVerifier, getAuthURL, exchangeCodeForToken,
 } from 'util/auth';
 
+import {
+  useTranslation,
+} from 'react-i18next';
+
 import './AuthComponent.scss';
 
 const AuthComponent = (props) => {
+  const {
+    t,
+  } = useTranslation();
   const [authURL, setAuthURL] = useState('');
   const urlParams = new URLSearchParams(window.location.search);
   const accessToken = sessionStorage.getItem('pd_access_token');
@@ -56,7 +63,7 @@ const AuthComponent = (props) => {
         <Row className="justify-content-md-center">
           <Spinner animation="border" role="status" variant="success" />
           <h5 className="querying-incidents">
-            <b>Signing into PagerDuty Live</b>
+            <b>{t('Signing into PagerDuty Live')}</b>
           </h5>
         </Row>
       </div>
@@ -68,8 +75,8 @@ const AuthComponent = (props) => {
         <div id="pd-login-logo" />
         <Dropdown.Divider />
         <div id="pd-login-description">
-          <h1>Live Incidents Console</h1>
-          <p>Connect using PagerDuty OAuth to use this app</p>
+          <h1>{t('Live Incidents Console')}</h1>
+          <p>{t('Connect using PagerDuty OAuth to use this app')}</p>
         </div>
         <Button
           id="pd-login-button"
