@@ -69,6 +69,7 @@
     "eject": "craco eject",
     "lint": "npx eslint src --ext .js,.jsx,.ts,.tsx --exit-on-fatal-error",
     "format": "npx prettier-eslint --write \"src/**/*.js\"",
+    "locales": "npx i18next 'src/**/*.js'",
     "audit:fix": "npx yarn-audit-fix",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
@@ -114,6 +115,7 @@
     "genversion": "^3.1.1",
     "gh-pages": "^4.0.0",
     "html-webpack-plugin": "5",
+    "i18next-parser": "^6.5.0",
     "identity-obj-proxy": "^3.0.0",
     "jest-canvas-mock": "^2.4.0",
     "jest-location-mock": "^1.0.9",

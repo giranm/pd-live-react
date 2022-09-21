@@ -86,7 +86,10 @@ const MergeModalComponent = ({
               </Form.Text>
               <br />
               <Form.Label>
-                <b>{t('Select an open incident to merge into')}:</b>
+                <b>
+                  {t('Select an open incident to merge into')}
+                  :
+                </b>
               </Form.Label>
               <Select
                 id="merge-select"
