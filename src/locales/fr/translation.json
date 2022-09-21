@@ -1,4 +1,5 @@
 {
+  "Accept": "J'accepte",
   "Acknowledge": "Reconnaître",
   "Acknowledged": "Reconnu",
   "Actions": "Actions",
@@ -11,6 +12,8 @@
   "Continue": "Continue",
   "Current query parameters match X incidents": "Current query parameters match {{totalIncidentsFromQuery}} incidents",
   "Custom": "Personnalisé",
+  "Decline": "Décliner",
+  "Disclaimer & License": "Clause de non-responsabilité et licence (en anglais)",
   "Escalate": "Escalader",
   "Escalation Policy": "Politique d'escalade",
   "External Systems": "Systèmes externes",
@@ -19,6 +22,7 @@
   "Filters": "Filtres",
   "High": "Haute",
   "hours": "heures",
+  "I agree to the disclaimer and license above": "J'accepte la clause de non-responsabilité et la licence ci-dessus",
   "Live Incidents Console": "Console d'incidents en direct",
   "Log Out": "Se déconnecter",
   "Low": "Basse",
@@ -63,5 +67,6 @@
   "Urgency": "Urgence",
   "Users": "Utilisateurs",
   "Version": "Version",
-  "View Disclaimer": "Clause de non-responsabilité"
+  "View Disclaimer": "Clause de non-responsabilité",
+  "You must agree before submitting": "Vous devez accepter avant de soumettre"
 }

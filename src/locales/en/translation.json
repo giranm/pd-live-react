@@ -1,4 +1,5 @@
 {
+  "Accept": "Accept",
   "Acknowledge": "Acknowledge",
   "Acknowledged": "Acknowledged",
   "Actions": "Actions",
@@ -11,6 +12,8 @@
   "Continue": "Continue",
   "Current query parameters match X incidents": "Current query parameters match {{totalIncidentsFromQuery}} incidents",
   "Custom": "Custom",
+  "Decline": "Decline",
+  "Disclaimer & License": "Disclaimer & License",
   "Escalate": "Escalate",
   "Escalation Policy": "Escalation Policy",
   "External Systems": "External Systems",
@@ -19,6 +22,7 @@
   "Filters": "Filters",
   "High": "High",
   "hours": "hours",
+  "I agree to the disclaimer and license above": "I agree to the disclaimer and license above",
   "Live Incidents Console": "Live Incidents Console",
   "Log Out": "Log Out",
   "Low": "Low",
@@ -63,5 +67,6 @@
   "Urgency": "Urgency",
   "Users": "Users",
   "Version": "Version",
-  "View Disclaimer": "View Disclaimer"
+  "View Disclaimer": "View Disclaimer",
+  "You must agree before submitting": "You must agree before submitting"
 }
