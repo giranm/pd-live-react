@@ -62,6 +62,10 @@ import {
   reactSelectStyle,
 } from 'util/styles';
 
+import {
+  useTranslation,
+} from 'react-i18next';
+
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
 
@@ -94,6 +98,9 @@ const SettingsModalComponent = ({
   updateActionAlertsModal,
   toggleDisplayActionAlertsModal,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     displaySettingsModal,
     defaultSinceDateTenor,
@@ -215,16 +222,16 @@ const SettingsModalComponent = ({
         onHide={toggleSettingsModal}
       >
         <Modal.Header closeButton>
-          <Modal.Title as="h3">Settings</Modal.Title>
+          <Modal.Title as="h3">{t('Settings')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Tabs defaultActiveKey="user-profile">
-            <Tab eventKey="user-profile" title="User Profile">
+            <Tab eventKey="user-profile" title={t('User Profile')}>
               <br />
               <Form>
                 <Form.Group as={Row}>
                   <Form.Label id="user-profile-locale-label" column sm={2}>
-                    Locale
+                    {t('Locale')}
                   </Form.Label>
                   <Col xs={6}>
                     <Select
@@ -238,7 +245,7 @@ const SettingsModalComponent = ({
                 </Form.Group>
                 <Form.Group as={Row}>
                   <Form.Label id="user-profile-default-since-date-tenor-label" column sm={2}>
-                    Default Since Date Lookback
+                    {t('Default Since Date Lookback')}
                   </Form.Label>
                   <Col xs={6}>
                     <ButtonGroup toggle>
@@ -261,7 +268,7 @@ const SettingsModalComponent = ({
                 </Form.Group>
                 <Form.Group as={Row}>
                   <Form.Label id="user-profile-auto-refresh-interval-label" column sm={2}>
-                    Auto Refresh Interval (mins)
+                    {t('Auto Refresh Interval (mins)')}
                   </Form.Label>
                   <Col xs={6}>
                     <Form.Control
@@ -278,7 +285,7 @@ const SettingsModalComponent = ({
                 </Form.Group>
                 <Form.Group as={Row}>
                   <Form.Label id="user-profile-max-incidents-limit-label" column sm={2}>
-                    Max Incidents Limit
+                    {t('Max Incidents Limit')}
                   </Form.Label>
                   <Col xs={6}>
                     <Form.Control
@@ -295,7 +302,7 @@ const SettingsModalComponent = ({
                 </Form.Group>
                 <Form.Group as={Row}>
                   <Form.Label id="user-profile-auto-accept-incident-query-label" column sm={2}>
-                    Auto Accept Incident Query
+                    {t('Auto Accept Incident Query')}
                   </Form.Label>
                   <Col xs={6}>
                     <Form.Check
@@ -323,23 +330,28 @@ const SettingsModalComponent = ({
                   setMaxIncidentsLimit(tempMaxIncidentsLimit);
                   setAutoAcceptIncidentsQuery(tempAutoAcceptQuery);
                   setAutoRefreshInterval(tempAutoRefreshInterval);
-                  updateActionAlertsModal('success', 'Updated user profile settings');
+                  updateActionAlertsModal('success', t('Updated user profile settings'));
                   toggleDisplayActionAlertsModal();
                 }}
               >
-                Update User Profile
+                {t('Update User Profile')}
               </Button>
             </Tab>
-            <Tab eventKey="incident-table" title="Incident Table">
+            <Tab eventKey="incident-table" title={t('Incident Table')}>
               <br />
               <Col>
-                <h4>Column Selector</h4>
+                <h4>{t('Column Selector')}</h4>
                 <DualListBox
                   id="incident-column-select"
                   canFilter
                   preserveSelectOrder
                   showOrderButtons
                   showHeaderLabels
+                  lang={{
+                    selectedHeader: t('Selected'),
+                    availableHeader: t('Available'),
+                  }}
+                  filterPlaceholder={t('Search')}
                   showNoOptionsText
                   simpleValue={false}
                   options={availableColumns}
@@ -349,12 +361,12 @@ const SettingsModalComponent = ({
               </Col>
               <br />
               <Col>
-                <h4>Alert Custom Detail Column Definitions</h4>
+                <h4>{t('Alert Custom Detail Column Definitions')}</h4>
                 <CreatableSelect
                   id="alert-column-definition-select"
                   isMulti
                   isClearable
-                  placeholder="Enter 'Column Header:JSON Path' (e.g. Environment:details.env)"
+                  placeholder={t('Alert Custom Detail Column Definitions Placeholder')}
                   defaultValue={alertCustomDetailFields}
                   onChange={(fields) => setAlertCustomDetailColumns(fields)}
                 />
@@ -365,14 +377,14 @@ const SettingsModalComponent = ({
                 variant="primary"
                 onClick={() => {
                   saveIncidentTable(selectedColumns);
-                  updateActionAlertsModal('success', 'Updated incident table settings');
+                  updateActionAlertsModal('success', t('Updated incident table settings'));
                   toggleDisplayActionAlertsModal();
                 }}
               >
-                Update Incident Table
+                {t('Update Incident Table')}
               </Button>
             </Tab>
-            <Tab eventKey="local-cache" title="Local Cache">
+            <Tab eventKey="local-cache" title={t('Local Cache')}>
               <br />
               <Button
                 id="clear-local-cache-button"
@@ -383,7 +395,7 @@ const SettingsModalComponent = ({
                   window.location.reload();
                 }}
               >
-                Clear Local Cache
+                {t('Clear Local Cache')}
               </Button>
             </Tab>
           </Tabs>
