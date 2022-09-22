@@ -260,7 +260,7 @@ const SettingsModalComponent = ({
                           checked={tempSinceDateTenor === tenor}
                           onChange={(e) => setTempSinceDateTenor(e.currentTarget.value)}
                         >
-                          {tenor}
+                          {t(tenor)}
                         </ToggleButton>
                       ))}
                     </ButtonGroup>
