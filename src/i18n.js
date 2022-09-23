@@ -19,24 +19,28 @@ registerLocale('en-GB', gb);
 registerLocale('en-US', us);
 registerLocale('fr', fr);
 
-export const locales = {
-  'en-GB': 'English (United Kingdom)',
-  'en-US': 'English (United States)',
-  fr: 'Français',
-};
-
 // the translations
 export const lngs = {
   'en-US': {
     translation: translationEN,
+    nativeName: 'English (United States)',
   },
   'en-GB': {
     translation: translationEN,
+    nativeName: 'English (United Kingdom)',
   },
   fr: {
     translation: translationFR,
+    nativeName: 'Français',
   },
 };
+
+// locales is generated from the lngs object for compatibility with original locales implementation
+/* eslint-disable no-param-reassign */
+export const locales = Object.keys(lngs).reduce((acc, lng) => {
+  acc[lng] = lngs[lng].nativeName;
+  return acc;
+}, {});
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
