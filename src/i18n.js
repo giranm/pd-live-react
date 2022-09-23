@@ -3,6 +3,7 @@ import {
   initReactI18next,
 } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+
 import translationEN from './locales/en/translation.json';
 import translationFR from './locales/fr/translation.json';
 
@@ -10,9 +11,13 @@ import translationFR from './locales/fr/translation.json';
 // (tip move them in a JSON file and import them,
 // or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
 export const lngs = {
-  en: {
+  'en-US': {
     translation: translationEN,
-    nativeName: 'English',
+    nativeName: 'English (United States)',
+  },
+  'en-GB': {
+    translation: translationEN,
+    nativeName: 'English (United Kingdom)',
   },
   fr: {
     translation: translationFR,
