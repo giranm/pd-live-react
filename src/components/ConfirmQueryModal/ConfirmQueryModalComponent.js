@@ -44,8 +44,10 @@ const ConfirmQueryModalComponent = ({
         </Modal.Header>
         <Modal.Body>
           {t('Current query parameters match X incidents', { totalIncidentsFromQuery })}
+          {'. '}
           <br />
           {t('Only the first X incidents will be retrieved', { maxIncidentsLimit })}
+          {'. '}
           <br />
           <br />
           {t('Continue')}

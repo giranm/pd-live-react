@@ -7,6 +7,8 @@ import {
   registerLocale,
 } from 'react-datepicker';
 
+import '../../i18n';
+
 import {
   componentWrapper, waitForComponentToPaint,
 } from 'mocks/store.test';

@@ -6,6 +6,8 @@ import {
   Spinner,
 } from 'react-bootstrap';
 
+import '../../../i18n';
+
 import QueryActiveComponent from './QueryActiveComponent';
 
 describe('QueryActiveComponent', () => {

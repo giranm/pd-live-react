@@ -5,6 +5,8 @@ import {
 } from '@braintree/sanitize-url';
 import validator from 'validator';
 
+import '../../i18n';
+
 import {
   mockStore, componentWrapper,
 } from 'mocks/store.test';

@@ -1,3 +1,5 @@
+import '../../../i18n';
+
 import {
   shallow,
 } from 'enzyme';
