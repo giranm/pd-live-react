@@ -351,8 +351,20 @@ const SettingsModalComponent = ({
                   showOrderButtons
                   showHeaderLabels
                   lang={{
-                    selectedHeader: t('Selected'),
+                    availableFilterHeader: t('Filter available'),
                     availableHeader: t('Available'),
+                    moveAllLeft: t('Move all left'),
+                    moveAllRight: t('Move all right'),
+                    moveBottom: t('Move to bottom'),
+                    moveDown: t('Move down'),
+                    moveLeft: t('Move left'),
+                    moveRight: t('Move right'),
+                    moveTop: t('Move to top'),
+                    moveUp: t('Move up'),
+                    noAvailableOptions: t('No available options'),
+                    noSelectedOptions: t('No selected options'),
+                    selectedFilterHeader: t('Filter selected'),
+                    selectedHeader: t('Selected'),
                   }}
                   filterPlaceholder={t('Search')}
                   showNoOptionsText
