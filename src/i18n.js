@@ -8,6 +8,7 @@ import gb from 'date-fns/locale/en-GB';
 import us from 'date-fns/locale/en-US';
 import fr from 'date-fns/locale/fr';
 import es from 'date-fns/locale/es';
+import ja from 'date-fns/locale/ja';
 import {
   registerLocale,
 } from 'react-datepicker';
@@ -15,12 +16,14 @@ import {
 import translationEN from './locales/en/translation.json';
 import translationFR from './locales/fr/translation.json';
 import translationES from './locales/es/translation.json';
+import translationJA from './locales/ja/translation.json';
 
 // Variable for supported locales
 registerLocale('en-GB', gb);
 registerLocale('en-US', us);
 registerLocale('fr', fr);
 registerLocale('es', es);
+registerLocale('ja', ja);
 
 // the translations
 export const lngs = {
@@ -40,6 +43,10 @@ export const lngs = {
     translation: translationES,
     nativeName: 'Español',
   },
+  ja: {
+    translation: translationJA,
+    nativeName: '日本語',
+  },
 };
 
 // locales is generated from the lngs object for compatibility with original locales implementation
@@ -56,7 +63,7 @@ i18n
     resources: lngs,
     fallbackLng: 'en', // use en if detected lng is not available
     // array of allowed languages
-    supportedLngs: ['en', 'fr', 'es'],
+    supportedLngs: ['en', 'fr', 'es', 'ja'],
     // if true, will consider variants as supported when the main language is. E.g. en-US will be valid if en is in supportedLngs.
     nonExplicitSupportedLngs: true,
     interpolation: {
