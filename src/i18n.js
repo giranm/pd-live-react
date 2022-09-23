@@ -4,24 +4,37 @@ import {
 } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
+import gb from 'date-fns/locale/en-GB';
+import us from 'date-fns/locale/en-US';
+import fr from 'date-fns/locale/fr';
+import {
+  registerLocale,
+} from 'react-datepicker';
+
 import translationEN from './locales/en/translation.json';
 import translationFR from './locales/fr/translation.json';
 
+// Variable for supported locales
+registerLocale('en-GB', gb);
+registerLocale('en-US', us);
+registerLocale('fr', fr);
+
+export const locales = {
+  'en-GB': 'English (United Kingdom)',
+  'en-US': 'English (United States)',
+  fr: 'Français',
+};
+
 // the translations
-// (tip move them in a JSON file and import them,
-// or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
 export const lngs = {
   'en-US': {
     translation: translationEN,
-    nativeName: 'English (United States)',
   },
   'en-GB': {
     translation: translationEN,
-    nativeName: 'English (United Kingdom)',
   },
   fr: {
     translation: translationFR,
-    nativeName: 'Français',
   },
 };
 
@@ -31,15 +44,10 @@ i18n
   .init({
     resources: lngs,
     fallbackLng: 'en', // use en if detected lng is not available
-    // lng: 'en', // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
-    // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
-    // if you're using a language detector, do not define the lng option,
-
     // array of allowed languages
     supportedLngs: ['en', 'fr'],
     // if true, will consider variants as supported when the main language is. E.g. en-US will be valid if en is in supportedLngs.
     nonExplicitSupportedLngs: true,
-
     interpolation: {
       escapeValue: false, // react already safes from xss
     },

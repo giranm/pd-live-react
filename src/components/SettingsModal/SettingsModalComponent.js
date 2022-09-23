@@ -40,8 +40,6 @@ import {
   clearLocalCache as clearLocalCacheConnected,
 } from 'redux/settings/actions';
 
-import locales from 'config/locales';
-
 import {
   availableIncidentTableColumns,
   availableAlertTableColumns,
@@ -65,6 +63,10 @@ import {
 import {
   useTranslation,
 } from 'react-i18next';
+
+import {
+  locales,
+} from '../../i18n';
 
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
