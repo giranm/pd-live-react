@@ -21,13 +21,13 @@ registerLocale('fr', fr);
 
 // the translations
 export const lngs = {
-  'en-US': {
-    translation: translationEN,
-    nativeName: 'English (United States)',
-  },
   'en-GB': {
     translation: translationEN,
     nativeName: 'English (United Kingdom)',
+  },
+  'en-US': {
+    translation: translationEN,
+    nativeName: 'English (United States)',
   },
   fr: {
     translation: translationFR,
