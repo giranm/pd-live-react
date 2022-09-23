@@ -69,10 +69,9 @@ import {
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
 
-const lngs = {
-  en: { nativeName: 'English' },
-  fr: { nativeName: 'French' },
-};
+import {
+  lngs,
+} from '../../i18n';
 
 const columnMapper = (column, columnType) => ({
   label: column.Header,
