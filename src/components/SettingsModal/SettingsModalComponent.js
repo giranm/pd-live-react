@@ -69,6 +69,11 @@ import {
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
 
+const lngs = {
+  en: { nativeName: 'English' },
+  fr: { nativeName: 'French' },
+};
+
 const columnMapper = (column, columnType) => ({
   label: column.Header,
   value: column.Header,
@@ -99,7 +104,7 @@ const SettingsModalComponent = ({
   toggleDisplayActionAlertsModal,
 }) => {
   const {
-    t,
+    t, i18n,
   } = useTranslation();
   const {
     displaySettingsModal,
@@ -229,6 +234,27 @@ const SettingsModalComponent = ({
             <Tab eventKey="user-profile" title={t('User Profile')}>
               <br />
               <Form>
+                <Form.Group as={Row}>
+                  <Form.Label id="user-profile-locale-label" column sm={2}>
+                    {t('Language')}
+                  </Form.Label>
+                  <Col xs={6}>
+                    <ButtonGroup toggle>
+                      {Object.keys(lngs).map((lng) => (
+                        <ToggleButton
+                          key={lng}
+                          value={lng}
+                          variant="outline-secondary"
+                          checked={i18n.resolvedLanguage === lng}
+                          type="radio"
+                          onClick={() => i18n.changeLanguage(lng)}
+                        >
+                          {lngs[lng].nativeName}
+                        </ToggleButton>
+                      ))}
+                    </ButtonGroup>
+                  </Col>
+                </Form.Group>
                 <Form.Group as={Row}>
                   <Form.Label id="user-profile-locale-label" column sm={2}>
                     {t('Locale')}
