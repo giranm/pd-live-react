@@ -46,7 +46,7 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.1",
-    "styled-components": "^5.3.5",
+    "styled-components": "^5.3.6",
     "use-debounce": "^8.0.4",
     "validator": "^13.7.0",
     "web-vitals": "^3.0.2"
@@ -123,6 +123,6 @@
     "string.prototype.replaceall": "^1.0.6",
     "svg-jest": "^1.0.1",
     "wait-on": "^6.0.1",
-    "yarn-audit-fix": "^9.3.5"
+    "yarn-audit-fix": "^9.3.6"
   }
 }
