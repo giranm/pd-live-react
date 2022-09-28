@@ -6,7 +6,7 @@
   "dependencies": {
     "@braintree/sanitize-url": "^6.0.0",
     "@craco/craco": "7.0.0-alpha.3",
-    "@datadog/browser-rum": "^4.19.1",
+    "@datadog/browser-rum": "^4.20.0",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.2.0",
     "@fortawesome/free-regular-svg-icons": "^6.2.0",
@@ -123,6 +123,6 @@
     "string.prototype.replaceall": "^1.0.6",
     "svg-jest": "^1.0.1",
     "wait-on": "^6.0.1",
-    "yarn-audit-fix": "^9.3.5"
+    "yarn-audit-fix": "^9.3.6"
   }
 }
