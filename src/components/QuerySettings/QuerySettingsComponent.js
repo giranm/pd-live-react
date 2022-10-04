@@ -314,6 +314,7 @@ const QuerySettingsComponent = ({
                     value={storedSelectTeams}
                     isLoading={isTeamSelectDisabled}
                     isDisabled={isTeamSelectDisabled}
+                    placeholder={`${t('Select dotdotdot')}`}
                   />
                 </Form.Group>
               </Col>
@@ -335,6 +336,7 @@ const QuerySettingsComponent = ({
                     value={storedSelectUsers}
                     isLoading={isUserSelectDisabled}
                     isDisabled={isUserSelectDisabled}
+                    placeholder={`${t('Select dotdotdot')}`}
                   />
                 </Form.Group>
               </Col>
@@ -356,6 +358,7 @@ const QuerySettingsComponent = ({
                     value={storedSelectEscalationPolicies}
                     isLoading={isEscalationPolicySelectDisabled}
                     isDisabled={isEscalationPolicySelectDisabled}
+                    placeholder={`${t('Select dotdotdot')}`}
                   />
                 </Form.Group>
               </Col>
@@ -375,6 +378,7 @@ const QuerySettingsComponent = ({
                     value={storedSelectServices}
                     isLoading={isServiceSelectDisabled}
                     isDisabled={isServiceSelectDisabled}
+                    placeholder={`${t('Select dotdotdot')}`}
                   />
                 </Form.Group>
               </Col>

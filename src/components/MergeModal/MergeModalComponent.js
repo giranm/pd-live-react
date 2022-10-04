@@ -103,6 +103,7 @@ const MergeModalComponent = ({
                 components={animatedComponents}
                 options={selectListIncidents}
                 isClearable
+                placeholder={`${t('Select dotdotdot')}`}
               />
             </Form.Group>
             <Form.Group>

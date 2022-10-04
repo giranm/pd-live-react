@@ -437,6 +437,7 @@ const IncidentActionsComponent = ({
                         runResponsePlayAsync(selectedRows, selectedResponsePlay);
                         toggleRunActions(!displayRunActions);
                       }}
+                      placeholder={`${t('Select dotdotdot')}`}
                     />
                   </Dropdown.Item>
                   <Dropdown.Divider />
