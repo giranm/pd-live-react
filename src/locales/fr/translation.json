@@ -98,6 +98,7 @@
   "Team": "Équipe",
   "The alerts of the selected incidents will be merged into a single incident": "Les alertes des incidents sélectionnés seront fusionnées en un seul incident",
   "The remaining selected incidents will be resolved after the merge is complete": "Les incidents restants sélectionnés seront résolus après la fusion",
+  "Title": "Titre",
   "Triggered": "Triggered",
   "Unauthorized Access": "Accès non autorisé",
   "Update Incident Table": "Mettre à jour le tableau d'incidents",

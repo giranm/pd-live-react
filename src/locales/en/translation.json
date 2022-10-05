@@ -98,6 +98,7 @@
   "Team": "Team",
   "The alerts of the selected incidents will be merged into a single incident": "The alerts of the selected incidents will be merged into a single incident",
   "The remaining selected incidents will be resolved after the merge is complete": "The remaining selected incidents will be resolved after the merge is complete",
+  "Title": "Title",
   "Triggered": "Triggered",
   "Unauthorized Access": "Unauthorized Access",
   "Update Incident Table": "Update Incident Table",

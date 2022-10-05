@@ -69,6 +69,9 @@ describe('IncidentTableComponent', () => {
       querySettings: {
         displayConfirmQueryModal: false,
       },
+      users: {
+        currentUserLocale: 'en-GB',
+      },
     };
   });
 

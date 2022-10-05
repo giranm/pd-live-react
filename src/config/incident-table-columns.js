@@ -7,6 +7,7 @@ import {
   sanitizeUrl,
 } from '@braintree/sanitize-url';
 import validator from 'validator';
+import i18next from 'i18n';
 
 import {
   Badge,
@@ -52,6 +53,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'title',
     Header: 'Title',
+    i18n: i18next.t('Title'),
     sortable: true,
     minWidth: 400,
     Cell: ({
