@@ -53,6 +53,7 @@ export const generateIncidentActionModal = (incidents, action) => {
   const resolvedIncidents = filterIncidentsByField(incidents, 'status', [RESOLVED]);
 
   // Create message based on action and incident status
+  // TODO: i18n tokenization
   let message;
   const primaryMessage = `Incident(s) ${unresolvedIncidents
     .map((i) => i.incident_number)

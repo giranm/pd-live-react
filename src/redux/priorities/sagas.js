@@ -2,6 +2,8 @@ import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import _ from 'lodash';
 
 import {
@@ -31,7 +33,7 @@ export function* getPriorities() {
     //  Create params and call pd lib
     const response = yield call(pd.all, 'priorities');
     if (response.status !== 200) {
-      throw Error('Unable to fetch priorities');
+      throw Error(i18next.t('Unable to fetch priorities'));
     }
     const tempPriorities = response.resource;
 
@@ -58,7 +60,7 @@ export function* getPriorities() {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: FETCH_PRIORITIES_ERROR, message: e.message });
     yield put({

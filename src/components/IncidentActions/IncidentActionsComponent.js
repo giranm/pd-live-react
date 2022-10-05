@@ -315,6 +315,7 @@ const IncidentActionsComponent = ({
                   variant="light"
                   onClick={() => snooze(selectedRows, duration)}
                 >
+                  {/* TODO: i18n tokenization */}
                   {duration}
                 </Dropdown.Item>
               ))}

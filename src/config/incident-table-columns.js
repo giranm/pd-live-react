@@ -73,6 +73,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'description',
     Header: 'Description',
+    i18n: i18next.t('Description'),
     sortable: true,
     minWidth: 400,
     Cell: ({
@@ -83,6 +84,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'created_at',
     Header: 'Created At',
+    i18n: i18next.t('Created At'),
     sortable: true,
     minWidth: 180,
     Cell: ({
@@ -96,6 +98,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'status',
     Header: 'Status',
+    i18n: i18next.t('Status'),
     sortable: true,
     minWidth: 100,
     Cell: ({
@@ -106,6 +109,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'incident_key',
     Header: 'Incident Key',
+    i18n: i18next.t('Incident Key'),
     sortable: true,
     minWidth: 300,
   },
@@ -113,6 +117,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'service.summary',
     Header: 'Service',
+    i18n: i18next.t('Service'),
     sortable: true,
     minWidth: 150,
     Cell: ({
@@ -136,6 +141,7 @@ export const availableIncidentTableColumns = [
       }) => assignee.summary).join(', ')
       : 'Unassigned'),
     Header: 'Assignees',
+    i18n: i18next.t('Assignees'),
     sortable: true,
     minWidth: 160,
     Cell: ({
@@ -156,6 +162,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'last_status_change_at',
     Header: 'Last Status Change At',
+    i18n: i18next.t('Last Status Change At'),
     sortable: true,
     minWidth: 220,
     // width: 220,
@@ -170,6 +177,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'alert_counts.all',
     Header: 'Num Alerts',
+    i18n: i18next.t('Num Alerts'),
     sortable: true,
     minWidth: 130,
   },
@@ -177,6 +185,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'escalation_policy.summary',
     Header: 'Escalation Policy',
+    i18n: i18next.t('Escalation Policy'),
     sortable: true,
     minWidth: 200,
     Cell: ({
@@ -199,6 +208,7 @@ export const availableIncidentTableColumns = [
       return 'N/A';
     },
     Header: 'Teams',
+    i18n: i18next.t('Teams'),
     sortable: true,
     minWidth: 200,
     Cell: ({
@@ -238,6 +248,7 @@ export const availableIncidentTableColumns = [
       }) => acknowledger.summary).join(', ')
       : 'N/A'),
     Header: 'Acknowledgments',
+    i18n: i18next.t('Acknowledgments'),
     sortable: true,
     minWidth: 250,
     Cell: ({
@@ -258,6 +269,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'last_status_change_by.summary',
     Header: 'Last Status Change By',
+    i18n: i18next.t('Last Status Change By'),
     sortable: true,
     minWidth: 250,
     Cell: ({
@@ -292,6 +304,7 @@ export const availableIncidentTableColumns = [
       return <div className="priority-label">--</div>;
     },
     Header: 'Priority',
+    i18n: i18next.t('Priority'),
     sortable: true,
     minWidth: 90,
     sortType: (row1, row2) => {
@@ -306,6 +319,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'urgency',
     Header: 'Urgency',
+    i18n: i18next.t('Urgency'),
     sortable: true,
     minWidth: 120,
     Cell: ({
@@ -320,7 +334,7 @@ export const availableIncidentTableColumns = [
           <Badge className="urgency-badge" variant="primary">
             <FontAwesomeIcon icon={faChevronUp} />
             {' '}
-            High
+            {i18next.t('High')}
           </Badge>
         );
       } else if (urgency === LOW) {
@@ -328,7 +342,7 @@ export const availableIncidentTableColumns = [
           <Badge className="urgency-badge" variant="secondary">
             <FontAwesomeIcon icon={faChevronDown} />
             {' '}
-            Low
+            {i18next.t('Low')}
           </Badge>
         );
       }
@@ -339,6 +353,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'id',
     Header: 'Incident ID',
+    i18n: i18next.t('Incident ID'),
     sortable: true,
     minWidth: 160,
   },
@@ -346,6 +361,7 @@ export const availableIncidentTableColumns = [
     columnType: 'incident',
     accessor: 'summary',
     Header: 'Summary',
+    i18n: i18next.t('Summary'),
     sortable: true,
     minWidth: 400,
     Cell: ({
@@ -366,6 +382,7 @@ export const availableIncidentTableColumns = [
       return content;
     },
     Header: 'Latest Note',
+    i18n: i18next.t('Latest Note'),
     sortable: true,
     minWidth: 200,
     Cell: ({
@@ -378,6 +395,7 @@ export const availableIncidentTableColumns = [
       ? incident.external_references.map((ext) => ext.external_id).join(', ')
       : 'N/A'),
     Header: 'External References',
+    i18n: i18next.t('External References'),
     sortable: true,
     minWidth: 200,
     Cell: ({
@@ -434,6 +452,7 @@ export const availableAlertTableColumns = [
       return content;
     },
     Header: 'Severity',
+    i18n: i18next.t('Severity'),
     sortable: true,
     minWidth: 100,
     sortType: (row1, row2) => {
@@ -453,18 +472,23 @@ export const availableAlertTableColumns = [
       value,
     }) => {
       let variant = '';
+      let i18nValue = '';
       switch (value) {
         case 'critical':
           variant = 'dark';
+          i18nValue = i18next.t('critical');
           break;
         case 'error':
           variant = 'danger';
+          i18nValue = i18next.t('error');
           break;
         case 'warning':
           variant = 'warning';
+          i18nValue = i18next.t('warning');
           break;
         case 'info':
           variant = 'info';
+          i18nValue = i18next.t('info');
           break;
         default:
           variant = null;
@@ -472,7 +496,7 @@ export const availableAlertTableColumns = [
       }
       return (
         <Badge className="urgency-badge" variant={variant}>
-          {value}
+          {i18nValue}
         </Badge>
       );
     },
@@ -497,6 +521,7 @@ export const availableAlertTableColumns = [
       return content;
     },
     Header: 'Component',
+    i18n: i18next.t('Component'),
     sortable: true,
     minWidth: 130,
     Cell: ({
@@ -523,6 +548,7 @@ export const availableAlertTableColumns = [
       return content;
     },
     Header: 'Source',
+    i18n: i18next.t('Source'),
     sortable: true,
     minWidth: 100,
     Cell: ({
@@ -549,6 +575,7 @@ export const availableAlertTableColumns = [
       return content;
     },
     Header: 'Class',
+    i18n: i18next.t('Class'),
     sortable: true,
     minWidth: 100,
     Cell: ({
@@ -575,6 +602,7 @@ export const availableAlertTableColumns = [
       return content;
     },
     Header: 'Group',
+    i18n: i18next.t('Group'),
     sortable: true,
     minWidth: 100,
     Cell: ({
@@ -613,7 +641,7 @@ export const customReactTableColumnSchema = (
         result = null;
       }
       if (!accessorPath) {
-        content = 'Invalid JSON Path';
+        content = i18next.t('Invalid JSON Path');
       } else if (result && !Array.isArray(result)) {
         content = result;
       } else if (result && Array.isArray(result)) {
@@ -627,7 +655,7 @@ export const customReactTableColumnSchema = (
         content = '--';
       } else {
         // FIXME: This codepath doesn't work
-        content = 'Fetching alerts ...';
+        content = `${i18next.t('Fetching Alerts')} ...`;
       }
       return content;
     };

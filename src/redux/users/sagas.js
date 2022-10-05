@@ -2,6 +2,8 @@ import {
   put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   PD_SUBDOMAIN_ALLOW_LIST,
 } from 'config/constants';
@@ -119,7 +121,7 @@ export function* getUsers(action) {
 
     const response = yield call(pd.all, 'users', { data: { ...params } });
     if (response.status !== 200) {
-      throw Error('Unable to fetch users');
+      throw Error(i18next.t('Unable to fetch users'));
     }
     const users = response.resource;
     const usersMap = convertListToMapById(users);
@@ -131,7 +133,7 @@ export function* getUsers(action) {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: GET_USERS_ERROR, message: e.message });
     yield updateConnectionStatusRequested('neutral', e.message);
@@ -146,7 +148,7 @@ export function* getCurrentUser() {
   try {
     const response = yield call(pd.get, 'users/me');
     if (response.status !== 200) {
-      throw Error('Unable to fetch current user details');
+      throw Error(i18next.t('Unable to fetch current user details'));
     }
     yield put({
       type: GET_CURRENT_USER_COMPLETED,
@@ -155,7 +157,7 @@ export function* getCurrentUser() {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: GET_CURRENT_USER_ERROR, message: e.message });
     yield updateConnectionStatusRequested('neutral', e.message);

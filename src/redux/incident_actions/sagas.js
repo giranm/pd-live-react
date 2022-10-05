@@ -169,6 +169,7 @@ export function* escalate(action) {
         const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')} have been manually escalated to level ${escalationLevel}`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -233,6 +234,7 @@ export function* reassign(action) {
         const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')} have been reassigned to ${assignment.name}`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -295,6 +297,7 @@ export function* addResponder(action) {
         const actionAlertsModalType = 'success';
         const actionAlertsModalMessage = `Requested additional response for 
         incident(s) ${selectedIncidents.map((i) => i.incident_number).join(', ')}.`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -427,6 +430,7 @@ export function* merge(action) {
           .map((i) => i.incident_number)
           .join(', ')} and their alerts have been merged onto incident
           ${targetIncident.incident_number}`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -551,6 +555,7 @@ export function* updatePriority(action) {
         const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')} have been updated with priority = ${priorityName}`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -591,6 +596,7 @@ export function* addNote(action) {
         const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')} have been updated with a note.`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -653,6 +659,7 @@ export function* runCustomIncidentAction(action) {
         }" triggered for incident(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')}.`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -742,6 +749,7 @@ export function* syncWithExternalSystem(action) {
         const actionAlertsModalMessage = `Synced with "${
           webhook.name
         }" on incident(s) ${selectedIncidents.map((i) => i.incident_number).join(', ')}.`;
+        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {

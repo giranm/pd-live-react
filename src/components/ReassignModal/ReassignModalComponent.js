@@ -96,7 +96,7 @@ const ReassignModalComponent = ({
               reassign(selectedRows, assignment);
             }}
           >
-            Reassign
+            {t('Reassign')}
           </Button>
           <Button
             variant="light"
