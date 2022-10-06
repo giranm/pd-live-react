@@ -1,12 +1,14 @@
 import {
   Badge,
 } from 'react-bootstrap';
-import {
-  ReactComponent as EmptyIncidents,
-} from 'assets/images/empty_incidents.svg';
+
 import {
   useTranslation,
 } from 'react-i18next';
+
+import {
+  ReactComponent as EmptyIncidents,
+} from 'assets/images/empty_incidents.svg';
 
 const EmptyIncidentsComponent = () => {
   const {

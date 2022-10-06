@@ -13,6 +13,10 @@ import {
 import DatePicker from 'react-datepicker';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayCustomSnoozeModal as toggleDisplayCustomSnoozeModalConnected,
   snooze as snoozeConnected,
 } from 'redux/incident_actions/actions';
@@ -20,10 +24,6 @@ import {
 import {
   TRIGGERED, ACKNOWLEDGED, filterIncidentsByField,
 } from 'util/incidents';
-
-import {
-  useTranslation,
-} from 'react-i18next';
 
 import './CustomSnoozeModalComponent.scss';
 

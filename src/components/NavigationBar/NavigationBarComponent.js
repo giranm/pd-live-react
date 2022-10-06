@@ -5,6 +5,10 @@ import {
   Navbar, Nav, NavDropdown, Button,
 } from 'react-bootstrap';
 
+import {
+  useTranslation,
+} from 'react-i18next';
+
 import GlobalSearchComponent from 'components/GlobalSearch/GlobalSearchComponent';
 
 import PD_APP_VERSION from 'config/version';
@@ -22,9 +26,6 @@ import {
 import {
   stopMonitoring as stopMonitoringConnected,
 } from 'redux/monitoring/actions';
-import {
-  useTranslation,
-} from 'react-i18next';
 
 import StatusBeaconComponent from './StatusBeaconComponent';
 

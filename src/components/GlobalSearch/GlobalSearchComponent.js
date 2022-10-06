@@ -10,18 +10,18 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   ReactComponent as SearchGlass,
 } from 'assets/images/search_glass.svg';
-
-import './GlobalSearchComponent.scss';
 
 import {
   updateSearchQuery as updateSearchQueryConnected,
 } from 'redux/query_settings/actions';
 
-import {
-  useTranslation,
-} from 'react-i18next';
+import './GlobalSearchComponent.scss';
 
 const GlobalSearchComponent = ({
   searchQuery, updateSearchQuery,

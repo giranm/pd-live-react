@@ -13,6 +13,10 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayMergeModal as toggleDisplayMergeModalConnected,
   merge as mergeConnected,
 } from 'redux/incident_actions/actions';
@@ -20,10 +24,6 @@ import {
 import {
   TRIGGERED, ACKNOWLEDGED, filterIncidentsByField,
 } from 'util/incidents';
-
-import {
-  useTranslation,
-} from 'react-i18next';
 
 import './MergeModalComponent.scss';
 

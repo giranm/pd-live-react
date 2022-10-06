@@ -7,12 +7,12 @@ import {
 } from 'react-bootstrap';
 
 import {
-  userAcceptDisclaimer as userAcceptDisclaimerConnected,
-} from 'redux/users/actions';
-
-import {
   useTranslation,
 } from 'react-i18next';
+
+import {
+  userAcceptDisclaimer as userAcceptDisclaimerConnected,
+} from 'redux/users/actions';
 
 const UnauthorizedModalComponent = ({
   users, userAcceptDisclaimer,

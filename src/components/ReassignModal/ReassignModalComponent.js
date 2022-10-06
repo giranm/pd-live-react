@@ -12,13 +12,13 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayReassignModal as toggleDisplayReassignModalConnected,
   reassign as reassignConnected,
 } from 'redux/incident_actions/actions';
-
-import {
-  useTranslation,
-} from 'react-i18next';
 
 import './ReassignModalComponent.scss';
 

@@ -10,12 +10,13 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayAddNoteModal as toggleDisplayAddNoteModalConnected,
   addNote as addNoteConnected,
 } from 'redux/incident_actions/actions';
-import {
-  useTranslation,
-} from 'react-i18next';
 
 import './AddNoteModalComponent.scss';
 

@@ -11,13 +11,13 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   userAcceptDisclaimer as userAcceptDisclaimerConnected,
   userUnauthorize as userUnauthorizeConnected,
 } from 'redux/users/actions';
-
-import {
-  useTranslation,
-} from 'react-i18next';
 
 const DisclaimerModalComponent = ({
   users, userAcceptDisclaimer, userUnauthorize,

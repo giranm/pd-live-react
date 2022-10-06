@@ -8,12 +8,12 @@ import {
 } from 'react-bootstrap';
 
 import {
-  createCodeVerifier, getAuthURL, exchangeCodeForToken,
-} from 'util/auth';
-
-import {
   useTranslation,
 } from 'react-i18next';
+
+import {
+  createCodeVerifier, getAuthURL, exchangeCodeForToken,
+} from 'util/auth';
 
 import './AuthComponent.scss';
 

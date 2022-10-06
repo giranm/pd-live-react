@@ -21,6 +21,10 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   FontAwesomeIcon,
 } from '@fortawesome/react-fontawesome';
 import {
@@ -30,12 +34,6 @@ import {
   faChevronUp,
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
-
-import {
-  useTranslation,
-} from 'react-i18next';
-
-import './QuerySettingsComponent.scss';
 
 import {
   updateQuerySettingsSinceDate as updateQuerySettingsSinceDateConnected,
@@ -68,6 +66,8 @@ import {
 import {
   reactSelectStyle,
 } from 'util/styles';
+
+import './QuerySettingsComponent.scss';
 
 const QuerySettingsComponent = ({
   querySettings,

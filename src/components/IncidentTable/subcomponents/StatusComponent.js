@@ -4,6 +4,10 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   FontAwesomeIcon,
 } from '@fortawesome/react-fontawesome';
 import {
@@ -15,10 +19,6 @@ import {
 import {
   TRIGGERED, ACKNOWLEDGED, RESOLVED,
 } from 'util/incidents';
-
-import {
-  useTranslation,
-} from 'react-i18next';
 
 const InternalStatusComponent = (tooltip, variant, icon) => (
   <OverlayTrigger placement="top" overlay={<Tooltip>{tooltip}</Tooltip>}>

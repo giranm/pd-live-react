@@ -12,12 +12,13 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayAddResponderModal as toggleDisplayAddResponderModalConnected,
   addResponder as addResponderConnected,
 } from 'redux/incident_actions/actions';
-import {
-  useTranslation,
-} from 'react-i18next';
 
 import './AddResponderModalComponent.scss';
 

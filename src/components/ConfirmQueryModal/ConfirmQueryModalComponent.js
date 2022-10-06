@@ -7,13 +7,13 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayConfirmQueryModal as toggleDisplayConfirmQueryModalConnected,
   confirmIncidentQuery as confirmIncidentQueryConnected,
 } from 'redux/query_settings/actions';
-
-import {
-  useTranslation,
-} from 'react-i18next';
 
 const ConfirmQueryModalComponent = ({
   settings,
