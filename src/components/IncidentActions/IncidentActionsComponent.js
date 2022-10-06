@@ -8,6 +8,10 @@ import {
 } from 'react-redux';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   Container,
   Row,
   Col,
@@ -72,9 +76,6 @@ import {
 import {
   getObjectsFromListbyKey,
 } from 'util/helpers';
-import {
-  useTranslation,
-} from 'react-i18next';
 
 import SelectedIncidentsComponent from './subcomponents/SelectedIncidentsComponent';
 
@@ -315,8 +316,7 @@ const IncidentActionsComponent = ({
                   variant="light"
                   onClick={() => snooze(selectedRows, duration)}
                 >
-                  {/* TODO: i18n tokenization */}
-                  {duration}
+                  {SNOOZE_TIMES[duration].i18n}
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />

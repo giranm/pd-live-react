@@ -2,6 +2,8 @@ import {
   put, call, select, takeLatest, all,
 } from 'redux-saga/effects';
 
+import i18next from 'i18next';
+
 import {
   handleSagaError,
   handleSingleAPIErrorResponse,
@@ -166,10 +168,9 @@ export function* escalate(action) {
       });
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+        const actionAlertsModalMessage = `${i18next.t('Incident')}(s) ${selectedIncidents
           .map((i) => i.incident_number)
-          .join(', ')} have been manually escalated to level ${escalationLevel}`;
-        // TODO: i18n tokenization
+          .join(', ')} ${i18next.t('have been manually escalated to level')} ${escalationLevel}`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -231,10 +232,9 @@ export function* reassign(action) {
       yield toggleDisplayReassignModalImpl();
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+        const actionAlertsModalMessage = `${i18next.t('Incident')}(s) ${selectedIncidents
           .map((i) => i.incident_number)
-          .join(', ')} have been reassigned to ${assignment.name}`;
-        // TODO: i18n tokenization
+          .join(', ')} ${i18next.t('have been reassigned to')} ${assignment.name}`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -295,9 +295,8 @@ export function* addResponder(action) {
       yield toggleDisplayAddResponderModalImpl();
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Requested additional response for 
-        incident(s) ${selectedIncidents.map((i) => i.incident_number).join(', ')}.`;
-        // TODO: i18n tokenization
+        const actionAlertsModalMessage = `${i18next.t('Requested additional response for')}
+        ${i18next.t('incident')}(s) ${selectedIncidents.map((i) => i.incident_number).join(', ')}.`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -348,7 +347,7 @@ export function* snooze(action) {
       endpoint: `incidents/${incident.id}/snooze`,
       data: {
         // Handle pre-built snoozes as well as custom durations
-        duration: SNOOZE_TIMES[duration] ? SNOOZE_TIMES[duration] : duration,
+        duration: SNOOZE_TIMES[duration] ? SNOOZE_TIMES[duration].seconds : duration,
       },
     }));
 
@@ -426,11 +425,10 @@ export function* merge(action) {
       yield toggleDisplayMergeModalImpl();
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Incident(s) ${incidentsToBeMerged
+        const actionAlertsModalMessage = `${i18next.t('Incident')}(s) ${incidentsToBeMerged
           .map((i) => i.incident_number)
-          .join(', ')} and their alerts have been merged onto incident
+          .join(', ')} ${i18next.t('and their alerts have been merged onto incident')}
           ${targetIncident.incident_number}`;
-        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -552,10 +550,9 @@ export function* updatePriority(action) {
       });
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+        const actionAlertsModalMessage = `${i18next.t('Incident')}(s) ${selectedIncidents
           .map((i) => i.incident_number)
-          .join(', ')} have been updated with priority = ${priorityName}`;
-        // TODO: i18n tokenization
+          .join(', ')} ${i18next.t('have been updated with priority')} = ${priorityName}`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -593,10 +590,9 @@ export function* addNote(action) {
       yield toggleDisplayAddNoteModalImpl();
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Incident(s) ${selectedIncidents
+        const actionAlertsModalMessage = `${i18next.t('Incident')}(s) ${selectedIncidents
           .map((i) => i.incident_number)
-          .join(', ')} have been updated with a note.`;
-        // TODO: i18n tokenization
+          .join(', ')} ${i18next.t('have been updated with a note')}.`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -654,12 +650,11 @@ export function* runCustomIncidentAction(action) {
       });
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Custom Incident Action "${
+        const actionAlertsModalMessage = `${i18next.t('Custom Incident Action')} "${
           webhook.name
-        }" triggered for incident(s) ${selectedIncidents
+        }" ${i18next.t('triggered for')} ${i18next.t('incident')}(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')}.`;
-        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {
@@ -746,10 +741,11 @@ export function* syncWithExternalSystem(action) {
       });
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Synced with "${
-          webhook.name
-        }" on incident(s) ${selectedIncidents.map((i) => i.incident_number).join(', ')}.`;
-        // TODO: i18n tokenization
+        const actionAlertsModalMessage = `${i18next.t('Synced with')} "${webhook.name}" ${i18next.t(
+          'on',
+        )} ${i18next.t('incident')}(s) ${selectedIncidents
+          .map((i) => i.incident_number)
+          .join(', ')}.`;
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {

@@ -90,12 +90,11 @@ export function* runResponsePlay(action) {
       });
       if (displayModal) {
         const actionAlertsModalType = 'success';
-        const actionAlertsModalMessage = `Ran "${
-          responsePlay.summary
-        }" response play for incident(s) ${selectedIncidents
+        const actionAlertsModalMessage = `${i18next.t('Ran')} "${responsePlay.summary}" ${i18next.t(
+          'response play for',
+        )} ${i18next.t('incident')}(s) ${selectedIncidents
           .map((i) => i.incident_number)
           .join(', ')}.`;
-        // TODO: i18n tokenization
         yield displayActionModal(actionAlertsModalType, actionAlertsModalMessage);
       }
     } else {

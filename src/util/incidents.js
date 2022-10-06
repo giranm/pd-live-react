@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 export const TRIGGERED = 'triggered';
@@ -13,11 +15,11 @@ export const UPDATE_INCIDENT_REDUCER_STATUS = 'UPDATE_INCIDENT_REDUCER_STATUS';
 export const UPDATE_INCIDENT_LAST_FETCH_DATE = 'UPDATE_INCIDENT_LAST_FETCH_DATE';
 
 export const SNOOZE_TIMES = {
-  '5 mins': 60 * 5,
-  '30 mins': 60 * 30,
-  '1 hr': 60 * 60,
-  '4 hrs': 60 * 60 * 4,
-  '24 hrs': 60 * 60 * 24,
+  '5 mins': { i18n: `5 ${i18next.t('minutes')}`, seconds: 60 * 5 },
+  '30 mins': { i18n: `30 ${i18next.t('minutes')}`, seconds: 60 * 30 },
+  '1 hr': { i18n: `1 ${i18next.t('hour')}`, seconds: 60 * 60 },
+  '4 hrs': { i18n: `4 ${i18next.t('hours')}`, seconds: 60 * 60 * 4 },
+  '24 hrs': { i18n: `24 ${i18next.t('hours')}`, seconds: 60 * 60 * 24 },
 };
 
 export const INCIDENT_STATES = [TRIGGERED, ACKNOWLEDGED, RESOLVED];
@@ -53,13 +55,24 @@ export const generateIncidentActionModal = (incidents, action) => {
   const resolvedIncidents = filterIncidentsByField(incidents, 'status', [RESOLVED]);
 
   // Create message based on action and incident status
-  // TODO: i18n tokenization
   let message;
-  const primaryMessage = `Incident(s) ${unresolvedIncidents
+  let i18nAction = '';
+  if (action === ACKNOWLEDGED) {
+    i18nAction = i18next.t('acknowledged');
+  }
+  if (action === RESOLVED) {
+    i18nAction = i18next.t('resolved');
+  }
+  if (action === SNOOZED) {
+    i18nAction = i18next.t('snoozed');
+  }
+  const primaryMessage = `${i18next.t('Incidents')}(s) ${unresolvedIncidents
     .map((i) => i.incident_number)
-    .join(', ')} have been ${action}.`;
-  const secondaryMessage = `(${resolvedIncidents.length} Incidents were not ${action} 
-    because they have already been suppressed or resolved)`;
+    .join(', ')} ${i18next.t('have been')} ${i18nAction}.`;
+  const secondaryMessage = `(${resolvedIncidents.length} ${i18next.t('Incidents')} ${i18next.t(
+    'were not',
+  )} ${action} 
+  ${i18next.t('because they have already been suppressed or resolved')})`;
 
   if (unresolvedIncidents.length > 0 && resolvedIncidents.length === 0) {
     message = primaryMessage;
