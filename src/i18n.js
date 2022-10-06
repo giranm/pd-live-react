@@ -64,7 +64,8 @@ i18n
     fallbackLng: 'en', // use en if detected lng is not available
     // array of allowed languages
     supportedLngs: ['en', 'fr', 'es', 'ja'],
-    // if true, will consider variants as supported when the main language is. E.g. en-US will be valid if en is in supportedLngs.
+    // if true, will consider variants as supported when the main language is.
+    // E.g. en-US will be valid if en is in supportedLngs.
     nonExplicitSupportedLngs: true,
     interpolation: {
       escapeValue: false, // react already safes from xss
