@@ -647,6 +647,7 @@ export function* filterIncidentsByEscalationPolicyImpl(action) {
     } = yield select(selectIncidents);
     let filteredIncidentsByEscalationPolicyList;
 
+    // eslint-disable-next-line max-len
     // Typically there is no filtered view by escalation policy, so if empty, show all escalation policies.
     if (escalationPolicyIds.length) {
       filteredIncidentsByEscalationPolicyList = filterIncidentsByField(
