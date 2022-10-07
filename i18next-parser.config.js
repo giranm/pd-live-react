@@ -41,8 +41,8 @@ module.exports = {
 
   lineEnding: 'auto',
   // Control the line ending. See options at https://github.com/ryanve/eol
- 
-  locales: ['en', 'fr', 'es', 'ja'],
+
+  locales: ['en', 'fr', 'es', 'de', 'ja'],
   // An array of the locales in your applications
 
   namespaceSeparator: ':',
@@ -104,4 +104,4 @@ module.exports = {
   // If you wish to customize options in internally used i18next instance, you can define an object with any
   // configuration property supported by i18next (https://www.i18next.com/overview/configuration-options).
   // { compatibilityJSON: 'v3' } can be used to generate v3 compatible plurals.
-}
+};

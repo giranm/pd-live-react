@@ -8,6 +8,7 @@ import gb from 'date-fns/locale/en-GB';
 import us from 'date-fns/locale/en-US';
 import fr from 'date-fns/locale/fr';
 import es from 'date-fns/locale/es';
+import de from 'date-fns/locale/de';
 import ja from 'date-fns/locale/ja';
 import {
   registerLocale,
@@ -16,6 +17,7 @@ import {
 import translationEN from './locales/en/translation.json';
 import translationFR from './locales/fr/translation.json';
 import translationES from './locales/es/translation.json';
+import translationDE from './locales/de/translation.json';
 import translationJA from './locales/ja/translation.json';
 
 // Variable for supported locales
@@ -23,6 +25,7 @@ registerLocale('en-GB', gb);
 registerLocale('en-US', us);
 registerLocale('fr', fr);
 registerLocale('es', es);
+registerLocale('de', de);
 registerLocale('ja', ja);
 
 // the translations
@@ -42,6 +45,10 @@ export const lngs = {
   es: {
     translation: translationES,
     nativeName: 'Español',
+  },
+  de: {
+    translation: translationDE,
+    nativeName: 'Deutsch',
   },
   ja: {
     translation: translationJA,
@@ -63,7 +70,7 @@ i18n
     resources: lngs,
     fallbackLng: 'en', // use en if detected lng is not available
     // array of allowed languages
-    supportedLngs: ['en', 'fr', 'es', 'ja'],
+    supportedLngs: ['en', 'fr', 'es', 'de', 'ja'],
     // if true, will consider variants as supported when the main language is.
     // E.g. en-US will be valid if en is in supportedLngs.
     nonExplicitSupportedLngs: true,
