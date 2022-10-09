@@ -27,7 +27,7 @@ import {
   ACKNOWLEDGED,
   RESOLVED,
   SNOOZED,
-  SNOOZE_TIMES,
+  getSnoozeTimes,
   filterIncidentsByField,
   generateIncidentActionModal,
 } from 'util/incidents';
@@ -333,6 +333,7 @@ export function* snooze(action) {
     const {
       incidents, duration, displayModal,
     } = action;
+    const snoozeTimes = getSnoozeTimes();
     const incidentsToBeSnoozed = filterIncidentsByField(incidents, 'status', [
       TRIGGERED,
       ACKNOWLEDGED,
@@ -347,7 +348,7 @@ export function* snooze(action) {
       endpoint: `incidents/${incident.id}/snooze`,
       data: {
         // Handle pre-built snoozes as well as custom durations
-        duration: SNOOZE_TIMES[duration] ? SNOOZE_TIMES[duration].seconds : duration,
+        duration: snoozeTimes[duration] ? snoozeTimes[duration].seconds : duration,
       },
     }));
 

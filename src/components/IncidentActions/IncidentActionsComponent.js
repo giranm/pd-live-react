@@ -64,9 +64,9 @@ import {
   TRIGGERED,
   ACKNOWLEDGED,
   RESOLVED,
-  SNOOZE_TIMES,
-  filterIncidentsByField,
   HIGH,
+  getSnoozeTimes,
+  filterIncidentsByField,
 } from 'util/incidents';
 
 import {
@@ -143,6 +143,7 @@ const IncidentActionsComponent = ({
   }, [enableEscalationAction]);
 
   // Create internal state for snooze - disable toggle irrespective of actions
+  const snoozeTimes = getSnoozeTimes();
   const [displaySnooze, toggleSnooze] = useState(false);
   useEffect(() => {
     toggleSnooze(false);
@@ -309,14 +310,14 @@ const IncidentActionsComponent = ({
               disabled={enableActions}
               onClick={() => toggleSnooze(!displaySnooze)}
             >
-              {Object.keys(SNOOZE_TIMES).map((duration) => (
+              {Object.keys(snoozeTimes).map((duration) => (
                 <Dropdown.Item
                   id={`snooze-duration-${duration}-button`}
                   key={duration}
                   variant="light"
                   onClick={() => snooze(selectedRows, duration)}
                 >
-                  {SNOOZE_TIMES[duration].i18n}
+                  {snoozeTimes[duration].i18n}
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />

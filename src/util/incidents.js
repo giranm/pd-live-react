@@ -14,14 +14,6 @@ export const LOW = 'low';
 export const UPDATE_INCIDENT_REDUCER_STATUS = 'UPDATE_INCIDENT_REDUCER_STATUS';
 export const UPDATE_INCIDENT_LAST_FETCH_DATE = 'UPDATE_INCIDENT_LAST_FETCH_DATE';
 
-export const SNOOZE_TIMES = {
-  '5 mins': { i18n: `5 ${i18next.t('minutes')}`, seconds: 60 * 5 },
-  '30 mins': { i18n: `30 ${i18next.t('minutes')}`, seconds: 60 * 30 },
-  '1 hr': { i18n: `1 ${i18next.t('hour')}`, seconds: 60 * 60 },
-  '4 hrs': { i18n: `4 ${i18next.t('hours')}`, seconds: 60 * 60 * 4 },
-  '24 hrs': { i18n: `24 ${i18next.t('hours')}`, seconds: 60 * 60 * 24 },
-};
-
 export const INCIDENT_STATES = [TRIGGERED, ACKNOWLEDGED, RESOLVED];
 
 // Helper function to filter incidents by json path + possible values
@@ -85,3 +77,11 @@ export const generateIncidentActionModal = (incidents, action) => {
     actionAlertsModalMessage: message,
   };
 };
+
+export const getSnoozeTimes = () => ({
+  '5 mins': { i18n: `5 ${i18next.t('minutes')}`, seconds: 60 * 5 },
+  '30 mins': { i18n: `30 ${i18next.t('minutes')}`, seconds: 60 * 30 },
+  '1 hr': { i18n: `1 ${i18next.t('hour')}`, seconds: 60 * 60 },
+  '4 hrs': { i18n: `4 ${i18next.t('hours')}`, seconds: 60 * 60 * 4 },
+  '24 hrs': { i18n: `24 ${i18next.t('hours')}`, seconds: 60 * 60 * 24 },
+});
