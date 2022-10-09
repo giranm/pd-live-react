@@ -6,7 +6,7 @@
   "dependencies": {
     "@braintree/sanitize-url": "^6.0.0",
     "@craco/craco": "7.0.0-alpha.3",
-    "@datadog/browser-rum": "^4.19.1",
+    "@datadog/browser-rum": "^4.21.0",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.2.0",
     "@fortawesome/free-regular-svg-icons": "^6.2.0",
@@ -33,12 +33,12 @@
     "moment": "^2.29.4",
     "node-sass": "^7.0.3",
     "react": "^17.0.2",
-    "react-bootstrap": "^1.6.5",
+    "react-bootstrap": "^1.6.6",
     "react-datepicker": "^4.8.0",
     "react-dom": "^17.0.2",
     "react-dual-listbox": "^2.3.0",
     "react-inject-env": "^2.0.1",
-    "react-redux": "^8.0.2",
+    "react-redux": "^8.0.4",
     "react-scripts": "5.0.1",
     "react-select": "^5.4.0",
     "react-table": "^7.8.0",
@@ -46,10 +46,10 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.1",
-    "styled-components": "^5.3.5",
+    "styled-components": "^5.3.6",
     "use-debounce": "^8.0.4",
     "validator": "^13.7.0",
-    "web-vitals": "^3.0.1"
+    "web-vitals": "^3.0.2"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"
@@ -96,7 +96,7 @@
     "@cypress/webpack-dev-server": "^2.3.0",
     "@faker-js/faker": "^7.5.0",
     "cy2": "^2.0.1",
-    "cypress": "^10.7.0",
+    "cypress": "^10.9.0",
     "cypress-fail-fast": "^5.0.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -123,6 +123,6 @@
     "string.prototype.replaceall": "^1.0.6",
     "svg-jest": "^1.0.1",
     "wait-on": "^6.0.1",
-    "yarn-audit-fix": "^9.3.5"
+    "yarn-audit-fix": "^9.3.6"
   }
 }

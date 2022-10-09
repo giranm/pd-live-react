@@ -111,6 +111,7 @@ const QuerySettingsComponent = ({
 
   // Identify when to enable selects once data has been fetched
   const isTeamSelectDisabled = teamStatus !== FETCH_TEAMS_COMPLETED;
+  // eslint-disable-next-line max-len
   const isEscalationPolicySelectDisabled = escalationPolicyStatus !== FETCH_ESCALATION_POLICIES_COMPLETED;
   const isServiceSelectDisabled = serviceStatus !== FETCH_SERVICES_COMPLETED;
   const isUserSelectDisabled = !userList.length; // There are multiple states which affect this
