@@ -8,7 +8,7 @@ import {
   Button,
 } from 'react-bootstrap';
 
-import '../../i18n';
+import 'i18n.js';
 
 import 'mocks/pdoauth';
 

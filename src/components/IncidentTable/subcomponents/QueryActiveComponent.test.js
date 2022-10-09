@@ -6,7 +6,7 @@ import {
   Spinner,
 } from 'react-bootstrap';
 
-import '../../../i18n';
+import 'i18n.js';
 
 import QueryActiveComponent from './QueryActiveComponent';
 

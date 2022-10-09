@@ -7,7 +7,7 @@ import {
   registerLocale,
 } from 'react-datepicker';
 
-import '../../i18n';
+import 'i18n.js';
 
 import {
   componentWrapper, waitForComponentToPaint,

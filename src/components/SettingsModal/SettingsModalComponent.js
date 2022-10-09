@@ -66,7 +66,7 @@ import {
 
 import {
   locales,
-} from '../../i18n';
+} from 'i18n.js';
 
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
