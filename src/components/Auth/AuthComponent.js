@@ -1,4 +1,7 @@
 /* eslint-disable no-unused-vars */
+/* ignore Invalid property 'align' found on tag 'div' */
+/* eslint-disable react/no-unknown-property */
+
 import React, {
   useState, useEffect,
 } from 'react';
