@@ -495,7 +495,7 @@ export const availableAlertTableColumns = [
           break;
       }
       return (
-        <Badge className="severity-badge" variant={variant}>
+        <Badge className="severity-badge" bg={variant}>
           {i18nValue}
         </Badge>
       );

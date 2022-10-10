@@ -54,7 +54,7 @@ const SelectedIncidentsComponent = ({
   const cancelledQueryRender = (
     <div className="selected-incidents-ctr">
       <h4>
-        <Badge className="selected-incidents-badge" variant="warning">
+        <Badge className="selected-incidents-badge" bg="warning">
           {t('N/A')}
         </Badge>
       </h4>
