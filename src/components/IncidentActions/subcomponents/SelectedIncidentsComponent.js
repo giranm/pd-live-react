@@ -35,7 +35,7 @@ const SelectedIncidentsComponent = ({
       <h4>
         <Badge
           className="selected-incidents-badge"
-          variant={filteredIncidentsByQuery.length ? 'primary' : 'secondary'}
+          bg={filteredIncidentsByQuery.length ? 'primary' : 'secondary'}
         >
           {`${selectedCount}/${filteredIncidentsByQuery.length}`}
         </Badge>
@@ -47,7 +47,7 @@ const SelectedIncidentsComponent = ({
   const cancelledQueryRender = (
     <div className="selected-incidents-ctr">
       <h4>
-        <Badge className="selected-incidents-badge" variant="warning">
+        <Badge className="selected-incidents-badge" bg="warning">
           N/A
         </Badge>
       </h4>

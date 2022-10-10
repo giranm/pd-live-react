@@ -315,7 +315,7 @@ export const availableIncidentTableColumns = [
       let elem;
       if (urgency === HIGH) {
         elem = (
-          <Badge className="urgency-badge" variant="primary">
+          <Badge className="urgency-badge" bg="primary">
             <FontAwesomeIcon icon={faChevronUp} />
             {' '}
             High
@@ -323,7 +323,7 @@ export const availableIncidentTableColumns = [
         );
       } else if (urgency === LOW) {
         elem = (
-          <Badge className="urgency-badge" variant="secondary">
+          <Badge className="urgency-badge" bg="secondary">
             <FontAwesomeIcon icon={faChevronDown} />
             {' '}
             Low
@@ -469,7 +469,7 @@ export const availableAlertTableColumns = [
           break;
       }
       return (
-        <Badge className="urgency-badge" variant={variant}>
+        <Badge className="urgency-badge" bg={variant}>
           {value}
         </Badge>
       );

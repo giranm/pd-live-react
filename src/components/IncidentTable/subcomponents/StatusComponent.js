@@ -18,7 +18,7 @@ import {
 
 const InternalStatusComponent = (tooltip, variant, icon) => (
   <OverlayTrigger placement="top" overlay={<Tooltip>{tooltip}</Tooltip>}>
-    <Badge className="status-badge" variant={variant}>
+    <Badge className="status-badge" bg={variant}>
       <FontAwesomeIcon icon={icon} />
     </Badge>
   </OverlayTrigger>
