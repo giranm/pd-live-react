@@ -212,10 +212,8 @@ const IncidentActionsComponent = ({
     <div>
       <Container className="incident-actions-ctr" id="incident-actions-ctr" fluid>
         <Row>
-          <Col sm={{ span: -1 }}>
+          <Col id="incident-actions-col">
             <SelectedIncidentsComponent />
-          </Col>
-          <Col>
             <Button
               id="incident-action-acknowledge-button"
               className="action-button"
@@ -332,20 +330,6 @@ const IncidentActionsComponent = ({
               </div>
               Merge
             </Button>
-            <Button
-              id="incident-action-resolve-button"
-              className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'light'}
-              disabled={enableActions}
-              onClick={() => resolve(selectedRows)}
-            >
-              <div className="action-icon">
-                <FontAwesomeIcon icon={faCheckCircle} />
-              </div>
-              Resolve
-            </Button>
-          </Col>
-          <Col sm={{ span: 3.5 }}>
             <DropdownButton
               id="incident-action-update-priority-button"
               as={ButtonGroup}
@@ -480,6 +464,18 @@ const IncidentActionsComponent = ({
                 <></>
               )}
             </DropdownButton>
+            <Button
+              id="incident-action-resolve-button"
+              className="action-button"
+              variant={enableActions ? 'outline-secondary' : 'light'}
+              disabled={enableActions}
+              onClick={() => resolve(selectedRows)}
+            >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faCheckCircle} />
+              </div>
+              Resolve
+            </Button>
           </Col>
         </Row>
       </Container>

@@ -28,7 +28,7 @@
 .selected-incidents-ctr {
   display: flex;
   justify-content: flex-end;
-  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .selected-incidents-badge {
@@ -40,4 +40,8 @@
   padding-left: 8px;
   position: relative;
   top: 8px;
+}
+
+#incident-actions-col {
+  display: flex;
 }
