@@ -38,7 +38,7 @@ export function* getResponsePlays() {
       },
     });
     if (response.status !== 200) {
-      throw Error(i18next.t('Unable to response plays'));
+      throw Error(i18next.t('Unable to fetch response plays'));
     }
 
     yield put({
