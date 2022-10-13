@@ -94,7 +94,7 @@
     "@babel/preset-react": "^7.16.7",
     "@cypress/react": "6.2.0",
     "@cypress/webpack-dev-server": "^2.3.0",
-    "@faker-js/faker": "^7.5.0",
+    "@faker-js/faker": "^7.6.0",
     "cy2": "^2.0.1",
     "cypress": "^10.10.0",
     "cypress-fail-fast": "^5.0.1",
