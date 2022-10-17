@@ -28,6 +28,10 @@ import {
 } from 'redux/users/actions';
 
 import {
+  DEBUG_SINCE_DATE, DEBUG_UNTIL_DATE,
+} from 'config/constants';
+
+import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
   TOGGLE_DISPLAY_QUERY_SETTINGS_COMPLETED,
   UPDATE_QUERY_SETTING_SINCE_DATE_REQUESTED,
@@ -237,8 +241,8 @@ export function* validateIncidentQueryImpl() {
     } = yield select(selectQuerySettings);
 
     const params = {
-      since: sinceDate.toISOString(),
-      until: new Date().toISOString(),
+      since: DEBUG_SINCE_DATE ? new Date(DEBUG_SINCE_DATE).toISOString() : sinceDate.toISOString(),
+      until: DEBUG_UNTIL_DATE ? new Date(DEBUG_UNTIL_DATE).toISOString() : new Date().toISOString(),
       limit: 1,
       total: true,
     };

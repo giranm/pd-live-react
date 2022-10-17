@@ -65,6 +65,10 @@ import {
   reactSelectStyle,
 } from 'util/styles';
 
+import {
+  DEBUG_SINCE_DATE,
+} from 'config/constants';
+
 const QuerySettingsComponent = ({
   querySettings,
   escalationPolicies,
@@ -157,7 +161,9 @@ const QuerySettingsComponent = ({
   const [sinceDateNum, sinceDateTenor] = defaultSinceDateTenor
     ? defaultSinceDateTenor.split(' ')
     : ['1', 'Day'];
-  const sinceDateCalc = today.subtract(Number(sinceDateNum), sinceDateTenor).toDate();
+  const sinceDateCalc = DEBUG_SINCE_DATE
+    ? new Date(DEBUG_SINCE_DATE)
+    : today.subtract(Number(sinceDateNum), sinceDateTenor).toDate();
   const [sinceDate, setSinceDate] = useState(sinceDateCalc);
 
   useEffect(() => {
