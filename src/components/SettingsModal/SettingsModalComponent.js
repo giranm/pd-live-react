@@ -101,7 +101,7 @@ const SettingsModalComponent = ({
   toggleDisplayActionAlertsModal,
 }) => {
   const {
-    t, i18n,
+    t,
   } = useTranslation();
   const {
     displaySettingsModal,
@@ -327,7 +327,6 @@ const SettingsModalComponent = ({
                   return false;
                 })()}
                 onClick={() => {
-                  i18n.changeLanguage(selectedLocale.value);
                   updateUserLocale(selectedLocale.value);
                   setDefaultSinceDateTenor(tempSinceDateTenor);
                   setMaxIncidentsLimit(tempMaxIncidentsLimit);

@@ -173,6 +173,7 @@ export function* updateUserLocaleImpl(action) {
     const {
       locale,
     } = action;
+    i18next.changeLanguage(locale);
     yield put({
       type: UPDATE_USER_LOCALE_COMPLETED,
       currentUserLocale: locale,
