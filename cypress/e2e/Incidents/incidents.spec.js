@@ -135,8 +135,8 @@ describe('Manage Open Incidents', { failFast: { enabled: false } }, () => {
     checkActionAlertsModalContent('Requested additional response for incident(s)');
   });
 
-  it('Snooze singular incident for specified duration (5 mins)', () => {
-    const duration = '5 mins';
+  it('Snooze singular incident for specified duration (5 minutes)', () => {
+    const duration = '5 minutes';
     selectIncident(0);
     snooze(duration);
     checkActionAlertsModalContent('have been snoozed.');
