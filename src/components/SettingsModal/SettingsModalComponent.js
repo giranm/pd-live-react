@@ -72,7 +72,7 @@ import 'react-dual-listbox/lib/react-dual-listbox.css';
 import './SettingsModalComponent.scss';
 
 const columnMapper = (column, columnType) => ({
-  label: column.Header,
+  label: column.i18n ? column.i18n : column.Header,
   value: column.Header,
   Header: column.Header,
   columnType,
@@ -176,7 +176,7 @@ const SettingsModalComponent = ({
       return {
         Header: column.Header,
         columnType: column.columnType,
-        label: column.Header,
+        label: column.i18n ? column.i18n : column.Header,
         value,
       };
     }),
@@ -334,6 +334,10 @@ const SettingsModalComponent = ({
                   setAutoRefreshInterval(tempAutoRefreshInterval);
                   updateActionAlertsModal('success', t('Updated user profile settings'));
                   toggleDisplayActionAlertsModal();
+                  // Force refresh so that i18n is reflected under DualListBox
+                  setTimeout(() => {
+                    window.location.reload(false);
+                  }, 3000);
                 }}
               >
                 {t('Update User Profile')}
