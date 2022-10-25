@@ -454,7 +454,7 @@ export const availableAlertTableColumns = [
     Header: 'Severity',
     i18n: i18next.t('Severity'),
     sortable: true,
-    minWidth: 100,
+    minWidth: 120,
     sortType: (row1, row2) => {
       const severityRank = {
         critical: 4,
@@ -495,7 +495,7 @@ export const availableAlertTableColumns = [
           break;
       }
       return (
-        <Badge className="urgency-badge" variant={variant}>
+        <Badge className="severity-badge" variant={variant}>
           {i18nValue}
         </Badge>
       );
