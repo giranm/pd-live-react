@@ -227,16 +227,16 @@ export const manageCustomAlertColumnDefinitions = (customAlertColumnDefinitions)
   cy.get('.close').click();
 };
 
-export const updateUserLocale = (localeName = 'English (United Kingdom)') => {
+export const updateUserLocale = (localeName = 'English (United Kingdom)', settingsMenu = 'Settings', userProfile = 'User Profile', updateuserProfile = 'Update User Profile', updatedUserProfileSettings = 'Updated user profile settings') => {
   cy.get('.settings-panel-dropdown').click();
-  cy.get('.dropdown-item').contains('Settings').click();
-  cy.get('.nav-item').contains('User Profile').click();
+  cy.get('.dropdown-item').contains(settingsMenu).click();
+  cy.get('.nav-item').contains(userProfile).click();
 
   cy.get('#user-locale-select').click();
   cy.contains('div', localeName).click();
 
-  cy.get('.btn').contains('Update User Profile').click();
-  checkActionAlertsModalContent('Updated user profile settings');
+  cy.get('.btn').contains(updateuserProfile).click();
+  checkActionAlertsModalContent(updatedUserProfileSettings);
   cy.get('.close').click();
 };
 

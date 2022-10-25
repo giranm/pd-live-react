@@ -2,6 +2,8 @@ import {
   put, call, takeLatest,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   pd,
 } from 'util/pd-api-wrapper';
@@ -23,7 +25,7 @@ export function* getEscalationPolicies() {
     //  Create params and call pd lib
     const response = yield call(pd.all, 'escalation_policies');
     if (response.status !== 200) {
-      throw Error('Unable to fetch escalation policies');
+      throw Error(i18next.t('Unable to fetch escalation policies'));
     }
     const escalationPolicies = response.resource;
 
@@ -34,7 +36,7 @@ export function* getEscalationPolicies() {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: FETCH_ESCALATION_POLICIES_ERROR, message: e.message });
     yield put({

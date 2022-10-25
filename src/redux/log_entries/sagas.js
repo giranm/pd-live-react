@@ -3,6 +3,8 @@ import {
   put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   RESOLVE_LOG_ENTRY,
   TRIGGER_LOG_ENTRY,
@@ -53,7 +55,7 @@ export function* getLogEntries(action) {
     };
     const response = yield call(pd.all, 'log_entries', { data: { ...params } });
     if (response.status !== 200) {
-      throw Error('Unable to fetch log entries');
+      throw Error(i18next.t('Unable to fetch log entries'));
     }
     const logEntries = response.resource;
     yield put({ type: FETCH_LOG_ENTRIES_COMPLETED, logEntries });
@@ -63,7 +65,7 @@ export function* getLogEntries(action) {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: FETCH_LOG_ENTRIES_ERROR, message: e.message });
     yield put({

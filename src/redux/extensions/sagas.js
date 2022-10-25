@@ -3,6 +3,8 @@ import {
   put, call, select, takeLatest,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import selectServices from 'redux/services/selectors';
 import {
   CUSTOM_INCIDENT_ACTION, EXTERNAL_SYSTEM,
@@ -34,7 +36,7 @@ export function* getExtensions() {
     //  Create params and call pd lib
     const response = yield call(pd.all, 'extensions');
     if (response.status !== 200) {
-      throw Error('Unable to fetch extensions');
+      throw Error(i18next.t('Unable to fetch extensions'));
     }
 
     yield put({
@@ -47,7 +49,7 @@ export function* getExtensions() {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: FETCH_EXTENSIONS_ERROR, message: e.message });
     yield put({
@@ -89,17 +91,17 @@ export function* mapServicesToExtensionsImpl() {
               // ServiceNow
             } else if (extensionSummary.includes('ServiceNow')) {
               modifiedExtension.extension_type = EXTERNAL_SYSTEM;
-              modifiedExtension.extension_label = 'Sync with ServiceNow';
+              modifiedExtension.extension_label = `${i18next.t('Sync with')} ServiceNow`;
 
               // Jira
             } else if (extensionSummary.includes('Jira')) {
               modifiedExtension.extension_type = EXTERNAL_SYSTEM;
-              modifiedExtension.extension_label = `Sync with ${extensionSummary}`;
+              modifiedExtension.extension_label = `${i18next.t('Sync with')} ${extensionSummary}`;
 
               // Zendesk
             } else if (extensionSummary === 'Zendesk') {
               modifiedExtension.extension_type = EXTERNAL_SYSTEM;
-              modifiedExtension.extension_label = 'Sync with Zendesk';
+              modifiedExtension.extension_label = `${i18next.t('Sync with')} Zendesk`;
             }
 
             serviceExtensions.push(modifiedExtension);

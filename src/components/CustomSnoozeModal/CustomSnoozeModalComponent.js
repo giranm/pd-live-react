@@ -13,6 +13,10 @@ import {
 import DatePicker from 'react-datepicker';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayCustomSnoozeModal as toggleDisplayCustomSnoozeModalConnected,
   snooze as snoozeConnected,
 } from 'redux/incident_actions/actions';
@@ -30,6 +34,9 @@ const CustomSnoozeModalComponent = ({
   incidentTable,
 }) => {
   const {
+    t,
+  } = useTranslation();
+  const {
     displayCustomSnoozeModal,
   } = incidentActions;
 
@@ -38,13 +45,15 @@ const CustomSnoozeModalComponent = ({
   const initialSnoozeTime = moment().add({ hour: defaultSnoozeTimeHours });
   const [snoozeTime, setSnoozeTime] = useState(initialSnoozeTime.toDate());
   const snoozeDuration = moment(snoozeTime).diff(moment());
-  const snoozeDurationFormatted = moment(snoozeDuration).format('H[ hour(s)]');
+  const snoozeDurationFormatted = moment(snoozeDuration).format(`H[ ${t('hours')}]`);
 
   // Internal state for snooze after tomorrow
   const tomorrow = moment().add({ days: 1 }).set({ hour: 8, minute: 0 });
   const [tomorrowSnoozeDate, setTomorrowSnoozeDate] = useState(tomorrow.toDate());
   const tomorrowDuration = moment(tomorrowSnoozeDate).diff(moment());
-  const tomorrowDurationFormatted = moment(tomorrowDuration).format('H[ hour(s)] m[ minute(s)]');
+  const tomorrowDurationFormatted = moment(tomorrowDuration).format(
+    `H[ ${t('hours')}] m[ ${t('minutes')}]`,
+  );
 
   // Only unresolved incidents can be snoozed
   const {
@@ -55,8 +64,8 @@ const CustomSnoozeModalComponent = ({
     ACKNOWLEDGED,
   ]);
   const modalTitle = unresolvedIncidents.length === 1
-    ? `Snooze Incident #${unresolvedIncidents[0].incident_number}`
-    : `Snooze ${unresolvedIncidents.length} incidents`;
+    ? t('Snooze Incident #X', { unresolvedIncidents })
+    : t('Snooze X incidents', { unresolvedIncidents });
 
   // Internal state to find active radio button
   const [activeButtonId, setActiveButton] = useState('snooze-hours');
@@ -79,7 +88,7 @@ const CustomSnoozeModalComponent = ({
               <Col>
                 <Form.Check
                   type="radio"
-                  label="Snooze for the following hours"
+                  label={t('Snooze for the following hours')}
                   name="snooze-group"
                   id="snooze-hours"
                   onChange={(e) => setActiveButton(e.target.id)}
@@ -102,7 +111,7 @@ const CustomSnoozeModalComponent = ({
               <Col>
                 <Form.Check
                   type="radio"
-                  label="Snooze until tomorrow at"
+                  label={t('Snooze until tomorrow at')}
                   name="snooze-group"
                   id="snooze-tomorrow"
                   onChange={(e) => setActiveButton(e.target.id)}
@@ -137,7 +146,7 @@ const CustomSnoozeModalComponent = ({
             {modalAction}
           </Button>
           <Button variant="light" onClick={toggleDisplayCustomSnoozeModal}>
-            Cancel
+            {t('Cancel')}
           </Button>
         </Modal.Footer>
       </Modal>

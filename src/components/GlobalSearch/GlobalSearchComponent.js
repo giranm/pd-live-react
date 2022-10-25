@@ -10,14 +10,18 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   ReactComponent as SearchGlass,
 } from 'assets/images/search_glass.svg';
-
-import './GlobalSearchComponent.scss';
 
 import {
   updateSearchQuery as updateSearchQueryConnected,
 } from 'redux/query_settings/actions';
+
+import './GlobalSearchComponent.scss';
 
 const GlobalSearchComponent = ({
   searchQuery, updateSearchQuery,
@@ -25,6 +29,9 @@ const GlobalSearchComponent = ({
   const debounced = useDebouncedCallback((value) => {
     updateSearchQuery(value);
   }, 500);
+  const {
+    t,
+  } = useTranslation();
   return (
     <div className="global-search-ctr">
       <Row>
@@ -37,7 +44,7 @@ const GlobalSearchComponent = ({
             </InputGroup.Prepend>
             <Form.Control
               id="global-search-input"
-              placeholder="Search"
+              placeholder={t('Search')}
               htmlSize={40}
               onChange={(e) => debounced(e.target.value)}
               defaultValue={searchQuery}

@@ -11,6 +11,10 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   userAcceptDisclaimer as userAcceptDisclaimerConnected,
   userUnauthorize as userUnauthorizeConnected,
 } from 'redux/users/actions';
@@ -18,6 +22,9 @@ import {
 const DisclaimerModalComponent = ({
   users, userAcceptDisclaimer, userUnauthorize,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     userAcceptedDisclaimer,
   } = users;
@@ -27,7 +34,7 @@ const DisclaimerModalComponent = ({
     <div className="disclaimer-modal-ctr">
       <Modal dialogClassName="modal-90w" show={!userAcceptedDisclaimer}>
         <Modal.Header>
-          <Modal.Title>Disclaimer & License</Modal.Title>
+          <Modal.Title>{t('Disclaimer & License')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -236,8 +243,8 @@ const DisclaimerModalComponent = ({
             <Form.Check
               id="disclaimer-agree-checkbox"
               required
-              label="I agree to the disclaimer and license above"
-              feedback="You must agree before submitting."
+              label={t('I agree to the disclaimer and license above')}
+              feedback={t('You must agree before submitting')}
               feedbackType="invalid"
               onClick={() => setAcceptDisclaimer(!acceptDisclaimer)}
             />
@@ -248,7 +255,7 @@ const DisclaimerModalComponent = ({
             onClick={() => userAcceptDisclaimer()}
             disabled={!acceptDisclaimer}
           >
-            Accept
+            {t('Accept')}
           </Button>
           <Button
             id="disclaimer-decline-button"
@@ -259,7 +266,7 @@ const DisclaimerModalComponent = ({
               window.location.reload();
             }}
           >
-            Decline
+            {t('Decline')}
           </Button>
         </Modal.Footer>
       </Modal>

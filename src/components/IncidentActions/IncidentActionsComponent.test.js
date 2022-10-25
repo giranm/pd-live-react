@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom';
 
+import 'i18n.js';
+
 import {
   mockStore, componentWrapper,
 } from 'mocks/store.test';
