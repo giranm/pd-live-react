@@ -83,9 +83,16 @@ export const toggleDisplayReassignModal = () => ({
   type: TOGGLE_DISPLAY_REASSIGN_MODAL_REQUESTED,
 });
 
-export const addResponder = (incidents, responderRequestTargets, message, displayModal = true) => ({
+export const addResponder = (
+  incidents,
+  requesterId,
+  responderRequestTargets,
+  message,
+  displayModal = true,
+) => ({
   type: ADD_RESPONDER_REQUESTED,
   incidents,
+  requesterId,
   responderRequestTargets,
   message,
   displayModal,

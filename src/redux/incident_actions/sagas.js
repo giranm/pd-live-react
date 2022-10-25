@@ -266,7 +266,11 @@ export function* addResponderAsync() {
 export function* addResponder(action) {
   try {
     const {
-      incidents: selectedIncidents, responderRequestTargets, message, displayModal,
+      incidents: selectedIncidents,
+      requesterId,
+      responderRequestTargets,
+      message,
+      displayModal,
     } = action;
 
     // Build individual requests as the endpoint supports singular POST
@@ -274,6 +278,7 @@ export function* addResponder(action) {
       method: 'post',
       endpoint: `incidents/${incident.id}/responder_requests`,
       data: {
+        requester_id: requesterId,
         message,
         responder_request_targets: responderRequestTargets.map((target) => ({
           responder_request_target: {

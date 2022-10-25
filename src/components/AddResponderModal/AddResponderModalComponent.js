@@ -29,6 +29,7 @@ const AddResponderModalComponent = ({
   incidentTable,
   escalationPolicies,
   users,
+  currentUser,
   toggleDisplayAddResponderModal,
   addResponder,
 }) => {
@@ -41,6 +42,9 @@ const AddResponderModalComponent = ({
   const {
     selectedRows,
   } = incidentTable;
+  const {
+    id: currentUserId,
+  } = currentUser;
 
   const messageMaxChars = 110;
 
@@ -117,7 +121,7 @@ const AddResponderModalComponent = ({
             disabled={responderRequestTargets.length === 0}
             onClick={() => {
               setResponderRequestTargets([]);
-              addResponder(selectedRows, responderRequestTargets, message);
+              addResponder(selectedRows, currentUserId, responderRequestTargets, message);
             }}
           >
             {t('Add Responders')}
@@ -142,12 +146,13 @@ const mapStateToProps = (state) => ({
   incidentTable: state.incidentTable,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   users: state.users.users,
+  currentUser: state.users.currentUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModalConnected()),
-  addResponder: (incidents, responderRequestTargets, message) => {
-    dispatch(addResponderConnected(incidents, responderRequestTargets, message));
+  addResponder: (incidents, requesterId, responderRequestTargets, message) => {
+    dispatch(addResponderConnected(incidents, requesterId, responderRequestTargets, message));
   },
 });
 

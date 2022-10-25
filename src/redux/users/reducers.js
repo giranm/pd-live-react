@@ -117,7 +117,7 @@ const users = produce(
   {
     users: [],
     usersMap: {},
-    currentUser: null,
+    currentUser: { id: '' },
     currentUserLocale: 'en-GB',
     userAuthorized: false,
     userAcceptedDisclaimer: false,
