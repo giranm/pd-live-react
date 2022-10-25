@@ -122,7 +122,7 @@ const users = produce(
     userAuthorized: false,
     userAcceptedDisclaimer: false,
     subdomain: '',
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },

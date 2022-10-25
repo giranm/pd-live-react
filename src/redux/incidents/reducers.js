@@ -324,7 +324,7 @@ const incidents = produce(
   {
     incidents: [],
     filteredIncidentsByQuery: [],
-    status: null,
+    status: '',
     fetchingData: false,
     fetchingIncidents: false,
     fetchingIncidentNotes: false,

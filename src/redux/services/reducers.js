@@ -32,7 +32,7 @@ const services = produce(
   },
   {
     services: [],
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },
