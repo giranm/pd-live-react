@@ -50,7 +50,7 @@ const extensions = produce(
   {
     extensions: [],
     serviceExtensionMap: {},
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },

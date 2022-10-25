@@ -17,7 +17,7 @@ import {
 } from 'util/sagas';
 
 import {
-  PD_REQUIRED_ABILITY,
+  PD_REQUIRED_ABILITY, DEBUG_DISABLE_POLLING,
 } from 'config/constants';
 
 import {
@@ -57,11 +57,13 @@ export function* checkConnectionStatus() {
 export function* checkConnectionStatusImpl() {
   // Wait until these actions have been dispatched before verifying connection status
   yield take([CHECK_ABILITIES_COMPLETED, CHECK_ABILITIES_ERROR]);
-  yield take([FETCH_LOG_ENTRIES_COMPLETED, FETCH_LOG_ENTRIES_ERROR]);
-  yield take([
-    FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
-    FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
-  ]);
+  if (!DEBUG_DISABLE_POLLING) {
+    yield take([FETCH_LOG_ENTRIES_COMPLETED, FETCH_LOG_ENTRIES_ERROR]);
+    yield take([
+      FILTER_INCIDENTS_LIST_BY_PRIORITY_COMPLETED,
+      FILTER_INCIDENTS_LIST_BY_PRIORITY_ERROR,
+    ]);
+  }
 
   // Check entire store for fulfilled statuses
   const store = yield select();
@@ -85,7 +87,9 @@ export function* checkConnectionStatusImpl() {
   const {
     abilities,
   } = store.connection;
-  if (validConnection) {
+  if (DEBUG_DISABLE_POLLING) {
+    yield updateConnectionStatusRequested('negative', i18next.t('Live updates disabled'));
+  } else if (validConnection) {
     if (!abilities.includes(PD_REQUIRED_ABILITY)) {
       yield updateConnectionStatusRequested('negative', MISSING_ABILITY_ERROR);
     } else {

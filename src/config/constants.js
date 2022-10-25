@@ -1,5 +1,6 @@
 // Hosts App Constants
 export const env = { ...process.env, ...window.env };
+export const debugParams = new URLSearchParams(window.location.search);
 
 // Application Details
 export const PD_APP_NAME = 'pd-live-react';
@@ -31,3 +32,8 @@ export const REFRESH_INTERVAL_UPPER = 60;
 
 // Date formatting (Locale Agnostic)
 export const DATE_FORMAT = 'LL \\at h:mm:ss A';
+
+// Debug params
+export const DEBUG_DISABLE_POLLING = debugParams.get('disable-polling') || false;
+export const DEBUG_SINCE_DATE = debugParams.get('since') || null;
+export const DEBUG_UNTIL_DATE = debugParams.get('until') || null;
