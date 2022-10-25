@@ -18,6 +18,8 @@ import {
   FixedSizeList,
 } from 'react-window';
 
+import i18next from 'i18n';
+
 import BTable from 'react-bootstrap/Table';
 
 import {
@@ -76,6 +78,7 @@ const IncidentTableComponent = ({
   incidentActions,
   incidents,
   querySettings,
+  users,
 }) => {
   const {
     incidentTableState, incidentTableColumns,
@@ -89,6 +92,9 @@ const IncidentTableComponent = ({
   const {
     displayConfirmQueryModal,
   } = querySettings;
+  const {
+    currentUserLocale,
+  } = users;
 
   // React Table Config
   const defaultColumn = useMemo(
@@ -100,10 +106,15 @@ const IncidentTableComponent = ({
     [],
   );
 
-  const memoizedColumns = useMemo(
-    () => getReactTableColumnSchemas(incidentTableColumns),
-    [incidentTableColumns],
-  );
+  const memoizedColumns = useMemo(() => {
+    const tempReactTableColumns = getReactTableColumnSchemas(incidentTableColumns).map((col) => {
+      // Monkeypatch for i18n
+      const tempCol = { ...col };
+      tempCol.Header = i18next.t(col.Header);
+      return tempCol;
+    });
+    return tempReactTableColumns;
+  }, [incidentTableColumns, currentUserLocale]);
 
   const scrollBarSize = useMemo(() => scrollbarWidth(), []);
 
@@ -320,6 +331,7 @@ const mapStateToProps = (state) => ({
   incidentActions: state.incidentActions,
   incidents: state.incidents,
   querySettings: state.querySettings,
+  users: state.users,
 });
 
 const mapDispatchToProps = (dispatch) => ({

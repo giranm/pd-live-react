@@ -2,6 +2,8 @@ import {
   put, call, select, takeLatest, take,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   pd,
 } from 'util/pd-api-wrapper';
@@ -90,7 +92,7 @@ export function* checkConnectionStatusImpl() {
       yield put({
         type: UPDATE_CONNECTION_STATUS_COMPLETED,
         connectionStatus: 'positive',
-        connectionStatusMessage: 'Connected',
+        connectionStatusMessage: i18next.t('Connected'),
       });
     }
   } else if (!abilities.includes(PD_REQUIRED_ABILITY)) {
@@ -113,7 +115,7 @@ export function* checkAbilitiesAsync() {
       status,
     } = response;
     if (status !== 200) {
-      throw Error('Unable to fetch account abilities');
+      throw Error(i18next.t('Unable to fetch account abilities'));
     }
     const abilities = response.resource;
     yield put({ type: CHECK_ABILITIES_COMPLETED, abilities });
@@ -125,7 +127,7 @@ export function* checkAbilitiesAsync() {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: CHECK_ABILITIES_ERROR, message: e.message });
     yield updateConnectionStatusRequested('neutral', e.message);

@@ -5,6 +5,8 @@ import {
 } from '@braintree/sanitize-url';
 import validator from 'validator';
 
+import 'i18n.js';
+
 import {
   mockStore, componentWrapper,
 } from 'mocks/store.test';
@@ -66,6 +68,9 @@ describe('IncidentTableComponent', () => {
       },
       querySettings: {
         displayConfirmQueryModal: false,
+      },
+      users: {
+        currentUserLocale: 'en-GB',
       },
     };
   });

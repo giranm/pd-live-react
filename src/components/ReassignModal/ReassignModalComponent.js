@@ -12,6 +12,10 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayReassignModal as toggleDisplayReassignModalConnected,
   reassign as reassignConnected,
 } from 'redux/incident_actions/actions';
@@ -28,6 +32,9 @@ const ReassignModalComponent = ({
   toggleDisplayReassignModal,
   reassign,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     displayReassignModal,
   } = incidentActions;
@@ -64,7 +71,7 @@ const ReassignModalComponent = ({
         }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Reassign To</Modal.Title>
+          <Modal.Title>{t('Reassign To')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -75,7 +82,7 @@ const ReassignModalComponent = ({
               }}
               components={animatedComponents}
               options={selectListAssignments}
-              placeholder="Search for Escalation Policy or User"
+              placeholder={t('Search for Escalation Policy or User')}
             />
           </Form>
         </Modal.Body>
@@ -89,7 +96,7 @@ const ReassignModalComponent = ({
               reassign(selectedRows, assignment);
             }}
           >
-            Reassign
+            {t('Reassign')}
           </Button>
           <Button
             variant="light"
@@ -98,7 +105,7 @@ const ReassignModalComponent = ({
               toggleDisplayReassignModal();
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </Modal.Footer>
       </Modal>

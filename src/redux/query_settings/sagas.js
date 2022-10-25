@@ -2,6 +2,8 @@ import {
   put, select, takeLatest, call, debounce,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   pd,
 } from 'util/pd-api-wrapper';
@@ -255,7 +257,7 @@ export function* validateIncidentQueryImpl() {
 
     const response = yield call(pd.get, 'incidents', { data: { ...params } });
     if (response.status !== 200) {
-      throw Error('Unable to fetch incidents');
+      throw Error(i18next.t('Unable to fetch incidents'));
     }
 
     const totalIncidentsFromQuery = response.data.total;
@@ -274,7 +276,7 @@ export function* validateIncidentQueryImpl() {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,
