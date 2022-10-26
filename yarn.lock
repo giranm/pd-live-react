@@ -1429,25 +1429,25 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@datadog/browser-core@4.22.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.22.0.tgz#366ecf2f15ec50c5c785f837e0b5a40abb0dd2a6"
-  integrity sha512-hMkplkHUpzA468m3OTNEjomZOYhb+Z42YfKf19AO0cARmp3Df7BKFREBt7UkQla7PVXWdcIDPQ5dAk72zD12xA==
+"@datadog/browser-core@4.23.1":
+  version "4.23.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.23.1.tgz#a7fe5c70613459f35e42d3830c52324dec9bc057"
+  integrity sha512-qPM3tnOwAw9BUL1b9KZ4yFQTQ8Z4vRKujnwS1c/EgQ/yzXltNLfphGi+Kn6wUzKP1QlwmERXUPKL7S+QXnc88Q==
 
-"@datadog/browser-rum-core@4.22.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.22.0.tgz#b348e7a039364bccbead4bb92f21c11db4117ea5"
-  integrity sha512-Y7iB/M9Y9YbwIhR6KpkRnhX1JKPg4R66HufwHX+8Ca1/cp0JKS01GcRCij/NoMJyowQJuyXDRksX1T/y5stwzQ==
+"@datadog/browser-rum-core@4.23.1":
+  version "4.23.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.23.1.tgz#b79d2ad4e855d75969fc4981a55d9d4ffde969d4"
+  integrity sha512-IaJ4KDe7hl4Qf5+O2Dl+i1DNrhaHhSE8h3jrunecrx/su4tDVL4OoOPTsA1wiZwVia31hkoyW/LhMzGmgMUFyQ==
   dependencies:
-    "@datadog/browser-core" "4.22.0"
+    "@datadog/browser-core" "4.23.1"
 
-"@datadog/browser-rum@^4.22.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.22.0.tgz#d7ef0f4792771a8995df87308d3f335b12a952be"
-  integrity sha512-WKiCd0VvnjnRQg/hBua6PapeCd0ZL6vfdNullXp5ynx3n4VuWNW91HAmoCagNu5v7rsKWqHQyEKsWHWnrnVrsA==
+"@datadog/browser-rum@^4.23.1":
+  version "4.23.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.23.1.tgz#7f99a372b9917db92fe1f6f58b4a2668de718aa6"
+  integrity sha512-kWZaRpGqXWAPdBdjKD8nC2TRJQSq2Tc98vSc5b0bdXN0xugGq3Ptf79gz4kXyhQGMGLFLO70J/DKEBepXkGLfw==
   dependencies:
-    "@datadog/browser-core" "4.22.0"
-    "@datadog/browser-rum-core" "4.22.0"
+    "@datadog/browser-core" "4.23.1"
+    "@datadog/browser-rum-core" "4.23.1"
 
 "@emotion/babel-plugin@^11.7.1":
   version "11.9.2"
