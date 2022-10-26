@@ -68,6 +68,7 @@ import {
   PD_REQUIRED_ABILITY,
   LOG_ENTRIES_POLLING_INTERVAL_SECONDS,
   LOG_ENTRIES_CLEARING_INTERVAL_SECONDS,
+  DEBUG_DISABLE_POLLING,
 } from 'config/constants';
 
 import 'App.scss';
@@ -152,6 +153,7 @@ const App = ({
             && !fetchingIncidentNotes
             && !fetchingIncidentAlerts
             && !refreshingIncidents
+            && !DEBUG_DISABLE_POLLING
           ) {
             if (useLastFetchDate) {
               getLogEntriesAsync(lastFetchDate);

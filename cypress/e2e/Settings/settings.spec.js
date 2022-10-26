@@ -41,12 +41,18 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
     waitForIncidentTable();
   });
 
+  it('Change user locale to fr', () => {
+    const localeName = 'Français';
+
+    updateUserLocale(localeName,'Settings', 'User Profile', 'Update User Profile', 'Paramètres du profil utilisateur mis à jour');
+  });
+
   it('Change user locale to en-US', () => {
     const localeName = 'English (United States)';
     const expectedSinceDateFormat = moment().subtract(1, 'days').format('L');
     const expectedIncidentDateFormat = moment().format('LL');
 
-    updateUserLocale(localeName);
+    updateUserLocale(localeName,'Paramètres', 'Profil utilisateur', 'Mettre à jour le profil utilisateur', 'Updated user profile settings');
     cy.get('#query-date-input').should('have.value', expectedSinceDateFormat);
     cy.get('[data-incident-header="Created At"][data-incident-row-cell-idx="0"]')
       .should('be.visible')

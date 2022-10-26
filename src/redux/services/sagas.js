@@ -2,6 +2,8 @@ import {
   put, call, takeLatest,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   pd,
 } from 'util/pd-api-wrapper';
@@ -32,7 +34,7 @@ export function* getServices(action) {
 
     const response = yield call(pd.all, 'services', { data: { ...params } });
     if (response.status !== 200) {
-      throw Error('Unable to fetch services');
+      throw Error(i18next.t('Unable to fetch services'));
     }
 
     yield put({
@@ -45,7 +47,7 @@ export function* getServices(action) {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({ type: FETCH_SERVICES_ERROR, message: e.message });
     yield put({

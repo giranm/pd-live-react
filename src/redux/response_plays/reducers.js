@@ -50,7 +50,7 @@ const responsePlays = produce(
   {
     responsePlays: [],
     responsePlayRequests: [],
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },

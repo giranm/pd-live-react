@@ -1,3 +1,5 @@
+import 'i18n.js';
+
 import {
   mockStore, componentWrapper,
 } from 'mocks/store.test';
@@ -32,9 +34,9 @@ describe('ConfirmQueryModalComponent', () => {
     );
     expect(wrapper.find('.modal-body').at(0).getDOMNode().textContent).toEqual(
       [
-        `Current query parameters match\u00A0${totalIncidentsFromQuery}\u00A0incidents.`,
-        `Only the first\u00A0${limit}\u00A0incidents will be retrieved.Continue?`,
-      ].join(''),
+        `Current query parameters match ${totalIncidentsFromQuery} incidents.`,
+        `Only the first ${limit} incidents will be retrieved. Continue?`,
+      ].join(' '),
     );
   });
 });

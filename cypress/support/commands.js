@@ -23,3 +23,9 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Ref: https://stackoverflow.com/a/67301763
+Cypress.Commands.add('requestsCountByUrl', (url) => cy.wrap().then(() => {
+  const requests = cy.state('requests') || [];
+  return requests.filter((req) => req.xhr.url === url).length;
+}));

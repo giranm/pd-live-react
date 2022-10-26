@@ -12,6 +12,10 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayAddResponderModal as toggleDisplayAddResponderModalConnected,
   addResponder as addResponderConnected,
 } from 'redux/incident_actions/actions';
@@ -25,15 +29,22 @@ const AddResponderModalComponent = ({
   incidentTable,
   escalationPolicies,
   users,
+  currentUser,
   toggleDisplayAddResponderModal,
   addResponder,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     displayAddResponderModal,
   } = incidentActions;
   const {
     selectedRows,
   } = incidentTable;
+  const {
+    id: currentUserId,
+  } = currentUser;
 
   const messageMaxChars = 110;
 
@@ -67,12 +78,12 @@ const AddResponderModalComponent = ({
         }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Responders</Modal.Title>
+          <Modal.Title>{t('Add Responders')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group>
-              <Form.Label>Responders</Form.Label>
+              <Form.Label>{t('Responders')}</Form.Label>
               <Select
                 id="add-responders-select"
                 onChange={(selectedTargets) => {
@@ -80,7 +91,7 @@ const AddResponderModalComponent = ({
                 }}
                 components={animatedComponents}
                 options={selectListResponderRequestTargets}
-                placeholder="Search for Escalation Policies and/or Users"
+                placeholder={t('Search for Escalation Policies and/or Users')}
                 isMulti
               />
             </Form.Group>
@@ -89,7 +100,7 @@ const AddResponderModalComponent = ({
               <Form.Control
                 id="add-responders-textarea"
                 as="textarea"
-                placeholder="Provide brief message for additional responders"
+                placeholder={t('Provide brief message for additional responders')}
                 minLength={1}
                 maxLength={messageMaxChars}
                 onChange={(e) => {
@@ -97,7 +108,8 @@ const AddResponderModalComponent = ({
                 }}
               />
               <div className="add-responder-message-remaining-chars">
-                {`${messageMaxChars - message.length} characters remaining`}
+                {`${messageMaxChars - message.length} `}
+                {t('characters remaining')}
               </div>
             </Form.Group>
           </Form>
@@ -109,10 +121,10 @@ const AddResponderModalComponent = ({
             disabled={responderRequestTargets.length === 0}
             onClick={() => {
               setResponderRequestTargets([]);
-              addResponder(selectedRows, responderRequestTargets, message);
+              addResponder(selectedRows, currentUserId, responderRequestTargets, message);
             }}
           >
-            Add Responder(s)
+            {t('Add Responders')}
           </Button>
           <Button
             variant="light"
@@ -121,7 +133,7 @@ const AddResponderModalComponent = ({
               toggleDisplayAddResponderModal();
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -134,12 +146,13 @@ const mapStateToProps = (state) => ({
   incidentTable: state.incidentTable,
   escalationPolicies: state.escalationPolicies.escalationPolicies,
   users: state.users.users,
+  currentUser: state.users.currentUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   toggleDisplayAddResponderModal: () => dispatch(toggleDisplayAddResponderModalConnected()),
-  addResponder: (incidents, responderRequestTargets, message) => {
-    dispatch(addResponderConnected(incidents, responderRequestTargets, message));
+  addResponder: (incidents, requesterId, responderRequestTargets, message) => {
+    dispatch(addResponderConnected(incidents, requesterId, responderRequestTargets, message));
   },
 });
 

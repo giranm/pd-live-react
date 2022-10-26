@@ -33,7 +33,7 @@ describe('Sagas: Users', () => {
       .hasFinalState({
         users: [],
         usersMap: {},
-        currentUser: null,
+        currentUser: { id: '' },
         currentUserLocale: locale,
         userAuthorized: false,
         userAcceptedDisclaimer: false,

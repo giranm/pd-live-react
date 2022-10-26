@@ -7,12 +7,19 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   userAcceptDisclaimer as userAcceptDisclaimerConnected,
 } from 'redux/users/actions';
 
 const UnauthorizedModalComponent = ({
   users, userAcceptDisclaimer,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     userAuthorized,
   } = users;
@@ -29,12 +36,14 @@ const UnauthorizedModalComponent = ({
         }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Unauthorized Access</Modal.Title>
+          <Modal.Title>{t('Unauthorized Access')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-            User is not permitted to access this instance of PagerDuty Live. Please contact the
-            associated site owner for access.
+            {t('User is not permitted to access this instance of PagerDuty Live')}
+            {'. '}
+            {t('Please contact the associated site owner for access')}
+            .
           </p>
         </Modal.Body>
       </Modal>

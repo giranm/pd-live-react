@@ -2,6 +2,8 @@ import {
   put, select, takeLatest, call, debounce,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   pd,
 } from 'util/pd-api-wrapper';
@@ -26,6 +28,10 @@ import {
 import {
   GET_USERS_REQUESTED,
 } from 'redux/users/actions';
+
+import {
+  DEBUG_SINCE_DATE, DEBUG_UNTIL_DATE,
+} from 'config/constants';
 
 import {
   TOGGLE_DISPLAY_QUERY_SETTINGS_REQUESTED,
@@ -237,8 +243,8 @@ export function* validateIncidentQueryImpl() {
     } = yield select(selectQuerySettings);
 
     const params = {
-      since: sinceDate.toISOString(),
-      until: new Date().toISOString(),
+      since: DEBUG_SINCE_DATE ? new Date(DEBUG_SINCE_DATE).toISOString() : sinceDate.toISOString(),
+      until: DEBUG_UNTIL_DATE ? new Date(DEBUG_UNTIL_DATE).toISOString() : new Date().toISOString(),
       limit: 1,
       total: true,
     };
@@ -251,7 +257,7 @@ export function* validateIncidentQueryImpl() {
 
     const response = yield call(pd.get, 'incidents', { data: { ...params } });
     if (response.status !== 200) {
-      throw Error('Unable to fetch incidents');
+      throw Error(i18next.t('Unable to fetch incidents'));
     }
 
     const totalIncidentsFromQuery = response.data.total;
@@ -270,7 +276,7 @@ export function* validateIncidentQueryImpl() {
   } catch (e) {
     // Handle API auth failure
     if (e.status === 401) {
-      e.message = 'Unauthorized Access';
+      e.message = i18next.t('Unauthorized Access');
     }
     yield put({
       type: UPDATE_CONNECTION_STATUS_REQUESTED,

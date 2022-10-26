@@ -46,7 +46,7 @@ const PersonInitialsComponent = ({
             overlay={<Tooltip id={`tooltip-${user.id}`}>{user.summary}</Tooltip>}
           >
             <div
-              idx={user.id}
+              data-user-id={user.id}
               style={{
                 backgroundColor: user.color,
                 height: '32px',

@@ -30,7 +30,7 @@ const teams = produce(
   },
   {
     teams: [],
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },

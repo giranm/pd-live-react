@@ -32,7 +32,7 @@ const priorities = produce(
   },
   {
     priorities: [],
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },

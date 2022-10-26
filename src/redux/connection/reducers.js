@@ -1,4 +1,5 @@
 import produce from 'immer';
+import i18next from 'i18n';
 
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
@@ -50,7 +51,7 @@ const connection = produce(
   },
   {
     connectionStatus: 'dormant',
-    connectionStatusMessage: 'Connecting',
+    connectionStatusMessage: i18next.t('Connecting'),
     abilities: [],
     status: '',
   },

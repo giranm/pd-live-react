@@ -32,7 +32,7 @@ const escalationPolicies = produce(
   },
   {
     escalationPolicies: [],
-    status: null,
+    status: '',
     fetchingData: false,
     error: null,
   },
