@@ -87,7 +87,7 @@ const AuthComponent = (props) => {
           size="lg"
           onClick={() => window.location.assign(authURL)}
         >
-          Sign In
+          {t('Sign In')}
         </Button>
       </Form>
     </div>
