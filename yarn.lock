@@ -5008,10 +5008,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
-cy2@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/cy2/-/cy2-3.1.4.tgz#ee90b72fbab20cb9cd218177fb8b05314c62f7cd"
-  integrity sha512-LvqdiEbCYK+k7llElyouynluw7j2s6kMC3aY0FKeAf+p3ceTsblRer9QNCxcH1eActj1W9ZbM8QFN24zWqSqsw==
+cy2@^3.1.7:
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/cy2/-/cy2-3.1.7.tgz#e1b9514b924b3c2dea5332b0783fc4e3375c985a"
+  integrity sha512-JOcwkcNU/41v+cBMvnRgIfVgn8ul4bgRkdPWsmy0JwsbcIVRdPwAxrrtBtYbsz/BH+wBfzWYO3NpwQkZOiQq8w==
   dependencies:
     acorn "^8.8.0"
     debug "^4.3.2"
@@ -5019,6 +5019,7 @@ cy2@^3.1.4:
     estraverse "^5.3.0"
     js-yaml "^4.1.0"
     npm-which "^3.0.1"
+    slash "3.0.0"
 
 cypress-fail-fast@^5.0.1:
   version "5.0.1"
@@ -11870,7 +11871,7 @@ sisteransi@^1.0.5:
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==
 
-slash@^3.0.0:
+slash@3.0.0, slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
