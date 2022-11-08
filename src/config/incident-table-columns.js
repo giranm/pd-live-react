@@ -377,7 +377,7 @@ export const availableIncidentTableColumns = [
       } else if (incident.notes && incident.notes.length === 0) {
         content = '--';
       } else {
-        content = 'Fetching notes ...';
+        content = `${i18next.t('Fetching Notes')} ...`;
       }
       return content;
     },
@@ -447,7 +447,7 @@ export const availableAlertTableColumns = [
       } else if (incident.alerts) {
         content = '--';
       } else {
-        content = 'Fetching alerts ...';
+        content = `${i18next.t('Fetching Alerts')} ...`;
       }
       return content;
     },
@@ -516,7 +516,7 @@ export const availableAlertTableColumns = [
       } else if (incident.alerts) {
         content = '--';
       } else {
-        content = 'Fetching alerts ...';
+        content = `${i18next.t('Fetching Alerts')} ...`;
       }
       return content;
     },
@@ -543,7 +543,7 @@ export const availableAlertTableColumns = [
       } else if (incident.alerts) {
         content = '--';
       } else {
-        content = 'Fetching alerts ...';
+        content = `${i18next.t('Fetching Alerts')} ...`;
       }
       return content;
     },
@@ -570,7 +570,7 @@ export const availableAlertTableColumns = [
       } else if (incident.alerts) {
         content = '--';
       } else {
-        content = 'Fetching alerts ...';
+        content = `${i18next.t('Fetching Alerts')} ...`;
       }
       return content;
     },
@@ -597,7 +597,7 @@ export const availableAlertTableColumns = [
       } else if (incident.alerts) {
         content = '--';
       } else {
-        content = 'Fetching alerts ...';
+        content = `${i18next.t('Fetching Alerts')} ...`;
       }
       return content;
     },
