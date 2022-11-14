@@ -42,7 +42,7 @@ module.exports = {
   lineEnding: 'auto',
   // Control the line ending. See options at https://github.com/ryanve/eol
 
-  locales: ['en', 'fr', 'es', 'de', 'ja', 'id'],
+  locales: ['en', 'fr', 'es', 'de', 'ja', 'id', 'pt', 'pt-br'],
   // An array of the locales in your applications
 
   namespaceSeparator: ':',
