@@ -52,7 +52,7 @@
     "styled-components": "^5.3.6",
     "use-debounce": "^8.0.4",
     "validator": "^13.7.0",
-    "web-vitals": "^3.0.3"
+    "web-vitals": "^3.1.0"
   },
   "resolutions": {
     "autoprefixer": "10.4.5"
