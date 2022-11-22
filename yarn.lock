@@ -5010,10 +5010,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
-cy2@^3.1.7:
-  version "3.1.7"
-  resolved "https://registry.yarnpkg.com/cy2/-/cy2-3.1.7.tgz#e1b9514b924b3c2dea5332b0783fc4e3375c985a"
-  integrity sha512-JOcwkcNU/41v+cBMvnRgIfVgn8ul4bgRkdPWsmy0JwsbcIVRdPwAxrrtBtYbsz/BH+wBfzWYO3NpwQkZOiQq8w==
+cy2@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/cy2/-/cy2-3.2.0.tgz#a90ed0f111267e6c266b2017ed06699e3c1b5cc9"
+  integrity sha512-QUYvEVHHGKS0CCXWrDBRUo7pJx4aeRCXazORRybUbuQcclPtngRmrE6CYjNLzJ7rRYbny60jeNBAVMfnYJ2J5A==
   dependencies:
     acorn "^8.8.0"
     debug "^4.3.2"
