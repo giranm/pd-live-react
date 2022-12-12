@@ -6,9 +6,16 @@ import {
   connect,
 } from 'react-redux';
 
+import {
+  useTranslation,
+} from 'react-i18next';
+
 const SelectedIncidentsComponent = ({
   incidents, incidentTable, querySettings,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     fetchingIncidents,
     fetchingIncidentNotes,
@@ -40,15 +47,15 @@ const SelectedIncidentsComponent = ({
           {`${selectedCount}/${filteredIncidentsByQuery.length}`}
         </Badge>
       </h4>
-      <p className="selected-incidents">Selected</p>
+      <p className="selected-incidents">{t('Selected')}</p>
     </div>
   );
 
   const cancelledQueryRender = (
     <div className="selected-incidents-ctr">
       <h4>
-        <Badge className="selected-incidents-badge" bg="warning">
-          N/A
+        <Badge className="selected-incidents-badge" variant="warning">
+          {t('N/A')}
         </Badge>
       </h4>
     </div>
@@ -59,19 +66,19 @@ const SelectedIncidentsComponent = ({
   }
 
   if (fetchingIncidents) {
-    return fetchingDataRender('success', 'Querying');
+    return fetchingDataRender('success', t('Querying'));
   }
 
   if (fetchingIncidentNotes) {
-    return fetchingDataRender('primary', 'Fetching Notes');
+    return fetchingDataRender('primary', t('Fetching Notes'));
   }
 
   if (fetchingIncidentAlerts) {
-    return fetchingDataRender('info', 'Fetching Alerts');
+    return fetchingDataRender('info', t('Fetching Alerts'));
   }
 
   if (refreshingIncidents) {
-    return fetchingDataRender('success', 'Refreshing');
+    return fetchingDataRender('success', t('Refreshing'));
   }
 
   if (

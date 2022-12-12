@@ -1,3 +1,5 @@
+import 'i18n.js';
+
 import {
   shallow,
 } from 'enzyme';

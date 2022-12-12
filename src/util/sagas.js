@@ -2,6 +2,8 @@ import {
   put,
 } from 'redux-saga/effects';
 
+import i18next from 'i18n';
+
 import {
   TOGGLE_DISPLAY_ACTION_ALERTS_MODAL_REQUESTED,
   UPDATE_ACTION_ALERTS_MODAL_REQUESTED,
@@ -12,7 +14,9 @@ import {
 } from 'redux/connection/actions';
 
 // eslint-disable-next-line max-len
-export const MISSING_ABILITY_ERROR = 'Current subdomain does not have the correct ability to use PagerDuty Live';
+export const MISSING_ABILITY_ERROR = i18next.t(
+  'Current subdomain does not have the correct ability to use PagerDuty Live',
+);
 
 // Helper function to handle errors while processing saga
 export function* handleSagaError(action, exception) {
@@ -25,7 +29,7 @@ export const handleSingleAPIErrorResponse = (response) => {
   if (response.data.error) {
     throw Error(response.data.error.message);
   } else {
-    throw Error('Unknown error while using PD API');
+    throw Error(i18next.t('Unknown error while using PD API'));
   }
 };
 
@@ -36,7 +40,7 @@ export const handleMultipleAPIErrorResponses = (responses) => {
   if (errors.length) {
     throw Error(errors);
   } else {
-    throw Error('Unknown error while using PD API');
+    throw Error(i18next.t('Unknown error while using PD API'));
   }
 };
 

@@ -7,6 +7,10 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   toggleDisplayConfirmQueryModal as toggleDisplayConfirmQueryModalConnected,
   confirmIncidentQuery as confirmIncidentQueryConnected,
 } from 'redux/query_settings/actions';
@@ -17,6 +21,9 @@ const ConfirmQueryModalComponent = ({
   toggleDisplayConfirmQueryModal,
   confirmIncidentQuery,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     maxIncidentsLimit,
   } = settings;
@@ -33,19 +40,18 @@ const ConfirmQueryModalComponent = ({
     <div className="confirm-query-modal-ctr">
       <Modal show={displayConfirmQueryModal} onHide={handleCancel}>
         <Modal.Header closeButton>
-          <Modal.Title>Max Incidents Limit Reached</Modal.Title>
+          <Modal.Title>{t('Max Incidents Limit Reached')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Current query parameters match&nbsp;
-          {totalIncidentsFromQuery}
-          &nbsp;incidents.
+          {t('Current query parameters match X incidents', { totalIncidentsFromQuery })}
+          {'. '}
           <br />
-          Only the first&nbsp;
-          {maxIncidentsLimit}
-          &nbsp;incidents will be retrieved.
+          {t('Only the first X incidents will be retrieved', { maxIncidentsLimit })}
+          {'. '}
           <br />
           <br />
-          Continue?
+          {t('Continue')}
+          ?
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -56,10 +62,10 @@ const ConfirmQueryModalComponent = ({
               toggleDisplayConfirmQueryModal();
             }}
           >
-            Retrieve Incidents
+            {t('Retrieve Incidents')}
           </Button>
           <Button id="cancel-incident-query-button" variant="danger" onClick={handleCancel}>
-            Cancel
+            {t('Cancel')}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -4,6 +4,10 @@ import {
 } from 'react-bootstrap';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   FontAwesomeIcon,
 } from '@fortawesome/react-fontawesome';
 import {
@@ -27,14 +31,17 @@ const InternalStatusComponent = (tooltip, variant, icon) => (
 const StatusComponent = ({
   status,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   if (status === TRIGGERED) {
-    return InternalStatusComponent('Triggered', 'danger', faExclamationTriangle);
+    return InternalStatusComponent(t('Triggered'), 'danger', faExclamationTriangle);
   }
   if (status === ACKNOWLEDGED) {
-    return InternalStatusComponent('Acknowledged', 'warning', faShieldAlt);
+    return InternalStatusComponent(t('Acknowledged'), 'warning', faShieldAlt);
   }
   if (status === RESOLVED) {
-    return InternalStatusComponent('Resolved', 'success', faCheckCircle);
+    return InternalStatusComponent(t('Resolved'), 'success', faCheckCircle);
   }
 };
 

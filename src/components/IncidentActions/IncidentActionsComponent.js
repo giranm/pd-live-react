@@ -8,6 +8,10 @@ import {
 } from 'react-redux';
 
 import {
+  useTranslation,
+} from 'react-i18next';
+
+import {
   Container,
   Row,
   Col,
@@ -60,9 +64,9 @@ import {
   TRIGGERED,
   ACKNOWLEDGED,
   RESOLVED,
-  SNOOZE_TIMES,
-  filterIncidentsByField,
   HIGH,
+  getSnoozeTimes,
+  filterIncidentsByField,
 } from 'util/incidents';
 
 import {
@@ -97,6 +101,9 @@ const IncidentActionsComponent = ({
   runResponsePlayAsync,
   syncWithExternalSystem,
 }) => {
+  const {
+    t,
+  } = useTranslation();
   const {
     selectedCount, selectedRows,
   } = incidentTable;
@@ -136,6 +143,7 @@ const IncidentActionsComponent = ({
   }, [enableEscalationAction]);
 
   // Create internal state for snooze - disable toggle irrespective of actions
+  const snoozeTimes = getSnoozeTimes();
   const [displaySnooze, toggleSnooze] = useState(false);
   useEffect(() => {
     toggleSnooze(false);
@@ -224,7 +232,7 @@ const IncidentActionsComponent = ({
               <div className="action-icon">
                 <FontAwesomeIcon icon={faShieldAlt} />
               </div>
-              Acknowledge
+              {t('Acknowledge')}
             </Button>
             <DropdownButton
               id="incident-action-escalate-button"
@@ -237,7 +245,7 @@ const IncidentActionsComponent = ({
                   <div className="action-icon">
                     <FontAwesomeIcon icon={faLevelUpAlt} />
                   </div>
-                  Escalate
+                  {t('Escalate')}
                 </>
               )}
               disabled={enableEscalationAction}
@@ -253,7 +261,7 @@ const IncidentActionsComponent = ({
                     onClick={() => escalate(selectedRows, escalationLevel)}
                   >
                     {`Level ${escalationLevel}: ${escalation_rule.targets
-                      .map((t) => t.summary)
+                      .map((target) => target.summary)
                       .join(', ')}`}
                   </Dropdown.Item>
                 );
@@ -269,7 +277,7 @@ const IncidentActionsComponent = ({
               <div className="action-icon">
                 <FontAwesomeIcon icon={faExchangeAlt} />
               </div>
-              Reassign
+              {t('Reassign')}
             </Button>
             <Button
               id="incident-action-add-responders-button"
@@ -281,7 +289,7 @@ const IncidentActionsComponent = ({
               <div className="action-icon">
                 <FontAwesomeIcon icon={faUserPlus} />
               </div>
-              Add Responders
+              {t('Add Responders')}
             </Button>
             <DropdownButton
               id="incident-action-snooze-button"
@@ -294,20 +302,20 @@ const IncidentActionsComponent = ({
                   <div className="action-icon">
                     <FontAwesomeIcon icon={faClock} />
                   </div>
-                  Snooze
+                  {t('Snooze')}
                 </>
               )}
               disabled={enableActions}
               onClick={() => toggleSnooze(!displaySnooze)}
             >
-              {Object.keys(SNOOZE_TIMES).map((duration) => (
+              {Object.keys(snoozeTimes).map((duration) => (
                 <Dropdown.Item
                   id={`snooze-duration-${duration}-button`}
                   key={duration}
                   variant="light"
                   onClick={() => snooze(selectedRows, duration)}
                 >
-                  {duration}
+                  {snoozeTimes[duration].i18n}
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />
@@ -315,7 +323,7 @@ const IncidentActionsComponent = ({
                 id="snooze-duration-custom-modal-button"
                 onClick={() => toggleDisplayCustomSnoozeModal()}
               >
-                Custom
+                {t('Custom')}
               </Dropdown.Item>
             </DropdownButton>
             <Button
@@ -328,8 +336,22 @@ const IncidentActionsComponent = ({
               <div className="action-icon">
                 <FontAwesomeIcon icon={faLayerGroup} />
               </div>
-              Merge
+              {t('Merge')}
             </Button>
+            <Button
+              id="incident-action-resolve-button"
+              className="action-button"
+              variant={enableActions ? 'outline-secondary' : 'light'}
+              disabled={enableActions}
+              onClick={() => resolve(selectedRows)}
+            >
+              <div className="action-icon">
+                <FontAwesomeIcon icon={faCheckCircle} />
+              </div>
+              {t('Resolve')}
+            </Button>
+          </Col>
+          <Col sm={{ span: 3.5 }}>
             <DropdownButton
               id="incident-action-update-priority-button"
               as={ButtonGroup}
@@ -341,7 +363,7 @@ const IncidentActionsComponent = ({
                   <div className="action-icon">
                     <FontAwesomeIcon icon={faExclamation} />
                   </div>
-                  Update Priority
+                  {t('Update Priority')}
                 </>
               )}
               disabled={enablePriorityAction}
@@ -376,7 +398,7 @@ const IncidentActionsComponent = ({
               <div className="action-icon">
                 <FontAwesomeIcon icon={faEdit} />
               </div>
-              Add Note
+              {t('Add Note')}
             </Button>
             <DropdownButton
               id="incident-action-run-action-button"
@@ -389,7 +411,7 @@ const IncidentActionsComponent = ({
                   <div className="action-icon">
                     <FontAwesomeIcon icon={faPlay} />
                   </div>
-                  Run Action
+                  {t('Run Action')}
                 </>
               )}
               align="end"
@@ -403,7 +425,7 @@ const IncidentActionsComponent = ({
             >
               {selectListResponsePlays.length > 0 ? (
                 <>
-                  <Dropdown.Header>Response Plays</Dropdown.Header>
+                  <Dropdown.Header>{t('Response Plays')}</Dropdown.Header>
                   <Dropdown.Item>
                     <Select
                       id="response-play-select"
@@ -415,6 +437,7 @@ const IncidentActionsComponent = ({
                         runResponsePlayAsync(selectedRows, selectedResponsePlay);
                         toggleRunActions(!displayRunActions);
                       }}
+                      placeholder={`${t('Select dotdotdot')}`}
                     />
                   </Dropdown.Item>
                   <Dropdown.Divider />
@@ -424,7 +447,7 @@ const IncidentActionsComponent = ({
               )}
               {customIncidentActions.length > 0 ? (
                 <>
-                  <Dropdown.Header>Actions</Dropdown.Header>
+                  <Dropdown.Header>{t('Actions')}</Dropdown.Header>
                   {customIncidentActions.map((customIncidentAction) => (
                     <Dropdown.Item
                       id={`custom-incident-action-${customIncidentAction.name}-button`}
@@ -444,7 +467,7 @@ const IncidentActionsComponent = ({
               )}
               {externalSystems.length > 0 ? (
                 <>
-                  <Dropdown.Header>External Systems</Dropdown.Header>
+                  <Dropdown.Header>{t('External Systems')}</Dropdown.Header>
                   {externalSystems.map((externalSystem) => (
                     <Dropdown.Item
                       id={`external-system-${externalSystem.extension_label}-button`}
