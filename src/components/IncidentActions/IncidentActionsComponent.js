@@ -338,20 +338,6 @@ const IncidentActionsComponent = ({
               </div>
               {t('Merge')}
             </Button>
-            <Button
-              id="incident-action-resolve-button"
-              className="action-button"
-              variant={enableActions ? 'outline-secondary' : 'light'}
-              disabled={enableActions}
-              onClick={() => resolve(selectedRows)}
-            >
-              <div className="action-icon">
-                <FontAwesomeIcon icon={faCheckCircle} />
-              </div>
-              {t('Resolve')}
-            </Button>
-          </Col>
-          <Col sm={{ span: 3.5 }}>
             <DropdownButton
               id="incident-action-update-priority-button"
               as={ButtonGroup}
@@ -497,7 +483,7 @@ const IncidentActionsComponent = ({
               <div className="action-icon">
                 <FontAwesomeIcon icon={faCheckCircle} />
               </div>
-              Resolve
+              {t('Resolve')}
             </Button>
           </Col>
         </Row>
