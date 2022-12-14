@@ -5125,10 +5125,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
-cy2@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/cy2/-/cy2-3.2.0.tgz#a90ed0f111267e6c266b2017ed06699e3c1b5cc9"
-  integrity sha512-QUYvEVHHGKS0CCXWrDBRUo7pJx4aeRCXazORRybUbuQcclPtngRmrE6CYjNLzJ7rRYbny60jeNBAVMfnYJ2J5A==
+cy2@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/cy2/-/cy2-3.4.3.tgz#c61665a953256e22399804f69067bb407ca922da"
+  integrity sha512-I1yfJWJTRy2ROti1TlLM5Qk86WSeKMrtZbY/G6VD2tjm3VKTu6pDkpcV56C2HhN+txK5p6MMsmzKXJM2W9JlxA==
   dependencies:
     acorn "^8.8.0"
     debug "^4.3.2"
