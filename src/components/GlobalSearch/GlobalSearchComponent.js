@@ -37,11 +37,9 @@ const GlobalSearchComponent = ({
       <Row>
         <Col>
           <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text>
-                <SearchGlass />
-              </InputGroup.Text>
-            </InputGroup.Prepend>
+            <InputGroup.Text>
+              <SearchGlass />
+            </InputGroup.Text>
             <Form.Control
               id="global-search-input"
               placeholder={t('Search')}

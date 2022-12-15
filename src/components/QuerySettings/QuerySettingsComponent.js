@@ -186,7 +186,7 @@ const QuerySettingsComponent = ({
       <Accordion defaultActiveKey="0">
         <Accordion.Collapse id="query-settings-accordion" eventKey={eventKey}>
           <Container className="card bg-light query-settings-inner-ctr" fluid>
-            <Row>
+            <Row className="query-settings-row">
               <Col xs="auto">
                 {t('Since')}
                 {': '}
@@ -326,7 +326,7 @@ const QuerySettingsComponent = ({
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
+            <Row className="query-settings-row">
               <Col>
                 {t('Users')}
                 {': '}
