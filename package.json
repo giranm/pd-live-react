@@ -99,7 +99,7 @@
     "@cypress/react": "7.0.1",
     "@cypress/webpack-dev-server": "^3.2.2",
     "@faker-js/faker": "^7.6.0",
-    "cy2": "^3.4.3",
+    "cy2": "^4.0.3",
     "cypress": "^10.10.0",
     "cypress-fail-fast": "^7.0.0",
     "eslint": "^7.32.0",
