@@ -24,6 +24,7 @@ import ReassignModalComponent from 'components/ReassignModal/ReassignModalCompon
 import AddResponderModalComponent from 'components/AddResponderModal/AddResponderModalComponent';
 import MergeModalComponent from 'components/MergeModal/MergeModalComponent';
 import ConfirmQueryModalComponent from 'components/ConfirmQueryModal/ConfirmQueryModalComponent';
+import IncidentDetailsModalComponent from 'components/IncidentDetailsModal/IncidentDetailsModalComponent';
 
 import {
   refreshIncidentsAsync as refreshIncidentsAsyncConnected,
@@ -238,6 +239,7 @@ const App = ({
         <AddResponderModalComponent />
         <MergeModalComponent />
         <ConfirmQueryModalComponent />
+        <IncidentDetailsModalComponent />
       </Container>
     </div>
   );
