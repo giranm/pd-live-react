@@ -16,6 +16,8 @@ import {
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
   SET_MAX_INCIDENTS_LIMIT_REQUESTED,
   SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+  SET_MAX_RATE_LIMIT_REQUESTED,
+  SET_MAX_RATE_LIMIT_COMPLETED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
   SET_AUTO_REFRESH_INTERVAL_REQUESTED,
@@ -79,6 +81,20 @@ export function* setMaxIncidentsLimitImpl(action) {
   yield put({
     type: SET_MAX_INCIDENTS_LIMIT_COMPLETED,
     maxIncidentsLimit,
+  });
+}
+
+export function* setMaxRateLimit() {
+  yield takeLatest(SET_MAX_RATE_LIMIT_REQUESTED, setMaxRateLimitImpl);
+}
+
+export function* setMaxRateLimitImpl(action) {
+  const {
+    maxRateLimit,
+  } = action;
+  yield put({
+    type: SET_MAX_RATE_LIMIT_COMPLETED,
+    maxRateLimit,
   });
 }
 

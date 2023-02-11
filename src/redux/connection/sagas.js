@@ -28,6 +28,8 @@ import {
 import {
   UPDATE_CONNECTION_STATUS_REQUESTED,
   UPDATE_CONNECTION_STATUS_COMPLETED,
+  UPDATE_QUEUE_STATS_REQUESTED,
+  UPDATE_QUEUE_STATS_COMPLETED,
   CHECK_CONNECTION_STATUS_REQUESTED,
   CHECK_CONNECTION_STATUS_COMPLETED,
   CHECK_ABILITIES_REQUESTED,
@@ -47,6 +49,20 @@ export function* updateConnectionStatusImpl(action) {
     type: UPDATE_CONNECTION_STATUS_COMPLETED,
     connectionStatus,
     connectionStatusMessage,
+  });
+}
+
+export function* updateQueueStats() {
+  yield takeLatest(UPDATE_QUEUE_STATS_REQUESTED, updateQueueStatsImpl);
+}
+
+export function* updateQueueStatsImpl(action) {
+  const {
+    queueStats,
+  } = action;
+  yield put({
+    type: UPDATE_QUEUE_STATS_COMPLETED,
+    queueStats,
   });
 }
 
