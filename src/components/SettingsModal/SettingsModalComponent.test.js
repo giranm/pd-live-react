@@ -11,6 +11,8 @@ import {
 import {
   MAX_INCIDENTS_LIMIT_LOWER,
   MAX_INCIDENTS_LIMIT_UPPER,
+  MAX_RATE_LIMIT_LOWER,
+  MAX_RATE_LIMIT_UPPER,
   REFRESH_INTERVAL_LOWER,
   REFRESH_INTERVAL_UPPER,
 } from 'config/constants';
@@ -27,6 +29,7 @@ describe('SettingsModalComponent', () => {
         displaySettingsModal: true,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
+        maxRateLimit: MAX_RATE_LIMIT_LOWER,
         autoAcceptIncidentsQuery: false,
         autoRefreshInterval: REFRESH_INTERVAL_LOWER,
         alertCustomDetailFields: [
@@ -148,6 +151,22 @@ describe('SettingsModalComponent', () => {
     expect(
       wrapper
         .find('input#user-profile-max-incidents-limit-input')
+        .hasClass('form-control is-invalid'),
+    ).toBeTruthy();
+    expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();
+  });
+
+  it('should deactivate user profile update button for incorrect rate limit input', () => {
+    baseStore.settings.maxRateLimit = MAX_RATE_LIMIT_UPPER + 1;
+    store = mockStore(baseStore);
+    const wrapper = componentWrapper(store, SettingsModalComponent);
+    const tabSelector = 'a[data-rb-event-key="user-profile"]';
+    const tabElement = wrapper.find(tabSelector);
+    tabElement.simulate('click');
+
+    expect(
+      wrapper
+        .find('input#user-profile-max-rate-limit-input')
         .hasClass('form-control is-invalid'),
     ).toBeTruthy();
     expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();

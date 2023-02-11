@@ -111,13 +111,14 @@ import {
   setDefaultSinceDateTenor,
   setAlertCustomDetailColumns,
   setMaxIncidentsLimit,
+  setMaxRateLimit,
   setAutoAcceptIncidentsQuery,
   setAutoRefreshInterval,
   clearLocalCache,
 } from './settings/sagas';
 
 import {
-  updateConnectionStatus, checkConnectionStatus, checkAbilities,
+  updateConnectionStatus, checkConnectionStatus, checkAbilities, updateQueueStats,
 } from './connection/sagas';
 
 import {
@@ -224,6 +225,7 @@ export default function* rootSaga() {
     setDefaultSinceDateTenor(),
     setAlertCustomDetailColumns(),
     setMaxIncidentsLimit(),
+    setMaxRateLimit(),
     setAutoAcceptIncidentsQuery(),
     setAutoRefreshInterval(),
     clearLocalCache(),
@@ -231,6 +233,7 @@ export default function* rootSaga() {
     // Connection
     updateConnectionStatus(),
     checkConnectionStatus(),
+    updateQueueStats(),
     checkAbilities(),
 
     // Monitoring

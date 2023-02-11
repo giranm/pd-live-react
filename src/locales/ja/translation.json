@@ -119,6 +119,7 @@
   "response play for": "レスポンスプレイ対象",
   "Response Plays": "レスポンスプレイ",
   "Retrieve Incidents": "インシデントを取得",
+  "Retrieving notes and alerts could take a long time": "メモとアラートの取得には時間がかかる場合があります",
   "Run Action": "アクションを実行",
   "Search": "検索",
   "Search for Escalation Policies and/or Users": "エスカレーションポリシー及びユーザーを検索",
