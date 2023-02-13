@@ -14,9 +14,7 @@ const generateMockEscalationPolicy = () => {
   };
 };
 
-export const generateMockEscalationPolicies = (num) => Array.from(
-  { length: num }, () => generateMockEscalationPolicy(),
-);
+export const generateMockEscalationPolicies = (num) => Array.from({ length: num }, () => generateMockEscalationPolicy());
 
 export default generateMockEscalationPolicies;
 

@@ -22,7 +22,17 @@ const StatusBeaconComponent = ({
       <OverlayTrigger
         placement="bottom"
         // eslint-disable-next-line
-        overlay={<Tooltip className="status-beacon-connection"><>{i18next.t('Status')}: {connectionStatusMessage}<br/>{queueStatsStr}</></Tooltip>}
+        overlay={(
+          <Tooltip className="status-beacon-connection">
+            <>
+              {i18next.t('Status')}
+              :
+              {connectionStatusMessage}
+              <br />
+              {queueStatsStr}
+            </>
+          </Tooltip>
+        )}
       >
         <Beacon status={connectionStatus} speed="normal" size="1.2em" />
       </OverlayTrigger>

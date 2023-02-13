@@ -145,9 +145,7 @@ export function* getIncidents() {
 
     const {
       maxRateLimit,
-    } = yield select(
-      selectSettings,
-    );
+    } = yield select(selectSettings);
 
     const {
       incidentPriority, escalationPolicyIds, searchQuery,
@@ -194,9 +192,7 @@ export function* refreshIncidents() {
 
     const {
       maxRateLimit,
-    } = yield select(
-      selectSettings,
-    );
+    } = yield select(selectSettings);
 
     yield call(resetLimiterWithRateLimit, maxRateLimit);
     const incidents = yield getIncidentsImpl();
