@@ -9,6 +9,8 @@ import {
 import {
   MAX_INCIDENTS_LIMIT_LOWER,
   MAX_INCIDENTS_LIMIT_UPPER,
+  MAX_RATE_LIMIT_LOWER,
+  MAX_RATE_LIMIT_UPPER,
   REFRESH_INTERVAL_LOWER,
   REFRESH_INTERVAL_UPPER,
 } from 'config/constants';
@@ -21,6 +23,8 @@ import {
   SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
   SET_MAX_INCIDENTS_LIMIT_REQUESTED,
   SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+  SET_MAX_RATE_LIMIT_REQUESTED,
+  SET_MAX_RATE_LIMIT_COMPLETED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_REQUESTED,
   SET_AUTO_ACCEPT_INCIDENTS_QUERY_COMPLETED,
   SET_AUTO_REFRESH_INTERVAL_REQUESTED,
@@ -30,6 +34,7 @@ import {
   setDefaultSinceDateTenor,
   setAlertCustomDetailColumns,
   setMaxIncidentsLimit,
+  setMaxRateLimit,
   setAutoAcceptIncidentsQuery,
   setAutoRefreshInterval,
 } from './sagas';
@@ -51,7 +56,8 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: tenor,
         maxIncidentsLimit: 200,
-        autoAcceptIncidentsQuery: false,
+        maxRateLimit: 200,
+        autoAcceptIncidentsQuery: true,
         autoRefreshInterval: 5,
         alertCustomDetailFields: [
           {
@@ -86,7 +92,8 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: 200,
-        autoAcceptIncidentsQuery: false,
+        maxRateLimit: 200,
+        autoAcceptIncidentsQuery: true,
         autoRefreshInterval: 5,
         alertCustomDetailFields,
         status: SET_ALERT_CUSTOM_DETAIL_COLUMNS_COMPLETED,
@@ -112,7 +119,8 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit,
-        autoAcceptIncidentsQuery: false,
+        maxRateLimit: 200,
+        autoAcceptIncidentsQuery: true,
         autoRefreshInterval: 5,
         alertCustomDetailFields: [
           {
@@ -122,6 +130,39 @@ describe('Sagas: Settings', () => {
           },
         ],
         status: SET_MAX_INCIDENTS_LIMIT_COMPLETED,
+      })
+      .silentRun();
+  });
+  it('setMaxRateLimit', () => {
+    const maxRateLimit = faker.datatype.number({
+      min: MAX_RATE_LIMIT_LOWER,
+      max: MAX_RATE_LIMIT_UPPER,
+    });
+    return expectSaga(setMaxRateLimit)
+      .withReducer(settings)
+      .dispatch({
+        type: SET_MAX_RATE_LIMIT_REQUESTED,
+        maxRateLimit,
+      })
+      .put({
+        type: SET_MAX_RATE_LIMIT_COMPLETED,
+        maxRateLimit,
+      })
+      .hasFinalState({
+        displaySettingsModal: false,
+        defaultSinceDateTenor: '1 Day',
+        maxIncidentsLimit: 200,
+        maxRateLimit,
+        autoAcceptIncidentsQuery: true,
+        autoRefreshInterval: 5,
+        alertCustomDetailFields: [
+          {
+            label: 'Environment:details.env',
+            value: 'Environment:details.env',
+            columnType: 'alert',
+          },
+        ],
+        status: SET_MAX_RATE_LIMIT_COMPLETED,
       })
       .silentRun();
   });
@@ -141,6 +182,7 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: 200,
+        maxRateLimit: 200,
         autoAcceptIncidentsQuery,
         autoRefreshInterval: 5,
         alertCustomDetailFields: [
@@ -173,7 +215,8 @@ describe('Sagas: Settings', () => {
         displaySettingsModal: false,
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: 200,
-        autoAcceptIncidentsQuery: false,
+        maxRateLimit: 200,
+        autoAcceptIncidentsQuery: true,
         autoRefreshInterval,
         alertCustomDetailFields: [
           {

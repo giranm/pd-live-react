@@ -30,7 +30,7 @@ describe('SettingsModalComponent', () => {
         defaultSinceDateTenor: '1 Day',
         maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
         maxRateLimit: MAX_RATE_LIMIT_LOWER,
-        autoAcceptIncidentsQuery: false,
+        autoAcceptIncidentsQuery: true,
         autoRefreshInterval: REFRESH_INTERVAL_LOWER,
         alertCustomDetailFields: [
           {
@@ -117,7 +117,7 @@ describe('SettingsModalComponent', () => {
     ).toBeTruthy();
     expect(
       wrapper.find('input#user-profile-auto-accept-incident-query-checkbox').prop('checked'),
-    ).toEqual(false);
+    ).toEqual(true);
 
     expect(
       wrapper.find('#update-user-profile-button').contains('Update User Profile'),

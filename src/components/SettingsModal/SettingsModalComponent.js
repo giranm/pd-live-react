@@ -356,7 +356,11 @@ const SettingsModalComponent = ({
                 id="update-user-profile-button"
                 variant="primary"
                 disabled={(() => {
-                  if (!isValidAutoRefreshInterval || !isValidMaxIncidentsLimit) {
+                  if (
+                    !isValidAutoRefreshInterval
+                    || !isValidMaxIncidentsLimit
+                    || !isValidMaxRateLimit
+                  ) {
                     return true;
                   }
                   return false;

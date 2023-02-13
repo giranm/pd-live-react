@@ -90,7 +90,7 @@ describe('Sagas: Query Settings', () => {
   };
   const mockSettings = {
     maxIncidentsLimit: MAX_INCIDENTS_LIMIT_LOWER,
-    autoAcceptIncidentsQuery: false,
+    autoAcceptIncidentsQuery: true,
   };
 
   it('validateIncidentQueryImpl: Within MAX_INCIDENTS_LIMIT_LOWER', () => {
@@ -129,7 +129,9 @@ describe('Sagas: Query Settings', () => {
       ])
       .silentRun()
       .then((result) => {
-        expect(result.storeState.status).toEqual(TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED);
+        // FIXME: This was previously `expect(result.storeState.status).toEqual(TOGGLE_DISPLAY_CONFIRM_QUERY_MODAL_REQUESTED);`
+        // but changed in https://github.com/giranm/pd-live-react/pull/449 due to introduction of a better implementation with API rate limits
+        expect(result.storeState.status).toEqual(CONFIRM_INCIDENT_QUERY_REQUESTED);
       });
   });
 
