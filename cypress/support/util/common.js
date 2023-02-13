@@ -277,6 +277,18 @@ export const updateMaxIncidentsLimit = (limit = 200) => {
   cy.get('.close').click();
 };
 
+export const updateMaxRateLimit = (limit = 200) => {
+  cy.get('.settings-panel-dropdown').click();
+  cy.get('.dropdown-item').contains('Settings').click();
+  cy.get('.nav-item').contains('User Profile').click();
+
+  cy.get('#user-profile-max-rate-limit-input').clear().type(`${limit}{enter}`);
+
+  cy.get('.btn').contains('Update User Profile').click();
+  checkActionAlertsModalContent('Updated user profile settings');
+  cy.get('.close').click();
+};
+
 export const updateAutoAcceptIncidentQuery = (autoAcceptIncidentsQuery = false) => {
   cy.get('.settings-panel-dropdown').click();
   cy.get('.dropdown-item').contains('Settings').click();
