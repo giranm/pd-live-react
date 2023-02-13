@@ -165,9 +165,7 @@ describe('SettingsModalComponent', () => {
     tabElement.simulate('click');
 
     expect(
-      wrapper
-        .find('input#user-profile-max-rate-limit-input')
-        .hasClass('form-control is-invalid'),
+      wrapper.find('input#user-profile-max-rate-limit-input').hasClass('form-control is-invalid'),
     ).toBeTruthy();
     expect(wrapper.find('button#update-user-profile-button').prop('disabled')).toBeTruthy();
   });

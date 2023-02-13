@@ -37,9 +37,7 @@ describe('Sagas: Incident Table', () => {
     },
   ];
 
-  it('saveIncidentTableImpl', () => expectSaga(
-    saveIncidentTableImpl, { updatedIncidentTableColumns },
-  )
+  it('saveIncidentTableImpl', () => expectSaga(saveIncidentTableImpl, { updatedIncidentTableColumns })
     .withReducer(incidentTable)
     .provide([
       [select(selectIncidentTable), { incidentTableColumns: [], incidentTableState: {} }],

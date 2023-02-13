@@ -118,7 +118,10 @@ import {
 } from './settings/sagas';
 
 import {
-  updateConnectionStatus, checkConnectionStatus, checkAbilities, updateQueueStats,
+  updateConnectionStatus,
+  checkConnectionStatus,
+  checkAbilities,
+  updateQueueStats,
 } from './connection/sagas';
 
 import {

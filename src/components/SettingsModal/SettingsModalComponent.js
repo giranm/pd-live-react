@@ -164,10 +164,7 @@ const SettingsModalComponent = ({
   const [isValidMaxRateLimit, setIsValidMaxRateLimit] = useState(true);
   const [tempMaxRateLimit, setTempMaxRateLimit] = useState(maxRateLimit);
   useEffect(() => {
-    if (
-      tempMaxRateLimit < MAX_RATE_LIMIT_LOWER
-      || tempMaxRateLimit > MAX_RATE_LIMIT_UPPER
-    ) {
+    if (tempMaxRateLimit < MAX_RATE_LIMIT_LOWER || tempMaxRateLimit > MAX_RATE_LIMIT_UPPER) {
       setIsValidMaxRateLimit(false);
     } else {
       setIsValidMaxRateLimit(true);
