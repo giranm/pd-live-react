@@ -8,6 +8,7 @@ import {
 import {
   acceptDisclaimer,
   waitForIncidentTable,
+  updateAutoAcceptIncidentQuery,
   activateButton,
   deactivateButton,
   checkIncidentCellContentAllRows,
@@ -70,11 +71,22 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     activateButton('query-urgency-low-button');
   });
 
-  it('Query for incidents exceeding MAX_INCIDENTS_LIMIT; Cancel Request', () => {
+  it('Query for incidents exceeding MAX_INCIDENTS_LIMIT with auto accept incident query on', () => {
     // Update since date to T-2
     const queryDate = moment()
       .subtract(2, 'days')
       .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    cy.get('#query-date-input').clear().type(queryDate.format('DD/MM/yyyy')).type('{enter}');
+    waitForIncidentTable();
+  });
+
+  it('Query for incidents exceeding MAX_INCIDENTS_LIMIT with auto accept incident query off; Cancel Request', () => {
+    // Set auto accept incident query to false to test cancel & allow request
+    updateAutoAcceptIncidentQuery(false);
+    // Update since date to T-3
+    const queryDate = moment()
+    .subtract(3, 'days')
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     cy.get('#query-date-input').clear().type(queryDate.format('DD/MM/yyyy')).type('{enter}');
 
     // Cancel request from modal
@@ -88,7 +100,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
     deactivateButton('query-status-resolved-button');
   });
 
-  it('Query for incidents exceeding MAX_INCIDENTS_LIMIT; Accept Request', () => {
+  it('Query for incidents exceeding MAX_INCIDENTS_LIMIT with auto accept incident query off; Accept Request', () => {
     // Accept request from modal
     activateButton('query-status-resolved-button');
     cy.get('#retrieve-incident-query-button').click();
@@ -104,6 +116,8 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
       .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     cy.get('#query-date-input').clear().type(queryDate.format('DD/MM/yyyy')).type('{enter}');
     waitForIncidentTable();
+    // Reset auto accept incident query to true
+    updateAutoAcceptIncidentQuery(true);
   });
 
   it('Query for triggered incidents only', () => {
