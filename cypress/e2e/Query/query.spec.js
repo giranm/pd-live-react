@@ -43,7 +43,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
   });
 
   it('Query for incidents within T-1 since date', () => {
-    // Limit dataset to resolved low-urgency incidents
+    // Limit dataset to high-urgency triggered, ackd and resolved incidents
     activateButton('query-status-resolved-button');
     deactivateButton('query-urgency-low-button');
 
@@ -66,7 +66,7 @@ describe('Query Incidents', { failFast: { enabled: false } }, () => {
       }
     });
 
-    // Reset query for next test
+    // Reset query for next test - both high and low-urgency triggered, ackd and resolved incidents
     activateButton('query-urgency-low-button');
   });
 
