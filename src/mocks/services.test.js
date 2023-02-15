@@ -14,9 +14,7 @@ const generateMockService = () => {
   };
 };
 
-export const generateMockServices = (num) => Array.from(
-  { length: num }, () => generateMockService(),
-);
+export const generateMockServices = (num) => Array.from({ length: num }, () => generateMockService());
 
 export default generateMockServices;
 

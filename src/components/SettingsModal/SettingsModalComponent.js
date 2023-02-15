@@ -35,6 +35,7 @@ import {
   setDefaultSinceDateTenor as setDefaultSinceDateTenorConnected,
   setAlertCustomDetailColumns as setAlertCustomDetailColumnsConnected,
   setMaxIncidentsLimit as setMaxIncidentsLimitConnected,
+  setMaxRateLimit as setMaxRateLimitConnected,
   setAutoAcceptIncidentsQuery as setAutoAcceptIncidentsQueryConnected,
   setAutoRefreshInterval as setAutoRefreshIntervalConnected,
   clearLocalCache as clearLocalCacheConnected,
@@ -48,6 +49,8 @@ import {
 import {
   MAX_INCIDENTS_LIMIT_LOWER,
   MAX_INCIDENTS_LIMIT_UPPER,
+  MAX_RATE_LIMIT_LOWER,
+  MAX_RATE_LIMIT_UPPER,
   REFRESH_INTERVAL_LOWER,
   REFRESH_INTERVAL_UPPER,
 } from 'config/constants';
@@ -94,6 +97,7 @@ const SettingsModalComponent = ({
   setAlertCustomDetailColumns,
   saveIncidentTable,
   setMaxIncidentsLimit,
+  setMaxRateLimit,
   setAutoAcceptIncidentsQuery,
   setAutoRefreshInterval,
   clearLocalCache,
@@ -107,6 +111,7 @@ const SettingsModalComponent = ({
     displaySettingsModal,
     defaultSinceDateTenor,
     maxIncidentsLimit,
+    maxRateLimit,
     autoAcceptIncidentsQuery,
     autoRefreshInterval,
     alertCustomDetailFields,
@@ -155,6 +160,16 @@ const SettingsModalComponent = ({
       setIsValidMaxIncidentsLimit(true);
     }
   }, [tempMaxIncidentsLimit]);
+
+  const [isValidMaxRateLimit, setIsValidMaxRateLimit] = useState(true);
+  const [tempMaxRateLimit, setTempMaxRateLimit] = useState(maxRateLimit);
+  useEffect(() => {
+    if (tempMaxRateLimit < MAX_RATE_LIMIT_LOWER || tempMaxRateLimit > MAX_RATE_LIMIT_UPPER) {
+      setIsValidMaxRateLimit(false);
+    } else {
+      setIsValidMaxRateLimit(true);
+    }
+  }, [tempMaxRateLimit]);
 
   const [tempAutoAcceptQuery, setTempAutoAcceptQuery] = useState(autoAcceptIncidentsQuery);
 
@@ -303,6 +318,23 @@ const SettingsModalComponent = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row}>
+                  <Form.Label id="user-profile-max-rate-limit-label" column sm={2}>
+                    {t('Max API Call Rate')}
+                  </Form.Label>
+                  <Col xs={6}>
+                    <Form.Control
+                      id="user-profile-max-rate-limit-input"
+                      type="number"
+                      defaultValue={maxRateLimit}
+                      min={MAX_RATE_LIMIT_LOWER}
+                      max={MAX_RATE_LIMIT_UPPER}
+                      step={100}
+                      onChange={(e) => setTempMaxRateLimit(Number(e.target.value))}
+                      isInvalid={!isValidMaxRateLimit}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row}>
                   <Form.Label id="user-profile-auto-accept-incident-query-label" column sm={2}>
                     {t('Auto Accept Incident Query')}
                   </Form.Label>
@@ -321,7 +353,11 @@ const SettingsModalComponent = ({
                 id="update-user-profile-button"
                 variant="primary"
                 disabled={(() => {
-                  if (!isValidAutoRefreshInterval || !isValidMaxIncidentsLimit) {
+                  if (
+                    !isValidAutoRefreshInterval
+                    || !isValidMaxIncidentsLimit
+                    || !isValidMaxRateLimit
+                  ) {
                     return true;
                   }
                   return false;
@@ -330,6 +366,7 @@ const SettingsModalComponent = ({
                   updateUserLocale(selectedLocale.value);
                   setDefaultSinceDateTenor(tempSinceDateTenor);
                   setMaxIncidentsLimit(tempMaxIncidentsLimit);
+                  setMaxRateLimit(tempMaxRateLimit);
                   setAutoAcceptIncidentsQuery(tempAutoAcceptQuery);
                   setAutoRefreshInterval(tempAutoRefreshInterval);
                   updateActionAlertsModal('success', t('Updated user profile settings'));
@@ -439,6 +476,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setMaxIncidentsLimit: (maxIncidentsLimit) => {
     dispatch(setMaxIncidentsLimitConnected(maxIncidentsLimit));
+  },
+  setMaxRateLimit: (maxRateLimit) => {
+    dispatch(setMaxRateLimitConnected(maxRateLimit));
   },
   setAutoAcceptIncidentsQuery: (autoAcceptIncidentsQuery) => {
     dispatch(setAutoAcceptIncidentsQueryConnected(autoAcceptIncidentsQuery));

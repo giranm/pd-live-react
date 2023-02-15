@@ -11,6 +11,7 @@ import {
   updateUserLocale,
   updateDefaultSinceDateLookback,
   updateMaxIncidentsLimit,
+  updateMaxRateLimit,
   updateAutoAcceptIncidentQuery,
   updateAutoRefreshInterval,
   manageIncidentTableColumns,
@@ -88,6 +89,17 @@ describe('Manage Settings', { failFast: { enabled: false } }, () => {
       .then((state) => expect(
         Number(state.settings.maxIncidentsLimit),
       ).to.equal(maxIncidentsLimit));
+  });
+
+  it('Update max rate limit', () => {
+    const maxRateLimit = faker.datatype.number({ min: 100, max: 1000 });
+    updateMaxRateLimit(maxRateLimit);
+    cy.window()
+      .its('store')
+      .invoke('getState')
+      .then((state) => expect(
+        Number(state.settings.maxRateLimit),
+      ).to.equal(maxRateLimit));
   });
 
   it('Update auto-accept incident query', () => {

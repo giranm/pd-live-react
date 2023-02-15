@@ -7,7 +7,10 @@ import {
 import Fuse from 'fuse.js';
 
 import {
-  pd, throttledPdAxiosRequest,
+  pd,
+  throttledPdAxiosRequest,
+  pdParallelFetch,
+  resetLimiterWithRateLimit,
 } from 'util/pd-api-wrapper';
 
 import {
@@ -98,9 +101,6 @@ export function* getIncidentsImpl() {
       type: UPDATE_INCIDENT_LAST_FETCH_DATE,
     });
     const {
-      maxIncidentsLimit,
-    } = yield select(selectSettings);
-    const {
       sinceDate, incidentStatus, incidentUrgency, teamIds, serviceIds, userIds,
     } = yield select(selectQuerySettings);
 
@@ -118,26 +118,7 @@ export function* getIncidentsImpl() {
     if (serviceIds.length) baseParams.service_ids = serviceIds;
     if (userIds.length) baseParams.user_ids = userIds;
 
-    // Define API requests to be made in parallel
-    const numberOfApiCalls = Math.ceil(maxIncidentsLimit / INCIDENTS_PAGINATION_LIMIT);
-    const incidentRequests = [];
-    for (let i = 0; i < numberOfApiCalls; i++) {
-      const params = { ...baseParams };
-      params.offset = i * INCIDENTS_PAGINATION_LIMIT;
-      incidentRequests.push(call(throttledPdAxiosRequest, 'GET', 'incidents', params));
-    }
-    const incidentResults = yield all(incidentRequests);
-
-    // Stitch results together
-    const fetchedIncidents = [];
-    const incidentResultsData = incidentResults.map((res) => [...res.data.incidents]);
-    incidentResultsData.forEach((data) => {
-      data.forEach((incident) => fetchedIncidents.push(incident));
-    });
-
-    // Sort incidents by reverse created_at date (i.e. recent incidents at the top) and truncate
-    fetchedIncidents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    incidents = fetchedIncidents.slice(0, maxIncidentsLimit);
+    incidents = yield call(pdParallelFetch, 'incidents', baseParams);
   } catch (e) {
     yield put({ type: FETCH_INCIDENTS_ERROR, message: e.message });
     yield put({
@@ -163,10 +144,16 @@ export function* getIncidents() {
     });
 
     const {
+      maxRateLimit,
+    } = yield select(selectSettings);
+
+    const {
       incidentPriority, escalationPolicyIds, searchQuery,
     } = yield select(
       selectQuerySettings,
     );
+
+    yield call(resetLimiterWithRateLimit, maxRateLimit);
     const incidents = yield getIncidentsImpl();
     yield put({
       type: FETCH_INCIDENTS_COMPLETED,
@@ -197,11 +184,29 @@ export function* refreshIncidentsAsync() {
 export function* refreshIncidents() {
   try {
     // Fetch incidents, notes, and alerts for refresh
+    const {
+      incidentPriority, escalationPolicyIds, searchQuery,
+    } = yield select(
+      selectQuerySettings,
+    );
+
+    const {
+      maxRateLimit,
+    } = yield select(selectSettings);
+
+    yield call(resetLimiterWithRateLimit, maxRateLimit);
     const incidents = yield getIncidentsImpl();
     yield put({
       type: REFRESH_INCIDENTS_COMPLETED,
       incidents,
     });
+    // Filter incident list on priority (can't do this from API)
+    yield call(filterIncidentsByPriorityImpl, { incidentPriority });
+    // Filter incident list on escalation policy (can't do this from API)
+    yield call(filterIncidentsByEscalationPolicyImpl, { escalationPolicyIds });
+    // Filter updated incident list by query; updates memoized data within incidents table
+    yield call(filterIncidentsByQueryImpl, { searchQuery });
+
     yield call(getAllIncidentNotes);
     yield call(getAllIncidentAlerts);
   } catch (e) {

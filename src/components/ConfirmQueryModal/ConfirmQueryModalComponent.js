@@ -25,6 +25,7 @@ const ConfirmQueryModalComponent = ({
     t,
   } = useTranslation();
   const {
+    // eslint-disable-next-line no-unused-vars
     maxIncidentsLimit,
   } = settings;
   const {
@@ -46,7 +47,7 @@ const ConfirmQueryModalComponent = ({
           {t('Current query parameters match X incidents', { totalIncidentsFromQuery })}
           {'. '}
           <br />
-          {t('Only the first X incidents will be retrieved', { maxIncidentsLimit })}
+          {t('Retrieving notes and alerts could take a long time')}
           {'. '}
           <br />
           <br />

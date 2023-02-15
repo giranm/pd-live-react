@@ -42,7 +42,7 @@ jobs:
     needs: build-id
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node16.13.0-chrome95-ff94
+      image: cypress/browsers:node16.16.0-chrome107-ff107
       options: --user 1001
     strategy:
       fail-fast: false

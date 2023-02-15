@@ -2,6 +2,9 @@
 export const UPDATE_CONNECTION_STATUS_REQUESTED = 'UPDATE_CONNECTION_STATUS_REQUESTED';
 export const UPDATE_CONNECTION_STATUS_COMPLETED = 'UPDATE_CONNECTION_STATUS_COMPLETED';
 
+export const UPDATE_QUEUE_STATS_REQUESTED = 'UPDATE_QUEUE_STATS_REQUESTED';
+export const UPDATE_QUEUE_STATS_COMPLETED = 'UPDATE_QUEUE_STATS_COMPLETED';
+
 export const CHECK_CONNECTION_STATUS_REQUESTED = 'CHECK_CONNECTION_STATUS_REQUESTED';
 export const CHECK_CONNECTION_STATUS_COMPLETED = 'CHECK_CONNECTION_STATUS_COMPLETED';
 
@@ -14,6 +17,11 @@ export const updateConnectionStatus = (connectionStatus, connectionStatusMessage
   type: UPDATE_CONNECTION_STATUS_REQUESTED,
   connectionStatus,
   connectionStatusMessage,
+});
+
+export const updateQueueStats = (queueStats) => ({
+  type: UPDATE_QUEUE_STATS_REQUESTED,
+  queueStats,
 });
 
 export const checkConnectionStatus = () => ({
