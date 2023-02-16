@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/pd-live-react/static/css/main.8c2ef6e8.css",
+    "main.js": "/pd-live-react/static/js/main.9ea02bd9.js",
+    "static/js/496.08d27cdc.chunk.js": "/pd-live-react/static/js/496.08d27cdc.chunk.js",
+    "static/media/fontawesome-webfont.svg?v=4.7.0": "/pd-live-react/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+    "static/media/empty_incidents.svg": "/pd-live-react/static/media/empty_incidents.128ef8de3598deced5089c593adc9ce1.svg",
+    "static/media/fontawesome-webfont.eot": "/pd-live-react/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
+    "static/media/fontawesome-webfont.ttf?v=4.7.0": "/pd-live-react/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+    "static/media/fontawesome-webfont.woff?v=4.7.0": "/pd-live-react/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
+    "static/media/fontawesome-webfont.woff2?v=4.7.0": "/pd-live-react/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+    "static/media/ColfaxPD-Regular.woff": "/pd-live-react/static/media/ColfaxPD-Regular.898ca4fc6e7bb800bc66.woff",
+    "static/media/pd_logo_black.svg": "/pd-live-react/static/media/pd_logo_black.52a72b66c50761d65f9c.svg",
+    "index.html": "/pd-live-react/index.html",
+    "static/media/search_glass.svg": "/pd-live-react/static/media/search_glass.95fbaa146335ce93e1cce8c89b5fad8a.svg",
+    "main.8c2ef6e8.css.map": "/pd-live-react/static/css/main.8c2ef6e8.css.map",
+    "main.9ea02bd9.js.map": "/pd-live-react/static/js/main.9ea02bd9.js.map",
+    "496.08d27cdc.chunk.js.map": "/pd-live-react/static/js/496.08d27cdc.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8c2ef6e8.css",
+    "static/js/main.9ea02bd9.js"
+  ]
+}
