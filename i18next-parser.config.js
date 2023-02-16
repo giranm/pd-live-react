@@ -8,9 +8,10 @@ module.exports = {
   defaultNamespace: 'translation',
   // Default namespace used in your i18next config
 
-  defaultValue: '',
+  defaultValue: (locale, namespace, key, value) => key,
   // Default value to give to empty keys
   // You may also specify a function accepting the locale, namespace, and key as arguments
+  // Ref: https://github.com/giranm/pd-live-react/pull/375
 
   indentation: 2,
   // Indentation of the catalog files
@@ -42,7 +43,7 @@ module.exports = {
   lineEnding: 'auto',
   // Control the line ending. See options at https://github.com/ryanve/eol
 
-  locales: ['en', 'fr', 'es', 'de', 'ja', 'id'],
+  locales: ['en', 'fr', 'es', 'de', 'ja', 'id', 'pt', 'pt-br'],
   // An array of the locales in your applications
 
   namespaceSeparator: ':',
@@ -64,15 +65,6 @@ module.exports = {
 
   sort: true,
   // Whether or not to sort the catalog. Can also be a [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#parameters)
-
-  skipDefaultValues: false,
-  // Whether to ignore default values
-  // You may also specify a function accepting the locale and namespace as arguments
-
-  useKeysAsDefaultValue: true,
-  // Whether to use the keys as the default value; ex. "Hello": "Hello", "World": "World"
-  // This option takes precedence over the `defaultValue` and `skipDefaultValues` options
-  // You may also specify a function accepting the locale and namespace as arguments
 
   verbose: false,
   // Display info about the parsing including some stats

@@ -67,15 +67,37 @@ export const pdAxiosRequest = async (method, endpoint, params = {}, data = {}) =
 });
 
 // Ref: https://www.npmjs.com/package/bottleneck#refresh-interval
-const limiter = new Bottleneck({
-  reservoir: 1900,
-  reservoirRefreshAmount: 1900,
+const limiterSettings = {
+  reservoir: 200,
+  reservoirRefreshAmount: 200,
   reservoirRefreshInterval: 60 * 1000,
   maxConcurrent: 20,
-  minTime: 60,
-});
+};
 
-export const throttledPdAxiosRequest = limiter.wrap(pdAxiosRequest);
+// limiter needs to be a mutable export because we need it to get the
+// queue stats, and we have to reassign it when we clear the queue
+
+// eslint-disable-next-line import/no-mutable-exports
+export let limiter = new Bottleneck(limiterSettings);
+
+// throttledPdAxiosRequest needs to be a mutable export because when we
+// reset the limiter, we have to re-wrap pdAxiosRequest
+
+// eslint-disable-next-line import/no-mutable-exports
+export let throttledPdAxiosRequest = limiter.wrap(pdAxiosRequest);
+
+// drop all the queued requests in the limiter - needed if we are getting
+// the list of incidents again but there are still outstanding requests
+// for notes, etc.
+export const resetLimiterWithRateLimit = async (limit = 200) => {
+  await limiter.stop({ dropWaitingJobs: true });
+  limiter = new Bottleneck({
+    ...limiterSettings,
+    reservoir: limit,
+    reservoirRefreshAmount: limit,
+  });
+  throttledPdAxiosRequest = limiter.wrap(pdAxiosRequest);
+};
 
 /*
   Optimized parallel fetch for paginated endpoints
@@ -101,26 +123,20 @@ export const pdParallelFetch = async (endpoint, params, progressCallback) => {
   if (endpoint.indexOf('log_entries') > -1) reversedSortOrder = true;
 
   const firstPage = (await pdAxiosRequest('GET', endpoint, requestParams)).data;
-  let fetchedData = [...firstPage[endpointIdentifier(endpoint)]];
-  requestParams.offset += requestParams.limit;
+  const fetchedData = firstPage[endpointIdentifier(endpoint)];
 
   const promises = [];
-  let outerOffset = 0;
-  let more = true;
-  while (more && outerOffset + requestParams.offset < firstPage.total) {
-    while (
-      more
-      && outerOffset + requestParams.offset < firstPage.total
-      && requestParams.offset < 10000
+  if (firstPage.more) {
+    for (
+      let offset = requestParams.limit;
+      offset < firstPage.total;
+      offset += requestParams.limit
     ) {
-      const promise = pdAxiosRequest('GET', endpoint, requestParams)
+      const promise = throttledPdAxiosRequest('GET', endpoint, { ...requestParams, offset })
         .then(({
           data,
         }) => {
-          fetchedData = [...fetchedData, ...data[endpointIdentifier(endpoint)]];
-          if (data.more === false) {
-            more = false;
-          }
+          fetchedData.push(...data[endpointIdentifier(endpoint)]);
           if (progressCallback) {
             progressCallback(firstPage.total, fetchedData.length);
           }
@@ -130,16 +146,10 @@ export const pdParallelFetch = async (endpoint, params, progressCallback) => {
           console.error(error);
         });
       promises.push(promise);
-      requestParams.offset += requestParams.limit;
     }
-    await Promise.all(promises);
-    // eslint-disable-next-line max-len
-    fetchedData.sort((a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)));
-    const untilOrSince = reversedSortOrder ? 'until' : 'since';
-    requestParams[untilOrSince] = fetchedData[fetchedData.length - 1].created_at;
-    outerOffset = fetchedData.length;
-    requestParams.offset = 0;
   }
+  await Promise.all(promises);
+  // eslint-disable-next-line max-len
   fetchedData.sort((a, b) => (reversedSortOrder ? compareCreatedAt(b, a) : compareCreatedAt(a, b)));
   return fetchedData;
 };

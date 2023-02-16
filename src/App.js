@@ -53,6 +53,7 @@ import {
 } from 'redux/response_plays/actions';
 import {
   checkConnectionStatus as checkConnectionStatusConnected,
+  updateQueueStats as updateQueueStatsConnected,
   checkAbilities as checkAbilitiesConnected,
 } from 'redux/connection/actions';
 import {
@@ -61,6 +62,9 @@ import {
 import {
   store,
 } from 'redux/store';
+import {
+  limiter,
+} from 'util/pd-api-wrapper';
 
 import {
   PD_OAUTH_CLIENT_ID,
@@ -80,6 +84,7 @@ const App = ({
   userAuthorize,
   checkAbilities,
   checkConnectionStatus,
+  updateQueueStats,
   getServicesAsync,
   getTeamsAsync,
   getPrioritiesAsync,
@@ -190,6 +195,16 @@ const App = ({
     return () => clearInterval(clearingInterval);
   }, [userAuthorized]);
 
+  // Setup queue stats update for status beacon tooltip
+  useEffect(() => {
+    const queueStateInterval = setInterval(() => {
+      if (userAuthorized) {
+        updateQueueStats(limiter.counts());
+      }
+    }, 1000);
+    return () => clearInterval(queueStateInterval);
+  }, [userAuthorized]);
+
   // Setup auto-refresh for incidents
   useEffect(() => {
     const refreshInterval = setInterval(() => {
@@ -250,6 +265,7 @@ const mapDispatchToProps = (dispatch) => ({
   userAuthorize: () => dispatch(userAuthorizeConnected()),
   checkAbilities: () => dispatch(checkAbilitiesConnected()),
   checkConnectionStatus: () => dispatch(checkConnectionStatusConnected()),
+  updateQueueStats: (queueStats) => dispatch(updateQueueStatsConnected(queueStats)),
   getServicesAsync: (teamIds) => dispatch(getServicesAsyncConnected(teamIds)),
   getTeamsAsync: () => dispatch(getTeamsAsyncConnected()),
   getPrioritiesAsync: () => dispatch(getPrioritiesAsyncConnected()),

@@ -35,7 +35,7 @@ describe('ConfirmQueryModalComponent', () => {
     expect(wrapper.find('.modal-body').at(0).getDOMNode().textContent).toEqual(
       [
         `Current query parameters match ${totalIncidentsFromQuery} incidents.`,
-        `Only the first ${limit} incidents will be retrieved. Continue?`,
+        'Retrieving notes and alerts could take a long time. Continue?',
       ].join(' '),
     );
   });
