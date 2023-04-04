@@ -39,6 +39,7 @@ import {
   setAutoAcceptIncidentsQuery as setAutoAcceptIncidentsQueryConnected,
   setAutoRefreshInterval as setAutoRefreshIntervalConnected,
   clearLocalCache as clearLocalCacheConnected,
+  setDarkMode as setDarkModeConnected,
 } from 'redux/settings/actions';
 
 import {
@@ -100,6 +101,7 @@ const SettingsModalComponent = ({
   setMaxRateLimit,
   setAutoAcceptIncidentsQuery,
   setAutoRefreshInterval,
+  setDarkMode,
   clearLocalCache,
   updateActionAlertsModal,
   toggleDisplayActionAlertsModal,
@@ -115,6 +117,7 @@ const SettingsModalComponent = ({
     autoAcceptIncidentsQuery,
     autoRefreshInterval,
     alertCustomDetailFields,
+    darkMode,
   } = settings;
   const {
     incidentTableColumns,
@@ -172,6 +175,8 @@ const SettingsModalComponent = ({
   }, [tempMaxRateLimit]);
 
   const [tempAutoAcceptQuery, setTempAutoAcceptQuery] = useState(autoAcceptIncidentsQuery);
+
+  const [tempDarkMode, setTempDarkMode] = useState(darkMode);
 
   const [selectedColumns, setSelectedColumns] = useState(
     incidentTableColumns.map((column) => {
@@ -347,6 +352,19 @@ const SettingsModalComponent = ({
                     />
                   </Col>
                 </Form.Group>
+                <Form.Group as={Row}>
+                  <Form.Label id="user-profile-dark-mode-label" column sm={2}>
+                    {t('Dark Mode')}
+                  </Form.Label>
+                  <Col xs={6}>
+                    <Form.Check
+                      id="user-profile-dark-mode-checkbox"
+                      type="checkbox"
+                      checked={tempDarkMode}
+                      onChange={(e) => setTempDarkMode(e.target.checked)}
+                    />
+                  </Col>
+                </Form.Group>
               </Form>
               <br />
               <Button
@@ -369,6 +387,7 @@ const SettingsModalComponent = ({
                   setMaxRateLimit(tempMaxRateLimit);
                   setAutoAcceptIncidentsQuery(tempAutoAcceptQuery);
                   setAutoRefreshInterval(tempAutoRefreshInterval);
+                  setDarkMode(tempDarkMode);
                   updateActionAlertsModal('success', t('Updated user profile settings'));
                   toggleDisplayActionAlertsModal();
                 }}
@@ -491,6 +510,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateActionAlertsModalConnected(actionAlertsModalType, actionAlertsModalMessage));
   },
   toggleDisplayActionAlertsModal: () => dispatch(toggleDisplayActionAlertsModalConnected()),
+  setDarkMode: (darkMode) => {
+    dispatch(setDarkModeConnected(darkMode));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsModalComponent);
