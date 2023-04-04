@@ -36,9 +36,7 @@ import {
 } from 'config/incident-table-columns';
 
 import {
-  ContextMenu,
-  MenuItem,
-  ContextMenuTrigger,
+  ContextMenu, MenuItem, ContextMenuTrigger,
 } from 'react-contextmenu';
 
 import CheckboxComponent from './subcomponents/CheckboxComponent';
@@ -81,8 +79,7 @@ const exportTableDataToCsv = (tableData) => {
   // Create headers from table columns
   const headers = tableData.columns.map((column) => column.Header);
 
-  const rowsToMap = tableData.selectedFlatRows.length > 0
-    ? tableData.selectedFlatRows : tableData.rows;
+  const rowsToMap = tableData.selectedFlatRows.length > 0 ? tableData.selectedFlatRows : tableData.rows;
   const exportRows = rowsToMap.map((row) => {
     tableData.prepareRow(row);
     const cells = row.cells.slice(1);
@@ -286,7 +283,7 @@ const IncidentTableComponent = ({
   useEffect(() => {
     const selectedRows = selectedFlatRows.map((row) => row.original);
     selectIncidentTableRows(true, selectedRows.length, selectedRows);
-    return () => { };
+    return () => {};
   }, [selectedFlatRows]);
 
   // Handle deselecting rows after incident action has completed
@@ -334,9 +331,7 @@ const IncidentTableComponent = ({
                           {...column.getHeaderProps(column.getSortByToggleProps())}
                         >
                           {column.render('Header')}
-                          <span>
-                            {column.isSorted ? (column.isSortedDesc ? ' ▼' : ' ▲') : ''}
-                          </span>
+                          <span>{column.isSorted ? (column.isSortedDesc ? ' ▼' : ' ▲') : ''}</span>
                           {column.canResize && (
                             <div
                               {...column.getResizerProps()}
