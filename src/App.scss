@@ -5,6 +5,10 @@ body {
   background-color: $pd-brand-background !important;
 }
 
+body.dark-mode {
+  background-color: $pd-brand-gray-dark !important;
+}
+
 .btn-outline-secondary {
   color: $pd-brand-black;
   background-color: $pd-brand-white;

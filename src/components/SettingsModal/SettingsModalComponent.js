@@ -388,6 +388,8 @@ const SettingsModalComponent = ({
                   setAutoAcceptIncidentsQuery(tempAutoAcceptQuery);
                   setAutoRefreshInterval(tempAutoRefreshInterval);
                   setDarkMode(tempDarkMode);
+                  if (tempDarkMode) document.body.className = 'dark-mode';
+                  else document.body.className = '';
                   updateActionAlertsModal('success', t('Updated user profile settings'));
                   toggleDisplayActionAlertsModal();
                 }}
