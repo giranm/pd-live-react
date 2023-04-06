@@ -86,8 +86,13 @@ body.dark-mode .modal-title {
   color: $pd-brand-white !important;
 }
 
-body.dark-mode label.form-label {
+body.dark-mode .form-label, body.dark-mode .form-text {
   color: $pd-brand-white !important;
+}
+
+body.dark-mode .form-control {
+  background-color: $pd-brand-gray-dark !important;
+  color: $pd-white;
 }
 
 body.dark-mode div.react-select__control, body.dark-mode div.react-select__menu {
@@ -100,6 +105,10 @@ body.dark-mode div.react-select__multi-value {
   color: $pd-brand-white !important;
 }
 
+body.dark-mode div.react-select__single-value {
+  color: $pd-brand-white !important;
+}
+
 body.dark-mode div.react-select__option:hover {
   background-color: $pd-brand-secondary-light !important;
   color: $pd-brand-white !important;
@@ -109,3 +118,4 @@ body.dark-mode div.react-select__option--is-focused {
   background-color: $pd-brand-secondary-light !important;
   color: $pd-brand-white !important;
 }
+
