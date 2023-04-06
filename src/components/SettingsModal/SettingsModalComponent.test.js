@@ -236,7 +236,7 @@ describe('SettingsModalComponent', () => {
     expect(tabElement.contains('Local Cache')).toBeTruthy();
     expect(wrapper.find('#clear-local-cache-button').contains('Clear Local Cache')).toBeTruthy();
   });
-  
+
   it('should set darkMode to true when checked', () => {
     const darkMode = true;
     store = mockStore(baseStore);
@@ -248,9 +248,6 @@ describe('SettingsModalComponent', () => {
     wrapper
       .find('input#user-profile-dark-mode-checkbox')
       .simulate('change', { target: { checked: darkMode } });
-    expect(
-      wrapper.find('input#user-profile-dark-mode-checkbox').prop('checked'),
-    ).toEqual(darkMode);
+    expect(wrapper.find('input#user-profile-dark-mode-checkbox').prop('checked')).toEqual(darkMode);
   });
-
 });

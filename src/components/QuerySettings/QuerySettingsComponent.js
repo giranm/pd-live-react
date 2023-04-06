@@ -116,8 +116,7 @@ const QuerySettingsComponent = ({
     currentUserLocale, users: userList,
   } = users;
   const {
-    defaultSinceDateTenor,
-    darkMode,
+    defaultSinceDateTenor, darkMode,
   } = settings;
   const eventKey = displayQuerySettings ? '0' : '1';
 
@@ -186,7 +185,14 @@ const QuerySettingsComponent = ({
     <div className="query-settings-ctr" id="query-settings-ctr">
       <Accordion defaultActiveKey="0">
         <Accordion.Collapse id="query-settings-accordion" eventKey={eventKey}>
-          <Container className={darkMode ? 'card bg-dark query-settings-inner-ctr' : 'card bg-light query-settings-inner-ctr'} fluid>
+          <Container
+            className={
+              darkMode
+                ? 'card bg-dark query-settings-inner-ctr'
+                : 'card bg-light query-settings-inner-ctr'
+            }
+            fluid
+          >
             <Row>
               <Col xs="auto">
                 {t('Since')}
