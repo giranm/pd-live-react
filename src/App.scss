@@ -63,3 +63,7 @@ body.dark-mode {
 .modal-footer {
   display: unset !important;
 }
+
+body.dark-mode a {
+  color: $pd-brand-white !important;
+}
