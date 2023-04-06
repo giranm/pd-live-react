@@ -110,7 +110,7 @@ const App = ({
     userAuthorized, userAcceptedDisclaimer, currentUserLocale,
   } = state.users;
   const {
-    autoRefreshInterval,
+    autoRefreshInterval, darkMode,
   } = state.settings;
   const {
     fetchingIncidents,
@@ -236,6 +236,10 @@ const App = ({
         <UnauthorizedModalComponent />
       </div>
     );
+  }
+
+  if (darkMode) {
+    document.body.classList.add('dark-mode');
   }
 
   return (
