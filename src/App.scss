@@ -15,6 +15,12 @@ body.dark-mode {
   border-color: $pd-brand-secondary-light;
 }
 
+body.dark-mode .btn-outline-secondary {
+  color: $pd-white;
+  background-color: $pd-brand-gray-dark;
+  border-color: $pd-brand-secondary-light;
+}
+
 .btn-outline-secondary:disabled {
   color: $pd-brand-secondary-light !important;
 }
@@ -28,6 +34,10 @@ body.dark-mode {
 .btn-outline-secondary:not(:disabled):not(.disabled).active {
   border-bottom: 3px $pd-success solid !important;
   background-color: unset !important;
+}
+
+body.dark-mode .btn-outline-secondary:not(:disabled):not(.disabled).active {
+  background-color: $pd-brand-gray-light !important;
 }
 
 .btn-outline-dark {
