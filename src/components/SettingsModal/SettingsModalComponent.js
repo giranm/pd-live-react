@@ -258,6 +258,7 @@ const SettingsModalComponent = ({
                   <Col xs={6}>
                     <Select
                       id="user-locale-select"
+                      classNamePrefix="react-select"
                       styles={reactSelectStyle}
                       options={selectLocales}
                       value={selectedLocale}
@@ -436,6 +437,7 @@ const SettingsModalComponent = ({
                 <h4>{t('Alert Custom Detail Column Definitions')}</h4>
                 <CreatableSelect
                   id="alert-column-definition-select"
+                  classNamePrefix="react-select"
                   isMulti
                   isClearable
                   placeholder={t('Alert Custom Detail Column Definitions Placeholder')}

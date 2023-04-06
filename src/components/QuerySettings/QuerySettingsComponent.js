@@ -318,6 +318,7 @@ const QuerySettingsComponent = ({
                 <Form.Group>
                   <Select
                     id="query-team-select"
+                    classNamePrefix="react-select"
                     styles={reactSelectStyle}
                     onChange={(selectedTeams) => {
                       const teamIdsInt = selectedTeams.map((team) => team.value);
@@ -340,6 +341,7 @@ const QuerySettingsComponent = ({
                 <Form.Group>
                   <Select
                     id="query-user-select"
+                    classNamePrefix="react-select"
                     styles={reactSelectStyle}
                     onChange={(selectedUsers) => {
                       const userIdsInt = selectedUsers.map((user) => user.value);
@@ -360,6 +362,7 @@ const QuerySettingsComponent = ({
                 <Form.Group>
                   <Select
                     id="query-escalation-policy-select"
+                    classNamePrefix="react-select"
                     styles={reactSelectStyle}
                     onChange={(selectedEscalationPolicies) => {
                       const escalationPolicyIdsInt = selectedEscalationPolicies.map(
@@ -382,6 +385,7 @@ const QuerySettingsComponent = ({
                 <Form.Group>
                   <Select
                     id="query-service-select"
+                    classNamePrefix="react-select"
                     styles={reactSelectStyle}
                     onChange={(selectedServices) => {
                       const serviceIdsInt = selectedServices.map((service) => service.value);
