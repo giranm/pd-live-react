@@ -67,3 +67,15 @@ body.dark-mode {
 body.dark-mode a {
   color: $pd-brand-white !important;
 }
+
+body.dark-mode .modal-content {
+  background-color: $pd-brand-black !important;
+}
+
+body.dark-mode .modal-title {
+  color: $pd-brand-white !important;
+}
+
+body.dark-mode label.form-label {
+  color: $pd-brand-white !important;
+}
