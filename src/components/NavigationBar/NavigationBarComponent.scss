@@ -69,6 +69,10 @@ a.dropdown-toggle.nav-link::after {
   font-weight: 900 !important;
 }
 
+body.dark-mode .version-info {
+  color: $pd-teal !important;
+}
+
 body.dark-mode div.dropdown-menu {
   background-color: $pd-brand-gray-dark !important;
 }

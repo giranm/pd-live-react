@@ -75,14 +75,19 @@ body.dark-mode .btn-outline-secondary:not(:disabled):not(.disabled).active {
 }
 
 body.dark-mode a {
-  color: $pd-brand-white !important;
+  color: $pd-brand-white;
 }
 
 body.dark-mode .modal-content {
   background-color: $pd-brand-black !important;
+  color: $pd-white !important;
 }
 
 body.dark-mode .modal-title {
+  color: $pd-brand-white !important;
+}
+
+body.dark-mode .modal-header .close {
   color: $pd-brand-white !important;
 }
 
