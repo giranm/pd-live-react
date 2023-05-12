@@ -9,6 +9,7 @@ export const persistConfig = {
     'logEntries',
     'querySettings',
     'incidentActions',
+    'incidentDetails',
     'services',
     'teams',
     'users',

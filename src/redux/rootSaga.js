@@ -72,6 +72,11 @@ import {
 } from './incident_actions/sagas';
 
 import {
+  toggleDisplayIncidentDetailsModal,
+  updateIncidentDetailsModal,
+} from './incident_details/sagas';
+
+import {
   toggleActionAlertsModal, updateActionAlertsModal,
 } from './action_alerts/sagas';
 
@@ -191,6 +196,10 @@ export default function* rootSaga() {
     toggleDisplayAddNoteModal(),
     runCustomIncidentActionAsync(),
     syncWithExternalSystemAsync(),
+
+    // Incident Details
+    toggleDisplayIncidentDetailsModal(),
+    updateIncidentDetailsModal(),
 
     // Action Alerts Modal
     toggleActionAlertsModal(),

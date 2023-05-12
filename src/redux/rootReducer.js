@@ -15,6 +15,7 @@ import logEntries from './log_entries/reducers';
 import querySettings from './query_settings/reducers';
 import incidentTable from './incident_table/reducers';
 import incidentActions from './incident_actions/reducers';
+import incidentDetails from './incident_details/reducers';
 import services from './services/reducers';
 import teams from './teams/reducers';
 import priorities from './priorities/reducers';
@@ -33,6 +34,7 @@ export default combineReducers({
   querySettings: persistReducer(querySettingsPersistConfig, querySettings),
   incidentTable,
   incidentActions,
+  incidentDetails,
   services,
   teams,
   priorities,
